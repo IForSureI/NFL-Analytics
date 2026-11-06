@@ -8,7 +8,7 @@ I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward 
 
 **Headline work:** a [fourth-down decision bot](reports/02-fourth-down-bot/) on my own win-probability model, which matches nflfastR out of sample (Brier 0.1495 vs 0.1488 on 80,613 plays), and [evidence of a market inefficiency in pass-rusher contracts](reports/07-box-score-tax/): teams pay about \$0.62M a year for sacks that pressures say won't repeat.
 
-<p align="center"><img src="assets/at-a-glance.png" alt="Eight studies at a glance" width="100%"></p>
+<p align="center"><img src="assets/at-a-glance.png" alt="Selected studies at a glance" width="100%"></p>
 
 ## The studies
 
