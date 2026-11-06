@@ -4,7 +4,6 @@ gsis_id,player,position,team,apy,year_signed,years,sk,prss,snaps,prss100,exp_sk,
 00-0033964,Al-Quadin Muhammad,ED,Buccaneers,4.0,2026,1.0,11.0,26.0,457.0,5.69,6.86,4.14,careful: sacks above pressures
 00-0032052,Dante Fowler Jr.,ED,Seahawks,2.5,2026,1.0,3.0,20.0,359.0,5.57,5.28,-2.28,buy: pressure without the sacks
 00-0031040,Khalil Mack,ED,Chargers,18.0,2026,1.0,5.5,23.0,424.0,5.42,6.07,-0.57,buy: pressure without the sacks
-00-0031565,Danielle Hunter,ED,Texans,40.1,2026,1.0,15.0,34.0,728.0,4.67,8.97,6.03,careful: sacks above pressures
 00-0027940,Von Miller,ED,Cowboys,5.5,2026,1.0,9.0,19.0,420.0,4.52,5.01,3.99,careful: sacks above pressures
 00-0039111,Tuli Tuipulotu,ED,Chargers,1.64,2023,4.0,13.0,32.0,733.0,4.37,8.45,4.55,careful: sacks above pressures
 00-0039068,YaYa Diaby,ED,Buccaneers,1.37,2023,4.0,7.0,32.0,783.0,4.09,8.45,-1.45,buy: pressure without the sacks
@@ -12,7 +11,6 @@ gsis_id,player,position,team,apy,year_signed,years,sk,prss,snaps,prss100,exp_sk,
 00-0033046,Jihad Ward,ED,Giants,1.3,2026,1.0,5.0,27.0,708.0,3.81,7.13,-2.13,buy: pressure without the sacks
 00-0027962,Cameron Jordan,ED,Saints,7.5,2026,1.0,10.5,22.0,590.0,3.73,5.81,4.69,careful: sacks above pressures
 00-0034163,Jacob Martin,ED,Titans,9.0,2026,1.0,5.5,26.0,700.0,3.71,6.86,-1.36,buy: pressure without the sacks
-00-0036333,Alex Highsmith,ED,Steelers,17.0,2023,4.0,9.5,23.0,634.0,3.63,6.07,3.43,careful: sacks above pressures
 00-0036286,K'Lavon Chaisson,ED,Commanders,11.0,2026,1.0,7.5,23.0,639.0,3.6,6.07,1.43,
 00-0037815,Cameron Thomas,ED,Falcons,3.1,2026,1.0,2.5,11.0,310.0,3.55,2.9,-0.4,buy: pressure without the sacks
 00-0035647,Montez Sweat,ED,Bears,24.5,2023,4.0,10.0,27.0,780.0,3.46,7.13,2.87,careful: sacks above pressures
@@ -22,20 +20,21 @@ gsis_id,player,position,team,apy,year_signed,years,sk,prss,snaps,prss100,exp_sk,
 00-0037665,Sam Williams,ED,Browns,1.14,2026,1.0,1.0,15.0,474.0,3.16,3.96,-2.96,buy: pressure without the sacks
 00-0033876,Derek Barnett,ED,Browns,3.5,2026,1.0,5.0,11.0,350.0,3.14,2.9,2.1,careful: sacks above pressures
 00-0031054,DaQuan Jones,IDL,Patriots,3.5,2026,1.0,3.0,13.0,422.0,3.08,3.43,-0.43,buy: pressure without the sacks
-00-0035402,Carl Granderson,ED,Saints,13.0,2023,4.0,6.0,23.0,765.0,3.01,6.07,-0.07,buy: pressure without the sacks
 00-0038505,Tavius Robinson,ED,Ravens,1.14,2023,4.0,4.5,13.0,451.0,2.88,3.43,1.07,
 00-0037799,Dondrea Tillman,ED,Broncos,1.08,2026,1.0,4.0,12.0,417.0,2.88,3.17,0.83,
 00-0038116,Arnold Ebiketie,ED,Eagles,4.3,2026,1.0,2.0,11.0,384.0,2.86,2.9,-0.9,buy: pressure without the sacks
 00-0038412,Moro Ojomo,IDL,Eagles,0.98,2023,4.0,6.0,21.0,740.0,2.84,5.54,0.46,
 00-0035279,Charles Omenihu,ED,Commanders,4.0,2026,1.0,3.5,16.0,565.0,2.83,4.22,-0.72,buy: pressure without the sacks
 00-0036989,Malcolm Koonce,ED,Raiders,11.01,2026,1.0,4.5,14.0,501.0,2.79,3.7,0.8,
+00-0035272,Andrew Van Ginkel,ED,Vikings,23.0,2025,1.0,7.0,16.0,582.0,2.75,4.22,2.78,careful: sacks above pressures
 00-0036192,A.J. Epenesa,ED,Eagles,1.4,2026,1.0,2.5,12.0,438.0,2.74,3.17,-0.67,buy: pressure without the sacks
 00-0039138,Kobie Turner,IDL,Rams,1.35,2023,4.0,7.0,20.0,750.0,2.67,5.28,1.72,
 00-0032164,Arik Armstead,ED,Jaguars,14.5,2024,3.0,5.5,16.0,619.0,2.58,4.22,1.28,
+00-0039031,Adetomiwa Adebawore,ED,Colts,17.5,2026,2.0,4.0,14.0,548.0,2.55,3.7,0.3,
 00-0033945,Samson Ebukam,ED,Falcons,2.76,2026,1.0,2.0,9.0,415.0,2.17,2.38,-0.38,buy: pressure without the sacks
 00-0039148,Keion White,ED,NE/SF,1.95,2023,4.0,1.5,9.0,442.0,2.04,2.38,-0.88,buy: pressure without the sacks
-00-0034760,Nathan Shepherd,IDL,Saints,4.26,2025,2.0,3.0,14.0,696.0,2.01,3.7,-0.7,
-00-0033120,Kenny Clark,IDL,GB/DAL,21.33,2024,3.0,3.0,15.0,748.0,2.01,3.96,-0.96,
+00-0034760,Nathan Shepherd,IDL,Saints,4.26,2025,2.0,3.0,14.0,696.0,2.01,3.7,-0.7,buy: pressure without the sacks
+00-0033120,Kenny Clark,IDL,GB/DAL,21.33,2024,3.0,3.0,15.0,748.0,2.01,3.96,-0.96,buy: pressure without the sacks
 00-0034773,Vita Vea,IDL,Buccaneers,30.0,2026,1.0,4.5,15.0,764.0,1.96,3.96,0.54,
 00-0032415,Matt Judon,ED,49ers,0.33,2026,1.0,0.0,7.0,368.0,1.9,1.85,-1.85,
 00-0039431,Jowon Briggs,IDL,Jets,1.08,2026,1.0,4.0,11.0,588.0,1.87,2.9,1.1,
@@ -44,16 +43,17 @@ gsis_id,player,position,team,apy,year_signed,years,sk,prss,snaps,prss100,exp_sk,
 00-0036867,Chris Rumph II,ED,Saints,2.0,2026,1.0,2.0,6.0,330.0,1.82,1.58,0.42,
 00-0033870,Solomon Thomas,IDL,DAL/TEN,3.0,2025,2.0,0.0,7.0,419.0,1.67,1.85,-1.85,
 00-0038574,Isaiah McGuire,ED,Browns,1.14,2023,4.0,2.0,7.0,427.0,1.64,1.85,0.15,
-00-0035683,Dexter Lawrence,IDL,Bengals,28.0,2026,1.0,0.5,12.0,754.0,1.59,3.17,-2.67,
 00-0034371,Da'Shawn Hand,ED,Falcons,3.0,2026,1.0,1.5,7.0,451.0,1.55,1.85,-0.35,
+00-0032146,Bud Dupree,ED,Chargers,4.0,2025,1.0,2.0,6.0,390.0,1.54,1.58,0.42,
 00-0037262,Thomas Booker,IDL,Raiders,3.67,2026,1.0,0.0,9.0,603.0,1.49,2.38,-2.38,
+00-0034333,Daron Payne,IDL,Commanders,18.94,2023,1.0,3.0,9.0,607.0,1.48,2.38,0.62,
 00-0033952,Grover Stewart,IDL,Colts,13.0,2024,3.0,0.5,10.0,683.0,1.46,2.64,-2.14,
-00-0027969,Cameron Heyward,IDL,Steelers,18.0,2026,1.0,3.5,12.0,823.0,1.46,3.17,0.33,
 00-0038778,Jalen Redmond,IDL,Vikings,1.08,2026,1.0,6.0,11.0,793.0,1.39,2.9,3.1,careful: sacks above pressures
 00-0031270,Shelby Harris,IDL,Giants,3.0,2026,1.0,1.0,7.0,509.0,1.38,1.85,-0.85,
 00-0036642,Tedarrell Slaton,IDL,Bengals,7.05,2025,2.0,3.0,8.0,582.0,1.37,2.11,0.89,
 00-0033066,Andrew Billings,IDL,Cardinals,2.5,2026,1.0,1.0,7.0,511.0,1.37,1.85,-0.85,
 00-0036995,Baron Browning,ED,Cardinals,7.5,2025,2.0,2.0,7.0,519.0,1.35,1.85,0.15,
+00-0036883,Tommy Togiai,IDL,Texans,2.68,2025,1.0,1.5,6.0,459.0,1.31,1.58,-0.08,
 00-0036337,James Lynch,IDL,Bears,1.22,2026,1.0,0.5,4.0,334.0,1.2,1.06,-0.56,
 00-0035674,Jerry Tillery,IDL,Colts,1.49,2026,1.0,1.5,4.0,376.0,1.06,1.06,0.44,
 00-0035254,Anthony Nelson,ED,Buccaneers,5.0,2025,2.0,3.0,4.0,386.0,1.04,1.06,1.94,
@@ -65,6 +65,10 @@ gsis_id,player,position,team,apy,year_signed,years,sk,prss,snaps,prss100,exp_sk,
 00-0033860,Davon Godchaux,IDL,Saints,5.5,2025,2.0,0.0,4.0,456.0,0.88,1.06,-1.06,
 00-0034302,Frankie Luvu,ED,Commanders,10.33,2024,3.0,3.0,9.0,1107.0,0.81,2.38,0.62,
 00-0038387,Colby Wooden,IDL,IND/GB/NO,1.15,2023,4.0,0.0,4.0,587.0,0.68,1.06,-1.06,
+00-0036262,Davon Hamilton,IDL,Jaguars,11.5,2023,3.0,1.0,3.0,486.0,0.62,0.79,0.21,
 00-0038623,Dante Stills,IDL,Cardinals,0.99,2023,4.0,0.0,3.0,548.0,0.55,0.79,-0.79,
 00-0035667,Greg Gaines,IDL,Bills,1.49,2026,1.0,2.0,2.0,369.0,0.54,0.53,1.47,
+00-0034782,Harrison Phillips,IDL,MIN/NYJ,7.5,2024,2.0,0.5,3.0,693.0,0.43,0.79,-0.29,
+00-0030070,John Jenkins,IDL,Ravens,1.75,2025,1.0,1.0,2.0,523.0,0.38,0.53,0.47,
 00-0033093,Jonathan Bullard,IDL,Cowboys,2.0,2026,1.0,0.0,1.0,327.0,0.31,0.26,-0.26,
+00-0038653,Cory Durden,IDL,Patriots,0.23,2025,1.0,0.0,1.0,383.0,0.26,0.26,-0.26,

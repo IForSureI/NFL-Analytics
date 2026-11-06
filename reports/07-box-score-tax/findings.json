@@ -135,7 +135,7 @@
   ],
   "current_season":2026,
   "fa_class":2027,
-  "fa_rushers_n":69,
+  "fa_rushers_n":73,
   "fa_buy_targets":[
     [
       "Dante Fowler Jr.",
@@ -202,13 +202,6 @@
       26.0
     ],
     [
-      "Danielle Hunter",
-      "ED",
-      40.1,
-      15.0,
-      34.0
-    ],
-    [
       "Von Miller",
       "ED",
       5.5,
@@ -221,6 +214,13 @@
       1.6,
       13.0,
       32.0
+    ],
+    [
+      "Cameron Jordan",
+      "ED",
+      7.5,
+      10.5,
+      22.0
     ]
   ],
   "cov_pairs":605,
