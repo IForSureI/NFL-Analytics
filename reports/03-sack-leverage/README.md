@@ -68,7 +68,7 @@ Top five by expected points taken: M.Garrett (23 sacks, 35.8 EPA), W.Anderson (1
 
 **In equations**
 
-- Value of a sack $= -\text{EPA}_{\text{play}}$ (nflfastR expected points), credited half and half on shared sacks.
+- Value of a sack $`= -\text{EPA}_{\text{play}}`$ (nflfastR expected points), credited half and half on shared sacks.
 
 ## Validation
 
