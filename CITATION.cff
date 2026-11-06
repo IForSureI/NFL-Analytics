@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you refer to this work, cite it as below. All rights reserved; see LICENSE."
+title: "Dylan Fanelli NFL Analytics Portfolio"
+abstract: "NFL analytics studies on public data: a fourth-down decision bot with its own win-probability model, a flag audit, sack leverage, a luck index, kickoff value, pass vs run, the box-score tax on pass-rusher contracts and the YAC tax on receiver contracts."
+type: software
+authors:
+  - given-names: Dylan
+    family-names: Fanelli
+repository-code: "https://github.com/IForSureI/NFL-Analytics"
+date-released: 2026-11-06
+keywords:
+  - football
+  - nfl
+  - sports-analytics
+  - sabermetrics
