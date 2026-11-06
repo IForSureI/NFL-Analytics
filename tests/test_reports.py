@@ -42,3 +42,11 @@ def test_luck_does_not_repeat():
 def test_pass_beats_run_every_season():
     f = load("06-pass-run")
     assert f["seasons_pass_better"] == f["seasons_total"]
+
+
+def test_box_score_tax_direction():
+    f = load("07-box-score-tax")
+    assert f["yoy_r_pressure_rate"] > f["yoy_r_sack_rate"]           # pressures are the stabler skill
+    assert abs(f["yoy_r_sack_luck"]) < 0.2                           # sack luck does not repeat
+    assert f["musd_per_lucky_sack_ci"][0] > 0                        # ...but the market pays for it
+    assert 0.2 < f["league_sacks_per_pressure"] < 0.35
