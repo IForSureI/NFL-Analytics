@@ -67,3 +67,10 @@ def test_contract_end_year():
          {"contract_type": "Extension", "year_signed": 2024, "yrs": 3}]  # duplicate listing
     assert contract_end_year(h) == 2027
     assert contract_end_year([{"contract_type": "UFA", "year_signed": 2026, "yrs": 1}]) == 2026
+
+
+def test_flag_audit_ranges():
+    f = load("01-flag-audit")
+    assert 0.0 < f["crew_yoy_r"] < 0.6                 # crews have a modest style, not a fixed one
+    assert abs(f["split_r_net"]) < 0.3                 # a team's net flag luck does not carry over
+    assert 0.4 < f["false_start_road_share"] < 0.6     # false starts split about evenly
