@@ -286,12 +286,50 @@ def box_score_tax():
 """
 
 
+def yac_tax():
+    f = F("08-yac-tax")
+    y = f["yoy_r"]; pr = f["predict_next_yards_per_yard"]; pc = f["predict_ci"]; pay = f["musd_per_100_yards"]; pci = f["musd_per_100_yards_ci"]
+    fut = f["musd_per_100_future_yards"]
+    def lst(xs):
+        return ", ".join(f"{x[0]} ({x[1]}, {x[2]:,.0f} yds, {x[3]:+.0f} YAC over expected)" for x in xs)
+    return f"""# 08 The YAC Tax: do teams pay receivers for yards after the catch that won't come back?
+
+**The question:** study 07 found teams pay for sacks beyond what pressures predict. Receivers have the same shape of problem. A receiver's yards split three ways, using NFL Next Gen Stats tracking: air yards on his catches, the yards after the catch a typical receiver would get on those same catches (expected YAC), and **YAC above expected**, where broken tackles, missed angles and luck live. If YAC above expected repeats less than the rest but is paid like the rest, it is a tax.
+**Data:** NFL Next Gen Stats receiving ({f['seasons']}, qualified receivers, {f['player_seasons']:,} player-seasons) and {f['market_contracts']} veteran WR/TE contracts from Over The Cap ({f['market_players']} players, signed 2019-2026), via [nflverse](https://github.com/nflverse/nflverse-data). Dollars in 2026 cap terms ($301.2M).
+**Code:** [`projects/yac_tax.py`](../../projects/yac_tax.py)
+
+## What I found
+1. **Where the catch happens repeats; what happens after is shakier.** Year to year: depth of target r = {y['avg_intended_air_yards']:.2f}, separation r = {y['avg_separation']:.2f}, catch rate r = {y['catch_percentage']:.2f}, YAC per catch r = {y['avg_yac']:.2f}, **YAC above expected per catch r = {y['avg_yac_above_expectation']:.2f}** ({f['pairs']} back-to-back receiver seasons).
+2. **But the YAC tax mostly isn't there.** Per catch, YAC above expected is noisy. Over a season of catches it adds up to something real: each yard of it predicts {pr['yacoe_yds']:.2f} yards the next season (95% interval {pc['yacoe_yds'][0]:.2f}-{pc['yacoe_yds'][1]:.2f}), about the same as an air yard ({pr['air_yds']:.2f}). Season-long YAC over expected carries over much more than the per-catch number suggests.
+3. **The market prices it about right.** Contracts pay ${pay['yacoe_yds']:.2f}M a year per 100 yards of YAC above expected, ${pay['air_yds']:.2f}M per 100 air yards and ${pay['xyac_yds']:.2f}M per 100 expected-YAC yards. Per future yard, that works out to ${fut['yacoe_yds']:.2f}M (YAC above expected), ${fut['air_yds']:.2f}M (air yards) and ${fut['xyac_yds']:.2f}M (expected YAC) per 100. Those are close, and the intervals overlap. Unlike sacks in study 07, I can't find a premium for the lucky part of receiving production. The robustness table (WR only, TE only, multi-year deals, deals over 1% of the cap, 2023-2026 deals) tells the same story.
+4. **What that means for a front office.** The data says not to discount a receiver's YAC as luck by default. The most stable traits are target depth and separation, and the market already pays for production built on them. The receiver market looks efficient where the pass-rush market (study 07) does not.
+5. **The {f['fa_class']} free-agent receivers.** Contracts ending after {f['current_season']} (Over The Cap, extensions counted), still active: most {f['current_season'] - 1} yards came from {lst(f['fa_top_yards'][:4])}. Leaned most on YAC above expected (100+ yards): {lst(f['fa_leaned'])}. Given finding 2, that is a reason to look closer, not to pass.
+
+![Stability](receiver_stability.png)
+![Price vs prediction](yac_tax.png)
+
+## Method
+- **Yards split:** air yards on catches = yards - catches x YAC per catch; expected YAC = catches x NGS expected YAC per catch; YAC above expected = catches x NGS YAC above expectation per catch. The three add up to total receiving yards.
+- **Prediction:** next season's yards on this season's three parts plus targets; **price:** APY as % of the cap on the platform season's three parts plus targets. Both cluster standard errors by player. Output in `models.txt`.
+- **Contracts:** veteran WR/TE deals (rookie deals and duplicates dropped), at least 0.4% of the cap, platform season = the season before signing.
+- **Free agents:** end year from each player's Over The Cap contract history, with extensions added after the deal they extend; first-round rookie deals (fifth-year option) left out; must have played offense this season.
+
+## Limits
+- NGS season tables only include qualified receivers, so part-time players and many tight ends are missing.
+- Expected YAC is the NFL's model; the split is only as good as it is.
+- Contract status can lag a new extension. Puka Nacua and George Pickens (franchise tag) were both in the final year of their deals as of this writing; check before acting.
+
+## Files
+`receivers_{f['current_season'] - 1}.csv`, `free_agents_{f['fa_class']}_receivers.csv`, `robustness_price_per_100_yards.csv`, `models.txt`, `findings.json`
+"""
+
+
 REPORTS = [("01-flag-audit", flag_audit), ("02-fourth-down-bot", fourth), ("03-sack-leverage", sacks),
-           ("04-luck-index", luck), ("05-kickoff-value", kickoff), ("06-pass-run", passrun), ("07-box-score-tax", box_score_tax)]
+           ("04-luck-index", luck), ("05-kickoff-value", kickoff), ("06-pass-run", passrun), ("07-box-score-tax", box_score_tax), ("08-yac-tax", yac_tax)]
 
 
 def top_readme():
-    f1, f2, f3, f4, f5, f6, f7 = (F(s) for s, _ in REPORTS)
+    f1, f2, f3, f4, f5, f6, f7, f8 = (F(s) for s, _ in REPORTS)
     g = f2["go_rate_clear_spots"]; ys = sorted(g)
     era = {k.strip("()").replace("'", "").replace(" ", ""): v for k, v in f1["home_edge_by_era"].items()}
     old = sorted({k.split(",")[0] for k in era})[0]
@@ -299,7 +337,7 @@ def top_readme():
     k = f5["by_season"]
     return f"""# NFL Analytics
 
-Football analytics by **Dylan Fanelli** (M.S. Sport Management, UMass Amherst McCormack). Seven studies on public NFL data, each one starting from a question a coach, scout or fan argues about, then testing it with data. Python, SQL-ready parquet, tested code, and charts a coach can read.
+A portfolio I am building to show proficiency in NFL statistics and sabermetrics-style analysis, aimed at a job in an NFL club front office. By **Dylan Fanelli** (M.S. Sport Management candidate, UMass Amherst McCormack). Studies on public NFL data, each one starting from a question a coach, scout or fan argues about, then testing it with data. Python, SQL-ready parquet, tested code, and charts a coach can read.
 
 Built on [nflverse](https://github.com/nflverse) data. Inspired by two of the best football explainers working: **Michael MacKelvie** (data storytelling) and **Brett Kollmann** (film plus numbers). Each report links the video that started it. See [`docs/inspiration.md`](docs/inspiration.md).
 
@@ -316,6 +354,7 @@ Built on [nflverse](https://github.com/nflverse) data. Inspired by two of the be
 | 05 | [Kickoff Value](reports/05-kickoff-value/) | What did the new kickoff do? | Returns went from {pct(k['2023']['return_rate'])} (2023) to {pct(k['2025']['return_rate'])} (2025); the average return still lands {abs(f5['returned_vs_tb_league']):.1f} yards behind a touchback |
 | 06 | [Pass vs Run](reports/06-pass-run/) | Passing is better, so why run? | Passing won on neutral early downs in {f6['seasons_pass_better']} of {f6['seasons_total']} seasons, but team pass rate over expected tracks efficiency only at r = {f6['team_corr_proe_epa_last_full']:.2f} |
 | 07 | [The Box-Score Tax](reports/07-box-score-tax/) | Where is value hiding? | Teams pay about ${f7['musd_per_lucky_sack_2026']:.2f}M a year per "lucky" sack (sacks beyond what pressures predict) though sack luck repeats at r = {f7['yoy_r_sack_luck']:.2f}; pressures repeat at r = {f7['yoy_r_pressure_rate']:.2f} vs sacks {f7['yoy_r_sack_rate']:.2f}. Includes a {f7['fa_class']} free-agent target list |
+| 08 | [The YAC Tax](reports/08-yac-tax/) | Do teams pay receivers for lucky YAC? | No clear tax: YAC above expected is noisy per catch (r = {f8['yoy_r']['avg_yac_above_expectation']:.2f}) but a season of it predicts next year like air yards do ({f8['predict_next_yards_per_yard']['yacoe_yds']:.2f} vs {f8['predict_next_yards_per_yard']['air_yds']:.2f} yards per yard), and the market prices it about right. Includes the {f8['fa_class']} free-agent receivers |
 
 ## What is in here
 ```
@@ -331,7 +370,7 @@ docs/           inspiration notes from the MacKelvie and Kollmann videos
 ## Run it
 ```bash
 pip install -r requirements.txt
-python scripts/update.py          # downloads nflverse data (about 400 MB), runs all seven studies, tests, READMEs
+python scripts/update.py          # downloads nflverse data (about 400 MB), runs every study, tests, READMEs
 pytest -q
 ```
 Each study also runs alone, for example `python -m projects.fourth_down_bot`.
@@ -342,7 +381,7 @@ Each study also runs alone, for example `python -m projects.fourth_down_bot`.
 - Ideas: Michael MacKelvie and Brett Kollmann (YouTube). Contracts: Over The Cap via nflverse; advanced defense: Pro Football Reference via nflverse. All analysis and any mistakes are mine.
 
 ## About
-Dylan Fanelli, M.S. Sport Management candidate at UMass Amherst (Mark H. McCormack Department), aiming for a club front office. Baseball work lives in a separate portfolio. [LinkedIn](https://www.linkedin.com/in/dylanfanelli/)
+Dylan Fanelli, M.S. Sport Management candidate at UMass Amherst (Mark H. McCormack Department). I am building this portfolio to show proficiency in NFL statistics and sabermetrics-style analysis, with the goal of a job in an NFL club front office. New studies are added through November 2026 and the data refreshes weekly in season. [LinkedIn](https://www.linkedin.com/in/dylanfanelli/)
 """
 
 
