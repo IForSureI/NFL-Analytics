@@ -67,7 +67,7 @@ With returns forced, the kicker decides field position. Best since 2025 (opponen
 
 **In equations**
 
-- Yards vs touchback $=$ receiving team's first-snap yard line $-$ touchback spot for that rule year (25 through 2023, 30 in 2024, 35 from 2025).
+- Yards vs touchback $`=`$ receiving team's first-snap yard line $`-`$ touchback spot for that rule year (25 through 2023, 30 in 2024, 35 from 2025).
 
 ## Validation
 
