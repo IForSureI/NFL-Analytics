@@ -134,7 +134,7 @@ Dylan Fanelli, M.S. Sport Management candidate at UMass Amherst (Mark H. McCorma
 
 I also keep a [baseball analytics portfolio](https://github.com/IForSureI/Dylan-Fanelli-Baseball-Analytics-Portfolio). [LinkedIn](https://www.linkedin.com/in/dylanfanelli/)
 
-<sub>Photos are my own; location data removed.</sub>
+<sub>Photos are my own.</sub>
 
 </td>
 </tr>
