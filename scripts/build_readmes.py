@@ -239,12 +239,59 @@ def passrun():
 """
 
 
+def _usd(x):
+    return f"-${abs(x):.2f}M" if x < 0 else f"${x:.2f}M"
+
+
+def box_score_tax():
+    f = F("07-box-score-tax")
+    bl = f["buy_low_last_full"]; sh = f["sell_high_last_full"]; fa = f["fa_buy_targets"]; ca = f["fa_careful"]
+    def rusher(x):
+        return f"{x[0]} ({x[1]}: {x[2]:g} sacks on {x[3]:g} pressures, {x[4]:.1f} expected)"
+    return f"""# 07 The Box-Score Tax: NFL teams pay for the stats that don't repeat
+
+**The question:** where is value hiding that people aren't looking at? My bet: in the gap between what a stat says about the past and what it says about the future. Sacks are the headline pass-rush stat. They are also rare, so they are noisy. Pressures happen two to four times as often. If teams pay for sacks more than sacks predict, a team that shops by pressures buys the same future sacks for less.
+**Data:** Pro Football Reference advanced defense ({f['seasons']}), nflverse snap counts, and {f['market_contracts']} veteran edge and interior DL contracts ({f['market_players']} players) from Over The Cap (signed 2019-2026), all via [nflverse](https://github.com/nflverse/nflverse-data). Dollars use the 2026 salary cap (${f['cap_2026_musd']}M).
+**Code:** [`projects/box_score_tax.py`](../../projects/box_score_tax.py). Prior work: PFF's Sam Monson made this argument in 2021 with player examples ([link](https://www.pff.com/news/nfl-teams-are-still-paying-for-sacks-in-free-agency-and-the-edge-defender-market-is-suffering-because-of-it)); this study puts a price on it with public data.
+
+## What I found
+1. **Pressures repeat; sacks bounce.** For pass rushers with 300+ snaps in back-to-back seasons ({f['rush_pairs']:,} pairs), pressure rate repeats at r = {f['yoy_r_pressure_rate']:.2f}, sack rate at r = {f['yoy_r_sack_rate']:.2f}. This year's pressure rate predicts next year's sack rate (r = {f['r_next_sack_rate_from_pressure_rate']:.2f}) better than this year's sack rate does (r = {f['r_next_sack_rate_from_sack_rate']:.2f}).
+2. **Teams pay full price for sack luck.** "Sack luck" means sacks above what a player's pressures predict (league rate: {f['league_sacks_per_pressure']:.2f} sacks per pressure). It barely repeats (r = {f['yoy_r_sack_luck']:.2f} year to year): holding pressures and snaps equal, one extra sack this year predicts only {f['future_sacks_per_lucky_sack']:.2f} extra sacks next year. Yet each one adds about **${f['musd_per_lucky_sack_2026']:.2f}M a year** to a veteran contract (95% interval ${f['musd_per_lucky_sack_ci'][0]:.2f}M to ${f['musd_per_lucky_sack_ci'][1]:.2f}M, 2026 dollars, errors clustered by player). Per future sack, that is about **${f['musd_per_future_sack_via_luck']:.2f}M** bought through sack luck vs **${f['musd_per_future_sack_via_pressure']:.2f}M** bought through pressures. The premium stays positive in all {f['robust_n']} versions in `robustness_lucky_sack_price.csv` (${f['robust_min']:.2f}M to ${f['robust_max']:.2f}M: with age controls, edge or interior alone, multi-year deals, deals over 1% of the cap). One version is weaker and worth watching: for deals signed 2023-2026 it is ${f['recent_deals_price'][0]:.2f}M and not significant (interval {_usd(f['recent_deals_price'][1])} to {_usd(f['recent_deals_price'][2])}), so the market may be starting to learn.
+3. **The price gap.** In contracts, one sack is priced like {f['market_ratio_sack_to_pressure']:.2f} non-sack pressures. In predicting next season's sacks, one sack is worth {f['predict_count_ratio']:.2f}. The 90% ranges overlap (market {f['market_ratio_ci90'][0]}-{f['market_ratio_ci90'][1]}, prediction {f['predict_ratio_ci90'][0]}-{f['predict_ratio_ci90'][1]}; the market ratio is higher in {100 * f['share_boot_market_above_predict']:.0f}% of 1,000 bootstrap samples that resample players). Two more reasons to read this as direction, not proof: the prediction side includes linebackers with 15+ pressures while contracts are ED/IDL only, and a contract pays for several years and run defense, not only next year's sacks. Finding 2 is the firmer evidence.
+4. **Buy low ({f['current_season'] - 1}).** Most pressure without the sacks: {'; '.join(rusher(x) for x in bl[:4])}.
+5. **Regression risk ({f['current_season'] - 1}).** Most sacks above their pressures: {'; '.join(rusher(x) for x in sh[:3])}. Garrett's season set the single-season sack record, and elite rushers can beat the league rate; the point is that the excess over pressures is the part least likely to repeat, and the part a contract should pay least for.
+6. **The {f['fa_class']} free-agent rushers to target.** Contracts ending after {f['current_season']} (Over The Cap via nflverse), still active in {f['current_season']}, ranked by {f['current_season'] - 1} pressure rate (rookie first-rounders with a fifth-year option left out): above-median pressure rate with fewer sacks than expected: {', '.join(f"{x[0]} ({x[1]}, {x[4]:g} pressures, {x[3]:g} sacks)" for x in fa[:5])}. Careful, sacks above pressures: {', '.join(f"{x[0]} ({x[3]:g} sacks on {x[4]:g} pressures)" for x in ca[:4])}.
+7. **Coverage: the same idea failed, and that matters.** I expected interceptions to be the coverage version of sacks. In PFR's charting, interception rate repeats best (r = {f['yoy_r_int_rate']:.2f}), above completion % allowed (r = {f['yoy_r_cmp_pct']:.2f}) and yards per target allowed (r = {f['yoy_r_yds_per_target']:.2f}). The market pays about ${f['musd_per_int_2026']:.2f}M per platform-year interception. Public coverage stats are too noisy to call that a mistake, so I don't.
+
+![Stability](rush_stability.png)
+![Tax](sack_tax.png)
+![Buy low](buy_low_rushers.png)
+![Coverage](coverage_stability.png)
+
+## Method
+- **Traded players:** PFR lists a combined row plus one row per team; only the combined row is kept.
+- **Pass rushers:** player-seasons with 300+ regular-season defensive snaps, listed DE/DT/DL/NT or with 15+ pressures (catches 3-4 outside linebackers). PFR pressures = sacks + hurries + knockdowns; "non-sack pressures" removes the sacks so the two are not double counted.
+- **Contracts:** veteran deals only (rookie contracts dropped, duplicates removed), at least 0.4% of the cap, matched to the player's season right before signing. Pay is measured as APY as a share of that year's cap, so 2019 and 2026 deals compare fairly. Pay and prediction regressions cluster standard errors by player (many players sign several deals); full output in `models.txt`.
+- **Like-for-like comparison:** the price ratio (sacks vs non-sack pressures in contracts) and the prediction ratio (sacks vs non-sack pressures in next season's sacks) both control for snaps.
+
+## Limits
+- Pressure charting is PFR's, which differs from PFF and NGS; all charting has judgment in it.
+- Contracts reflect more than stats: age, injuries, scheme fit and run defense. The sack-luck result holds pressures and snaps fixed but not those.
+- Free-agent status comes from Over The Cap via nflverse and can lag a new extension or a retirement. Check a player's status before acting.
+- The platform season is the season before signing, which mis-times in-season extensions slightly.
+- PFR's current-season file lags the snap counts, so player ratings use full seasons only.
+
+## Files
+`rusher_contracts_with_platform.csv`, `rusher_sack_luck_board.csv`, `free_agents_{f['fa_class']}_rushers.csv`, `models.txt`, `findings.json`
+"""
+
+
 REPORTS = [("01-flag-audit", flag_audit), ("02-fourth-down-bot", fourth), ("03-sack-leverage", sacks),
-           ("04-luck-index", luck), ("05-kickoff-value", kickoff), ("06-pass-run", passrun)]
+           ("04-luck-index", luck), ("05-kickoff-value", kickoff), ("06-pass-run", passrun), ("07-box-score-tax", box_score_tax)]
 
 
 def top_readme():
-    f1, f2, f3, f4, f5, f6 = (F(s) for s, _ in REPORTS)
+    f1, f2, f3, f4, f5, f6, f7 = (F(s) for s, _ in REPORTS)
     g = f2["go_rate_clear_spots"]; ys = sorted(g)
     era = {k.strip("()").replace("'", "").replace(" ", ""): v for k, v in f1["home_edge_by_era"].items()}
     old = sorted({k.split(",")[0] for k in era})[0]
@@ -252,7 +299,7 @@ def top_readme():
     k = f5["by_season"]
     return f"""# NFL Analytics
 
-Football analytics by **Dylan Fanelli** (M.S. Sport Management, UMass Amherst McCormack). Six studies on public NFL play-by-play, each one starting from a question a coach, scout or fan argues about, then testing it with data. Python, SQL-ready parquet, tested code, and charts a coach can read.
+Football analytics by **Dylan Fanelli** (M.S. Sport Management, UMass Amherst McCormack). Seven studies on public NFL data, each one starting from a question a coach, scout or fan argues about, then testing it with data. Python, SQL-ready parquet, tested code, and charts a coach can read.
 
 Built on [nflverse](https://github.com/nflverse) data. Inspired by two of the best football explainers working: **Michael MacKelvie** (data storytelling) and **Brett Kollmann** (film plus numbers). Each report links the video that started it. See [`docs/inspiration.md`](docs/inspiration.md).
 
@@ -268,6 +315,7 @@ Built on [nflverse](https://github.com/nflverse) data. Inspired by two of the be
 | 04 | [Luck Index](reports/04-luck-index/) | How much is luck? | Fumble, kick and close-game luck repeat at r < 0.1; teams 2+ wins over their points drop {abs(f4['lucky_change_wins_per17']):.1f} wins the next year |
 | 05 | [Kickoff Value](reports/05-kickoff-value/) | What did the new kickoff do? | Returns went from {pct(k['2023']['return_rate'])} (2023) to {pct(k['2025']['return_rate'])} (2025); the average return still lands {abs(f5['returned_vs_tb_league']):.1f} yards behind a touchback |
 | 06 | [Pass vs Run](reports/06-pass-run/) | Passing is better, so why run? | Passing won on neutral early downs in {f6['seasons_pass_better']} of {f6['seasons_total']} seasons, but team pass rate over expected tracks efficiency only at r = {f6['team_corr_proe_epa_last_full']:.2f} |
+| 07 | [The Box-Score Tax](reports/07-box-score-tax/) | Where is value hiding? | Teams pay about ${f7['musd_per_lucky_sack_2026']:.2f}M a year per "lucky" sack (sacks beyond what pressures predict) though sack luck repeats at r = {f7['yoy_r_sack_luck']:.2f}; pressures repeat at r = {f7['yoy_r_pressure_rate']:.2f} vs sacks {f7['yoy_r_sack_rate']:.2f}. Includes a {f7['fa_class']} free-agent target list |
 
 ## What is in here
 ```
@@ -283,7 +331,7 @@ docs/           inspiration notes from the MacKelvie and Kollmann videos
 ## Run it
 ```bash
 pip install -r requirements.txt
-python scripts/update.py          # downloads nflverse data (about 400 MB), runs all six studies, tests, READMEs
+python scripts/update.py          # downloads nflverse data (about 400 MB), runs all seven studies, tests, READMEs
 pytest -q
 ```
 Each study also runs alone, for example `python -m projects.fourth_down_bot`.
@@ -291,7 +339,7 @@ Each study also runs alone, for example `python -m projects.fourth_down_bot`.
 ## Data and credit
 - Play-by-play and officials data: [nflverse](https://github.com/nflverse/nflverse-data) (CC-BY 4.0), with nflfastR's EPA and win-probability models.
 - Fourth-down method: the public idea behind [nfl4th](https://github.com/nflverse/nfl4th) by Ben Baldwin, rebuilt from scratch.
-- Ideas: Michael MacKelvie and Brett Kollmann (YouTube). All analysis and any mistakes are mine.
+- Ideas: Michael MacKelvie and Brett Kollmann (YouTube). Contracts: Over The Cap via nflverse; advanced defense: Pro Football Reference via nflverse. All analysis and any mistakes are mine.
 
 ## About
 Dylan Fanelli, M.S. Sport Management candidate at UMass Amherst (Mark H. McCormack Department), aiming for a club front office. Baseball work lives in a separate portfolio. [LinkedIn](https://www.linkedin.com/in/dylanfanelli/)
