@@ -1,6 +1,6 @@
 # NFL Analytics
 
-Football analytics by **Dylan Fanelli** (M.S. Sport Management, UMass Amherst McCormack). Seven studies on public NFL data, each one starting from a question a coach, scout or fan argues about, then testing it with data. Python, SQL-ready parquet, tested code, and charts a coach can read.
+A portfolio I am building to show proficiency in NFL statistics and sabermetrics-style analysis, aimed at a job in an NFL club front office. By **Dylan Fanelli** (M.S. Sport Management candidate, UMass Amherst McCormack). Studies on public NFL data, each one starting from a question a coach, scout or fan argues about, then testing it with data. Python, SQL-ready parquet, tested code, and charts a coach can read.
 
 Built on [nflverse](https://github.com/nflverse) data. Inspired by two of the best football explainers working: **Michael MacKelvie** (data storytelling) and **Brett Kollmann** (film plus numbers). Each report links the video that started it. See [`docs/inspiration.md`](docs/inspiration.md).
 
@@ -17,6 +17,7 @@ Built on [nflverse](https://github.com/nflverse) data. Inspired by two of the be
 | 05 | [Kickoff Value](reports/05-kickoff-value/) | What did the new kickoff do? | Returns went from 21% (2023) to 75% (2025); the average return still lands 5.6 yards behind a touchback |
 | 06 | [Pass vs Run](reports/06-pass-run/) | Passing is better, so why run? | Passing won on neutral early downs in 21 of 21 seasons, but team pass rate over expected tracks efficiency only at r = 0.20 |
 | 07 | [The Box-Score Tax](reports/07-box-score-tax/) | Where is value hiding? | Teams pay about $0.62M a year per "lucky" sack (sacks beyond what pressures predict) though sack luck repeats at r = 0.10; pressures repeat at r = 0.71 vs sacks 0.46. Includes a 2027 free-agent target list |
+| 08 | [The YAC Tax](reports/08-yac-tax/) | Do teams pay receivers for lucky YAC? | No clear tax: YAC above expected is noisy per catch (r = 0.36) but a season of it predicts next year like air yards do (0.66 vs 0.55 yards per yard), and the market prices it about right. Includes the 2027 free-agent receivers |
 
 ## What is in here
 ```
@@ -32,7 +33,7 @@ docs/           inspiration notes from the MacKelvie and Kollmann videos
 ## Run it
 ```bash
 pip install -r requirements.txt
-python scripts/update.py          # downloads nflverse data (about 400 MB), runs all seven studies, tests, READMEs
+python scripts/update.py          # downloads nflverse data (about 400 MB), runs every study, tests, READMEs
 pytest -q
 ```
 Each study also runs alone, for example `python -m projects.fourth_down_bot`.
@@ -43,4 +44,4 @@ Each study also runs alone, for example `python -m projects.fourth_down_bot`.
 - Ideas: Michael MacKelvie and Brett Kollmann (YouTube). Contracts: Over The Cap via nflverse; advanced defense: Pro Football Reference via nflverse. All analysis and any mistakes are mine.
 
 ## About
-Dylan Fanelli, M.S. Sport Management candidate at UMass Amherst (Mark H. McCormack Department), aiming for a club front office. Baseball work lives in a separate portfolio. [LinkedIn](https://www.linkedin.com/in/dylanfanelli/)
+Dylan Fanelli, M.S. Sport Management candidate at UMass Amherst (Mark H. McCormack Department). I am building this portfolio to show proficiency in NFL statistics and sabermetrics-style analysis, with the goal of a job in an NFL club front office. New studies are added through November 2026 and the data refreshes weekly in season. [LinkedIn](https://www.linkedin.com/in/dylanfanelli/)
