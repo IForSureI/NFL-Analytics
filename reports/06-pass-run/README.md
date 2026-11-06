@@ -63,7 +63,7 @@ In 2025, a team's pass rate over expected correlated only r = 0.20 with its EPA 
 
 **In equations**
 
-- Pass rate over expected (PROE) $=$ actual dropback rate $- \overline{\text{xpass}}$, where xpass is nflfastR's dropback probability given the situation.
+- Pass rate over expected (PROE) $`=`$ actual dropback rate $`- \overline{\text{xpass}}`$, where xpass is nflfastR's dropback probability given the situation.
 
 ## Validation
 
