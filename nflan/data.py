@@ -97,3 +97,34 @@ def load_snap_counts(seasons, refresh_current: int | None = None) -> pd.DataFram
         seasons = [seasons]
     return pd.concat([_release("snap_counts", f"snap_counts_{s}.parquet", s == refresh_current) for s in seasons],
                      ignore_index=True)
+
+
+def load_ngs_receiving(refresh: bool = False) -> pd.DataFrame:
+    """NFL Next Gen Stats receiving (2016+). week == 0 rows are season totals for qualified receivers."""
+    return _release("nextgen_stats", "ngs_receiving.parquet", refresh)
+
+
+def contract_end_year(history) -> float:
+    """Last season of a player's current deal from Over The Cap contract_history.
+
+    New deals run year_signed .. year_signed + yrs - 1. An extension adds its years after the deal
+    it extends (OTC counts only the new years). Fifth-year options and void years are not counted.
+    """
+    if history is None or len(history) == 0:
+        return float("nan")
+    seen, rows = set(), []
+    for h in history:
+        if h.get("year_signed") is None or h.get("yrs") is None:
+            continue
+        key = (h.get("contract_type"), int(h["year_signed"]), int(h["yrs"]))
+        if key not in seen:  # OTC sometimes lists the same deal twice
+            seen.add(key); rows.append(h)
+    rows.sort(key=lambda h: h["year_signed"])
+    end = None
+    for h in rows:
+        y, n = int(h["year_signed"]), int(h["yrs"])
+        if h.get("contract_type") == "Extension" and end is not None and end >= y:
+            end = end + n
+        else:
+            end = y + n - 1
+    return float(end) if end is not None else float("nan")
