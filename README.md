@@ -10,6 +10,8 @@ I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward 
 
 <p align="center"><img src="assets/at-a-glance.png" alt="Selected studies at a glance" width="100%"></p>
 
+<p><img src="assets/img/strip-helmets.jpg" width="100%" alt="All 32 NFL helmets on one wall"></p>
+
 ## The studies
 
 | # | Study | The question | Headline | Methods |
@@ -123,4 +125,17 @@ Full history: [LOG.md](LOG.md). Data refreshes weekly in season (last: November 
 <a id="about"></a>
 ## About
 
-Dylan Fanelli, M.S. Sport Management candidate at UMass Amherst (Mark H. McCormack Department). I am building this portfolio to show proficiency in NFL statistics and sabermetrics-style analysis, with the goal of a job in an NFL club front office. I also keep a [baseball analytics portfolio](https://github.com/IForSureI/Dylan-Fanelli-Baseball-Analytics-Portfolio). [LinkedIn](https://www.linkedin.com/in/dylanfanelli/)
+<table>
+<tr>
+<td width="32%" valign="top"><img src="assets/img/about-nfl.jpg" width="100%" alt="Dylan Fanelli"></td>
+<td valign="top">
+
+Dylan Fanelli, M.S. Sport Management candidate at UMass Amherst (Mark H. McCormack Department). I am building this portfolio to show proficiency in NFL statistics and sabermetrics-style analysis, with the goal of a job in an NFL club front office.
+
+I also keep a [baseball analytics portfolio](https://github.com/IForSureI/Dylan-Fanelli-Baseball-Analytics-Portfolio). [LinkedIn](https://www.linkedin.com/in/dylanfanelli/)
+
+<sub>Photos are my own; location data removed.</sub>
+
+</td>
+</tr>
+</table>
