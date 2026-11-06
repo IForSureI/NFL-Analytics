@@ -234,7 +234,7 @@ def main():
     allc = data.load_contracts()
     allc = allc[allc.position.isin(["ED", "IDL"]) & allc.gsis_id.notna()].sort_values("year_signed")
     latest = allc.groupby("gsis_id").tail(1).copy()
-    latest["end_year"] = latest.year_signed + latest.years - 1
+    latest["end_year"] = latest.contract_history.map(data.contract_end_year)
     option = (latest.draft_round == 1) & (latest.year_signed == latest.draft_year)  # 5th-year option can extend these
     fa = latest[(latest.end_year == last) & ~option][["gsis_id", "player", "position", "team", "apy", "year_signed", "years"]]
     two = ps[(ps.season == last - 1) & ps.gsis_id.notna()][["gsis_id", "sk", "prss", "def_snaps"]].rename(columns={"def_snaps": "snaps"})
