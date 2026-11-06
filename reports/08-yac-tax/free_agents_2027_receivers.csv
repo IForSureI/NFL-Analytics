@@ -1,0 +1,33 @@
+gsis_id,player,position,team,apy,yards,targets,air_yds,xyac_yds,yacoe_yds,avg_separation,avg_intended_air_yards,ypt,yacoe_share,flag
+00-0039075,Puka Nacua,WR,Rams,1.02,1715.0,166,996.3,548.35,170.35,2.83,8.94,10.33,0.1,leaned on YAC above expected (100+ yards)
+00-0037247,George Pickens,WR,Cowboys,27.3,1429.0,137,942.5,286.33,200.17,2.24,11.81,10.43,0.14,leaned on YAC above expected (100+ yards)
+00-0031588,Stefon Diggs,WR,Commanders,8.0,1013.0,102,636.8,329.94,46.26,3.04,8.52,9.93,0.05,
+00-0030506,Travis Kelce,TE,Chiefs,12.0,851.0,108,389.97,427.77,33.26,3.18,6.35,7.88,0.04,
+00-0038606,Parker Washington,WR,Jaguars,1.01,847.0,95,564.23,181.8,100.97,2.32,12.68,8.92,0.12,leaned on YAC above expected (100+ yards)
+00-0031381,Davante Adams,WR,Rams,22.0,789.0,114,665.31,156.94,-33.25,2.12,13.22,6.92,-0.04,YAC below expected
+00-0030279,Keenan Allen,WR,Colts,3.32,777.0,122,527.86,225.29,23.85,2.63,8.46,6.37,0.03,
+00-0035719,Deebo Samuel,WR,49ers,4.1,727.0,99,263.47,383.72,79.81,3.55,5.31,7.34,0.11,
+00-0038563,Tre Tucker,WR,Raiders,1.33,696.0,92,397.31,277.59,21.1,3.56,10.34,7.57,0.03,
+00-0036259,Jauan Jennings,WR,Vikings,8.0,643.0,90,458.67,141.75,42.58,2.23,10.18,7.14,0.07,
+00-0034351,Dallas Goedert,TE,Eagles,7.0,591.0,82,345.34,235.81,9.85,3.31,7.11,7.21,0.02,
+00-0035662,Marquise Brown,WR,Eagles,5.0,587.0,74,375.36,241.55,-29.91,3.19,11.18,7.93,-0.05,YAC below expected
+00-0039067,Rashee Rice,WR,Chiefs,1.62,571.0,78,139.57,400.64,30.79,3.57,4.46,7.32,0.05,
+00-0038997,Josh Downs,WR,Colts,1.38,559.0,88,406.04,145.71,7.25,2.63,7.79,6.35,0.01,
+00-0038608,Kayshon Boutte,WR,HOU/NE,1.01,551.0,46,507.08,54.59,-10.67,2.44,17.12,11.98,-0.02,YAC below expected
+00-0033555,Mack Hollins,WR,Patriots,4.2,550.0,65,444.38,117.73,-12.11,2.73,12.96,8.46,-0.02,YAC below expected
+00-0030061,Zach Ertz,TE,Eagles,0.51,504.0,72,358.66,184.02,-38.68,2.73,8.68,7.0,-0.08,YAC below expected
+00-0039065,Sam LaPorta,TE,Lions,2.37,489.0,49,204.99,243.07,40.94,3.44,5.64,9.98,0.08,
+00-0033881,Evan Engram,TE,Broncos,11.5,461.0,76,143.84,317.33,-0.17,4.58,4.29,6.07,-0.0,YAC below expected
+00-0038621,Demario Douglas,WR,Patriots,0.99,447.0,46,229.83,193.8,23.37,3.96,9.96,9.72,0.05,
+00-0036309,Darnell Mooney,WR,Giants,3.0,443.0,72,365.58,83.81,-6.39,2.94,14.21,6.15,-0.01,YAC below expected
+00-0035229,T.J. Hockenson,TE,Vikings,10.25,438.0,66,189.31,254.89,-6.2,3.76,4.76,6.64,-0.01,YAC below expected
+00-0038619,Andrei Iosivas,WR,Bengals,1.0,435.0,58,321.38,116.89,-3.27,2.44,9.86,7.5,-0.01,YAC below expected
+00-0038618,Xavier Hutchinson,WR,Texans,1.0,428.0,57,269.73,141.59,16.68,2.99,9.15,7.51,0.04,
+00-0036244,Colby Parkinson,TE,Rams,7.5,408.0,56,122.72,265.48,19.8,3.5,4.74,7.29,0.05,
+00-0032385,Sterling Shepard,WR,Jets,0.42,371.0,53,219.05,142.92,9.03,3.27,8.71,7.0,0.02,
+00-0036415,Van Jefferson,WR,Commanders,0.46,350.0,52,259.05,74.37,16.58,2.7,12.0,6.73,0.05,
+00-0038976,Marvin Mims,WR,Broncos,1.52,322.0,51,81.79,222.99,17.22,4.52,9.05,6.31,0.05,
+00-0033885,David Njoku,TE,Chargers,3.0,293.0,48,116.09,150.17,26.74,2.71,4.99,6.1,0.09,
+00-0037614,John Metchie III,WR,Panthers,1.9,274.0,48,124.17,177.06,-27.23,3.83,5.26,5.71,-0.1,YAC below expected
+00-0034775,Christian Kirk,WR,49ers,3.0,239.0,52,122.27,122.75,-6.02,2.52,7.22,4.6,-0.03,YAC below expected
+00-0033858,Jonnu Smith,TE,Packers,2.0,222.0,54,35.77,184.11,2.12,3.8,4.04,4.11,0.01,

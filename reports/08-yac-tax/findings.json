@@ -1,0 +1,320 @@
+{
+  "seasons":"2016-2025",
+  "player_seasons":1251,
+  "pairs":760,
+  "yoy_r":{
+    "avg_separation":0.592,
+    "avg_intended_air_yards":0.768,
+    "catch_percentage":0.482,
+    "avg_expected_yac":0.462,
+    "avg_yac":0.471,
+    "avg_yac_above_expectation":0.365,
+    "ypt":0.295
+  },
+  "predict_next_yards_per_yard":{
+    "air_yds":0.547,
+    "xyac_yds":0.333,
+    "yacoe_yds":0.662
+  },
+  "predict_ci":{
+    "air_yds":[
+      0.37,
+      0.723
+    ],
+    "xyac_yds":[
+      0.05,
+      0.617
+    ],
+    "yacoe_yds":[
+      0.35,
+      0.974
+    ]
+  },
+  "yoy_r_yacoe_yards":0.428,
+  "market_contracts":397,
+  "market_players":216,
+  "musd_per_100_yards":{
+    "air_yds":2.428,
+    "xyac_yds":1.87,
+    "yacoe_yds":3.238
+  },
+  "musd_per_100_yards_ci":{
+    "air_yds":[
+      1.845,
+      3.012
+    ],
+    "xyac_yds":[
+      0.78,
+      2.96
+    ],
+    "yacoe_yds":[
+      2.067,
+      4.409
+    ]
+  },
+  "musd_per_100_future_yards":{
+    "air_yds":4.44,
+    "xyac_yds":5.62,
+    "yacoe_yds":4.89
+  },
+  "robustness":[
+    {
+      "sample":"all",
+      "contracts":397,
+      "air_yds_musd_per_100":2.43,
+      "xyac_yds_musd_per_100":1.87,
+      "yacoe_yds_musd_per_100":3.24
+    },
+    {
+      "sample":"WR only",
+      "contracts":301,
+      "air_yds_musd_per_100":2.87,
+      "xyac_yds_musd_per_100":1.61,
+      "yacoe_yds_musd_per_100":3.11
+    },
+    {
+      "sample":"TE only",
+      "contracts":96,
+      "air_yds_musd_per_100":1.37,
+      "xyac_yds_musd_per_100":0.87,
+      "yacoe_yds_musd_per_100":3.01
+    },
+    {
+      "sample":"deals >= 1% of cap",
+      "contracts":312,
+      "air_yds_musd_per_100":2.26,
+      "xyac_yds_musd_per_100":1.52,
+      "yacoe_yds_musd_per_100":3.01
+    },
+    {
+      "sample":"multi-year deals",
+      "contracts":194,
+      "air_yds_musd_per_100":2.12,
+      "xyac_yds_musd_per_100":0.89,
+      "yacoe_yds_musd_per_100":2.27
+    },
+    {
+      "sample":"signed 2023-2026",
+      "contracts":199,
+      "air_yds_musd_per_100":3.03,
+      "xyac_yds_musd_per_100":2.14,
+      "yacoe_yds_musd_per_100":3.25
+    }
+  ],
+  "most_yacoe_last_full":[
+    [
+      "George Pickens",
+      "DAL",
+      1429.0,
+      200.0
+    ],
+    [
+      "Puka Nacua",
+      "LAR",
+      1715.0,
+      170.0
+    ],
+    [
+      "Ja'Marr Chase",
+      "CIN",
+      1412.0,
+      165.0
+    ],
+    [
+      "DK Metcalf",
+      "PIT",
+      850.0,
+      163.0
+    ],
+    [
+      "Khalil Shakir",
+      "BUF",
+      686.0,
+      134.0
+    ]
+  ],
+  "least_yacoe_last_full":[
+    [
+      "Kyle Pitts",
+      "ATL",
+      928.0,
+      -74.0
+    ],
+    [
+      "Chris Olave",
+      "NO",
+      1163.0,
+      -66.0
+    ],
+    [
+      "Zach Ertz",
+      "WAS",
+      504.0,
+      -39.0
+    ],
+    [
+      "Davante Adams",
+      "LAR",
+      789.0,
+      -33.0
+    ],
+    [
+      "Tyler Lockett",
+      "LV",
+      291.0,
+      -32.0
+    ]
+  ],
+  "fa_class":2027,
+  "fa_n":32,
+  "fa_leaned":[
+    [
+      "Puka Nacua",
+      "WR",
+      1715.0,
+      170.0
+    ],
+    [
+      "George Pickens",
+      "WR",
+      1429.0,
+      200.0
+    ],
+    [
+      "Parker Washington",
+      "WR",
+      847.0,
+      101.0
+    ]
+  ],
+  "fa_below":[
+    [
+      "Davante Adams",
+      "WR",
+      789.0,
+      -33.3,
+      2.1
+    ],
+    [
+      "Marquise Brown",
+      "WR",
+      587.0,
+      -29.9,
+      3.2
+    ],
+    [
+      "Kayshon Boutte",
+      "WR",
+      551.0,
+      -10.7,
+      2.4
+    ],
+    [
+      "Mack Hollins",
+      "WR",
+      550.0,
+      -12.1,
+      2.7
+    ],
+    [
+      "Zach Ertz",
+      "TE",
+      504.0,
+      -38.7,
+      2.7
+    ],
+    [
+      "Evan Engram",
+      "TE",
+      461.0,
+      -0.2,
+      4.6
+    ],
+    [
+      "Darnell Mooney",
+      "WR",
+      443.0,
+      -6.4,
+      2.9
+    ],
+    [
+      "T.J. Hockenson",
+      "TE",
+      438.0,
+      -6.2,
+      3.8
+    ],
+    [
+      "Andrei Iosivas",
+      "WR",
+      435.0,
+      -3.3,
+      2.4
+    ],
+    [
+      "John Metchie III",
+      "WR",
+      274.0,
+      -27.2,
+      3.8
+    ],
+    [
+      "Christian Kirk",
+      "WR",
+      239.0,
+      -6.0,
+      2.5
+    ]
+  ],
+  "fa_top_yards":[
+    [
+      "Puka Nacua",
+      "WR",
+      1715.0,
+      170.0
+    ],
+    [
+      "George Pickens",
+      "WR",
+      1429.0,
+      200.0
+    ],
+    [
+      "Stefon Diggs",
+      "WR",
+      1013.0,
+      46.0
+    ],
+    [
+      "Travis Kelce",
+      "TE",
+      851.0,
+      33.0
+    ],
+    [
+      "Parker Washington",
+      "WR",
+      847.0,
+      101.0
+    ],
+    [
+      "Davante Adams",
+      "WR",
+      789.0,
+      -33.0
+    ],
+    [
+      "Keenan Allen",
+      "WR",
+      777.0,
+      24.0
+    ],
+    [
+      "Deebo Samuel",
+      "WR",
+      727.0,
+      80.0
+    ]
+  ],
+  "current_season":2026
+}

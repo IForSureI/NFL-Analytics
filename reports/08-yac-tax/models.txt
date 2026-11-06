@@ -1,0 +1,63 @@
+=== Next-year yards ~ components (+targets), clustered by player
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:             yards_next   R-squared:                       0.287
+Model:                            OLS   Adj. R-squared:                  0.284
+Method:                 Least Squares   F-statistic:                     71.82
+Date:                Fri, 06 Nov 2026   Prob (F-statistic):           2.81e-40
+Time:                        03:42:50   Log-Likelihood:                -5342.4
+No. Observations:                 760   AIC:                         1.069e+04
+Df Residuals:                     755   BIC:                         1.072e+04
+Df Model:                           4                                         
+Covariance Type:              cluster                                         
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const        320.1646     27.629     11.588      0.000     266.012     374.317
+air_yds        0.5466      0.090      6.080      0.000       0.370       0.723
+xyac_yds       0.3332      0.145      2.303      0.021       0.050       0.617
+yacoe_yds      0.6622      0.159      4.161      0.000       0.350       0.974
+targets        0.5659      0.748      0.756      0.449      -0.900       2.032
+==============================================================================
+Omnibus:                       20.011   Durbin-Watson:                   2.075
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               21.357
+Skew:                           0.365   Prob(JB):                     2.30e-05
+Kurtosis:                       3.375   Cond. No.                     1.87e+03
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (CRV1)
+[2] The condition number is large, 1.87e+03. This might indicate that there are
+strong multicollinearity or other numerical problems.
+
+=== APY % of cap ~ components (+targets), clustered by player
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                apy_pct   R-squared:                       0.705
+Model:                            OLS   Adj. R-squared:                  0.702
+Method:                 Least Squares   F-statistic:                     269.3
+Date:                Fri, 06 Nov 2026   Prob (F-statistic):           1.66e-82
+Time:                        03:42:50   Log-Likelihood:                -812.94
+No. Observations:                 397   AIC:                             1636.
+Df Residuals:                     392   BIC:                             1656.
+Df Model:                           4                                         
+Covariance Type:              cluster                                         
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         -2.1895      0.267     -8.214      0.000      -2.712      -1.667
+air_yds        0.0081      0.001      8.157      0.000       0.006       0.010
+xyac_yds       0.0062      0.002      3.362      0.001       0.003       0.010
+yacoe_yds      0.0107      0.002      5.419      0.000       0.007       0.015
+targets        0.0142      0.010      1.424      0.154      -0.005       0.034
+==============================================================================
+Omnibus:                       34.698   Durbin-Watson:                   1.313
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               42.300
+Skew:                           0.712   Prob(JB):                     6.53e-10
+Kurtosis:                       3.727   Cond. No.                     1.43e+03
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (CRV1)
+[2] The condition number is large, 1.43e+03. This might indicate that there are
+strong multicollinearity or other numerical problems.
