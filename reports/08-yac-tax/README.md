@@ -74,7 +74,7 @@ Contracts ending after 2026 (Over The Cap, extensions counted), still active: mo
 
 **In equations**
 
-- Receiving yards $=$ air yards on catches $+$ expected YAC $+$ YAC over expected (NGS), so the three parts add to the total.
+- Receiving yards $`=`$ air yards on catches $`+`$ expected YAC $`+`$ YAC over expected (NGS), so the three parts add to the total.
 - Price and prediction models regress APY share of the cap, and next-season yards, on the three parts plus targets, with standard errors clustered by player.
 
 ## Validation
