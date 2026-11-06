@@ -1,0 +1,172 @@
+=== Predict next-year sack rate from rates
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:             sk100_next   R-squared:                       0.319
+Model:                            OLS   Adj. R-squared:                  0.318
+Method:                 Least Squares   F-statistic:                     209.8
+Date:                Fri, 06 Nov 2026   Prob (F-statistic):           1.03e-76
+Time:                        03:29:49   Log-Likelihood:                -553.32
+No. Observations:                 995   AIC:                             1113.
+Df Residuals:                     992   BIC:                             1127.
+Df Model:                           2                                         
+Covariance Type:                  HC1                                         
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1548      0.027      5.674      0.000       0.101       0.208
+sk100          0.2620      0.035      7.521      0.000       0.194       0.330
+ns100          0.1830      0.016     11.392      0.000       0.152       0.214
+==============================================================================
+Omnibus:                       72.066   Durbin-Watson:                   1.970
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               89.931
+Skew:                           0.646   Prob(JB):                     2.96e-20
+Kurtosis:                       3.707   Cond. No.                         6.75
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity robust (HC1)
+
+=== Market: APY % of cap ~ sacks + non-sack pressures + snaps
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                apy_pct   R-squared:                       0.535
+Model:                            OLS   Adj. R-squared:                  0.533
+Method:                 Least Squares   F-statistic:                     147.5
+Date:                Fri, 06 Nov 2026   Prob (F-statistic):           7.34e-63
+Time:                        03:29:49   Log-Likelihood:                -1845.5
+No. Observations:                 850   AIC:                             3699.
+Df Residuals:                     846   BIC:                             3718.
+Df Model:                           3                                         
+Covariance Type:              cluster                                         
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         -1.5614      0.299     -5.228      0.000      -2.147      -0.976
+sk             0.3020      0.043      7.047      0.000       0.218       0.386
+ns_prss        0.0973      0.020      4.946      0.000       0.059       0.136
+def_snaps      0.4246      0.076      5.574      0.000       0.275       0.574
+==============================================================================
+Omnibus:                      108.796   Durbin-Watson:                   0.812
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              203.962
+Skew:                           0.785   Prob(JB):                     5.13e-45
+Kurtosis:                       4.814   Cond. No.                         57.6
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (CRV1)
+
+=== Predict next-year sacks (counts)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                sk_next   R-squared:                       0.392
+Model:                            OLS   Adj. R-squared:                  0.390
+Method:                 Least Squares   F-statistic:                     98.83
+Date:                Fri, 06 Nov 2026   Prob (F-statistic):           1.49e-45
+Time:                        03:29:49   Log-Likelihood:                -2491.7
+No. Observations:                 995   AIC:                             4991.
+Df Residuals:                     991   BIC:                             5011.
+Df Model:                           3                                         
+Covariance Type:              cluster                                         
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          1.5475      0.360      4.293      0.000       0.841       2.254
+sk             0.3286      0.055      6.009      0.000       0.221       0.436
+ns_prss        0.1713      0.018      9.724      0.000       0.137       0.206
+def_snaps     -0.1116      0.079     -1.410      0.159      -0.267       0.044
+==============================================================================
+Omnibus:                      102.984   Durbin-Watson:                   1.945
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              159.212
+Skew:                           0.733   Prob(JB):                     2.68e-35
+Kurtosis:                       4.301   Cond. No.                         68.3
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (CRV1)
+
+=== Market: APY % of cap ~ pressures + sack luck + snaps
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                apy_pct   R-squared:                       0.535
+Model:                            OLS   Adj. R-squared:                  0.533
+Method:                 Least Squares   F-statistic:                     147.5
+Date:                Fri, 06 Nov 2026   Prob (F-statistic):           7.34e-63
+Time:                        03:29:49   Log-Likelihood:                -1845.5
+No. Observations:                 850   AIC:                             3699.
+Df Residuals:                     846   BIC:                             3718.
+Df Model:                           3                                         
+Covariance Type:              cluster                                         
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         -1.5614      0.299     -5.228      0.000      -2.147      -0.976
+prss           0.1513      0.014     10.966      0.000       0.124       0.178
+sack_luck      0.2047      0.055      3.750      0.000       0.098       0.312
+def_snaps      0.4246      0.076      5.574      0.000       0.275       0.574
+==============================================================================
+Omnibus:                      108.796   Durbin-Watson:                   0.812
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              203.962
+Skew:                           0.785   Prob(JB):                     5.13e-45
+Kurtosis:                       4.814   Cond. No.                         71.8
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (CRV1)
+
+=== Coverage market: APY % of cap ~ INTs + yards/target + snaps
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                apy_pct   R-squared:                       0.253
+Model:                            OLS   Adj. R-squared:                  0.249
+Method:                 Least Squares   F-statistic:                     68.55
+Date:                Fri, 06 Nov 2026   Prob (F-statistic):           1.13e-34
+Time:                        03:29:49   Log-Likelihood:                -1383.1
+No. Observations:                 642   AIC:                             2774.
+Df Residuals:                     638   BIC:                             2792.
+Df Model:                           3                                         
+Covariance Type:              cluster                                         
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          1.4418      0.478      3.018      0.003       0.506       2.378
+int            0.3274      0.073      4.502      0.000       0.185       0.470
+ypt           -0.2749      0.055     -5.017      0.000      -0.382      -0.167
+def_snaps      0.3509      0.036      9.780      0.000       0.281       0.421
+==============================================================================
+Omnibus:                      164.101   Durbin-Watson:                   0.486
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              356.187
+Skew:                           1.380   Prob(JB):                     4.52e-78
+Kurtosis:                       5.386   Cond. No.                         61.2
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (CRV1)
+
+=== Next-year yards/target ~ INTs + yards/target
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:               ypt_next   R-squared:                       0.018
+Model:                            OLS   Adj. R-squared:                  0.015
+Method:                 Least Squares   F-statistic:                     5.209
+Date:                Fri, 06 Nov 2026   Prob (F-statistic):            0.00572
+Time:                        03:29:49   Log-Likelihood:                -1059.1
+No. Observations:                 605   AIC:                             2124.
+Df Residuals:                     602   BIC:                             2137.
+Df Model:                           2                                         
+Covariance Type:                  HC1                                         
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          6.3424      0.326     19.456      0.000       5.703       6.981
+int            0.0212      0.034      0.630      0.528      -0.045       0.087
+ypt            0.1366      0.043      3.214      0.001       0.053       0.220
+==============================================================================
+Omnibus:                       16.647   Durbin-Watson:                   2.042
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               17.573
+Skew:                           0.373   Prob(JB):                     0.000153
+Kurtosis:                       3.373   Cond. No.                         42.7
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity robust (HC1)
+

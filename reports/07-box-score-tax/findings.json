@@ -1,0 +1,245 @@
+{
+  "seasons":"2018-2026",
+  "cap_2026_musd":301.2,
+  "rush_player_seasons":1634,
+  "league_sacks_per_pressure":0.264,
+  "rush_pairs":995,
+  "yoy_r_sack_rate":0.462,
+  "yoy_r_pressure_rate":0.711,
+  "r_next_sack_rate_from_sack_rate":0.462,
+  "r_next_sack_rate_from_pressure_rate":0.563,
+  "predict_weight_sack":0.262,
+  "predict_weight_nonsack_pressure":0.183,
+  "predict_ratio_sack_to_pressure":1.43,
+  "market_players":371,
+  "market_contracts":850,
+  "market_pct_cap_per_sack":0.302,
+  "market_pct_cap_per_nonsack_pressure":0.097,
+  "market_ratio_sack_to_pressure":3.1,
+  "market_r2":0.535,
+  "musd_per_sack_2026":0.91,
+  "musd_per_nonsack_pressure_2026":0.29,
+  "predict_count_weight_sack":0.329,
+  "predict_count_weight_nonsack":0.171,
+  "predict_count_ratio":1.92,
+  "market_ratio_ci90":[
+    1.94,
+    5.18
+  ],
+  "predict_ratio_ci90":[
+    1.26,
+    2.71
+  ],
+  "share_boot_market_above_predict":0.92,
+  "future_sacks_per_extra_sack":0.329,
+  "future_sacks_per_extra_nonsack_pressure":0.171,
+  "musd_per_future_sack_buying_sacks":2.77,
+  "musd_per_future_sack_buying_pressures":1.69,
+  "yoy_r_sack_luck":0.095,
+  "future_sacks_per_lucky_sack":0.157,
+  "future_sacks_per_lucky_sack_ci":[
+    0.033,
+    0.281
+  ],
+  "future_sacks_per_pressure":0.213,
+  "musd_per_lucky_sack_2026":0.62,
+  "musd_per_lucky_sack_ci":[
+    0.29,
+    0.94
+  ],
+  "musd_per_pressure_2026":0.46,
+  "musd_per_future_sack_via_luck":3.92,
+  "musd_per_future_sack_via_pressure":2.14,
+  "robust_min":0.36,
+  "robust_max":0.78,
+  "robust_all_ci_above_zero":false,
+  "robust_n":6,
+  "recent_deals_price":[
+    0.36,
+    -0.1,
+    0.82
+  ],
+  "buy_low_last_full":[
+    [
+      "Zach Allen",
+      "DEN",
+      7.0,
+      50.0,
+      13.2
+    ],
+    [
+      "Abdul Carter",
+      "NYG",
+      4.0,
+      34.0,
+      9.0
+    ],
+    [
+      "Osa Odighizuwa",
+      "DAL",
+      3.5,
+      31.0,
+      8.2
+    ],
+    [
+      "DeMarcus Lawrence",
+      "SEA",
+      6.0,
+      39.0,
+      10.3
+    ],
+    [
+      "Jaelan Phillips",
+      "2TM",
+      5.0,
+      35.0,
+      9.2
+    ]
+  ],
+  "sell_high_last_full":[
+    [
+      "Myles Garrett",
+      "CLE",
+      23.0,
+      53.0,
+      14.0
+    ],
+    [
+      "Danielle Hunter",
+      "HOU",
+      15.0,
+      34.0,
+      9.0
+    ],
+    [
+      "Brian Burns",
+      "NYG",
+      16.5,
+      41.0,
+      10.8
+    ],
+    [
+      "Brandon Dorlus",
+      "ATL",
+      8.5,
+      14.0,
+      3.7
+    ],
+    [
+      "Cameron Jordan",
+      "NO",
+      10.5,
+      22.0,
+      5.8
+    ]
+  ],
+  "current_season":2026,
+  "fa_class":2027,
+  "fa_rushers_n":69,
+  "fa_buy_targets":[
+    [
+      "Dante Fowler Jr.",
+      "ED",
+      2.5,
+      3.0,
+      20.0,
+      5.6
+    ],
+    [
+      "Khalil Mack",
+      "ED",
+      18.0,
+      5.5,
+      23.0,
+      5.4
+    ],
+    [
+      "YaYa Diaby",
+      "ED",
+      1.4,
+      7.0,
+      32.0,
+      4.1
+    ],
+    [
+      "Jihad Ward",
+      "ED",
+      1.3,
+      5.0,
+      27.0,
+      3.8
+    ],
+    [
+      "Jacob Martin",
+      "ED",
+      9.0,
+      5.5,
+      26.0,
+      3.7
+    ],
+    [
+      "Cameron Thomas",
+      "ED",
+      3.1,
+      2.5,
+      11.0,
+      3.5
+    ]
+  ],
+  "fa_careful":[
+    [
+      "Jadeveon Clowney",
+      "ED",
+      5.5,
+      8.5,
+      22.0
+    ],
+    [
+      "Al-Quadin Muhammad",
+      "ED",
+      4.0,
+      11.0,
+      26.0
+    ],
+    [
+      "Danielle Hunter",
+      "ED",
+      40.1,
+      15.0,
+      34.0
+    ],
+    [
+      "Von Miller",
+      "ED",
+      5.5,
+      9.0,
+      19.0
+    ],
+    [
+      "Tuli Tuipulotu",
+      "ED",
+      1.6,
+      13.0,
+      32.0
+    ]
+  ],
+  "cov_pairs":605,
+  "yoy_r_int_rate":0.317,
+  "yoy_r_yds_per_target":0.134,
+  "yoy_r_cmp_pct":0.242,
+  "r_next_int_rate_from_int_rate":0.317,
+  "r_next_ypt_from_ypt":0.134,
+  "cov_market_contracts":642,
+  "musd_per_int_2026":0.99,
+  "musd_per_int_ci":[
+    0.56,
+    1.42
+  ],
+  "musd_per_ypt_2026":-0.83,
+  "musd_per_ypt_ci":[
+    -1.15,
+    -0.5
+  ],
+  "ints_predict_next_ypt_coef":0.021,
+  "ints_predict_next_ypt_p":0.528
+}

@@ -1,0 +1,7 @@
+sample,contracts,musd_per_lucky_sack,ci_low,ci_high
+base + age,850,0.65,0.34,0.96
+deals >= 1% of cap,569,0.45,0.11,0.8
+edge only,384,0.7,0.29,1.11
+interior only,466,0.78,0.33,1.23
+multi-year deals,343,0.74,0.34,1.15
+signed 2023-2026,431,0.36,-0.1,0.82
