@@ -566,7 +566,7 @@ def wrap(slug, body, idx):
     if m.get("method_eq"):
         out += ["**In equations**", ""]
         for e in m["method_eq"]:
-            out += [f"- {e}"]
+            out += ["- " + re.sub(r"\$([^$`]+)\$", lambda q: "$`" + q.group(1).strip() + "`$", e)]
         out += [""]
     out += ["## Validation", ""] + [f"- {v}" for v in m["validation"](f)] + [""]
     out += ["## Limitations", ""] + [l for l in limits if l.strip()] + [""]
