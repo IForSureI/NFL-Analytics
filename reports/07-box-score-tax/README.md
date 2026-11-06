@@ -90,9 +90,9 @@ I expected interceptions to be the coverage version of sacks. In PFR's charting,
 
 **In equations**
 
-- $\text{sack luck}_i = \text{sacks}_i - c \cdot \text{pressures}_i$, where $c$ is the league's sacks per pressure (see key numbers).
-- Price: $\dfrac{\text{APY}_i}{\text{cap}_t} = \beta_0 + \beta_1\,\text{pressures}_i + \beta_2\,\text{sack luck}_i + \beta_3\,\text{snaps}_i + \varepsilon_i$, standard errors clustered by player.
-- Prediction: $\text{sacks}_{i,t+1} = \gamma_0 + \gamma_1\,\text{pressures}_{i,t} + \gamma_2\,\text{sack luck}_{i,t} + \gamma_3\,\text{snaps}_{i,t} + u_{i,t}$.
+- $`\text{sack luck}_i = \text{sacks}_i - c \cdot \text{pressures}_i`$, where $`c`$ is the league's sacks per pressure (see key numbers).
+- Price: $`\dfrac{\text{APY}_i}{\text{cap}_t} = \beta_0 + \beta_1\,\text{pressures}_i + \beta_2\,\text{sack luck}_i + \beta_3\,\text{snaps}_i + \varepsilon_i`$, standard errors clustered by player.
+- Prediction: $`\text{sacks}_{i,t+1} = \gamma_0 + \gamma_1\,\text{pressures}_{i,t} + \gamma_2\,\text{sack luck}_{i,t} + \gamma_3\,\text{snaps}_{i,t} + u_{i,t}`$.
 
 ## Validation
 
