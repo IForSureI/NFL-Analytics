@@ -81,8 +81,8 @@ Among 41 QBs with 1,500+ dropbacks since 2018, he ranks #22 (by shrunk rate) at 
 
 **In equations**
 
-- Shrunk roughing rate for quarterback $i$ (beta-binomial empirical Bayes): $\hat p_i = \dfrac{x_i + \alpha}{n_i + \alpha + \beta}$, with $\alpha, \beta$ fit to all quarterbacks.
-- Split-half reliability: $r\big(\bar y_{\text{odd weeks}},\ \bar y_{\text{even weeks}}\big)$ across team-seasons.
+- Shrunk roughing rate for quarterback $`i`$ (beta-binomial empirical Bayes): $`\hat p_i = \dfrac{x_i + \alpha}{n_i + \alpha + \beta}`$, with $`\alpha, \beta`$ fit to all quarterbacks.
+- Split-half reliability: $`r\big(\bar y_{\text{odd weeks}},\ \bar y_{\text{even weeks}}\big)`$ across team-seasons.
 
 ## Validation
 
