@@ -380,6 +380,9 @@ Each study also runs alone, for example `python -m projects.fourth_down_bot`.
 - Fourth-down method: the public idea behind [nfl4th](https://github.com/nflverse/nfl4th) by Ben Baldwin, rebuilt from scratch.
 - Ideas: Michael MacKelvie and Brett Kollmann (YouTube). Contracts: Over The Cap via nflverse; advanced defense: Pro Football Reference via nflverse. All analysis and any mistakes are mine.
 
+## License
+© 2026 Dylan Fanelli. All rights reserved. The code, reports and figures may be viewed here; they may not be copied, modified or used without written permission. See [LICENSE](LICENSE). To cite this work, use the **Cite this repository** button (from [CITATION.cff](CITATION.cff)).
+
 ## About
 Dylan Fanelli, M.S. Sport Management candidate at UMass Amherst (Mark H. McCormack Department). I am building this portfolio to show proficiency in NFL statistics and sabermetrics-style analysis, with the goal of a job in an NFL club front office. New studies are added through November 2026 and the data refreshes weekly in season. [LinkedIn](https://www.linkedin.com/in/dylanfanelli/)
 """
