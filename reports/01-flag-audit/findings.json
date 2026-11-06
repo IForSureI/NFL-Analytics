@@ -1,0 +1,97 @@
+{
+  "games":2882,
+  "flags":35094,
+  "seasons":"2016-2026",
+  "away_share_objective":0.5173756309,
+  "away_share_subjective":0.5125403168,
+  "home_edge_by_era":{
+    "('2016-22', 'objective')":0.168,
+    "('2016-22', 'other')":0.005,
+    "('2016-22', 'subjective')":0.273,
+    "('2023-26', 'objective')":0.166,
+    "('2023-26', 'other')":0.009,
+    "('2023-26', 'subjective')":0.0
+  },
+  "objective_road_skew_top":{
+    "Neutral Zone Infraction":0.598,
+    "Delay of Game":0.565,
+    "Encroachment":0.569,
+    "Illegal Formation":0.535
+  },
+  "false_start_road_share":0.4955223881,
+  "crew_yoy_r":0.2382110704,
+  "crew_pairs":141,
+  "crew_latest_season":2025,
+  "crew_spread_latest":[
+    16.0,
+    "Alex Moore",
+    9.9333333333,
+    "Brad Allen"
+  ],
+  "split_r_net":0.0794974276,
+  "split_r_committed":0.2811178785,
+  "split_r_drawn":0.1712506482,
+  "rtp_league_per100":0.2263200676,
+  "rtp_top":[
+    [
+      "J.Goff",
+      19.0,
+      5358,
+      0.35,
+      0.23,
+      0.55
+    ],
+    [
+      "A.Dalton",
+      10.0,
+      2236,
+      0.45,
+      0.24,
+      0.82
+    ],
+    [
+      "M.Ryan",
+      12.0,
+      3095,
+      0.39,
+      0.22,
+      0.68
+    ],
+    [
+      "J.Allen",
+      17.0,
+      5118,
+      0.33,
+      0.21,
+      0.53
+    ],
+    [
+      "D.Prescott",
+      15.0,
+      4615,
+      0.33,
+      0.2,
+      0.54
+    ]
+  ],
+  "rtp_above_league":[
+    "J.Goff",
+    "A.Dalton"
+  ],
+  "rtp_mahomes":[
+    0.2201151371,
+    22,
+    41
+  ],
+  "big_calls":923,
+  "big_calls_reg":888,
+  "big_calls_per_full_season_reg":84.5,
+  "big_call_top_types":{
+    "Defensive Pass Interference":241,
+    "Unnecessary Roughness":125,
+    "Roughing the Passer":97,
+    "Unsportsmanlike Conduct":70,
+    "Offensive Holding":61
+  },
+  "big_call_net_yoy_r":0.0348071281
+}
