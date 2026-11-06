@@ -1,6 +1,6 @@
 # NFL Analytics
 
-Football analytics by **Dylan Fanelli** (M.S. Sport Management, UMass Amherst McCormack). Six studies on public NFL play-by-play, each one starting from a question a coach, scout or fan argues about, then testing it with data. Python, SQL-ready parquet, tested code, and charts a coach can read.
+Football analytics by **Dylan Fanelli** (M.S. Sport Management, UMass Amherst McCormack). Seven studies on public NFL data, each one starting from a question a coach, scout or fan argues about, then testing it with data. Python, SQL-ready parquet, tested code, and charts a coach can read.
 
 Built on [nflverse](https://github.com/nflverse) data. Inspired by two of the best football explainers working: **Michael MacKelvie** (data storytelling) and **Brett Kollmann** (film plus numbers). Each report links the video that started it. See [`docs/inspiration.md`](docs/inspiration.md).
 
@@ -16,6 +16,7 @@ Built on [nflverse](https://github.com/nflverse) data. Inspired by two of the be
 | 04 | [Luck Index](reports/04-luck-index/) | How much is luck? | Fumble, kick and close-game luck repeat at r < 0.1; teams 2+ wins over their points drop 2.9 wins the next year |
 | 05 | [Kickoff Value](reports/05-kickoff-value/) | What did the new kickoff do? | Returns went from 21% (2023) to 75% (2025); the average return still lands 5.6 yards behind a touchback |
 | 06 | [Pass vs Run](reports/06-pass-run/) | Passing is better, so why run? | Passing won on neutral early downs in 21 of 21 seasons, but team pass rate over expected tracks efficiency only at r = 0.20 |
+| 07 | [The Box-Score Tax](reports/07-box-score-tax/) | Where is value hiding? | Teams pay about $0.62M a year per "lucky" sack (sacks beyond what pressures predict) though sack luck repeats at r = 0.10; pressures repeat at r = 0.71 vs sacks 0.46. Includes a 2027 free-agent target list |
 
 ## What is in here
 ```
@@ -31,7 +32,7 @@ docs/           inspiration notes from the MacKelvie and Kollmann videos
 ## Run it
 ```bash
 pip install -r requirements.txt
-python scripts/update.py          # downloads nflverse data (about 400 MB), runs all six studies, tests, READMEs
+python scripts/update.py          # downloads nflverse data (about 400 MB), runs all seven studies, tests, READMEs
 pytest -q
 ```
 Each study also runs alone, for example `python -m projects.fourth_down_bot`.
@@ -39,7 +40,7 @@ Each study also runs alone, for example `python -m projects.fourth_down_bot`.
 ## Data and credit
 - Play-by-play and officials data: [nflverse](https://github.com/nflverse/nflverse-data) (CC-BY 4.0), with nflfastR's EPA and win-probability models.
 - Fourth-down method: the public idea behind [nfl4th](https://github.com/nflverse/nfl4th) by Ben Baldwin, rebuilt from scratch.
-- Ideas: Michael MacKelvie and Brett Kollmann (YouTube). All analysis and any mistakes are mine.
+- Ideas: Michael MacKelvie and Brett Kollmann (YouTube). Contracts: Over The Cap via nflverse; advanced defense: Pro Football Reference via nflverse. All analysis and any mistakes are mine.
 
 ## About
 Dylan Fanelli, M.S. Sport Management candidate at UMass Amherst (Mark H. McCormack Department), aiming for a club front office. Baseball work lives in a separate portfolio. [LinkedIn](https://www.linkedin.com/in/dylanfanelli/)
