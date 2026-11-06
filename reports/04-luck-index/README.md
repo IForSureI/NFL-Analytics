@@ -70,8 +70,8 @@ Above their points: CLE (5 wins, 3.0 expected), DEN (6 wins, 4.2 expected), BUF 
 
 **In equations**
 
-- Pythagorean win % $= \dfrac{PF^{2.37}}{PF^{2.37} + PA^{2.37}}$
-- Fumble luck $=$ fumbles recovered $- \tfrac12 \times$ all fumbles in the team's games; one-score luck $=$ one-score wins $- \tfrac12 \times$ one-score games.
+- Pythagorean win % $`= \dfrac{PF^{2.37}}{PF^{2.37} + PA^{2.37}}`$
+- Fumble luck $`=`$ fumbles recovered $`- \tfrac12 \times`$ all fumbles in the team's games; one-score luck $`=`$ one-score wins $`- \tfrac12 \times`$ one-score games.
 
 ## Validation
 
