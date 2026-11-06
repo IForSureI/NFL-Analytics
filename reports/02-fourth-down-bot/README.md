@@ -74,9 +74,9 @@ Most win probability lost per game on clear 4th-down calls: HOU (6.0 points), AR
 
 **In equations**
 
-- $\text{WP}_{\text{go}} = P(\text{convert})\cdot \text{WP}(\text{first down}) + \big(1 - P(\text{convert})\big)\cdot \text{WP}(\text{opponent ball at the spot})$
-- $\text{WP}_{\text{FG}} = P(\text{make})\cdot \text{WP}(+3,\ \text{kickoff}) + \big(1 - P(\text{make})\big)\cdot \text{WP}(\text{opponent ball after a miss})$
-- A call is charged $\max_k \text{WP}_k - \text{WP}_{\text{call}}$ only when that gap is at least 1 point. Brier score $= \frac{1}{N}\sum_i (p_i - y_i)^2$.
+- $`\text{WP}_{\text{go}} = P(\text{convert})\cdot \text{WP}(\text{first down}) + \big(1 - P(\text{convert})\big)\cdot \text{WP}(\text{opponent ball at the spot})`$
+- $`\text{WP}_{\text{FG}} = P(\text{make})\cdot \text{WP}(+3,\ \text{kickoff}) + \big(1 - P(\text{make})\big)\cdot \text{WP}(\text{opponent ball after a miss})`$
+- A call is charged $`\max_k \text{WP}_k - \text{WP}_{\text{call}}`$ only when that gap is at least 1 point. Brier score $`= \frac{1}{N}\sum_i (p_i - y_i)^2`$.
 
 ## Validation
 
