@@ -42,6 +42,7 @@ def main():
     for name in STUDIES:
         print(f"== {name}")
         importlib.import_module(f"projects.{name}").main()
+    subprocess.run([sys.executable, "scripts/build_figures.py"], check=True)
     subprocess.run([sys.executable, "scripts/build_readmes.py"], check=True)
     r = subprocess.run([sys.executable, "-m", "pytest", "-q"])
     sys.exit(r.returncode)

@@ -103,6 +103,7 @@ def fourth():
 ## Limits
 - One average team: it does not know a team's QB, kicker, or short-yardage offense.
 - Seasons through {last_full} are scored with a model trained on them (in sample); {ys[-1]} is out of sample.
+- Per-game totals add up many small misses graded by an average-team model, so they run higher than published fourth-down estimates; read the report card as a ranking.
 - No clock management beyond fixed play lengths, and fake punts count as "go".
 
 ## Files
@@ -256,7 +257,7 @@ def box_score_tax():
 
 ## What I found
 1. **Pressures repeat; sacks bounce.** For pass rushers with 300+ snaps in back-to-back seasons ({f['rush_pairs']:,} pairs), pressure rate repeats at r = {f['yoy_r_pressure_rate']:.2f}, sack rate at r = {f['yoy_r_sack_rate']:.2f}. This year's pressure rate predicts next year's sack rate (r = {f['r_next_sack_rate_from_pressure_rate']:.2f}) better than this year's sack rate does (r = {f['r_next_sack_rate_from_sack_rate']:.2f}).
-2. **Teams pay full price for sack luck.** "Sack luck" means sacks above what a player's pressures predict (league rate: {f['league_sacks_per_pressure']:.2f} sacks per pressure). It barely repeats (r = {f['yoy_r_sack_luck']:.2f} year to year): holding pressures and snaps equal, one extra sack this year predicts only {f['future_sacks_per_lucky_sack']:.2f} extra sacks next year. Yet each one adds about **${f['musd_per_lucky_sack_2026']:.2f}M a year** to a veteran contract (95% interval ${f['musd_per_lucky_sack_ci'][0]:.2f}M to ${f['musd_per_lucky_sack_ci'][1]:.2f}M, 2026 dollars, errors clustered by player). Per future sack, that is about **${f['musd_per_future_sack_via_luck']:.2f}M** bought through sack luck vs **${f['musd_per_future_sack_via_pressure']:.2f}M** bought through pressures. The premium stays positive in all {f['robust_n']} versions in `robustness_lucky_sack_price.csv` (${f['robust_min']:.2f}M to ${f['robust_max']:.2f}M: with age controls, edge or interior alone, multi-year deals, deals over 1% of the cap). One version is weaker and worth watching: for deals signed 2023-2026 it is ${f['recent_deals_price'][0]:.2f}M and not significant (interval {_usd(f['recent_deals_price'][1])} to {_usd(f['recent_deals_price'][2])}), so the market may be starting to learn.
+2. **Teams pay a premium for sack luck.** "Sack luck" means sacks above what a player's pressures predict (league rate: {f['league_sacks_per_pressure']:.2f} sacks per pressure). It barely repeats (r = {f['yoy_r_sack_luck']:.2f} year to year): holding pressures and snaps equal, one extra sack this year predicts only {f['future_sacks_per_lucky_sack']:.2f} extra sacks next year. Yet each one adds about **${f['musd_per_lucky_sack_2026']:.2f}M a year** to a veteran contract (95% interval ${f['musd_per_lucky_sack_ci'][0]:.2f}M to ${f['musd_per_lucky_sack_ci'][1]:.2f}M, 2026 dollars, errors clustered by player). Per future sack, that is about **${f['musd_per_future_sack_via_luck']:.2f}M** bought through sack luck vs **${f['musd_per_future_sack_via_pressure']:.2f}M** bought through pressures. The premium stays positive in all {f['robust_n']} versions in `robustness_lucky_sack_price.csv` (${f['robust_min']:.2f}M to ${f['robust_max']:.2f}M: with age controls, edge or interior alone, multi-year deals, deals over 1% of the cap). One version is weaker and worth watching: for deals signed 2023-2026 it is ${f['recent_deals_price'][0]:.2f}M and not significant (interval {_usd(f['recent_deals_price'][1])} to {_usd(f['recent_deals_price'][2])}), so the market may be starting to learn.
 3. **The price gap.** In contracts, one sack is priced like {f['market_ratio_sack_to_pressure']:.2f} non-sack pressures. In predicting next season's sacks, one sack is worth {f['predict_count_ratio']:.2f}. The 90% ranges overlap (market {f['market_ratio_ci90'][0]}-{f['market_ratio_ci90'][1]}, prediction {f['predict_ratio_ci90'][0]}-{f['predict_ratio_ci90'][1]}; the market ratio is higher in {100 * f['share_boot_market_above_predict']:.0f}% of 1,000 bootstrap samples that resample players). Two more reasons to read this as direction, not proof: the prediction side includes linebackers with 15+ pressures while contracts are ED/IDL only, and a contract pays for several years and run defense, not only next year's sacks. Finding 2 is the firmer evidence.
 4. **Buy low ({f['current_season'] - 1}).** Most pressure without the sacks: {'; '.join(rusher(x) for x in bl[:4])}.
 5. **Regression risk ({f['current_season'] - 1}).** Most sacks above their pressures: {'; '.join(rusher(x) for x in sh[:3])}. Garrett's season set the single-season sack record, and elite rushers can beat the league rate; the point is that the excess over pressures is the part least likely to repeat, and the part a contract should pay least for.
@@ -328,70 +329,281 @@ REPORTS = [("01-flag-audit", flag_audit), ("02-fourth-down-bot", fourth), ("03-s
            ("04-luck-index", luck), ("05-kickoff-value", kickoff), ("06-pass-run", passrun), ("07-box-score-tax", box_score_tax), ("08-yac-tax", yac_tax)]
 
 
+UPCOMING = [("09", "Run Game Value", "How much of a running back's production is his, and do contracts pay for that part?"),
+            ("10", "Draft Value", "In rounds 3-7, which positions return the most value per pick?"),
+            ("11", "Turnovers Forced", "Do defenses that force turnovers keep doing it, and does a takeaway-heavy year fool people?"),
+            ("12", "Backup QB Value", "What is a good backup quarterback worth, in expected wins and in cap dollars?")]
+
+
+def _html_badge(md):
+    alt, url = re.match(r"!\[([^\]]*)\]\(([^)]+)\)", md).groups()
+    return f'<img src="{url}" alt="{alt}">'
+
+
+def _n_tests():
+    return sum((ROOT / "tests" / p.name).read_text().count("\ndef test_") for p in (ROOT / "tests").glob("test_*.py"))
+
+
 def top_readme():
-    f1, f2, f3, f4, f5, f6, f7, f8 = (F(s) for s, _ in REPORTS)
+    f2 = F("02-fourth-down-bot")
     g = f2["go_rate_clear_spots"]; ys = sorted(g)
-    era = {k.strip("()").replace("'", "").replace(" ", ""): v for k, v in f1["home_edge_by_era"].items()}
-    old = sorted({k.split(",")[0] for k in era})[0]
-    mah = f1.get("rtp_mahomes", [0, 0, 0])
-    k = f5["by_season"]
-    return f"""# NFL Analytics
+    done = {s[:2] for s, _ in REPORTS}
+    rows = []
+    for slug, _ in REPORTS:
+        m = META.get(slug, {})
+        f = F(slug)
+        t = m["tldr"](f)[m.get("headline", 0)] if m else ""
+        rows.append(f"| {slug[:2]} | [**{m.get('short', slug)}**](reports/{slug}/) | {m.get('question', '')} | {t} | {', '.join(m.get('tags', []))} |")
+    cells = []
+    for slug, _ in REPORTS:
+        m = META.get(slug, {})
+        hero = m.get("hero", ("", ""))[0]
+        cells.append(f'<td width="25%" valign="top"><a href="reports/{slug}/"><img src="reports/{slug}/{hero}" width="100%"></a><br><sub><b>{slug[:2]} {m.get("short", slug)}</b></sub></td>')
+    gallery = "<table>\n" + "\n".join("<tr>" + "".join(cells[i:i + 4]) + "</tr>" for i in range(0, len(cells), 4)) + "\n</table>"
+    up = [u for u in UPCOMING if u[0] not in done]
+    upcoming = ("\n## Coming next\n\nNew studies are on the way; each follows the same [report standard](docs/report-standard.md).\n\n| # | Study | The question |\n|---|---|---|\n"
+                + "\n".join(f"| {n} | {t} | {q} |" for n, t, q in up) + "\n") if up else ""
+    log = [l for l in (ROOT / "LOG.md").read_text().splitlines() if l.startswith("- ")][-3:]
+    badges = " ".join(_html_badge(b) for b in [
+        badge("python", "3.10+", "1d2433"),
+        badge("data", f"nflverse 2006-{ys[-1]}", "1d2433"), badge("studies", str(len(REPORTS)), "c2410c"),
+        badge("refreshed", f"{date.today():%b %d %Y}", "6b7280"), badge("license", "all rights reserved", "6b7280")])
+    ci = f'<a href="{REPO}/actions/workflows/tests.yml"><img src="{REPO}/actions/workflows/tests.yml/badge.svg" alt="tests"></a>'
+    return f"""<p align="center"><img src="assets/banner.png" alt="NFL Analytics by Dylan Fanelli" width="100%"></p>
 
-A portfolio I am building to show proficiency in NFL statistics and sabermetrics-style analysis, aimed at a job in an NFL club front office. By **Dylan Fanelli** (M.S. Sport Management candidate, UMass Amherst McCormack). Studies on public NFL data, each one starting from a question a coach, scout or fan argues about, then testing it with data. Python, SQL-ready parquet, tested code, and charts a coach can read.
+<p align="center">{ci} {badges}</p>
 
-Built on [nflverse](https://github.com/nflverse) data. Inspired by two of the best football explainers working: **Michael MacKelvie** (data storytelling) and **Brett Kollmann** (film plus numbers). Each report links the video that started it. See [`docs/inspiration.md`](docs/inspiration.md).
+<p align="center"><b><a href="#the-studies">Studies</a> &nbsp;|&nbsp; <a href="#what-a-club-gets">What a club gets</a> &nbsp;|&nbsp; <a href="#how-i-work">How I work</a> &nbsp;|&nbsp; <a href="#under-the-hood">Under the hood</a> &nbsp;|&nbsp; <a href="docs/glossary.md">Glossary</a> &nbsp;|&nbsp; <a href="#about">About</a></b></p>
 
-**Last refreshed:** {date.today():%B %d, %Y} (through the latest completed week of the {ys[-1]} season).
+I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward a job in a club front office. Each study starts from a question a coach, scout or general manager actually argues about, answers it with public data and a model I built, and ends with what a club would do with the answer. I validate every model before I trust it, I say what the data can't show, and every number on these pages is regenerated from code on each weekly refresh.
+
+**Headline work:** a [fourth-down decision bot](reports/02-fourth-down-bot/) on my own win-probability model, which matches nflfastR out of sample (Brier {f2['brier_ours']:.4f} vs {f2['brier_nflfastR_vegas_wp']:.4f} on {f2['wp_test_plays']:,} plays), and [evidence of a market inefficiency in pass-rusher contracts](reports/07-box-score-tax/): teams pay about ${F('07-box-score-tax')['musd_per_lucky_sack_2026']:.2f}M a year for sacks that pressures say won't repeat.
+
+<p align="center"><img src="assets/at-a-glance.png" alt="Eight studies at a glance" width="100%"></p>
 
 ## The studies
 
-| # | Study | The question | Headline |
-|---|---|---|---|
-| 01 | [Flag Audit](reports/01-flag-audit/) | Do flags even out? | Road teams' extra judgment-call flags ({era[old + ',subjective']:.2f} a game in {old}) are gone since 2023; Mahomes ranks #{mah[1]} of {mah[2]} QBs in roughing flags drawn |
-| 02 | [Fourth-Down Bot](reports/02-fourth-down-bot/) | Who leaves wins on the table? | Own WP model (Brier {f2['brier_ours']:.4f} vs nflfastR {f2['brier_nflfastR_vegas_wp']:.4f}); coaches go in {pct(g[ys[-2]])} of clear go spots, up from {pct(g[ys[0]])} in {ys[0]} |
-| 03 | [Sack Leverage](reports/03-sack-leverage/) | Are all sacks equal? | An average 2nd-down sack ({f3['epa_lost_2nd_down_sack_avg']} EPA) is worth more than a 3rd-and-11+ sack ({f3['epa_lost_per_sack']['3&11+']}); {pct(f3['share_2nd_down_sacks_to_3rd_and_11plus'])} of them leave 3rd-and-11+ |
-| 04 | [Luck Index](reports/04-luck-index/) | How much is luck? | Fumble, kick and close-game luck repeat at r < 0.1; teams 2+ wins over their points drop {abs(f4['lucky_change_wins_per17']):.1f} wins the next year |
-| 05 | [Kickoff Value](reports/05-kickoff-value/) | What did the new kickoff do? | Returns went from {pct(k['2023']['return_rate'])} (2023) to {pct(k['2025']['return_rate'])} (2025); the average return still lands {abs(f5['returned_vs_tb_league']):.1f} yards behind a touchback |
-| 06 | [Pass vs Run](reports/06-pass-run/) | Passing is better, so why run? | Passing won on neutral early downs in {f6['seasons_pass_better']} of {f6['seasons_total']} seasons, but team pass rate over expected tracks efficiency only at r = {f6['team_corr_proe_epa_last_full']:.2f} |
-| 07 | [The Box-Score Tax](reports/07-box-score-tax/) | Where is value hiding? | Teams pay about ${f7['musd_per_lucky_sack_2026']:.2f}M a year per "lucky" sack (sacks beyond what pressures predict) though sack luck repeats at r = {f7['yoy_r_sack_luck']:.2f}; pressures repeat at r = {f7['yoy_r_pressure_rate']:.2f} vs sacks {f7['yoy_r_sack_rate']:.2f}. Includes a {f7['fa_class']} free-agent target list |
-| 08 | [The YAC Tax](reports/08-yac-tax/) | Do teams pay receivers for lucky YAC? | No clear tax: YAC above expected is noisy per catch (r = {f8['yoy_r']['avg_yac_above_expectation']:.2f}) but a season of it predicts next year like air yards do ({f8['predict_next_yards_per_yard']['yacoe_yds']:.2f} vs {f8['predict_next_yards_per_yard']['air_yds']:.2f} yards per yard), and the market prices it about right. Includes the {f8['fa_class']} free-agent receivers |
+| # | Study | The question | Headline | Methods |
+|---|---|---|---|---|
+{chr(10).join(rows)}
 
-## What is in here
+{gallery}
+{upcoming}
+<a id="what-a-club-gets"></a>
+## What a club gets
+
+| Department | Question it answers | Study |
+|---|---|---|
+| Head coach and game management | Go, kick or punt on this fourth down? | [02 Fourth-Down Bot](reports/02-fourth-down-bot/) |
+| Pro personnel and free agency | Are pass rushers and receivers priced for what repeats? Who to target in free agency? | [07 Box-Score Tax](reports/07-box-score-tax/), [08 YAC Tax](reports/08-yac-tax/) |
+| Defensive staff | When is a sack worth the most, and who produces those? | [03 Sack Leverage](reports/03-sack-leverage/) |
+| Offensive staff | Should we pass more on early downs? | [06 Pass vs Run](reports/06-pass-run/) |
+| Special teams | Who creates field position under the new kickoff? | [05 Kickoff Value](reports/05-kickoff-value/) |
+| Front office and ownership | How much of our record was luck? | [04 Luck Index](reports/04-luck-index/) |
+| Game prep | What does this crew call, and what flags are coachable on the road? | [01 Flag Audit](reports/01-flag-audit/) |
+
+<a id="how-i-work"></a>
+## How I work
+
+Every study follows the same [report standard](docs/report-standard.md), modeled on how Big Data Bowl entries, Open Source Football articles and the nflverse model write-ups are built:
+
+1. **A question first,** stated before the data, with prior public work credited.
+2. **Stability before value.** A stat has to repeat before it can be called a skill or priced.
+3. **Validation in the open:** out-of-sample tests, calibration, bootstraps, clustered standard errors and robustness tables.
+4. **Results under headings that state the finding,** each with its figure.
+5. **What a club does with it,** limitations and next steps on every page.
+6. **Reproducible:** one command rebuilds every number, chart and page; `pytest` (run by GitHub Actions on every change, Python 3.10 and 3.12) checks that published numbers stay football-sane and every page meets the standard.
+
+**Techniques used here:** gradient-boosted win probability with monotone constraints; decision analysis; expected points (EPA); empirical-Bayes shrinkage and Wilson intervals; split-half and year-to-year reliability; OLS with player-clustered standard errors; bootstrap resampling; Pythagorean expectation; contract valuation in cap-share terms; DuckDB SQL.
+
+<a id="under-the-hood"></a>
+## Under the hood
+
+```mermaid
+flowchart LR
+    A[nflverse data<br>play-by-play, NGS, PFR,<br>Over The Cap, snaps] --> B[nflan library<br>loaders, WP model,<br>4th-down bot, stats]
+    B --> C[projects/<br>one script per study]
+    C --> D[reports/<br>findings.json, CSVs, charts]
+    D --> E[scripts/build_readmes.py<br>scripts/build_figures.py]
+    E --> F[README pages]
+    D --> G[pytest<br>sanity checks on<br>every published number]
 ```
-nflan/          small tested library: data loading, win-probability model, 4th-down bot, penalty and stats helpers
+
+```
+nflan/          tested library: data loading, win-probability model, 4th-down bot, penalty and stats helpers
 projects/       one script per study (python -m projects.<name>)
-reports/        each study's write-up, charts, CSV outputs and findings.json
-sql/            DuckDB queries that answer the same questions straight from the parquet files
-scripts/        update.py (refresh the season in progress and rebuild everything), build_readmes.py
-tests/          unit tests and sanity checks on every published number
-docs/           inspiration notes from the MacKelvie and Kollmann videos
+reports/        each study's write-up, figures, CSV outputs and findings.json
+sql/            DuckDB queries answering the same questions straight from the parquet files
+scripts/        update.py (weekly refresh), build_readmes.py, build_figures.py, report_meta.py
+tests/          unit tests and sanity checks on published numbers
+docs/           report standard, glossary, data dictionary, inspiration notes
+assets/         banner and at-a-glance figure
 ```
 
-## Run it
+### Reproduce
+
 ```bash
 pip install -r requirements.txt
-python scripts/update.py          # downloads nflverse data (about 400 MB), runs every study, tests, READMEs
+python scripts/update.py          # downloads nflverse data (about 400 MB), runs every study, figures, tests and READMEs
 pytest -q
 ```
+
 Each study also runs alone, for example `python -m projects.fourth_down_bot`.
 
-## Data and credit
-- Play-by-play and officials data: [nflverse](https://github.com/nflverse/nflverse-data) (CC-BY 4.0), with nflfastR's EPA and win-probability models.
-- Fourth-down method: the public idea behind [nfl4th](https://github.com/nflverse/nfl4th) by Ben Baldwin, rebuilt from scratch.
-- Ideas: Michael MacKelvie and Brett Kollmann (YouTube). Contracts: Over The Cap via nflverse; advanced defense: Pro Football Reference via nflverse. All analysis and any mistakes are mine.
+## Data, glossary and credit
 
-## License
+- Data: [nflverse](https://github.com/nflverse/nflverse-data) (CC-BY 4.0): play-by-play with nflfastR's EPA and win-probability models, officials, NFL Next Gen Stats, Pro Football Reference advanced stats, snap counts and Over The Cap contracts. See the [data dictionary](docs/data-dictionary.md).
+- Terms used on these pages (EPA, WP, Brier score, PROE, clustered standard errors and more): [glossary](docs/glossary.md).
+- Fourth-down method: the public idea behind [nfl4th](https://github.com/nflverse/nfl4th) by Ben Baldwin, rebuilt from scratch in Python.
+- Inspiration: **Michael MacKelvie** (data storytelling) and **Brett Kollmann** (film plus numbers); each report links the video that started it. Notes in [`docs/inspiration.md`](docs/inspiration.md).
+- All analysis, and any mistakes, are mine.
+
+## Changelog
+
+{chr(10).join(log)}
+
+Full history: [LOG.md](LOG.md). Data refreshes weekly in season (last: {date.today():%B %d, %Y}, through the latest completed week of {ys[-1]}).
+
+## License and citation
+
 © 2026 Dylan Fanelli. All rights reserved. The code, reports and figures may be viewed here; they may not be copied, modified or used without written permission. See [LICENSE](LICENSE). To cite this work, use the **Cite this repository** button (from [CITATION.cff](CITATION.cff)).
 
+<a id="about"></a>
 ## About
-Dylan Fanelli, M.S. Sport Management candidate at UMass Amherst (Mark H. McCormack Department). I am building this portfolio to show proficiency in NFL statistics and sabermetrics-style analysis, with the goal of a job in an NFL club front office. New studies are added through November 2026 and the data refreshes weekly in season. [LinkedIn](https://www.linkedin.com/in/dylanfanelli/)
+
+Dylan Fanelli, M.S. Sport Management candidate at UMass Amherst (Mark H. McCormack Department). I am building this portfolio to show proficiency in NFL statistics and sabermetrics-style analysis, with the goal of a job in an NFL club front office. I also keep a [baseball analytics portfolio](https://github.com/IForSureI/Dylan-Fanelli-Baseball-Analytics-Portfolio). [LinkedIn](https://www.linkedin.com/in/dylanfanelli/)
 """
+
+# ---------------------------------------------------------------------------------------------
+# Presentation layer: every study README follows docs/report-standard.md
+# ---------------------------------------------------------------------------------------------
+import re  # noqa: E402
+import sys  # noqa: E402
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from report_meta import META  # noqa: E402
+
+REPO = "https://github.com/IForSureI/NFL-Analytics"
+COLORS = {"status": "0b6e4f", "seasons": "1d2433", "method": "c2410c"}
+
+
+def badge(label, msg, color):
+    enc = lambda t: t.replace("-", "--").replace("_", "__").replace(" ", "%20").replace("/", "%2F").replace("+", "%2B")
+    return f"![{label}: {msg}](https://img.shields.io/badge/{enc(label)}-{enc(msg)}-{color})"
+
+
+def _split(body):
+    """Split a study body into title, preamble lines, numbered findings, method/limits/files sections."""
+    lines = body.strip("\n").split("\n")
+    title = lines[0].lstrip("# ").strip()
+    sec, cur = {"pre": []}, "pre"
+    for ln in lines[1:]:
+        m = re.match(r"^## (.+)$", ln)
+        if m:
+            cur = m.group(1).strip(); sec[cur] = []
+        else:
+            sec[cur].append(ln)
+    found = "\n".join(sec.get("What I found", []))
+    figs = re.findall(r"!\[[^\]]*\]\(([^)]+)\)", found)
+    found = re.sub(r"^!\[[^\]]*\]\([^)]+\)\s*$", "", found, flags=re.M)
+    items = re.findall(r"^(\d+)\. \*\*(.+?)\*\*\s*(.*)$", found, flags=re.M)
+    method_key = next((k for k in sec if k not in ("pre", "What I found", "Limits", "Files")), None)
+    return title, [l for l in sec["pre"] if l.strip()], items, figs, sec.get(method_key, []), method_key, sec.get("Limits", []), sec.get("Files", [])
+
+
+def _fig(slug, file, cap):
+    return f'<p align="center"><img src="{file}" width="720" alt="{cap}"></p>\n<p align="center"><sub>{cap}</sub></p>'
+
+
+def wrap(slug, body, idx):
+    m = META.get(slug)
+    if m is None:
+        return body
+    f = F(slug)
+    title, pre, items, figs, method, method_key, limits, files = _split(body)
+    num, name_rest = title.split(" ", 1)
+    name, sep, sub = name_rest.partition(": ")
+    prev_s = REPORTS[idx - 1][0] if idx > 0 else None
+    next_s = REPORTS[idx + 1][0] if idx + 1 < len(REPORTS) else None
+    nav = [f"[← Portfolio](../../README.md)"]
+    if prev_s:
+        nav.append(f"[← {prev_s[:2]} {META.get(prev_s, {}).get('short', prev_s)}](../{prev_s}/)")
+    if next_s:
+        nav.append(f"[{next_s[:2]} {META.get(next_s, {}).get('short', next_s)} →](../{next_s}/)")
+    navline = " &nbsp;|&nbsp; ".join(nav)
+    out = [f"<sub>{navline}</sub>", "", f"# {num} {name}", f"### {sub[0].upper() + sub[1:]}" if sub else "", ""]
+    out.append(" ".join([badge("status", "published", COLORS["status"]), badge("seasons", m["seasons"](f), COLORS["seasons"])]
+                        + [badge("method", t, COLORS["method"]) for t in m["tags"]]))
+    out += ["", "> **TL;DR**"]
+    for t in (m["tldr"](f) if "tldr" in m else [lead for _, lead, _ in items[:5]]):
+        out.append(f"> - {t}")
+    out += ["", _fig(slug, *m["hero"]), ""]
+    out += ["## Key numbers", "", "| Measure | Value |", "|---|---|"] + [f"| {a} | **{b}** |" for a, b in m["key"](f)] + [""]
+    out += ["## Why it matters for a club", ""] + [f"- {w}" for w in m["why"]] + [""]
+    out += ["## The question", "", f"**{m['question']}**", ""]
+    for l in pre:
+        if l.startswith("**The question:**"):
+            t = l.replace("**The question:**", "").strip()
+            t = t.split("? ", 1)[1] if t.lower().startswith("where is value hiding") else t
+            out += [t[0].upper() + t[1:], ""]
+    for l in pre:
+        if not l.startswith(("**Data:**", "**Code:**", "**The question:**")):
+            out.append(l + "  ")
+    out += [""]
+    data = next((l for l in pre if l.startswith("**Data:**")), None)
+    if data:
+        out += ["## Data", "", data.replace("**Data:**", "").strip(), ""]
+    out += ["## Results", ""]
+    placed = {m["hero"][0]}
+    for n, lead, text in items:
+        out += [f"### {n}. {lead}", "", text.strip(), ""]
+        for file, cap in m["figs"].get(int(n), []):
+            out += [_fig(slug, file, cap), ""]; placed.add(file)
+    rest = [x for x in figs if x not in placed and all(x != q for v in m["figs"].values() for q, _ in v)]
+    for x in rest:
+        out += [_fig(slug, x, ""), ""]
+    out += [f"## {'Method' if method_key in (None, 'Method') else method_key}", ""] + [l for l in method if l.strip()] + [""]
+    if m.get("method_eq"):
+        out += ["**In equations**", ""]
+        for e in m["method_eq"]:
+            out += [f"- {e}"]
+        out += [""]
+    out += ["## Validation", ""] + [f"- {v}" for v in m["validation"](f)] + [""]
+    out += ["## Limitations", ""] + [l for l in limits if l.strip()] + [""]
+    out += ["## Next steps", ""] + [f"- {x}" for x in m["next"]] + [""]
+    code = next((l for l in pre if l.startswith("**Code:**")), "")
+    mod = re.search(r"projects/(\w+)\.py", code)
+    out += ["## Reproduce", "", "```bash", "pip install -r requirements.txt",
+            f"python -m projects.{mod.group(1)}" if mod else "python scripts/update.py --no-download", "```",
+            code.replace("**Code:**", "Code:").strip(), ""]
+    out += ["## Files in this folder", "", "| File | What it holds |", "|---|---|"]
+    ftxt = " ".join(files)
+    listed = re.findall(r"`([^`]+)`", ftxt)
+    descs = dict(m["files"])
+    for k in descs:
+        if k not in listed and (R / slug / k).exists():
+            listed.append(k)
+    for fn in listed:
+        if fn == "findings.json":
+            continue
+        real = fn.replace("<season>", str(f.get("current_season", ""))) if "<" in fn else fn
+        d = descs.get(real) or descs.get(fn) or next((v for k, v in descs.items() if k.split("_20")[0] == fn.split("_<")[0].split("_20")[0]), "")
+        out.append(f"| [`{fn}`]({real if (R / slug / real).exists() else ''}) | {d} |".replace("[`" + fn + "`]()", "`" + fn + "`"))
+    out.append("| [`findings.json`](findings.json) | Every number quoted on this page, machine-readable |")
+    out += ["", "---", f"<sub>{navline}</sub>", "",
+            f"<sub>© 2026 Dylan Fanelli. All rights reserved. To cite: Fanelli, D. (2026). *{name}*. NFL Analytics. {REPO}/tree/main/reports/{slug}</sub>", ""]
+    return "\n".join(x for x in out if x is not None)
+
+
+def money(md):
+    """Escape currency dollar signs so GitHub does not read '$0.62M ... $3.92M' as inline math."""
+    return re.sub(r"(?<!\\)\$(?=-?\d)", r"\\$", md)
 
 
 def main():
-    for slug, fn in REPORTS:
-        (R / slug / "README.md").write_text(fn())
-    (ROOT / "README.md").write_text(top_readme())
+    for i, (slug, fn) in enumerate(REPORTS):
+        (R / slug / "README.md").write_text(money(wrap(slug, fn(), i)))
+    (ROOT / "README.md").write_text(money(top_readme()))
     print("READMEs written")
 
 
