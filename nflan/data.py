@@ -72,3 +72,28 @@ def games(pbp: pd.DataFrame) -> pd.DataFrame:
             "home_score", "away_score", "result", "spread_line", "roof", "home_coach", "away_coach"]
     g = pbp[cols].drop_duplicates("game_id").copy()
     return g.reset_index(drop=True)
+
+
+def _release(tag: str, fname: str, refresh: bool = False) -> pd.DataFrame:
+    return pd.read_parquet(_fetch(f"{BASE}/{tag}/{fname}", DATA_DIR / fname, refresh))
+
+
+def load_contracts(refresh: bool = False) -> pd.DataFrame:
+    """Over The Cap contract history via nflverse (one row per contract)."""
+    return _release("contracts", "historical_contracts.parquet", refresh)
+
+
+def load_pfr_def(refresh: bool = False) -> pd.DataFrame:
+    """Pro Football Reference advanced defense, season level (2018+): pressures, hurries, coverage."""
+    return _release("pfr_advstats", "advstats_season_def.parquet", refresh)
+
+
+def load_players(refresh: bool = False) -> pd.DataFrame:
+    return _release("players", "players.parquet", refresh)
+
+
+def load_snap_counts(seasons, refresh_current: int | None = None) -> pd.DataFrame:
+    if isinstance(seasons, int):
+        seasons = [seasons]
+    return pd.concat([_release("snap_counts", f"snap_counts_{s}.parquet", s == refresh_current) for s in seasons],
+                     ignore_index=True)
