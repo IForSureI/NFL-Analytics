@@ -379,7 +379,7 @@ I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward 
 
 **Headline work:** a [fourth-down decision bot](reports/02-fourth-down-bot/) on my own win-probability model, which matches nflfastR out of sample (Brier {f2['brier_ours']:.4f} vs {f2['brier_nflfastR_vegas_wp']:.4f} on {f2['wp_test_plays']:,} plays), and [evidence of a market inefficiency in pass-rusher contracts](reports/07-box-score-tax/): teams pay about ${F('07-box-score-tax')['musd_per_lucky_sack_2026']:.2f}M a year for sacks that pressures say won't repeat.
 
-<p align="center"><img src="assets/at-a-glance.png" alt="Eight studies at a glance" width="100%"></p>
+<p align="center"><img src="assets/at-a-glance.png" alt="Selected studies at a glance" width="100%"></p>
 
 ## The studies
 

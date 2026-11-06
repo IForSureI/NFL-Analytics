@@ -162,7 +162,7 @@ def at_a_glance():
     ax.set_ylim(0, max(fut.values()) * 1.25)
     _card(ax, "08", "YAC Tax", "No tax", "Price per 100 future yards: air yards, expected YAC, YAC over expected (orange) all close")
 
-    fig.text(0.03, 0.955, "Eight studies at a glance", fontsize=20, fontweight="black", color=INK, fontfamily="Inter Display")
+    fig.text(0.03, 0.955, "Selected studies at a glance", fontsize=20, fontweight="black", color=INK, fontfamily="Inter Display")
     fig.text(0.03, 0.915, "Headline number and the evidence behind it. Every figure is rebuilt from the data on each refresh.", fontsize=11, color=MUTED, fontfamily="Inter")
     fig.text(0.03, 0.02, "Data: nflverse (play-by-play, NGS, PFR, Over The Cap). Chart: Dylan Fanelli", fontsize=8.5, color=MUTED)
     A.mkdir(exist_ok=True)
