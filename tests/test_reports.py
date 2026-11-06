@@ -50,3 +50,20 @@ def test_box_score_tax_direction():
     assert abs(f["yoy_r_sack_luck"]) < 0.2                           # sack luck does not repeat
     assert f["musd_per_lucky_sack_ci"][0] > 0                        # ...but the market pays for it
     assert 0.2 < f["league_sacks_per_pressure"] < 0.35
+
+
+def test_yac_tax_components():
+    f = load("08-yac-tax")
+    y = f["yoy_r"]
+    assert y["avg_intended_air_yards"] > y["avg_yac_above_expectation"]  # depth is stabler than YAC over expected
+    for v in f["predict_next_yards_per_yard"].values():
+        assert -0.5 < v < 1.5
+
+
+def test_contract_end_year():
+    from nflan.data import contract_end_year
+    h = [{"contract_type": "Drafted", "year_signed": 2021, "yrs": 4},
+         {"contract_type": "Extension", "year_signed": 2024, "yrs": 3},
+         {"contract_type": "Extension", "year_signed": 2024, "yrs": 3}]  # duplicate listing
+    assert contract_end_year(h) == 2027
+    assert contract_end_year([{"contract_type": "UFA", "year_signed": 2026, "yrs": 1}]) == 2026
