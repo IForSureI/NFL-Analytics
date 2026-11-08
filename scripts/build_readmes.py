@@ -351,11 +351,11 @@ def snippets():
     """README for the in-season snippets folder; every number comes from its findings.json."""
     f = F(SNIP)
     w = f"Weeks {f['weeks'][0]}-{f['weeks'][1]}"
-    q, y, t, pr, rc, d = (f["qb_epa_cpoe"], f["qb_adot_yac"], f["team_tiers"], f["early_down_proe"],
+    q, rb, t, pr, rc, d = (f["qb_epa_cpoe"], f["rb_success"], f["team_tiers"], f["early_down_proe"],
                           f["receiver_share"], f["defense_pressure"])
     nm = lambda r: f"{r['name']} ({r['team']})"
     top = q["top3_epa"]
-    yac = y["most_yac"]
+    r1 = rb["top5"]
     tt = t["top5_net"]
     rw = rc["top5_wopr"][0]
     pp = list(pr["most_pass_happy"].items())
@@ -366,14 +366,14 @@ Six quick charts on the season in progress, the kind a staff looks at on a Monda
 
 | | |
 |---|---|
-| <img src="qb_epa_cpoe.png" width="100%"> | <img src="qb_adot_yac.png" width="100%"> |
+| <img src="qb_epa_cpoe.png" width="100%"> | <img src="rb_success.png" width="100%"> |
 | <img src="team_tiers.png" width="100%"> | <img src="early_down_proe.png" width="100%"> |
 | <img src="receiver_share.png" width="100%"> | <img src="defense_pressure.png" width="100%"> |
 
 ## What each one says
 
 1. **QB Efficiency: EPA vs. CPOE** ([chart](qb_epa_cpoe.png)). {nm(top[0])} leads in EPA per dropback ({top[0]['epa']:+.3f}), ahead of {nm(top[1])} and {nm(top[2])}. Accuracy and efficiency move together this year (r = {q['corr_epa_cpoe']:.2f} across {q['n_qbs']} QBs with 150+ dropbacks).
-2. **Where QB Yards Come From** ([chart](qb_adot_yac.png)). {nm(yac[0])} gets {pct(yac[0]['yac_share'])} of his passing yards after the catch on a {yac[0]['adot']:.1f}-yard average depth of target; {nm(yac[1])} is next ({pct(yac[1]['yac_share'])}). The shorter the throws, the bigger the YAC share (r = {y['corr_adot_yac_share']:.2f}), so a high YAC share is a style, not a skill by itself.
+2. **Running Back Success Rate** ([chart](rb_success.png)). {r1[0]['rusher_player_name']} ({r1[0]['team']}) leads the {rb['n_qualified']} backs with 60+ carries at {pct(r1[0]['success'], 1)} of runs gaining positive EPA, ahead of {r1[1]['rusher_player_name']} ({r1[1]['team']}, {pct(r1[1]['success'], 1)}) and {r1[2]['rusher_player_name']} ({r1[2]['team']}, {pct(r1[2]['success'], 1)}). The RB average is {pct(rb['rb_average_success'], 1)}. Success rate shows how often a back keeps the offense on schedule; it mixes his work with his blocking, which study 09 (Run Game Value, coming next) will separate.
 3. **2026 Team Tiers** ([chart](team_tiers.png)). Best net EPA per play: {tt[0]['team']} ({tt[0]['net']:+.3f}), {tt[1]['team']} ({tt[1]['net']:+.3f}), {tt[2]['team']} ({tt[2]['net']:+.3f}).
 4. **Early-Down Pass Rate Over Expected** ([chart](early_down_proe.png)). {pp[0][0]} throws {100 * pp[0][1]:+.1f} points over expectation in neutral early downs; {rh[-1][0]} sits at {100 * rh[-1][1]:+.1f}. Teams that throw more than expected also have the better offenses so far (r = {pr['corr_proe_off_epa']:.2f} with offensive EPA per play), the same pattern as [study 06](../06-pass-run/).
 5. **Receiver Roles: Targets vs. Air Yards** ([chart](receiver_share.png)). {rw['receiver_player_name']} ({rw['team']}) carries the league's biggest role: {pct(rw['tgt_share'])} of targets and {pct(rw['air_share'])} of air yards (WOPR {rw['wopr']:.2f}). Points above the dashed line are used downfield; points below it are volume options on shorter throws.
@@ -404,11 +404,11 @@ def snippets_section():
     if not p.exists():
         return ""
     f = F(SNIP)
-    figs = ["qb_epa_cpoe", "team_tiers", "early_down_proe", "receiver_share", "qb_adot_yac", "defense_pressure"]
+    figs = ["qb_epa_cpoe", "team_tiers", "early_down_proe", "receiver_share", "rb_success", "defense_pressure"]
     cells = "".join(f'<td width="33%"><a href="reports/{SNIP}/"><img src="reports/{SNIP}/{x}.png" width="100%"></a></td>' for x in figs[:3])
     cells2 = "".join(f'<td width="33%"><a href="reports/{SNIP}/"><img src="reports/{SNIP}/{x}.png" width="100%"></a></td>' for x in figs[3:])
     return (f"\n## 2026 in-season snippets\n\nSix quick charts on the season in progress, through Weeks {f['weeks'][0]}-{f['weeks'][1]}: "
-            f"QB efficiency, where QB yards come from, team tiers, early-down pass rate over expected, receiver roles and pass-rush results. "
+            f"QB efficiency, running back success rate, team tiers, early-down pass rate over expected, receiver roles and pass-rush results. "
             f"[See them all](reports/{SNIP}/).\n\n<table><tr>{cells}</tr><tr>{cells2}</tr></table>\n")
 
 
