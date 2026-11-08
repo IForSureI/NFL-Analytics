@@ -1,4 +1,4 @@
-"""2026 In-Season Snippets: six quick charts on the season in progress.
+"""2026 In-Season Snippets: twelve quick charts on the season in progress.
 
 Question: what does the 2026 season look like so far, through the lens of a few
 numbers a coaching staff or front office would actually look at on a Monday?
@@ -10,6 +10,12 @@ Charts (all from nflverse play-by-play, regular season, completed weeks only):
   4. early_down_proe.png     Who throws on early downs: neutral-situation pass rate over expected
   5. receiver_share.png      Receiver roles: target share vs air-yards share (WOPR)
   6. defense_pressure.png    Pass defense: pressure-proxy rate vs EPA per dropback allowed
+  7. qb_adot_yac.png         How QBs get their yards: depth of target vs share of yards after the catch
+  8. receiver_epa_adot.png   Receivers: role (depth of target) vs value (EPA per target)
+  9. yac_over_expected.png   Yards after the catch over expected per reception, top 30 (ranked bar)
+ 10. defense_run_pass.png    Team defense: EPA per run allowed vs EPA per dropback allowed
+ 11. pass_rush_leaders.png   Defenders: plays with a sack or QB hit, top 30 (ranked bar)
+ 12. kicker_fgoe.png         Kickers: field-goal points over expected (distance and roof model, 2022-25)
 
 Data: nflverse play-by-play (CC-BY 4.0) and nflverse teams_colors_logos (team colors).
 Teams are drawn as color-coded markers with their abbreviation; no logos are used.
@@ -71,7 +77,7 @@ def load(refresh: bool = False):
             "epa", "success", "qb_dropback", "pass_attempt", "sack", "qb_hit", "qb_scramble", "cpoe",
             "air_yards", "yards_after_catch", "complete_pass", "passing_yards", "receiving_yards",
             "id", "name", "passer_player_id", "passer_player_name", "receiver_player_id",
-            "receiver_player_name", "rusher_player_id", "rusher_player_name", "yards_gained", "wp", "half_seconds_remaining", "pass_oe", "xpass", "two_point_attempt"]
+            "receiver_player_name", "xyac_mean_yardage", "field_goal_attempt", "field_goal_result", "kick_distance", "kicker_player_id", "kicker_player_name", "roof", "sack_player_id", "sack_player_name", "half_sack_1_player_id", "half_sack_1_player_name", "half_sack_2_player_id", "half_sack_2_player_name", "qb_hit_1_player_id", "qb_hit_1_player_name", "qb_hit_2_player_id", "qb_hit_2_player_name", "rusher_player_id", "rusher_player_name", "yards_gained", "wp", "half_seconds_remaining", "pass_oe", "xpass", "two_point_attempt"]
     p = pd.read_parquet(data.pbp_path(SEASON, refresh=refresh), columns=cols)
     p = p[p.season_type == "REG"]
     weeks = completed_weeks(p)
@@ -405,6 +411,208 @@ def chart_defense(p, weeks, tc, f):
                              "worst_vs_fit": resid.tail(3).round(3).to_dict()}
 
 
+# ---------------------------------------------------------------- set two (charts 7-12)
+
+def chart_qb_adot_yac(p, weeks, tc, f):
+    q = qb_table(p)
+    q = q[q.attempts >= 150].copy()
+    fig, ax = canvas()
+    player_points(ax, q, "adot", "yac_share", "name", "team", tc)
+    mean_lines(ax, q.adot.mean(), q.yac_share.mean())
+    ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
+    corner(ax, "Short throws, YAC does the work", "tl")
+    corner(ax, "Pushes it downfield", "br")
+    ax.set_xlabel("Average depth of target (air yards per attempt)", fontsize=12, fontweight="bold")
+    ax.set_ylabel("Share of passing yards gained after the catch", fontsize=12, fontweight="bold")
+    header_footer(fig, "Where QB Yards Come From",
+                  sub_line(weeks, "Min. attempts: 150 | YAC share = YAC / passing yards on completions"))
+    save(fig, "qb_adot_yac.png")
+    s = q.sort_values("yac_share", ascending=False)
+    f["qb_adot_yac"] = {"n_qbs": int(len(q)), "corr_adot_yac_share": round(float(q.adot.corr(q.yac_share)), 2),
+                        "most_yac": s.head(3)[["name", "team", "adot", "yac_share"]].round(3).to_dict("records"),
+                        "least_yac": s.tail(3)[["name", "team", "adot", "yac_share"]].round(3).to_dict("records")}
+
+
+
+def ranked_bars(rows, value, label, team, tc, fmt, xlabel, title, sub, fname, ref=None, ref_label="", right=None,
+                right_head="", diverging=False):
+    """The ranked-bar look: name inside a team-colored bar, value at the end, optional right-hand column."""
+    fig = plt.figure(figsize=(10, 12.5), dpi=200, facecolor="white")
+    ax = fig.add_axes([0.07, 0.10, 0.86, 0.74])
+    ax.grid(True, axis="x", color=GRID, lw=0.8)
+    ax.set_axisbelow(True)
+    n = len(rows)
+    y = np.arange(n)[::-1]
+    vals = rows[value].to_numpy(float)
+    if diverging:
+        base = 0.0
+        span = np.abs(vals).max()
+        lo, hi = -span * 1.45, span * 1.45
+    else:
+        lo = max(0.0, vals.min() - (vals.max() - vals.min()) * 0.45) if vals.min() >= 0 else vals.min() * 1.2
+        base, hi = lo, vals.max() + (vals.max() - lo) * 0.14
+    for yi, (_, r) in zip(y, rows.iterrows()):
+        c1, c2 = tc.loc[r[team], "team_color"], tc.loc[r[team], "team_color2"]
+        v = r[value]
+        ax.barh(yi, v - base, left=base, color=c1, edgecolor=c2, lw=1.2, height=0.8, zorder=3)
+        inside = "white" if _lum(c1) < 0.55 else INK
+        if diverging:
+            # name on the zero side, value at the bar end
+            ax.text(-0.01 * span if v >= 0 else 0.01 * span, yi, r[label], ha="right" if v >= 0 else "left",
+                    va="center", fontsize=9, fontweight="bold", color=_readable(c1, c2), zorder=4)
+            ax.text(v + (0.02 * span if v >= 0 else -0.02 * span), yi, fmt(v), ha="left" if v >= 0 else "right",
+                    va="center", fontsize=9.5, fontweight="bold", color=INK, zorder=4)
+        else:
+            ax.text(v - (hi - lo) * 0.006, yi, r[label], ha="right", va="center", fontsize=9, fontweight="bold",
+                    color=inside, zorder=4)
+            ax.text(v + (hi - lo) * 0.006, yi, fmt(v), ha="left", va="center", fontsize=9.5, fontweight="bold",
+                    color=INK, zorder=4)
+        if right is not None:
+            ax.text(1.005, yi, right(r), transform=ax.get_yaxis_transform(), va="center", ha="left", fontsize=9,
+                    color=MUTED)
+    if right is not None:
+        ax.text(1.005, n - 0.2, right_head, transform=ax.get_yaxis_transform(), va="bottom", ha="left", fontsize=8.5,
+                color=MUTED, fontweight="bold")
+    if diverging:
+        ax.axvline(0, color=INK, lw=1, zorder=2)
+    if ref is not None:
+        ax.axvline(ref, color=ACCENT, ls="--", lw=1.3, zorder=2)
+        ax.text(ref, n - 0.1, f" {ref_label}", color=ACCENT, fontsize=9, fontweight="bold", va="bottom", ha="left")
+    ax.set_yticks(y)
+    ax.set_yticklabels(range(1, n + 1), fontsize=9)
+    ax.set_xlim(lo, hi)
+    ax.set_ylim(-0.7, n + 0.6)
+    ax.set_xlabel(xlabel, fontsize=12, fontweight="bold")
+    for sp in ("top", "right"):
+        ax.spines[sp].set_visible(False)
+    header_footer(fig, title, sub)
+    save(fig, fname)
+
+
+def chart_receiver_epa_adot(p, weeks, tc, f):
+    tg = p[(p.pass_attempt == 1) & (p.sack != 1) & p.receiver_player_id.notna() & p.epa.notna() & (p.two_point_attempt != 1)]
+    r = tg.groupby(["receiver_player_id", "receiver_player_name"]).agg(
+        team=("posteam", lambda s: s.mode().iat[0]), tgt=("epa", "size"), epa=("epa", "mean"),
+        adot=("air_yards", "mean"), catch=("complete_pass", "mean")).reset_index()
+    q = r[r.tgt >= 40].sort_values("tgt", ascending=False).head(45).copy()
+    fig, ax = canvas()
+    player_points(ax, q, "adot", "epa", "receiver_player_name", "team", tc, size_col="tgt")
+    mean_lines(ax, q.adot.mean(), q.epa.mean())
+    corner(ax, "Deep role, big value", "tr")
+    corner(ax, "Short role, low value", "bl")
+    ax.set_xlabel("Average depth of target (air yards)", fontsize=12, fontweight="bold")
+    ax.set_ylabel("EPA per target", fontsize=12, fontweight="bold")
+    header_footer(fig, "Receivers: Role vs. Value",
+                  sub_line(weeks, "45 most-targeted receivers (WR, TE, RB), min. 40 targets | Bubble size = targets"))
+    save(fig, "receiver_epa_adot.png")
+    s = q.sort_values("epa", ascending=False)
+    f["receiver_epa_adot"] = {"n": int(len(q)), "top5_epa_per_target": s.head(5)[["receiver_player_name", "team", "tgt", "adot", "epa"]].round(3).to_dict("records"),
+                              "corr_adot_epa": round(float(q.adot.corr(q.epa)), 2)}
+
+
+def chart_yac_oe(p, weeks, tc, f):
+    c = p[(p.complete_pass == 1) & p.receiver_player_id.notna() & p.yards_after_catch.notna() & p.xyac_mean_yardage.notna()
+          & (p.two_point_attempt != 1)].copy()
+    c["yacoe"] = c.yards_after_catch - c.xyac_mean_yardage
+    r = c.groupby(["receiver_player_id", "receiver_player_name"]).agg(
+        team=("posteam", lambda s: s.mode().iat[0]), rec=("yacoe", "size"), yacoe=("yacoe", "mean"),
+        yac=("yards_after_catch", "mean")).reset_index()
+    league = float(c.yacoe.mean())
+    n_q = int((r.rec >= 25).sum())
+    q = r[r.rec >= 25].sort_values("yacoe", ascending=False).head(30).reset_index(drop=True)
+    q["lab"] = q.receiver_player_name + " (" + q.team + ", " + q.rec.astype(str) + ")"
+    ranked_bars(q, "yacoe", "lab", "team", tc, lambda v: f"{v:+.2f}", "Yards after the catch over expected, per reception",
+                "YAC Over Expected per Catch",
+                sub_line(weeks, f"Top 30 of {n_q} players with 25+ catches | Expected = nflverse xYAC model | (team, catches)"),
+                "yac_over_expected.png", ref=None, right=lambda r: f"{r.yac:.1f}", right_head="YAC/\nrec", diverging=True)
+    f["yac_over_expected"] = {"league_mean": round(league, 3), "n_qualified": n_q,
+                              "top5": q.head(5)[["receiver_player_name", "team", "rec", "yacoe", "yac"]].round(2).to_dict("records")}
+
+
+def chart_defense_run_pass(p, weeks, tc, f):
+    sc = data.scrimmage(p)
+    sc = sc[sc.two_point_attempt != 1]
+    run = sc[(sc.play_type == "run") & (sc.qb_scramble != 1)].groupby("defteam").epa.mean().rename("run")
+    pas = sc[sc.qb_dropback == 1].groupby("defteam").epa.mean().rename("pass")
+    t = pd.concat([run, pas], axis=1).dropna()
+    fig, ax = canvas()
+    team_dots(ax, t, "run", "pass", tc)
+    pad(ax)
+    ax.invert_xaxis()
+    ax.invert_yaxis()
+    mean_lines(ax, t["run"].mean(), t["pass"].mean())
+    corner(ax, "Stops both", "tr")
+    corner(ax, "Gets hit both ways", "bl")
+    ax.set_xlabel("EPA per run allowed (better is right)", fontsize=12, fontweight="bold")
+    ax.set_ylabel("EPA per dropback allowed (better is up)", fontsize=12, fontweight="bold")
+    header_footer(fig, "Defense: Run Stopping vs. Pass Defense",
+                  sub_line(weeks, "Designed runs (scrambles go to pass) | Dropbacks include sacks | Dotted lines = league average"))
+    save(fig, "defense_run_pass.png")
+    t["both"] = t["run"] + t["pass"]
+    f["defense_run_pass"] = {"best_run_d": t["run"].nsmallest(3).round(3).to_dict(), "best_pass_d": t["pass"].nsmallest(3).round(3).to_dict(),
+                             "corr_run_pass": round(float(t["run"].corr(t["pass"])), 2)}
+
+
+def chart_pass_rush(p, weeks, tc, f):
+    d = p[(p.qb_dropback == 1) & (p.two_point_attempt != 1)]
+    rows = []
+    for _, r in d.iterrows():
+        seen = {}
+        if pd.notna(r.sack_player_id):
+            seen[r.sack_player_id] = (r.sack_player_name, 1.0)
+        for i in (1, 2):
+            pid = r[f"half_sack_{i}_player_id"]
+            if pd.notna(pid):
+                seen[pid] = (r[f"half_sack_{i}_player_name"], 0.5)
+        for i in (1, 2):
+            pid = r[f"qb_hit_{i}_player_id"]
+            if pd.notna(pid) and pid not in seen:
+                seen[pid] = (r[f"qb_hit_{i}_player_name"], 0.0)
+        for pid, (nm, sk) in seen.items():
+            rows.append((pid, nm, r.defteam, sk))
+    e = pd.DataFrame(rows, columns=["pid", "name", "team", "sacks"])
+    g = e.groupby("pid").agg(name=("name", "first"), team=("team", lambda s: s.mode().iat[0]), events=("sacks", "size"),
+                             sacks=("sacks", "sum")).reset_index()
+    q = g.sort_values(["events", "sacks"], ascending=False).head(30).reset_index(drop=True)
+    q["lab"] = q.name + " (" + q.team + ")"
+    ranked_bars(q, "events", "lab", "team", tc, lambda v: f"{int(v)}", "Plays with a sack or QB hit",
+                "Pass Rush Leaders: Sacks + QB Hits",
+                sub_line(weeks, "Each play counted once per player (a sack that is also a hit counts once) | Half sacks = 0.5"),
+                "pass_rush_leaders.png", right=lambda r: f"{r.sacks:g}", right_head="Sacks")
+    f["pass_rush_leaders"] = {"top5": q.head(5)[["name", "team", "events", "sacks"]].to_dict("records")}
+
+
+def fg_model():
+    """League make probability by distance from 2022-25 regular seasons (logistic in distance)."""
+    from sklearn.linear_model import LogisticRegression
+    cols = ["season_type", "field_goal_attempt", "field_goal_result", "kick_distance", "roof"]
+    h = data.load_pbp(range(2022, 2026), columns=cols)
+    h = h[(h.season_type == "REG") & (h.field_goal_attempt == 1) & h.kick_distance.notna()]
+    X = np.c_[h.kick_distance, h.kick_distance ** 2, h.roof.isin(["dome", "closed"])]
+    m = LogisticRegression(max_iter=1000, C=1e6).fit(X, (h.field_goal_result == "made").astype(int))
+    return m, len(h)
+
+
+def chart_kickers(p, weeks, tc, f):
+    m, n_hist = fg_model()
+    k = p[(p.field_goal_attempt == 1) & p.kick_distance.notna()].copy()
+    k["p"] = m.predict_proba(np.c_[k.kick_distance, k.kick_distance ** 2, k.roof.isin(["dome", "closed"])])[:, 1]
+    k["made"] = (k.field_goal_result == "made").astype(int)
+    g = k.groupby(["kicker_player_id", "kicker_player_name"]).agg(
+        team=("posteam", lambda s: s.mode().iat[0]), att=("made", "size"), made=("made", "sum"), exp=("p", "sum"),
+        long=("kick_distance", lambda s: s[k.loc[s.index, "made"] == 1].max())).reset_index()
+    g["fgoe_pts"] = 3 * (g.made - g.exp)
+    q = g[g.att >= 8].sort_values("fgoe_pts", ascending=False).reset_index(drop=True)
+    q["lab"] = q.kicker_player_name + " (" + q.team + ")"
+    ranked_bars(q, "fgoe_pts", "lab", "team", tc, lambda v: f"{v:+.1f}", "Field-goal points over expected",
+                "Kickers: FG Points Over Expected",
+                sub_line(weeks, f"Min. 8 attempts | Expected make rate by distance and roof, fit on {n_hist:,} 2022-25 kicks | made-att at right"),
+                "kicker_fgoe.png", right=lambda r: f"{int(r.made)}-{int(r.att)}", right_head="FG", diverging=True)
+    f["kicker_fgoe"] = {"n": int(len(q)), "model_kicks": int(n_hist),
+                        "top3": q.head(3)[["kicker_player_name", "team", "made", "att", "fgoe_pts"]].round(2).to_dict("records"),
+                        "bottom3": q.tail(3)[["kicker_player_name", "team", "made", "att", "fgoe_pts"]].round(2).to_dict("records")}
+
+
 def main(refresh: bool = False):
     p, weeks = load(refresh)
     tc = team_colors()
@@ -416,6 +624,12 @@ def main(refresh: bool = False):
     chart_proe(p, weeks, tc, f)
     chart_receivers(p, weeks, tc, f)
     chart_defense(p, weeks, tc, f)
+    chart_qb_adot_yac(p, weeks, tc, f)
+    chart_receiver_epa_adot(p, weeks, tc, f)
+    chart_yac_oe(p, weeks, tc, f)
+    chart_defense_run_pass(p, weeks, tc, f)
+    chart_pass_rush(p, weeks, tc, f)
+    chart_kickers(p, weeks, tc, f)
     (OUT / "findings.json").write_text(json.dumps(f, indent=1, default=float))
     print(json.dumps(f, indent=1, default=float)[:3000])
 
