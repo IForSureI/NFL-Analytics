@@ -228,5 +228,228 @@
    "ARI": 0.185,
    "MIA": 0.226
   }
+ },
+ "qb_adot_yac": {
+  "n_qbs": 29,
+  "corr_adot_yac_share": -0.6,
+  "most_yac": [
+   {
+    "name": "P.Mahomes",
+    "team": "KC",
+    "adot": 5.815,
+    "yac_share": 0.653
+   },
+   {
+    "name": "B.Nix",
+    "team": "DEN",
+    "adot": 5.384,
+    "yac_share": 0.629
+   },
+   {
+    "name": "A.Rodgers",
+    "team": "PIT",
+    "adot": 7.351,
+    "yac_share": 0.598
+   }
+  ],
+  "least_yac": [
+   {
+    "name": "D.Prescott",
+    "team": "DAL",
+    "adot": 7.768,
+    "yac_share": 0.384
+   },
+   {
+    "name": "C.Stroud",
+    "team": "HOU",
+    "adot": 9.186,
+    "yac_share": 0.37
+   },
+   {
+    "name": "J.Hurts",
+    "team": "PHI",
+    "adot": 7.526,
+    "yac_share": 0.369
+   }
+  ]
+ },
+ "receiver_epa_adot": {
+  "n": 45,
+  "top5_epa_per_target": [
+   {
+    "receiver_player_name": "T.Higgins",
+    "team": "CIN",
+    "tgt": 61,
+    "adot": 13.623,
+    "epa": 0.866
+   },
+   {
+    "receiver_player_name": "J.Smith-Njigba",
+    "team": "SEA",
+    "tgt": 89,
+    "adot": 10.528,
+    "epa": 0.725
+   },
+   {
+    "receiver_player_name": "B.Bowers",
+    "team": "LV",
+    "tgt": 61,
+    "adot": 9.967,
+    "epa": 0.559
+   },
+   {
+    "receiver_player_name": "J.Williams",
+    "team": "DET",
+    "tgt": 44,
+    "adot": 14.932,
+    "epa": 0.544
+   },
+   {
+    "receiver_player_name": "C.Olave",
+    "team": "NO",
+    "tgt": 71,
+    "adot": 12.268,
+    "epa": 0.528
+   }
+  ],
+  "corr_adot_epa": 0.38
+ },
+ "yac_over_expected": {
+  "league_mean": -0.197,
+  "n_qualified": 68,
+  "top5": [
+   {
+    "receiver_player_name": "J.Warren",
+    "team": "PIT",
+    "rec": 25,
+    "yacoe": 5.12,
+    "yac": 13.84
+   },
+   {
+    "receiver_player_name": "T.Kelce",
+    "team": "KC",
+    "rec": 28,
+    "yacoe": 4.13,
+    "yac": 9.75
+   },
+   {
+    "receiver_player_name": "K.Shakir",
+    "team": "BUF",
+    "rec": 27,
+    "yacoe": 2.98,
+    "yac": 9.04
+   },
+   {
+    "receiver_player_name": "R.Harvey",
+    "team": "DEN",
+    "rec": 25,
+    "yacoe": 2.79,
+    "yac": 11.96
+   },
+   {
+    "receiver_player_name": "Z.Flowers",
+    "team": "BAL",
+    "rec": 40,
+    "yacoe": 2.75,
+    "yac": 7.78
+   }
+  ]
+ },
+ "defense_run_pass": {
+  "best_run_d": {
+   "JAX": -0.192,
+   "SF": -0.182,
+   "LA": -0.164
+  },
+  "best_pass_d": {
+   "MIN": -0.207,
+   "TB": -0.159,
+   "SEA": -0.076
+  },
+  "corr_run_pass": 0.33
+ },
+ "pass_rush_leaders": {
+  "top5": [
+   {
+    "name": "G.Rousseau",
+    "team": "BUF",
+    "events": 22,
+    "sacks": 7.0
+   },
+   {
+    "name": "D.Turner",
+    "team": "MIN",
+    "events": 20,
+    "sacks": 6.0
+   },
+   {
+    "name": "Z.Allen",
+    "team": "DEN",
+    "events": 20,
+    "sacks": 4.5
+   },
+   {
+    "name": "M.Crosby",
+    "team": "LV",
+    "events": 18,
+    "sacks": 3.0
+   },
+   {
+    "name": "A.Hutchinson",
+    "team": "DET",
+    "events": 17,
+    "sacks": 5.0
+   }
+  ]
+ },
+ "kicker_fgoe": {
+  "n": 31,
+  "model_kicks": 4325,
+  "top3": [
+   {
+    "kicker_player_name": "C.McLaughlin",
+    "team": "TB",
+    "made": 19,
+    "att": 19,
+    "fgoe_pts": 9.4
+   },
+   {
+    "kicker_player_name": "S.Shrader",
+    "team": "IND",
+    "made": 19,
+    "att": 21,
+    "fgoe_pts": 7.34
+   },
+   {
+    "kicker_player_name": "R.Fitzgerald",
+    "team": "CAR",
+    "made": 13,
+    "att": 13,
+    "fgoe_pts": 6.51
+   }
+  ],
+  "bottom3": [
+   {
+    "kicker_player_name": "H.Mevis",
+    "team": "LA",
+    "made": 5,
+    "att": 9,
+    "fgoe_pts": -7.55
+   },
+   {
+    "kicker_player_name": "H.Butker",
+    "team": "KC",
+    "made": 12,
+    "att": 18,
+    "fgoe_pts": -7.76
+   },
+   {
+    "kicker_player_name": "T.Smack",
+    "team": "GB",
+    "made": 11,
+    "att": 16,
+    "fgoe_pts": -8.45
+   }
+  ]
  }
 }
