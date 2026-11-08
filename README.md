@@ -32,9 +32,9 @@ I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward 
 
 ## 2026 in-season snippets
 
-Six quick charts on the season in progress, through Weeks 1-8: QB efficiency, where QB yards come from, team tiers, early-down pass rate over expected, receiver roles and pass-rush results. [See them all](reports/2026-in-season-snippets/).
+Twelve quick charts on the season in progress, through Weeks 1-8: QB, running back, receiver, pass rusher, defense, kicker and team views. [See them all](reports/2026-in-season-snippets/).
 
-<table><tr><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/qb_epa_cpoe.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/team_tiers.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/early_down_proe.png" width="100%"></a></td></tr><tr><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/receiver_share.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/qb_adot_yac.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/defense_pressure.png" width="100%"></a></td></tr></table>
+<table><tr><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/qb_epa_cpoe.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/team_tiers.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/early_down_proe.png" width="100%"></a></td></tr><tr><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/receiver_share.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/rb_success.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/defense_pressure.png" width="100%"></a></td></tr></table>
 
 ## Coming next
 
@@ -118,9 +118,9 @@ Each study also runs alone, for example `python -m projects.fourth_down_bot`.
 
 ## Changelog
 
-- 2026-11-06: License changed to all rights reserved (matches the baseball portfolio); CITATION.cff added.
 - 2026-11-06: Presentation overhaul to a professional report standard (docs/report-standard.md): banner and at-a-glance figure, TL;DR, key-number tables, what a club does with each study, equations, validation, next steps and file tables on every study page; glossary and data dictionary; README test enforces the standard.
-- 2026-11-08: 2026 in-season snippets: six charts through the latest completed week (QB EPA vs CPOE, where QB yards come from, team tiers, early-down pass rate over expected, receiver target vs air-yards share, pass-rush results); rebuilt on every weekly refresh.
+- 2026-11-08: 2026 in-season snippets: six charts through the latest completed week (QB EPA vs CPOE, running back success rate, team tiers, early-down pass rate over expected, receiver target vs air-yards share, pass-rush results); rebuilt on every weekly refresh.
+- 2026-11-08: In-season snippets 7-12: where QB yards come from, receiver role vs value, YAC over expected per catch, run vs pass defense, pass-rush leaders (sacks + QB hits), kicker FG points over expected (own distance-and-roof make model, 2022-25).
 
 Full history: [LOG.md](LOG.md). Data refreshes weekly in season (last: November 08, 2026, through the latest completed week of 2026).
 
