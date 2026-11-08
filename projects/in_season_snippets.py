@@ -63,14 +63,13 @@ def team_colors(refresh: bool = False) -> pd.DataFrame:
 
 
 def completed_weeks(pbp: pd.DataFrame) -> list[int]:
-    """Weeks whose games are all in the file (a week in progress is dropped)."""
-    g = pbp.groupby("week")["game_id"].nunique()
-    # A week is complete if it has at least 13 games (max 6 teams on bye) and is not the last
-    # week when that last week has fewer games than the week before it.
-    weeks = sorted(g.index)
-    keep = [w for w in weeks if g[w] >= 13]
-    return keep
-
+    """Weeks whose games are all in the file. A week counts only when every game on its schedule
+    (nflverse schedules) has play-by-play, so a week in progress is left out."""
+    sched = data._release("schedules", "games.parquet", refresh=True)
+    sched = sched[(sched.season == SEASON) & (sched.game_type == "REG")]
+    want = sched.groupby("week").game_id.nunique()
+    have = pbp.groupby("week").game_id.nunique()
+    return [int(w) for w in have.index if w in want.index and have[w] == want[w]]
 
 def load(refresh: bool = False):
     cols = ["season", "season_type", "week", "game_id", "posteam", "defteam", "play_type", "down", "ydstogo",
