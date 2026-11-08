@@ -79,8 +79,16 @@ def test_flag_audit_ranges():
 def test_in_season_snippets_sane():
     f = load("2026-in-season-snippets")
     assert f["weeks"][0] == 1 and f["weeks"][1] >= 1
-    for name in ["qb_epa_cpoe", "rb_success", "team_tiers", "early_down_proe", "receiver_share", "defense_pressure"]:
+    for name in ["qb_epa_cpoe", "rb_success", "team_tiers", "early_down_proe", "receiver_share", "defense_pressure", "qb_adot_yac", "receiver_epa_adot",
+                 "yac_over_expected", "defense_run_pass", "pass_rush_leaders", "kicker_fgoe"]:
         assert (R / "2026-in-season-snippets" / f"{name}.png").exists(), name
     assert -0.6 < f["qb_epa_cpoe"]["top3_epa"][0]["epa"] < 0.6        # EPA per dropback stays football-sane
     assert f["qb_epa_cpoe"]["corr_epa_cpoe"] > 0                       # accuracy and efficiency go together
     assert all(0 < r["tgt_share"] < 0.5 for r in f["receiver_share"]["top5_wopr"])
+
+
+def test_snippets_kicker_model_sane():
+    f = load("2026-in-season-snippets")
+    k = f["kicker_fgoe"]
+    assert k["model_kicks"] > 2000
+    assert all(-20 < r["fgoe_pts"] < 20 for r in k["top3"] + k["bottom3"])   # a half season can't swing more than ~6 kicks
