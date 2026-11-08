@@ -134,13 +134,38 @@ def pad(ax, frac=0.12):
         setter(a - d, b + d)
 
 
+def badge(ax, x, y, abbr, c1, c2, s=760, fs=7.6, z=5, text=True):
+    """Team badge: soft shadow, outer ring in the second color, a white gap, the main color, the abbreviation.
+    Sizes are in points, so the badge stays round whatever the axes' aspect."""
+    import matplotlib.transforms as mt
+    sh = mt.offset_copy(ax.transData, fig=ax.figure, x=1.2, y=-1.6, units="points")
+    ax.scatter([x], [y], s=s * 1.02, color="black", alpha=0.18, lw=0, transform=sh, zorder=z, clip_on=False)
+    ax.scatter([x], [y], s=s, color=c2, lw=0, zorder=z + 0.1, clip_on=False)
+    ax.scatter([x], [y], s=s * 0.74, color="white", lw=0, zorder=z + 0.2, clip_on=False)
+    ax.scatter([x], [y], s=s * 0.58, color=c1, lw=0, zorder=z + 0.3, clip_on=False)
+    if text:
+        ax.text(x, y, abbr, ha="center", va="center", fontsize=fs, fontweight="bold", zorder=z + 0.4,
+                color="white" if _lum(c1) < 0.55 else INK, clip_on=False)
+
+
+def cap(ax, x, y, abbr, c1, c2):
+    """Small badge at the end of a ranked bar."""
+    badge(ax, x, y, abbr, c1, c2, s=330, fs=5.4, z=4)
+
+
+def side_text(ax, x, y, txt, right=True, pts=13, **kw):
+    """Text placed a fixed number of points beside (x, y), clear of a bar-end badge."""
+    ax.annotate(txt, (x, y), xytext=(pts if right else -pts, 0), textcoords="offset points", va="center",
+                ha="left" if right else "right", **kw)
+
+
 def team_dots(ax, t, xcol, ycol, tc, size=360, invert_y=False):
     """Team markers, nudged apart where they would overlap; a thin line marks the true spot."""
     xs, ys = t[xcol].to_numpy(float), t[ycol].to_numpy(float)
     xr, yr = xs.max() - xs.min(), ys.max() - ys.min()
     u, v = (xs - xs.min()) / xr, (ys - ys.min()) / yr          # unit square
     pu, pv = u.copy(), v.copy()
-    rad = 0.036
+    rad = 0.045
     for _ in range(400):
         moved = False
         for i in range(len(pu)):
@@ -162,9 +187,7 @@ def team_dots(ax, t, xcol, ycol, tc, size=360, invert_y=False):
         if np.hypot(pu[k] - u[k], pv[k] - v[k]) > 0.004:
             ax.plot([xs[k], px[k]], [ys[k], py[k]], color="#9ca3af", lw=0.8, zorder=4)
             ax.scatter([xs[k]], [ys[k]], s=10, color=c1, zorder=4)
-        ax.scatter([px[k]], [py[k]], s=size, color=c1, edgecolor=c2, linewidth=2.0, zorder=5)
-        ax.text(px[k], py[k], abbr, ha="center", va="center", fontsize=6.8, fontweight="bold",
-                color="white" if _lum(c1) < 0.55 else INK, zorder=6)
+        badge(ax, px[k], py[k], abbr, c1, c2)
 
 
 def player_points(ax, df, x, y, label, team, tc, size_col=None):
@@ -221,14 +244,14 @@ def chart_qb_epa_cpoe(p, weeks, tc, f):
     q = qb_table(p)
     q = q[q.dropbacks >= 150].copy()
     fig, ax = canvas()
-    player_points(ax, q, "epa", "cpoe", "name", "team", tc, size_col="dropbacks")
+    player_points(ax, q, "epa", "cpoe", "name", "team", tc)
     mean_lines(ax, q.epa.mean(), q.cpoe.mean())
     corner(ax, "Efficient & accurate", "tr")
     corner(ax, "Struggling", "bl")
     ax.set_xlabel("EPA per dropback", fontsize=12, fontweight="bold")
     ax.set_ylabel("Completion % over expected (CPOE)", fontsize=12, fontweight="bold")
     header_footer(fig, "QB Efficiency: EPA vs. CPOE",
-                  sub_line(weeks, f"Min. dropbacks: 150 | Dropbacks include sacks and scrambles | Bubble size = dropbacks"))
+                  sub_line(weeks, f"Min. dropbacks: 150 | Dropbacks include sacks and scrambles"))
     save(fig, "qb_epa_cpoe.png")
     top = q.sort_values("epa", ascending=False)
     f["qb_epa_cpoe"] = {"n_qbs": int(len(q)), "top3_epa": top.head(3)[["name", "team", "epa", "cpoe"]].round(3).to_dict("records"),
@@ -256,10 +279,10 @@ def chart_rb_success(p, weeks, tc, f):
     for yi, (_, row) in zip(y, q.iterrows()):
         c1, c2 = tc.loc[row.team, "team_color"], tc.loc[row.team, "team_color2"]
         ax.barh(yi, row.success - lo, left=lo, color=c1, edgecolor=c2, lw=1.2, height=0.8, zorder=3)
-        ax.text(row.success - 0.004, yi, f"{row.rusher_player_name} ({row.team}, {row.carries})", ha="right", va="center",
-                fontsize=9, fontweight="bold", color="white" if _lum(c1) < 0.55 else INK, zorder=4)
-        ax.text(row.success + 0.004, yi, f"{100 * row.success:.1f}%", ha="left", va="center", fontsize=9.5,
-                fontweight="bold", color=INK, zorder=4)
+        cap(ax, row.success, yi, row.team, c1, c2)
+        side_text(ax, row.success, yi, f"{row.rusher_player_name} ({row.team}, {row.carries})", right=False, pts=12,
+                  fontsize=9, fontweight="bold", color="white" if _lum(c1) < 0.55 else INK, zorder=4)
+        side_text(ax, row.success, yi, f"{100 * row.success:.1f}%", fontsize=9.5, fontweight="bold", color=INK, zorder=4)
         ax.text(1.005, yi, f"{row.epa:+.2f}", transform=ax.get_yaxis_transform(), va="center", ha="left",
                 fontsize=9, color=MUTED)
     ax.text(1.005, len(q) - 0.2, "EPA/\nrush", transform=ax.get_yaxis_transform(), va="bottom", ha="left",
@@ -329,9 +352,9 @@ def chart_proe(p, weeks, tc, f):
     for yi, (abbr, r) in zip(y, t.iterrows()):
         c1, c2 = tc.loc[abbr, "team_color"], tc.loc[abbr, "team_color2"]
         ax.barh(yi, r.proe, color=c1, edgecolor=c2, lw=1.2, height=0.78, zorder=3)
-        xt = r.proe + (0.003 if r.proe >= 0 else -0.003)
-        ax.text(xt, yi, f"{abbr}  {100 * r.proe:+.1f}%", va="center", ha="left" if r.proe >= 0 else "right",
-                fontsize=9.5, fontweight="bold", color=_readable(c1, c2), zorder=4)
+        cap(ax, r.proe, yi, abbr, c1, c2)
+        side_text(ax, r.proe, yi, f"{abbr}  {100 * r.proe:+.1f}%", right=r.proe >= 0, fontsize=9.5, fontweight="bold",
+                  color=_readable(c1, c2), zorder=4)
         ax.text(1.005, yi, f"#{int(r.epa_rank)}", transform=ax.get_yaxis_transform(), va="center", ha="left",
                 fontsize=9, color=MUTED)
     ax.text(1.005, len(t) - 0.2, "Off. EPA\nrank", transform=ax.get_yaxis_transform(), va="bottom", ha="left",
@@ -434,16 +457,19 @@ def chart_qb_adot_yac(p, weeks, tc, f):
 
 
 def ranked_bars(rows, value, label, team, tc, fmt, xlabel, title, sub, fname, ref=None, ref_label="", right=None,
-                right_head="", diverging=False):
+                right_head="", diverging=False, names_left=False):
     """The ranked-bar look: name inside a team-colored bar, value at the end, optional right-hand column."""
     fig = plt.figure(figsize=(10, 12.5), dpi=200, facecolor="white")
-    ax = fig.add_axes([0.07, 0.10, 0.86, 0.74])
+    ax = fig.add_axes([0.30, 0.10, 0.62, 0.74] if names_left else [0.07, 0.10, 0.86, 0.74])
     ax.grid(True, axis="x", color=GRID, lw=0.8)
     ax.set_axisbelow(True)
     n = len(rows)
     y = np.arange(n)[::-1]
     vals = rows[value].to_numpy(float)
-    if diverging:
+    if names_left:
+        base, span = 0.0, np.abs(vals).max()
+        lo, hi = min(0.0, vals.min()) - span * 0.12, vals.max() + span * 0.16
+    elif diverging:
         base = 0.0
         span = np.abs(vals).max()
         lo, hi = -span * 1.45, span * 1.45
@@ -455,17 +481,19 @@ def ranked_bars(rows, value, label, team, tc, fmt, xlabel, title, sub, fname, re
         v = r[value]
         ax.barh(yi, v - base, left=base, color=c1, edgecolor=c2, lw=1.2, height=0.8, zorder=3)
         inside = "white" if _lum(c1) < 0.55 else INK
-        if diverging:
-            # name on the zero side, value at the bar end
+        cap(ax, v, yi, r[team], c1, c2)
+        if names_left:
+            ax.text(-0.012, yi, r[label], transform=ax.get_yaxis_transform(), ha="right", va="center", fontsize=9.5,
+                    fontweight="bold", color=_readable(c1, c2), zorder=4)
+            side_text(ax, v, yi, fmt(v), right=v >= 0, fontsize=9.5, fontweight="bold", color=INK, zorder=4)
+        elif diverging:
+            # name on the zero side, value beyond the badge at the bar end
             ax.text(-0.01 * span if v >= 0 else 0.01 * span, yi, r[label], ha="right" if v >= 0 else "left",
                     va="center", fontsize=9, fontweight="bold", color=_readable(c1, c2), zorder=4)
-            ax.text(v + (0.02 * span if v >= 0 else -0.02 * span), yi, fmt(v), ha="left" if v >= 0 else "right",
-                    va="center", fontsize=9.5, fontweight="bold", color=INK, zorder=4)
+            side_text(ax, v, yi, fmt(v), right=v >= 0, fontsize=9.5, fontweight="bold", color=INK, zorder=4)
         else:
-            ax.text(v - (hi - lo) * 0.006, yi, r[label], ha="right", va="center", fontsize=9, fontweight="bold",
-                    color=inside, zorder=4)
-            ax.text(v + (hi - lo) * 0.006, yi, fmt(v), ha="left", va="center", fontsize=9.5, fontweight="bold",
-                    color=INK, zorder=4)
+            side_text(ax, v, yi, r[label], right=False, pts=12, fontsize=9, fontweight="bold", color=inside, zorder=4)
+            side_text(ax, v, yi, fmt(v), fontsize=9.5, fontweight="bold", color=INK, zorder=4)
         if right is not None:
             ax.text(1.005, yi, right(r), transform=ax.get_yaxis_transform(), va="center", ha="left", fontsize=9,
                     color=MUTED)
@@ -477,8 +505,15 @@ def ranked_bars(rows, value, label, team, tc, fmt, xlabel, title, sub, fname, re
     if ref is not None:
         ax.axvline(ref, color=ACCENT, ls="--", lw=1.3, zorder=2)
         ax.text(ref, n - 0.1, f" {ref_label}", color=ACCENT, fontsize=9, fontweight="bold", va="bottom", ha="left")
+    if diverging or names_left:
+        ax.axvline(0, color=INK, lw=1, zorder=2)
     ax.set_yticks(y)
     ax.set_yticklabels(range(1, n + 1), fontsize=9)
+    if names_left:
+        ax.set_yticklabels([])
+        ax.tick_params(axis="y", length=0)
+        for yi, k in zip(y, range(1, n + 1)):
+            ax.text(-0.42, yi, f"{k}", transform=ax.get_yaxis_transform(), ha="right", va="center", fontsize=9, color=MUTED)
     ax.set_xlim(lo, hi)
     ax.set_ylim(-0.7, n + 0.6)
     ax.set_xlabel(xlabel, fontsize=12, fontweight="bold")
@@ -495,14 +530,14 @@ def chart_receiver_epa_adot(p, weeks, tc, f):
         adot=("air_yards", "mean"), catch=("complete_pass", "mean")).reset_index()
     q = r[r.tgt >= 40].sort_values("tgt", ascending=False).head(45).copy()
     fig, ax = canvas()
-    player_points(ax, q, "adot", "epa", "receiver_player_name", "team", tc, size_col="tgt")
+    player_points(ax, q, "adot", "epa", "receiver_player_name", "team", tc)
     mean_lines(ax, q.adot.mean(), q.epa.mean())
     corner(ax, "Deep role, big value", "tr")
     corner(ax, "Short role, low value", "bl")
     ax.set_xlabel("Average depth of target (air yards)", fontsize=12, fontweight="bold")
     ax.set_ylabel("EPA per target", fontsize=12, fontweight="bold")
     header_footer(fig, "Receivers: Role vs. Value",
-                  sub_line(weeks, "45 most-targeted receivers (WR, TE, RB), min. 40 targets | Bubble size = targets"))
+                  sub_line(weeks, "45 most-targeted receivers (WR, TE, RB), min. 40 targets | Dotted lines = group average"))
     save(fig, "receiver_epa_adot.png")
     s = q.sort_values("epa", ascending=False)
     f["receiver_epa_adot"] = {"n": int(len(q)), "top5_epa_per_target": s.head(5)[["receiver_player_name", "team", "tgt", "adot", "epa"]].round(3).to_dict("records"),
@@ -523,7 +558,7 @@ def chart_yac_oe(p, weeks, tc, f):
     ranked_bars(q, "yacoe", "lab", "team", tc, lambda v: f"{v:+.2f}", "Yards after the catch over expected, per reception",
                 "YAC Over Expected per Catch",
                 sub_line(weeks, f"Top 30 of {n_q} players with 25+ catches | Expected = nflverse xYAC model | (team, catches)"),
-                "yac_over_expected.png", ref=None, right=lambda r: f"{r.yac:.1f}", right_head="YAC/\nrec", diverging=True)
+                "yac_over_expected.png", ref=None, right=lambda r: f"{r.yac:.1f}", right_head="YAC/\nrec", names_left=True)
     f["yac_over_expected"] = {"league_mean": round(league, 3), "n_qualified": n_q,
                               "top5": q.head(5)[["receiver_player_name", "team", "rec", "yacoe", "yac"]].round(2).to_dict("records")}
 
