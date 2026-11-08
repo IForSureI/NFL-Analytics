@@ -344,6 +344,74 @@ def _n_tests():
     return sum((ROOT / "tests" / p.name).read_text().count("\ndef test_") for p in (ROOT / "tests").glob("test_*.py"))
 
 
+SNIP = "2026-in-season-snippets"
+
+
+def snippets():
+    """README for the in-season snippets folder; every number comes from its findings.json."""
+    f = F(SNIP)
+    w = f"Weeks {f['weeks'][0]}-{f['weeks'][1]}"
+    q, y, t, pr, rc, d = (f["qb_epa_cpoe"], f["qb_adot_yac"], f["team_tiers"], f["early_down_proe"],
+                          f["receiver_share"], f["defense_pressure"])
+    nm = lambda r: f"{r['name']} ({r['team']})"
+    top = q["top3_epa"]
+    yac = y["most_yac"]
+    tt = t["top5_net"]
+    rw = rc["top5_wopr"][0]
+    pp = list(pr["most_pass_happy"].items())
+    rh = list(pr["most_run_heavy"].items())
+    return f"""# 2026 In-Season Snippets
+
+Six quick charts on the season in progress, the kind a staff looks at on a Monday. Same data and code standard as the studies; lighter write-ups. Through **{w} of {f['season']}** (regular season, completed weeks only; {f['plays']:,} plays). Rebuilt on every weekly refresh.
+
+| | |
+|---|---|
+| <img src="qb_epa_cpoe.png" width="100%"> | <img src="qb_adot_yac.png" width="100%"> |
+| <img src="team_tiers.png" width="100%"> | <img src="early_down_proe.png" width="100%"> |
+| <img src="receiver_share.png" width="100%"> | <img src="defense_pressure.png" width="100%"> |
+
+## What each one says
+
+1. **QB Efficiency: EPA vs. CPOE** ([chart](qb_epa_cpoe.png)). {nm(top[0])} leads in EPA per dropback ({top[0]['epa']:+.3f}), ahead of {nm(top[1])} and {nm(top[2])}. Accuracy and efficiency move together this year (r = {q['corr_epa_cpoe']:.2f} across {q['n_qbs']} QBs with 150+ dropbacks).
+2. **Where QB Yards Come From** ([chart](qb_adot_yac.png)). {nm(yac[0])} gets {pct(yac[0]['yac_share'])} of his passing yards after the catch on a {yac[0]['adot']:.1f}-yard average depth of target; {nm(yac[1])} is next ({pct(yac[1]['yac_share'])}). The shorter the throws, the bigger the YAC share (r = {y['corr_adot_yac_share']:.2f}), so a high YAC share is a style, not a skill by itself.
+3. **2026 Team Tiers** ([chart](team_tiers.png)). Best net EPA per play: {tt[0]['team']} ({tt[0]['net']:+.3f}), {tt[1]['team']} ({tt[1]['net']:+.3f}), {tt[2]['team']} ({tt[2]['net']:+.3f}).
+4. **Early-Down Pass Rate Over Expected** ([chart](early_down_proe.png)). {pp[0][0]} throws {100 * pp[0][1]:+.1f} points over expectation in neutral early downs; {rh[-1][0]} sits at {100 * rh[-1][1]:+.1f}. Teams that throw more than expected also have the better offenses so far (r = {pr['corr_proe_off_epa']:.2f} with offensive EPA per play), the same pattern as [study 06](../06-pass-run/).
+5. **Receiver Roles: Targets vs. Air Yards** ([chart](receiver_share.png)). {rw['receiver_player_name']} ({rw['team']}) carries the league's biggest role: {pct(rw['tgt_share'])} of targets and {pct(rw['air_share'])} of air yards (WOPR {rw['wopr']:.2f}). Points above the dashed line are used downfield; points below it are volume options on shorter throws.
+6. **Pass Defense: Pressure vs. Results** ([chart](defense_pressure.png)). Defenses that hit the QB more allow less per dropback (r = {d['corr_press_epa']:.2f}), but the spread around the line is wide: teams far above it win in coverage, teams far below it get home and still leak.
+
+## Method notes
+
+- Data: [nflverse](https://github.com/nflverse/nflverse-data) play-by-play (EPA, CPOE, xpass from the nflfastR models) and nflverse team colors. Teams are drawn as color-coded markers with abbreviations.
+- A week counts once all of its games are in the file; a week in progress is left out.
+- Dropbacks include sacks and scrambles; two-point tries and penalty no-plays are excluded.
+- Pressure proxy = sack or QB hit. Play-by-play has no hurries, so this undercounts pressure; treat it as a rate comparison between teams, not a pressure rate.
+- Early-down PROE: 1st and 2nd down, win probability 20-80%, outside the last two minutes of each half.
+- Receiver shares are computed over the games each player appeared in (so injuries don't shrink them).
+- Small samples: part of a season is early. These are snapshots, not projections.
+
+## Reproduce
+
+```bash
+python -m projects.in_season_snippets --refresh   # re-downloads the season in progress
+```
+
+Code: [`projects/in_season_snippets.py`](../../projects/in_season_snippets.py). Numbers: [`findings.json`](findings.json).
+"""
+
+
+def snippets_section():
+    p = R / SNIP / "findings.json"
+    if not p.exists():
+        return ""
+    f = F(SNIP)
+    figs = ["qb_epa_cpoe", "team_tiers", "early_down_proe", "receiver_share", "qb_adot_yac", "defense_pressure"]
+    cells = "".join(f'<td width="33%"><a href="reports/{SNIP}/"><img src="reports/{SNIP}/{x}.png" width="100%"></a></td>' for x in figs[:3])
+    cells2 = "".join(f'<td width="33%"><a href="reports/{SNIP}/"><img src="reports/{SNIP}/{x}.png" width="100%"></a></td>' for x in figs[3:])
+    return (f"\n## 2026 in-season snippets\n\nSix quick charts on the season in progress, through Weeks {f['weeks'][0]}-{f['weeks'][1]}: "
+            f"QB efficiency, where QB yards come from, team tiers, early-down pass rate over expected, receiver roles and pass-rush results. "
+            f"[See them all](reports/{SNIP}/).\n\n<table><tr>{cells}</tr><tr>{cells2}</tr></table>\n")
+
+
 def top_readme():
     f2 = F("02-fourth-down-bot")
     g = f2["go_rate_clear_spots"]; ys = sorted(g)
@@ -390,7 +458,7 @@ I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward 
 {chr(10).join(rows)}
 
 {gallery}
-{upcoming}
+{snippets_section()}{upcoming}
 <a id="what-a-club-gets"></a>
 ## What a club gets
 
@@ -482,7 +550,7 @@ Dylan Fanelli, M.S. Sport Management candidate at UMass Amherst (Mark H. McCorma
 
 I also keep a [baseball analytics portfolio](https://github.com/IForSureI/Dylan-Fanelli-Baseball-Analytics-Portfolio). [LinkedIn](https://www.linkedin.com/in/dylanfanelli/)
 
-<sub>Photos are my own; location data removed.</sub>
+<sub>Photos are my own.</sub>
 
 </td>
 </tr>
@@ -618,6 +686,8 @@ def money(md):
 def main():
     for i, (slug, fn) in enumerate(REPORTS):
         (R / slug / "README.md").write_text(money(wrap(slug, fn(), i)))
+    if (R / SNIP / "findings.json").exists():
+        (R / SNIP / "README.md").write_text(money(snippets()))
     (ROOT / "README.md").write_text(money(top_readme()))
     print("READMEs written")
 
