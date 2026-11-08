@@ -35,7 +35,7 @@ def F(slug):
 
 
 def banner():
-    """A catalogue title page: the title set left, a registration target, and the go-rate trend as the one figure."""
+    """A catalogue title page: the title set left and the go-rate trend as the one figure."""
     f = F("02-fourth-down-bot")
     g = {int(k): v for k, v in f["go_rate_clear_spots"].items()}
     ys = sorted(g)
@@ -52,11 +52,6 @@ def banner():
     ax.text(3, 31, "NFL Analytics", fontsize=46, fontweight="bold", color=INK, fontfamily=DISPLAY, va="center")
     ax.text(3.2, 22.0, "Decision models, market inefficiencies and the stats that repeat.", fontsize=17, color=INK, fontfamily=TEXT, style="italic", va="center")
     ax.text(3.2, 7.0, "Dylan Fanelli. Python, SQL, nflverse %d-%d" % (min(ys) if min(ys) < 2010 else 2006, max(ys)), fontsize=13, color=MUTED, fontfamily=TEXT, va="center")
-    # registration target
-    tx, ty = 52.5, 31
-    for size in (3600, 600):  # marker sizes are in points, so the rings stay round on the wide banner
-        ax.scatter([tx], [ty], s=size, facecolor="none", edgecolor=ORANGE, lw=1.1, zorder=3)
-    ax.plot([tx - 2.6, tx + 2.6], [ty, ty], color=ORANGE, lw=1.1); ax.plot([tx, tx], [ty - 9.5, ty + 9.5], color=ORANGE, lw=1.1)
     # the go-rate trend, with ruler ticks for the seasons
     x0, x1 = 62, 96
     span = max(full) - min(full) or 1
