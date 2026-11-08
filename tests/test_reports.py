@@ -74,3 +74,13 @@ def test_flag_audit_ranges():
     assert 0.0 < f["crew_yoy_r"] < 0.6                 # crews have a modest style, not a fixed one
     assert abs(f["split_r_net"]) < 0.3                 # a team's net flag luck does not carry over
     assert 0.4 < f["false_start_road_share"] < 0.6     # false starts split about evenly
+
+
+def test_in_season_snippets_sane():
+    f = load("2026-in-season-snippets")
+    assert f["weeks"][0] == 1 and f["weeks"][1] >= 1
+    for name in ["qb_epa_cpoe", "qb_adot_yac", "team_tiers", "early_down_proe", "receiver_share", "defense_pressure"]:
+        assert (R / "2026-in-season-snippets" / f"{name}.png").exists(), name
+    assert -0.6 < f["qb_epa_cpoe"]["top3_epa"][0]["epa"] < 0.6        # EPA per dropback stays football-sane
+    assert f["qb_epa_cpoe"]["corr_epa_cpoe"] > 0                       # accuracy and efficiency go together
+    assert all(0 < r["tgt_share"] < 0.5 for r in f["receiver_share"]["top5_wopr"])
