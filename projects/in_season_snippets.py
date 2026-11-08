@@ -5,7 +5,7 @@ numbers a coaching staff or front office would actually look at on a Monday?
 
 Charts (all from nflverse play-by-play, regular season, completed weeks only):
   1. qb_epa_cpoe.png         QB efficiency: EPA per dropback vs completion % over expected
-  2. qb_adot_yac.png         How QBs get their yards: depth of target vs share of yards after the catch
+  2. rb_success.png          Running backs: rushing success rate, top 30 (ranked bar)
   3. team_tiers.png          Team tiers: offensive EPA/play vs defensive EPA/play allowed
   4. early_down_proe.png     Who throws on early downs: neutral-situation pass rate over expected
   5. receiver_share.png      Receiver roles: target share vs air-yards share (WOPR)
@@ -71,7 +71,7 @@ def load(refresh: bool = False):
             "epa", "success", "qb_dropback", "pass_attempt", "sack", "qb_hit", "qb_scramble", "cpoe",
             "air_yards", "yards_after_catch", "complete_pass", "passing_yards", "receiving_yards",
             "id", "name", "passer_player_id", "passer_player_name", "receiver_player_id",
-            "receiver_player_name", "wp", "half_seconds_remaining", "pass_oe", "xpass", "two_point_attempt"]
+            "receiver_player_name", "rusher_player_id", "rusher_player_name", "yards_gained", "wp", "half_seconds_remaining", "pass_oe", "xpass", "two_point_attempt"]
     p = pd.read_parquet(data.pbp_path(SEASON, refresh=refresh), columns=cols)
     p = p[p.season_type == "REG"]
     weeks = completed_weeks(p)
@@ -231,24 +231,51 @@ def chart_qb_epa_cpoe(p, weeks, tc, f):
                         "corr_epa_cpoe": round(float(q.epa.corr(q.cpoe)), 2)}
 
 
-def chart_qb_adot_yac(p, weeks, tc, f):
-    q = qb_table(p)
-    q = q[q.attempts >= 150].copy()
-    fig, ax = canvas()
-    player_points(ax, q, "adot", "yac_share", "name", "team", tc)
-    mean_lines(ax, q.adot.mean(), q.yac_share.mean())
-    ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
-    corner(ax, "Short throws, YAC does the work", "tl")
-    corner(ax, "Pushes it downfield", "br")
-    ax.set_xlabel("Average depth of target (air yards per attempt)", fontsize=12, fontweight="bold")
-    ax.set_ylabel("Share of passing yards gained after the catch", fontsize=12, fontweight="bold")
-    header_footer(fig, "Where QB Yards Come From",
-                  sub_line(weeks, "Min. attempts: 150 | YAC share = YAC / passing yards on completions"))
-    save(fig, "qb_adot_yac.png")
-    s = q.sort_values("yac_share", ascending=False)
-    f["qb_adot_yac"] = {"n_qbs": int(len(q)), "corr_adot_yac_share": round(float(q.adot.corr(q.yac_share)), 2),
-                        "most_yac": s.head(3)[["name", "team", "adot", "yac_share"]].round(3).to_dict("records"),
-                        "least_yac": s.tail(3)[["name", "team", "adot", "yac_share"]].round(3).to_dict("records")}
+def chart_rb_success(p, weeks, tc, f):
+    """Running backs ranked by rushing success rate, the X-style ranked bar."""
+    qbs = set(p[(p.qb_dropback == 1)].groupby("id").size().loc[lambda x: x >= 50].index)
+    r = p[(p.play_type == "run") & p.rusher_player_id.notna() & p.epa.notna() & (p.two_point_attempt != 1)
+          & (p.qb_scramble != 1) & ~p.rusher_player_id.isin(qbs)]
+    g = r.groupby(["rusher_player_id", "rusher_player_name"]).agg(
+        team=("posteam", lambda s: s.mode().iat[0]), carries=("epa", "size"), success=("success", "mean"),
+        epa=("epa", "mean"), explosive=("yards_gained", lambda y: (y >= 10).mean())).reset_index()
+    league = float(r.success.mean())
+    n_q = int((g.carries >= 60).sum())
+    q = g[g.carries >= 60].sort_values("success", ascending=False).head(30).reset_index(drop=True)
+    fig = plt.figure(figsize=(10, 12.5), dpi=200, facecolor="white")
+    ax = fig.add_axes([0.07, 0.10, 0.86, 0.74])
+    ax.grid(True, axis="x", color=GRID, lw=0.8)
+    ax.set_axisbelow(True)
+    y = np.arange(len(q))[::-1]
+    lo = max(0.0, q.success.min() - 0.08)
+    for yi, (_, row) in zip(y, q.iterrows()):
+        c1, c2 = tc.loc[row.team, "team_color"], tc.loc[row.team, "team_color2"]
+        ax.barh(yi, row.success - lo, left=lo, color=c1, edgecolor=c2, lw=1.2, height=0.8, zorder=3)
+        ax.text(row.success - 0.004, yi, f"{row.rusher_player_name} ({row.team}, {row.carries})", ha="right", va="center",
+                fontsize=9, fontweight="bold", color="white" if _lum(c1) < 0.55 else INK, zorder=4)
+        ax.text(row.success + 0.004, yi, f"{100 * row.success:.1f}%", ha="left", va="center", fontsize=9.5,
+                fontweight="bold", color=INK, zorder=4)
+        ax.text(1.005, yi, f"{row.epa:+.2f}", transform=ax.get_yaxis_transform(), va="center", ha="left",
+                fontsize=9, color=MUTED)
+    ax.text(1.005, len(q) - 0.2, "EPA/\nrush", transform=ax.get_yaxis_transform(), va="bottom", ha="left",
+            fontsize=8.5, color=MUTED, fontweight="bold")
+    ax.axvline(league, color=ACCENT, ls="--", lw=1.3, zorder=2)
+    ax.text(league, len(q) - 0.1, f" RB average {100 * league:.1f}%", color=ACCENT, fontsize=9, fontweight="bold",
+            va="bottom", ha="left")
+    ax.set_yticks(y)
+    ax.set_yticklabels(range(1, len(q) + 1), fontsize=9)
+    ax.set_xlim(lo, q.success.max() + 0.05)
+    ax.set_ylim(-0.7, len(q) + 0.6)
+    ax.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
+    ax.set_xlabel("Rushing success rate (play gains positive EPA)", fontsize=12, fontweight="bold")
+    for sp in ("top", "right"):
+        ax.spines[sp].set_visible(False)
+    header_footer(fig, "Running Back Success Rate",
+                  sub_line(weeks, f"Top 30 of {n_q} RBs with 60+ carries | QB runs and scrambles excluded | (team, carries)"))
+    save(fig, "rb_success.png")
+    f["rb_success"] = {"rb_average_success": round(league, 3), "n_qualified": n_q,
+                       "top5": q.head(5)[["rusher_player_name", "team", "carries", "success", "epa", "explosive"]].round(3).to_dict("records"),
+                       "corr_success_epa": round(float(q.success.corr(q.epa)), 2)}
 
 
 def chart_team_tiers(p, weeks, tc, f):
@@ -384,7 +411,7 @@ def main(refresh: bool = False):
     f = {"season": SEASON, "weeks": [int(min(weeks)), int(max(weeks))], "built": date.today().isoformat(),
          "plays": int(len(p))}
     chart_qb_epa_cpoe(p, weeks, tc, f)
-    chart_qb_adot_yac(p, weeks, tc, f)
+    chart_rb_success(p, weeks, tc, f)
     chart_team_tiers(p, weeks, tc, f)
     chart_proe(p, weeks, tc, f)
     chart_receivers(p, weeks, tc, f)
