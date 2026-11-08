@@ -13,7 +13,7 @@ Twelve quick charts on the season in progress, across positions, the kind a staf
 
 ## What each one says
 
-1. **QB Efficiency: EPA vs. CPOE** ([chart](qb_epa_cpoe.png)). J.Allen (BUF) leads in EPA per dropback (+0.303), ahead of B.Purdy (SF) and C.Williams (CHI). Accuracy and efficiency move together this year (r = 0.75 across 30 QBs with 150+ dropbacks).
+1. **QB Efficiency: EPA vs. CPOE** ([chart](qb_epa_cpoe.png)). J.Allen (BUF) leads in EPA per dropback (+0.303), ahead of B.Purdy (SF) (+0.287). Accuracy and efficiency move together this year (r = 0.75 across 30 QBs with 150+ dropbacks).
 2. **Running Back Success Rate** ([chart](rb_success.png)). C.McCaffrey (SF) leads the 33 backs with 60+ carries at 53.6% of runs gaining positive EPA, ahead of B.Corum (LA, 52.0%) and J.Cook (BUF, 50.7%). The RB average is 39.8%. Success rate shows how often a back keeps the offense on schedule; it mixes his work with his blocking, which study 09 (Run Game Value, coming next) will separate.
 3. **2026 Team Tiers** ([chart](team_tiers.png)). Best net EPA per play: JAX (+0.263), SF (+0.220), KC (+0.167).
 4. **Early-Down Pass Rate Over Expected** ([chart](early_down_proe.png)). CIN throws +11.3 points over expectation in neutral early downs; TB sits at -13.4. Teams that throw more than expected also have the better offenses so far (r = 0.49 with offensive EPA per play), the same pattern as [study 06](../06-pass-run/).
@@ -24,7 +24,7 @@ Twelve quick charts on the season in progress, across positions, the kind a staf
 8. **Receivers: Role vs. Value** ([chart](receiver_epa_adot.png)). Among the 45 most-targeted receivers, T.Higgins (CIN) adds the most per target (+0.87 EPA on a 13.6-yard depth). Deeper roles earn more per target (r = 0.38), so compare a receiver with others at his depth.
 9. **YAC Over Expected per Catch** ([chart](yac_over_expected.png)). J.Warren (PIT) gains +5.12 yards after the catch beyond what the nflverse xYAC model expects per reception, then T.Kelce (KC, +4.13). [Study 08](../08-yac-tax/) found a season of YAC over expected predicts next year about as well as air yards, so this is worth watching.
 10. **Defense: Run Stopping vs. Pass Defense** ([chart](defense_run_pass.png)). Best run defense by EPA per run allowed: JAX, SF, LA; best pass defense: MIN, TB, SEA. The two go together only loosely (r = 0.33).
-11. **Pass Rush Leaders** ([chart](pass_rush_leaders.png)). G.Rousseau (BUF) has a sack or QB hit on 22 plays, ahead of D.Turner (MIN, 20). [Study 07](../07-box-score-tax/) showed hits and pressures predict future sacks better than sacks do, which is why this counts both.
+11. **Pass Rush Leaders** ([chart](pass_rush_leaders.png)). G.Rousseau (BUF) has a sack or QB hit on 22 plays, ahead of D.Turner (MIN) and Z.Allen (DEN) with 20 each. [Study 07](../07-box-score-tax/) showed hits and pressures predict future sacks better than sacks do, which is why this counts both.
 12. **Kickers: FG Points Over Expected** ([chart](kicker_fgoe.png)). C.McLaughlin (TB, 19-19) is +9.4 points above what an average kicker makes from the same distances; the expected rate comes from a distance-and-roof model fit on 4,325 kicks from 2022-25.
 
 ## Method notes
