@@ -79,7 +79,7 @@ def test_flag_audit_ranges():
 def test_in_season_snippets_sane():
     f = load("2026-in-season-snippets")
     assert f["weeks"][0] == 1 and f["weeks"][1] >= 1
-    for name in ["qb_epa_cpoe", "qb_adot_yac", "team_tiers", "early_down_proe", "receiver_share", "defense_pressure"]:
+    for name in ["qb_epa_cpoe", "rb_success", "team_tiers", "early_down_proe", "receiver_share", "defense_pressure"]:
         assert (R / "2026-in-season-snippets" / f"{name}.png").exists(), name
     assert -0.6 < f["qb_epa_cpoe"]["top3_epa"][0]["epa"] < 0.6        # EPA per dropback stays football-sane
     assert f["qb_epa_cpoe"]["corr_epa_cpoe"] > 0                       # accuracy and efficiency go together
