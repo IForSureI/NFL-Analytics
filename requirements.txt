@@ -6,3 +6,4 @@ scikit-learn>=1.4
 statsmodels>=0.14
 duckdb>=1.0
 pytest>=8
+adjustText>=1.0
