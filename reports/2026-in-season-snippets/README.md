@@ -2,6 +2,8 @@
 
 Twelve quick charts on the season in progress, across positions, the kind a staff looks at on a Monday. Same data and code standard as the studies; lighter write-ups. Through **Weeks 1-8 of 2026** (regular season, completed weeks only; 21,191 plays). Rebuilt on every weekly refresh.
 
+**Interactive version:** [every chart on one page](https://iforsurei.github.io/NFL-Analytics/snippets.html), where hovering (or tapping) any player or team opens the breakdown: a quarterback's efficiency by down and by throw depth, a back's success by down, a receiver's role and value by depth, a team's offense and defense split into run and pass, a pass rusher's and every team's week by week, a kicker's makes by distance.
+
 | | |
 |---|---|
 | <img src="qb_epa_cpoe.png" width="100%"> | <img src="rb_success.png" width="100%"> |

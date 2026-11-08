@@ -345,6 +345,7 @@ def _n_tests():
 
 
 SNIP = "2026-in-season-snippets"
+WEB = "https://iforsurei.github.io/NFL-Analytics/snippets.html"
 
 
 def snippets():
@@ -365,6 +366,8 @@ def snippets():
     return f"""# 2026 In-Season Snippets
 
 Twelve quick charts on the season in progress, across positions, the kind a staff looks at on a Monday. Same data and code standard as the studies; lighter write-ups. Through **{w} of {f['season']}** (regular season, completed weeks only; {f['plays']:,} plays). Rebuilt on every weekly refresh.
+
+**Interactive version:** [every chart on one page]({WEB}), where hovering (or tapping) any player or team opens the breakdown: a quarterback's efficiency by down and by throw depth, a back's success by down, a receiver's role and value by depth, a team's offense and defense split into run and pass, a pass rusher's and every team's week by week, a kicker's makes by distance.
 
 | | |
 |---|---|
@@ -422,7 +425,8 @@ def snippets_section():
     cells2 = "".join(f'<td width="33%"><a href="reports/{SNIP}/"><img src="reports/{SNIP}/{x}.png" width="100%"></a></td>' for x in figs[3:])
     return (f"\n## 2026 in-season snippets\n\nTwelve quick charts on the season in progress, through Weeks {f['weeks'][0]}-{f['weeks'][1]}: "
             f"QB, running back, receiver, pass rusher, defense, kicker and team views. "
-            f"[See them all](reports/{SNIP}/).\n\n<table><tr>{cells}</tr><tr>{cells2}</tr></table>\n")
+            f"[See them all](reports/{SNIP}/). "
+            f"**Hover for the breakdown:** the [interactive version]({WEB}) opens every player's and team's numbers by down, by depth and week by week.\n\n<table><tr>{cells}</tr><tr>{cells2}</tr></table>\n")
 
 
 def top_readme():

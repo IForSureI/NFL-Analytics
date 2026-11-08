@@ -32,7 +32,7 @@ I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward 
 
 ## 2026 in-season snippets
 
-Twelve quick charts on the season in progress, through Weeks 1-8: QB, running back, receiver, pass rusher, defense, kicker and team views. [See them all](reports/2026-in-season-snippets/).
+Twelve quick charts on the season in progress, through Weeks 1-8: QB, running back, receiver, pass rusher, defense, kicker and team views. [See them all](reports/2026-in-season-snippets/). **Hover for the breakdown:** the [interactive version](https://iforsurei.github.io/NFL-Analytics/snippets.html) opens every player's and team's numbers by down, by depth and week by week.
 
 <table><tr><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/qb_epa_cpoe.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/team_tiers.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/early_down_proe.png" width="100%"></a></td></tr><tr><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/receiver_share.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/rb_success.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/defense_pressure.png" width="100%"></a></td></tr></table>
 
@@ -118,9 +118,9 @@ Each study also runs alone, for example `python -m projects.fourth_down_bot`.
 
 ## Changelog
 
-- 2026-11-06: Presentation overhaul to a professional report standard (docs/report-standard.md): banner and at-a-glance figure, TL;DR, key-number tables, what a club does with each study, equations, validation, next steps and file tables on every study page; glossary and data dictionary; README test enforces the standard.
 - 2026-11-08: 2026 in-season snippets: six charts through the latest completed week (QB EPA vs CPOE, running back success rate, team tiers, early-down pass rate over expected, receiver target vs air-yards share, pass-rush results); rebuilt on every weekly refresh.
 - 2026-11-08: In-season snippets 7-12: where QB yards come from, receiver role vs value, YAC over expected per catch, run vs pass defense, pass-rush leaders (sacks + QB hits), kicker FG points over expected (own distance-and-roof make model, 2022-25).
+- 2026-11-08: In-season snippets, interactive: `docs/snippets.html` ([live](https://iforsurei.github.io/NFL-Analytics/snippets.html)) puts the twelve charts on one page where hovering, tapping or tabbing to any point opens its breakdown (QBs by down and throw depth, backs by down, receivers by target depth, teams split into run and pass, rushers and kickers by week and distance, week-by-week bars). `projects/in_season_web.py` builds it from the snippets' own rows and stops if any headline number differs from `findings.json`; `scripts/update.py` rebuilds it every week; `tests/test_snippets_web.py` checks it.
 
 Full history: [LOG.md](LOG.md). Data refreshes weekly in season (last: November 08, 2026, through the latest completed week of 2026).
 
