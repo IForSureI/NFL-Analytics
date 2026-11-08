@@ -4,14 +4,14 @@ Six quick charts on the season in progress, the kind a staff looks at on a Monda
 
 | | |
 |---|---|
-| <img src="qb_epa_cpoe.png" width="100%"> | <img src="qb_adot_yac.png" width="100%"> |
+| <img src="qb_epa_cpoe.png" width="100%"> | <img src="rb_success.png" width="100%"> |
 | <img src="team_tiers.png" width="100%"> | <img src="early_down_proe.png" width="100%"> |
 | <img src="receiver_share.png" width="100%"> | <img src="defense_pressure.png" width="100%"> |
 
 ## What each one says
 
 1. **QB Efficiency: EPA vs. CPOE** ([chart](qb_epa_cpoe.png)). J.Allen (BUF) leads in EPA per dropback (+0.303), ahead of B.Purdy (SF) and C.Williams (CHI). Accuracy and efficiency move together this year (r = 0.75 across 30 QBs with 150+ dropbacks).
-2. **Where QB Yards Come From** ([chart](qb_adot_yac.png)). P.Mahomes (KC) gets 65% of his passing yards after the catch on a 5.8-yard average depth of target; B.Nix (DEN) is next (63%). The shorter the throws, the bigger the YAC share (r = -0.60), so a high YAC share is a style, not a skill by itself.
+2. **Running Back Success Rate** ([chart](rb_success.png)). C.McCaffrey (SF) leads the 33 backs with 60+ carries at 53.6% of runs gaining positive EPA, ahead of B.Corum (LA, 52.0%) and J.Cook (BUF, 50.7%). The RB average is 39.8%. Success rate shows how often a back keeps the offense on schedule; it mixes his work with his blocking, which study 09 (Run Game Value, coming next) will separate.
 3. **2026 Team Tiers** ([chart](team_tiers.png)). Best net EPA per play: JAX (+0.263), SF (+0.220), KC (+0.167).
 4. **Early-Down Pass Rate Over Expected** ([chart](early_down_proe.png)). CIN throws +11.3 points over expectation in neutral early downs; TB sits at -13.4. Teams that throw more than expected also have the better offenses so far (r = 0.49 with offensive EPA per play), the same pattern as [study 06](../06-pass-run/).
 5. **Receiver Roles: Targets vs. Air Yards** ([chart](receiver_share.png)). J.Smith-Njigba (SEA) carries the league's biggest role: 36% of targets and 52% of air yards (WOPR 0.90). Points above the dashed line are used downfield; points below it are volume options on shorter throws.
