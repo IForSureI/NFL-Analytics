@@ -44,14 +44,18 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "reports" / "2026-in-season-snippets"
 SEASON = 2026
 
-INK = "#1d2433"
-MUTED = "#6b7280"
-GRID = "#e5e7eb"
-BAND = "#1d2433"
-ACCENT = "#c2410c"
-BOX = "#e8f1fb"
-BOX_EDGE = "#5b7fa6"
-HANDLE = "Dylan Fanelli  |  github.com/IForSureI/NFL-Analytics"
+# Look: the static charts share the interactive page's design (fonts in assets/fonts, OFL-licensed): a numbered
+# plate with crop marks, the title set left, the club colour on the marks and every word in ink.
+from matplotlib import font_manager as _fm  # noqa: E402
+import matplotlib.patheffects as _pe  # noqa: E402
+
+for _f in "Unbounded-Medium Unbounded-Bold Literata-Regular Literata-SemiBold Literata-Italic".split():
+    _fm.fontManager.addfont(str(ROOT / "assets" / "fonts" / f"{_f}.ttf"))
+DISPLAY, TEXT = "Unbounded", "Literata"
+PAPER, PLATE, INK, MUTED, SOFT, GRID = "#f2f0f5", "#fbfaff", "#221532", "#5f5672", "#8a829a", "#e4dfeb"
+ACCENT, LOT, LOT2 = "#b8202c", "#5524b0", None
+HALO = [_pe.withStroke(linewidth=3, foreground=PLATE)]
+HANDLE = "Dylan Fanelli, github.com/IForSureI/NFL-Analytics"
 
 
 # ---------------------------------------------------------------- data
@@ -92,38 +96,43 @@ def _lum(hexc: str) -> float:
     return 0.2126 * r + 0.7152 * g + 0.0722 * b
 
 
-def _readable(hexc: str, other: str) -> str:
-    """Team color for text on white; fall back to the secondary or ink if too light."""
-    if _lum(hexc) < 0.62:
-        return hexc
-    return other if _lum(other) < 0.62 else INK
+def _readable(*_):
+    """Words wear ink; the club colour lives on the mark (dataviz: text tokens, never the series colour)."""
+    return INK
 
 
 def canvas(figsize=(10, 8.6)):
-    plt.rcParams.update({"font.family": "DejaVu Sans", "axes.edgecolor": "#9ca3af", "axes.linewidth": 1.0,
-                         "xtick.color": INK, "ytick.color": INK, "axes.labelcolor": INK, "text.color": INK})
-    fig = plt.figure(figsize=figsize, dpi=200, facecolor="white")
-    ax = fig.add_axes([0.10, 0.12, 0.86, 0.70])
+    plt.rcParams.update({"font.family": TEXT, "axes.edgecolor": SOFT, "axes.linewidth": 0.9,
+                         "xtick.color": MUTED, "ytick.color": MUTED, "axes.labelcolor": INK, "text.color": INK,
+                         "axes.labelweight": "semibold"})
+    fig = plt.figure(figsize=figsize, dpi=200, facecolor=PAPER)
+    ax = fig.add_axes([0.10, 0.12, 0.84, 0.68])
+    ax.set_facecolor(PLATE)
     ax.grid(True, color=GRID, lw=0.8, zorder=0)
     ax.set_axisbelow(True)
+    for sp in ("top", "right"):
+        ax.spines[sp].set_visible(False)
     return fig, ax
 
 
 def header_footer(fig, title: str, sub: str):
-    fig.text(0.5, 0.93, title, ha="center", va="center", fontsize=25, fontweight="black", color=INK)
-    fig.text(0.5, 0.875, sub, ha="center", va="center", fontsize=10, color=MUTED)
-    fig.add_artist(Rectangle((0, 0), 1, 0.055, transform=fig.transFigure, color=BAND, zorder=0))
-    fig.text(0.02, 0.0275, HANDLE, ha="left", va="center", fontsize=10.5, color="white", fontweight="bold")
-    fig.text(0.98, 0.0275, "Data: nflverse play-by-play", ha="right", va="center", fontsize=10.5,
-             color="#fca5a5", fontweight="bold")
+    plt.rcParams.update({"font.family": TEXT})
+    fig._plate_title = fig.text(0.06, 0.925, title, ha="left", va="center", fontsize=19,
+                                fontweight="bold", family=DISPLAY, color=INK)
+    fig.text(0.06, 0.872, sub.replace(" | ", "; "), ha="left", va="center", fontsize=10, style="italic", color=MUTED)
+    fig.add_artist(plt.Line2D([0.06, 0.94], [0.052, 0.052], transform=fig.transFigure, color=SOFT, lw=0.7))
+    fig.text(0.06, 0.028, HANDLE, ha="left", va="center", fontsize=9, color=MUTED)
+    fig.text(0.94, 0.028, "Data: nflverse play-by-play", ha="right", va="center", fontsize=9, color=MUTED)
+    for x, y, dx, dy in ((0.02, 0.98, 1, -1), (0.98, 0.98, -1, -1), (0.02, 0.02, 1, 1), (0.98, 0.02, -1, 1)):
+        fig.add_artist(plt.Line2D([x, x + dx * 0.022], [y, y], transform=fig.transFigure, color=SOFT, lw=0.8))
+        fig.add_artist(plt.Line2D([x, x], [y, y + dy * 0.022], transform=fig.transFigure, color=SOFT, lw=0.8))
 
 
 def corner(ax, text, where):
     pos = {"tl": (0.02, 0.97, "left", "top"), "tr": (0.98, 0.97, "right", "top"),
            "bl": (0.02, 0.03, "left", "bottom"), "br": (0.98, 0.03, "right", "bottom")}[where]
-    ax.text(pos[0], pos[1], text, transform=ax.transAxes, ha=pos[2], va=pos[3], fontsize=11,
-            fontweight="bold", color="#1e40af",
-            bbox=dict(boxstyle="round,pad=0.35", fc=BOX, ec=BOX_EDGE, lw=1.0), zorder=6)
+    ax.text(pos[0], pos[1], text, transform=ax.transAxes, ha=pos[2], va=pos[3], fontsize=10.5, style="italic",
+            color=ACCENT, zorder=6, path_effects=HALO)
 
 
 def pad(ax, frac=0.12):
@@ -135,13 +144,11 @@ def pad(ax, frac=0.12):
 
 
 def badge(ax, x, y, abbr, c1, c2, s=760, fs=7.6, z=5, text=True):
-    """Team badge: soft shadow, outer ring in the second color, a white gap, the main color, the abbreviation.
+    """Team badge: outer ring in the second color, a white gap, the main color, the abbreviation.
     Sizes are in points, so the badge stays round whatever the axes' aspect."""
     import matplotlib.transforms as mt
-    sh = mt.offset_copy(ax.transData, fig=ax.figure, x=1.2, y=-1.6, units="points")
-    ax.scatter([x], [y], s=s * 1.02, color="black", alpha=0.18, lw=0, transform=sh, zorder=z, clip_on=False)
     ax.scatter([x], [y], s=s, color=c2, lw=0, zorder=z + 0.1, clip_on=False)
-    ax.scatter([x], [y], s=s * 0.74, color="white", lw=0, zorder=z + 0.2, clip_on=False)
+    ax.scatter([x], [y], s=s * 0.74, color=PLATE, lw=0, zorder=z + 0.2, clip_on=False)
     ax.scatter([x], [y], s=s * 0.58, color=c1, lw=0, zorder=z + 0.3, clip_on=False)
     if text:
         ax.text(x, y, abbr, ha="center", va="center", fontsize=fs, fontweight="bold", zorder=z + 0.4,
@@ -149,8 +156,8 @@ def badge(ax, x, y, abbr, c1, c2, s=760, fs=7.6, z=5, text=True):
 
 
 def cap(ax, x, y, abbr, c1, c2):
-    """Small badge at the end of a ranked bar."""
-    badge(ax, x, y, abbr, c1, c2, s=330, fs=5.4, z=4)
+    """Bar ends carry no badge: the label already names the club, and the badge-on-bar look is a shared template."""
+    return None
 
 
 def side_text(ax, x, y, txt, right=True, pts=13, **kw):
@@ -185,7 +192,7 @@ def team_dots(ax, t, xcol, ycol, tc, size=360, invert_y=False):
     for k, abbr in enumerate(t.index):
         c1, c2 = tc.loc[abbr, "team_color"], tc.loc[abbr, "team_color2"]
         if np.hypot(pu[k] - u[k], pv[k] - v[k]) > 0.004:
-            ax.plot([xs[k], px[k]], [ys[k], py[k]], color="#9ca3af", lw=0.8, zorder=4)
+            ax.plot([xs[k], px[k]], [ys[k], py[k]], color=SOFT, lw=0.8, zorder=4)
             ax.scatter([xs[k]], [ys[k]], s=10, color=c1, zorder=4)
         badge(ax, px[k], py[k], abbr, c1, c2)
 
@@ -203,23 +210,36 @@ def player_points(ax, df, x, y, label, team, tc, size_col=None):
     for _, r in df.iterrows():
         c1, c2 = tc.loc[r[team], "team_color"], tc.loc[r[team], "team_color2"]
         texts.append(ax.text(r[x], r[y], r[label], fontsize=8.6, fontweight="bold",
-                             color=_readable(c1, c2), zorder=7))
-    adjust_text(texts, ax=ax, expand=(1.25, 1.5), arrowprops=dict(arrowstyle="-", color="#9ca3af", lw=0.6))
+                             color=_readable(c1, c2), zorder=7, path_effects=HALO))
+    adjust_text(texts, ax=ax, expand=(1.25, 1.5), arrowprops=dict(arrowstyle="-", color=SOFT, lw=0.6))
 
 
 def mean_lines(ax, xm, ym):
-    ax.axvline(xm, color=ACCENT, ls=":", lw=1.1, zorder=2)
-    ax.axhline(ym, color=ACCENT, ls=":", lw=1.1, zorder=2)
+    ax.axvline(xm, color=ACCENT, ls=(0, (2, 3)), lw=1.0, zorder=2)
+    ax.axhline(ym, color=ACCENT, ls=(0, (2, 3)), lw=1.0, zorder=2)
 
 
 def sub_line(weeks, extra):
-    w = f"Weeks: {min(weeks)}-{max(weeks)}"
-    return f"Season: {SEASON} | {w} | {extra}"
+    return f"{SEASON} season, weeks {min(weeks)}-{max(weeks)}. {extra.replace(' | ', '; ')}"
 
 
 def save(fig, name):
+    """Number the plate, keep the title clear of the number, write it."""
+    lots = [w for w in __doc__.split("Charts")[1].split("Data:")[0].split() if w.endswith(".png")]
+    no = lots.index(name) + 1 if name in lots else None
+    if no:
+        txt = f"{no:02d}"
+        if LOT2:  # two-ink misregistration on the number (risograph)
+            fig.text(0.943, 0.917, txt, ha="right", va="center", fontsize=30, fontweight="heavy", family=DISPLAY, color=LOT2, alpha=0.9)
+        lot = fig.text(0.94, 0.92, txt, ha="right", va="center", fontsize=30, fontweight="heavy", family=DISPLAY, color=LOT)
+        title = getattr(fig, "_plate_title", None)
+        if title is not None:
+            r = fig.canvas.get_renderer()
+            room = lot.get_window_extent(r).x0 - 24
+            while title.get_window_extent(r).x1 > room and title.get_fontsize() > 12:
+                title.set_fontsize(title.get_fontsize() - 0.5)
     OUT.mkdir(parents=True, exist_ok=True)
-    fig.savefig(OUT / name, dpi=200, facecolor="white")
+    fig.savefig(OUT / name, dpi=200, facecolor=PAPER)
     plt.close(fig)
 
 
