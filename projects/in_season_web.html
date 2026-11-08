@@ -5,118 +5,170 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2026 In-Season Snippets</title>
 <meta name="description" content="Twelve interactive charts on the 2026 NFL season. Hover any player or team for the breakdown. Dylan Fanelli.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
 <style>
-  :root {
-    --paper: #f3f5f8; --card: #ffffff; --ink: #1d2433; --muted: #6b7280; --line: #dfe3ea; --grid: #e9edf2;
-    --green: #1f4f8a; --clay: #c2410c; --tip: #1d2433; --tip-ink: #f6f3ec; --tip-muted: #b9b4aa;
-  }
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-  a { color: var(--green); }
-  header.top { max-width: 1180px; margin: 0 auto; padding: 36px 16px 8px; }
-  .eyebrow { text-transform: uppercase; letter-spacing: .08em; font-size: 12px; font-weight: 700; color: var(--clay); margin: 0 0 6px; }
-  h1 { font-size: clamp(28px, 4.5vw, 44px); line-height: 1.1; margin: 0 0 10px; font-weight: 800; }
-  .lede { max-width: 760px; color: #3a3a3a; margin: 0 0 14px; }
-  .facts { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--muted); margin: 0 0 6px; }
-  .facts b { color: var(--ink); }
-  .crumbs { font-size: 13px; display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 14px; color: var(--muted); }
-  .crumbs a { text-decoration: none; font-weight: 600; }
-  .subtitle { font-size: 18px; color: #3a3a3a; margin: 0 0 12px; font-weight: 600; }
-  .badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
-  .badge { display: inline-flex; font: 600 11.5px/1 "Verdana", "DejaVu Sans", sans-serif; border-radius: 3px; overflow: hidden; }
-  .badge span { padding: 4px 7px; color: #fff; white-space: nowrap; }
-  .badge .k { background: #555; }
-  .tldr { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--clay); border-radius: 6px; padding: 12px 16px; margin: 0 0 16px; max-width: 900px; }
-  .tldr b { font-size: 13px; letter-spacing: .04em; }
-  .tldr ul { margin: 6px 0 0; padding-left: 18px; }
-  .tldr li { margin: 3px 0; }
-  .glance { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px; margin: 0 0 12px; }
-  .glance > section { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 12px 16px; }
-  .glance-h { font-size: 15px; margin: 0 0 8px; font-weight: 800; }
-  .keynums { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-  .keynums td { padding: 5px 0; border-top: 1px solid var(--line); vertical-align: top; }
-  .keynums td + td { text-align: right; font-weight: 800; padding-left: 12px; white-space: nowrap; }
-  .why { margin: 0; padding-left: 18px; font-size: 13.5px; }
-  .why li { margin: 0 0 6px; }
-  .hint { display: inline-block; margin-top: 8px; font-size: 13px; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; color: var(--muted); }
-  main { max-width: 1180px; margin: 0 auto; padding: 12px 16px 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 540px), 1fr)); gap: 18px; }
-  section.chart { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px 16px 10px; min-width: 0; }
-  section.chart.wide { grid-column: 1 / -1; }
-  .num-badge { display: inline-block; font-size: 12px; font-weight: 700; color: #fff; background: var(--ink); border-radius: 4px; padding: 1px 7px; margin-right: 8px; vertical-align: 2px; }
-  h2 { font-size: 20px; margin: 0 0 2px; font-weight: 800; }
-  .sub { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
-  .says { font-size: 13.5px; margin: 8px 0 4px; color: #333; }
-  svg { display: block; width: 100%; height: auto; overflow: visible; }
-  svg text { font-family: inherit; }
-  .axis text { font-size: 11px; fill: var(--muted); }
-  .axis-title { font-size: 12px; font-weight: 700; fill: var(--ink); }
-  .gridline { stroke: var(--grid); stroke-width: 1; }
-  .ref { stroke: var(--clay); stroke-width: 1.2; stroke-dasharray: 3 3; }
-  .ref-label { font-size: 11px; font-weight: 700; fill: var(--clay); }
-  .corner { font-size: 11px; font-weight: 700; fill: var(--clay); }
-  .hit { cursor: pointer; outline: none; }
-  .hit:focus-visible .mark, .hit.active .mark { stroke: var(--ink) !important; stroke-width: 3 !important; }
-  .hit .mark { transition: opacity .12s; }
-  svg.dim .hit:not(.active) .mark { opacity: .28; }
-  svg.dim .hit:not(.active) text { opacity: .35; }
-  .pt-label { font-size: 10.5px; font-weight: 700; pointer-events: none; paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; }
-  .bar-label { font-size: 12px; font-weight: 700; }
-  .bar-val { font-size: 12px; font-weight: 700; fill: var(--ink); }
-  .bar-right { font-size: 11.5px; fill: var(--muted); }
-  .ws-title { font-size: 12.5px; font-weight: 700; fill: var(--ink); }
-  .ws-cursor { stroke: var(--ink); stroke-width: 1; }
-  footer { max-width: 1180px; margin: 0 auto; padding: 0 16px 40px; font-size: 13px; color: var(--muted); }
-  footer h3 { color: var(--ink); font-size: 15px; margin: 18px 0 6px; }
-  footer ul { padding-left: 18px; margin: 0; }
-  /* hover card */
-  #tip { position: fixed; z-index: 10; pointer-events: none; opacity: 0; transform: translateY(4px); transition: opacity .1s, transform .1s;
-         width: min(340px, calc(100vw - 24px)); background: var(--tip); color: var(--tip-ink); border-radius: 10px; padding: 12px 14px;
-         box-shadow: 0 10px 30px rgba(0,0,0,.28); font-size: 12.5px; line-height: 1.4; }
-  #tip.on { opacity: 1; transform: none; }
-  #tip .t-head { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
-  #tip .chip { font-size: 11px; font-weight: 800; border-radius: 4px; padding: 1px 6px; border: 2px solid; }
-  #tip .t-name { font-size: 15px; font-weight: 800; }
-  #tip .t-sub { color: var(--tip-muted); margin-bottom: 8px; }
-  #tip .big { display: flex; gap: 14px; margin: 6px 0 8px; }
-  #tip .big div { display: flex; flex-direction: column; }
-  #tip .big b { font-size: 18px; line-height: 1.1; }
-  #tip .big span { font-size: 11px; color: var(--tip-muted); }
-  #tip table { width: 100%; border-collapse: collapse; margin: 4px 0 6px; }
-  #tip th { text-align: left; font-weight: 600; color: var(--tip-muted); font-size: 11px; padding: 2px 4px 2px 0; border-bottom: 1px solid #3a3a3a; }
-  #tip td { padding: 2px 4px 2px 0; font-variant-numeric: tabular-nums; }
-  #tip td.r, #tip th.r { text-align: right; }
-  #tip .sec { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #f4b183; font-weight: 700; margin: 8px 0 2px; }
-  #tip .note { color: var(--tip-muted); font-size: 11px; margin-top: 6px; }
-  #tip .pos { color: #9fd8b3; } #tip .neg { color: #f4a3a3; }
-  @media (max-width: 640px) {
-    #tip { left: 12px !important; right: 12px; top: auto !important; bottom: 12px; width: auto; }
-    #tip.on { pointer-events: auto; }
-    .pt-label { font-size: 9.5px; }
-  }
-  @media (prefers-reduced-motion: reduce) { #tip, .hit .mark { transition: none; } }
+/* Direction: an index / catalogue of the season, set like a carbon-copy ledger. Violet carbon ink, a red correction
+   ribbon, crop marks on every plate. Display: Unbounded. Text: Literata. Scale 1.25. Square panels; one radius (6px)
+   for controls only. Tokens are selected per mode, not flipped. */
+:root {
+  --paper: #f2f0f5; --plate: #fbfaff; --ink: #221532; --muted: #5f5672; --soft: #8a829a; --rule: #d9d4e3; --grid: #e7e3ee;
+  --violet: #5524b0; --red: #b8202c; --tip: #221532; --tip-ink: #f2f0f5; --tip-muted: #b9b1c9; --tip-rule: #3d3150; --pos: #6fd39b; --neg: #ff8a93;
+  --display: "Unbounded", "Arial Black", sans-serif; --text: "Literata", Georgia, serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #15111c; --plate: #1d1826; --ink: #ece8f3; --muted: #b0a8c0; --soft: #8c849c; --rule: #342c40; --grid: #2a2335;
+  --violet: #b39aff; --red: #ff7a83; --tip: #ece8f3; --tip-ink: #1b1524; --tip-muted: #5f5672; --tip-rule: #cfc8db; --pos: #1d7a46; --neg: #b8202c; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #15111c; --plate: #1d1826; --ink: #ece8f3; --muted: #b0a8c0; --soft: #8c849c; --rule: #342c40; --grid: #2a2335;
+  --violet: #b39aff; --red: #ff7a83; --tip: #ece8f3; --tip-ink: #1b1524; --tip-muted: #5f5672; --tip-rule: #cfc8db; --pos: #1d7a46; --neg: #b8202c; color-scheme: dark }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.55 var(--text); font-variant-numeric: tabular-nums; }
+a { color: var(--violet); text-underline-offset: 3px; }
+a:focus-visible, .hit:focus-visible, summary:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 16px; }
+
+/* title page */
+header.top { padding: 40px 0 8px; }
+.crumbs { font-size: 14px; display: flex; gap: 18px; flex-wrap: wrap; margin: 0 0 28px; }
+.title-plate { position: relative; padding: 28px 0 24px; border-top: 3px solid var(--ink); border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: end; }
+h1 { font: 700 clamp(30px, 6.2vw, 64px)/1.02 var(--display); letter-spacing: -.01em; margin: 0; }
+h1 .yr { color: var(--violet); }
+.subtitle { font: italic 400 clamp(18px, 2.2vw, 22px)/1.4 var(--text); color: var(--muted); margin: 14px 0 0; max-width: 34ch; }
+.reg { width: 64px; height: 64px; color: var(--red); }
+.provenance { font-size: 14px; color: var(--muted); margin: 14px 0 18px; }
+.provenance b { color: var(--ink); font-weight: 600; white-space: nowrap; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 26px; }
+.tag { font: 500 11px/1 var(--display); letter-spacing: .02em; border: 1px solid currentColor; border-radius: 6px; padding: 6px 8px; color: var(--muted); }
+.tag.status { color: var(--violet); } .tag.method { color: var(--red); }
+.front { display: grid; grid-template-columns: 1.35fr 1fr; gap: 0; border-top: 1px solid var(--rule); }
+.front > section { padding: 20px 24px 20px 0; }
+.front > section + section { padding: 20px 0 20px 24px; border-left: 1px solid var(--rule); }
+.front h2 { font: 500 13px/1.3 var(--display); text-transform: none; margin: 0 0 10px; color: var(--red); }
+.tldr ul { margin: 0; padding: 0; list-style: none; counter-reset: t; }
+.tldr li { counter-increment: t; position: relative; padding-left: 30px; margin: 0 0 12px; font-size: 17px; }
+.tldr li::before { content: counter(t); position: absolute; left: 0; top: 2px; font: 700 13px/1 var(--display); color: var(--violet); }
+.keynums { width: 100%; border-collapse: collapse; font-size: 15px; }
+.keynums td { padding: 6px 0; border-top: 1px solid var(--rule); vertical-align: top; }
+.keynums td + td { text-align: right; font-weight: 600; padding-left: 12px; white-space: nowrap; }
+.why { border-top: 1px solid var(--rule); padding: 18px 0 6px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 6px 28px; }
+.why h2 { grid-column: 1 / -1; font: 500 13px/1.3 var(--display); margin: 0 0 4px; color: var(--red); }
+.why p { margin: 0 0 10px; font-size: 15px; }
+.hint { display: inline-block; margin: 14px 0 0; font-size: 14px; color: var(--muted); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 10px; }
+
+/* the catalogue: one plate per chart */
+main { padding: 8px 0 40px; }
+section.chart { display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 28px; padding: 36px 0; border-top: 1px solid var(--rule); min-width: 0; }
+.meta .lot { font: 700 44px/1 var(--display); color: var(--violet); display: block; margin-bottom: 12px; letter-spacing: -.02em; }
+.meta h2 { font: 700 18px/1.25 var(--display); margin: 0 0 8px; }
+.meta .sub { font-size: 14px; color: var(--muted); margin: 0 0 12px; }
+.meta .says { font-size: 15px; margin: 0; }
+.plate { position: relative; background: var(--plate); padding: 16px 14px 10px; min-width: 0; }
+.plate::before, .plate::after, .plate > .cm::before, .plate > .cm::after { content: ""; position: absolute; width: 14px; height: 14px; border: 0 solid var(--soft); }
+.plate::before { top: -8px; left: -8px; border-top-width: 1px; border-left-width: 1px; }
+.plate::after { top: -8px; right: -8px; border-top-width: 1px; border-right-width: 1px; }
+.plate > .cm::before { bottom: -8px; left: -8px; border-bottom-width: 1px; border-left-width: 1px; }
+.plate > .cm::after { bottom: -8px; right: -8px; border-bottom-width: 1px; border-right-width: 1px; }
+details.tbl { margin-top: 8px; font-size: 14px; }
+details.tbl summary { cursor: pointer; color: var(--violet); font-weight: 600; }
+details.tbl table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 13.5px; }
+details.tbl th { text-align: left; font-weight: 600; color: var(--muted); border-bottom: 1px solid var(--rule); padding: 4px 6px 4px 0; }
+details.tbl td { border-bottom: 1px solid var(--grid); padding: 3px 6px 3px 0; }
+details.tbl .r { text-align: right; }
+details.tbl .scroll { max-height: 320px; overflow: auto; }
+
+/* chart marks: text wears ink tokens, the team colour lives on the mark */
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { font-family: var(--text); }
+.axis text { font-size: 11px; fill: var(--muted); }
+.axis-title { font-size: 12px; font-weight: 600; fill: var(--ink); }
+.gridline { stroke: var(--grid); stroke-width: 1; }
+.ref { stroke: var(--red); stroke-width: 1.2; stroke-dasharray: 3 3; }
+.ref-label { font-size: 11px; font-weight: 600; fill: var(--red); }
+.corner { font-size: 11px; font-style: italic; fill: var(--red); }
+.diag { stroke: var(--soft); stroke-dasharray: 5 4; }
+.hit { cursor: pointer; outline: none; }
+.hit:focus-visible .mark, .hit.active .mark { stroke: var(--ink) !important; stroke-width: 3 !important; }
+.hit .mark { transition: opacity 120ms ease-out; }
+svg.dim .hit:not(.active) .mark { opacity: .28; }
+svg.dim .hit:not(.active) text { opacity: .35; }
+.pt-label { font-size: 10.5px; font-weight: 600; fill: var(--ink); pointer-events: none; paint-order: stroke; stroke: var(--plate); stroke-width: 3px; stroke-linejoin: round; }
+.bar-label { font-size: 12px; font-weight: 600; fill: var(--ink); }
+.bar-val { font-size: 12px; font-weight: 600; fill: var(--ink); }
+.bar-right { font-size: 11.5px; fill: var(--muted); }
+.ws-title { font-size: 12.5px; font-weight: 600; fill: var(--ink); }
+.ws-cursor { stroke: var(--ink); stroke-width: 1; }
+
+footer { padding: 8px 0 48px; font-size: 14px; color: var(--muted); border-top: 3px solid var(--ink); }
+footer h2 { font: 500 13px/1.3 var(--display); color: var(--red); margin: 18px 0 8px; }
+footer ul { padding-left: 18px; margin: 0; }
+
+/* hover card */
+#tip { position: fixed; z-index: 10; pointer-events: none; opacity: 0; transform: translateY(4px); transition: opacity 120ms ease-out, transform 120ms ease-out;
+       width: min(340px, calc(100vw - 24px)); background: var(--tip); color: var(--tip-ink); border-radius: 6px; padding: 12px 14px;
+       border: 1px solid var(--tip-rule); font: 13px/1.4 var(--text); font-variant-numeric: tabular-nums; }
+#tip.on { opacity: 1; transform: none; }
+#tip .t-head { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+#tip .chip { font: 700 10px/1.2 var(--display); border-radius: 4px; padding: 2px 5px; border: 2px solid; }
+#tip .t-name { font: 700 14px/1.2 var(--display); }
+#tip .t-sub { color: var(--tip-muted); margin-bottom: 8px; }
+#tip .big { display: flex; gap: 16px; margin: 6px 0 8px; }
+#tip .big div { display: flex; flex-direction: column; }
+#tip .big b { font: 700 17px/1.1 var(--display); }
+#tip .big span { font-size: 11.5px; color: var(--tip-muted); }
+#tip table { width: 100%; border-collapse: collapse; margin: 4px 0 6px; }
+#tip th { text-align: left; font-weight: 600; color: var(--tip-muted); font-size: 11.5px; padding: 2px 4px 2px 0; border-bottom: 1px solid var(--tip-rule); }
+#tip td { padding: 2px 4px 2px 0; }
+#tip td.r, #tip th.r { text-align: right; }
+#tip .sec { font: 500 10.5px/1.3 var(--display); color: var(--tip-muted); margin: 8px 0 2px; }
+#tip .note { color: var(--tip-muted); font-size: 11.5px; margin-top: 6px; }
+#tip .pos { color: var(--pos); } #tip .neg { color: var(--neg); }
+#tip .sp-pos { fill: var(--pos); } #tip .sp-neg { fill: var(--neg); } #tip .sp-none, #tip .sp-tick { fill: var(--tip-muted); }
+@media (max-width: 760px) {
+  .title-plate { grid-template-columns: 1fr; } .reg { display: none; }
+  .front { grid-template-columns: 1fr; }
+  .front > section, .front > section + section { padding: 18px 0; border-left: 0; }
+  .front > section + section { border-top: 1px solid var(--rule); }
+  section.chart { grid-template-columns: 1fr; gap: 14px; padding: 28px 0; }
+  .meta .lot { font-size: 34px; }
+}
+@media (max-width: 640px) {
+  #tip { left: 12px !important; right: 12px; top: auto !important; bottom: 12px; width: auto; }
+  #tip.on { pointer-events: auto; }
+}
+@media (prefers-reduced-motion: reduce) { #tip, .hit .mark { transition: none; } }
 </style>
 </head>
 <body>
+<div class="wrap">
 <header class="top">
-  <nav class="crumbs"><a href="https://github.com/IForSureI/NFL-Analytics#readme">← Portfolio</a><span>|</span><a href="https://github.com/IForSureI/NFL-Analytics/tree/main/reports/2026-in-season-snippets">Static charts and write-up →</a></nav>
-  <h1>2026 In-Season Snippets</h1>
-  <p class="subtitle">What does the 2026 season look like so far? Twelve charts a staff reads on a Monday.</p>
-  <div class="badges" id="badges"></div>
-  <section class="tldr" aria-label="TL;DR"><b>TL;DR</b><ul id="tldr"></ul></section>
-  <div class="glance">
-    <section><h2 class="glance-h">Key numbers</h2><table class="keynums" id="keynums"></table></section>
-    <section><h2 class="glance-h">Why it matters for a club</h2><ul class="why">
-      <li><b>Coaching and game prep:</b> an opponent's early-down pass rate, how its defense holds up against the run and the pass, and the rushers to plan protections around.</li>
-      <li><b>Pro personnel:</b> receiver roles and value at each depth, yards after the catch beyond the model, and which backs keep an offense on schedule.</li>
-      <li><b>Front office:</b> where each team really sits by net EPA per play, not by record, with small samples flagged so early-season noise isn't read as skill.</li>
-    </ul></section>
+  <nav class="crumbs" aria-label="Navigation"><a href="https://github.com/IForSureI/NFL-Analytics#readme">Portfolio</a><a href="https://github.com/IForSureI/NFL-Analytics/tree/main/reports/2026-in-season-snippets">Static charts and write-up</a></nav>
+  <div class="title-plate">
+    <div>
+      <h1><span class="yr">2026</span> In-Season Snippets</h1>
+      <p class="subtitle">What does the season look like so far?</p>
+    </div>
+    <svg class="reg" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="18" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="32" cy="32" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M32 4v56M4 32h56" stroke="currentColor" stroke-width="1.5"/></svg>
   </div>
-  <span class="hint" id="hint">Hover any player or team for the breakdown. On a phone, tap.</span>
+  <p class="provenance" id="provenance"></p>
+  <div class="tags" id="badges"></div>
+  <div class="front">
+    <section class="tldr" aria-label="TL;DR"><h2>TL;DR</h2><ul id="tldr"></ul></section>
+    <section><h2>Key numbers</h2><table class="keynums" id="keynums"></table></section>
+  </div>
+  <section class="why"><h2>Why it matters for a club</h2>
+    <p><b>Coaching and game prep:</b> an opponent's early-down pass rate, how its defense holds up against the run and the pass, and the rushers to plan protections around.</p>
+    <p><b>Pro personnel:</b> receiver roles and value at each depth, yards after the catch beyond the model, and which backs keep an offense on schedule.</p>
+    <p><b>Front office:</b> where each team really sits by net EPA per play, not by record, with small samples flagged so early-season noise isn't read as skill.</p>
+  </section>
+  <span class="hint" id="hint">Hover any player or team for the breakdown. On a phone, tap. Every chart also has a table.</span>
 </header>
 <main id="charts"></main>
 <footer>
-  <h3>Method</h3>
+  <h2>Method</h2>
   <ul>
     <li>Data: <a href="https://github.com/nflverse/nflverse-data">nflverse</a> play-by-play (EPA, CPOE, xpass, xYAC from the nflfastR models) and nflverse team colors. Regular season, completed weeks only: a week counts once all of its games are in.</li>
     <li>Dropbacks include sacks and scrambles; two-point tries and penalty no-plays are left out. Success = the play gains positive EPA. CPOE is in percentage points.</li>
@@ -126,6 +178,7 @@
   </ul>
   <p id="built"></p>
 </footer>
+</div>
 <div id="tip" role="tooltip" aria-live="polite"></div>
 <script>
 const DATA = /*DATA*/null;
@@ -195,18 +248,18 @@ function spark(vals, label, fmt) {
   const w = 14, h = 34, mid = vals.some(v => v != null && v < 0) ? h / 2 : h - 2;
   const max = Math.max(1e-9, ...vals.map(v => Math.abs(v ?? 0)));
   const bars = vals.map((v, i) => {
-    if (v == null) return `<rect x="${i * w + 2}" y="${mid - 1}" width="${w - 4}" height="2" fill="#555"/>`;
+    if (v == null) return `<rect class="sp-none" x="${i * w + 2}" y="${mid - 1}" width="${w - 4}" height="2"/>`;
     const hh = Math.max(1.5, Math.abs(v) / max * (mid === h / 2 ? h / 2 - 2 : h - 4));
-    return `<rect x="${i * w + 2}" y="${v >= 0 ? mid - hh : mid}" width="${w - 4}" height="${hh}" rx="1" fill="${v >= 0 ? "#9fd8b3" : "#f4a3a3"}"><title>Week ${wkLabels[i]}: ${fmt(v)}</title></rect>`;
+    return `<rect x="${i * w + 2}" y="${v >= 0 ? mid - hh : mid}" width="${w - 4}" height="${hh}" rx="1" class="${v >= 0 ? "sp-pos" : "sp-neg"}"><title>Week ${wkLabels[i]}: ${fmt(v)}</title></rect>`;
   }).join("");
-  const ticks = wkLabels.map((wk, i) => `<text x="${i * w + w / 2}" y="${h + 10}" font-size="8" fill="#b9b4aa" text-anchor="middle">${wk}</text>`).join("");
+  const ticks = wkLabels.map((wk, i) => `<text x="${i * w + w / 2}" y="${h + 10}" font-size="8" class="sp-tick" text-anchor="middle">${wk}</text>`).join("");
   return `<div class="sec">${label}, week by week</div><svg viewBox="0 0 ${vals.length * w} ${h + 12}" style="width:${vals.length * 15}px;height:auto">${bars}${ticks}</svg>`;
 }
 const DOWN = ["", "1st", "2nd", "3rd"];
 
 function qbCard(id, focus) {
   const q = QB[id];
-  const sub = `${q.games} games · ${q.dropbacks} dropbacks · ${q.att} att, ${pc(q.comp)} comp · ${q.yds.toLocaleString()} yds, ${q.td} TD, ${q.int} INT · ${q.sacks} sacks`;
+  const sub = `${q.games} games; ${q.dropbacks} dropbacks; ${q.att} att, ${pc(q.comp)} comp; ${q.yds.toLocaleString()} yds, ${q.td} TD, ${q.int} INT; ${q.sacks} sacks`;
   const top = focus === "yac"
     ? big([[q.adot ?? "–", "aDOT (yds)"], [pc(q.yac_share), "yards after catch"], [pts(q.cpoe), "CPOE"]])
     : big([[sg(q.epa, 3), "EPA/dropback", cls(q.epa)], [pts(q.cpoe), "CPOE (pts)", cls(q.cpoe)], [pc(q.succ), "success"]]);
@@ -217,7 +270,7 @@ function qbCard(id, focus) {
 }
 function rbCard(id) {
   const r = RB[id];
-  return head(r.name, r.team, `${r.games} games · ${r.carries} carries · ${r.yds} yds (${r.ypc}/carry) · ${r.td} TD · ${r.fumbles} fumbles lost`) +
+  return head(r.name, r.team, `${r.games} games; ${r.carries} carries; ${r.yds} yds (${r.ypc}/carry); ${r.td} TD; ${r.fumbles} fumbles lost`) +
     big([[pc(r.succ), `success (RB avg ${pc(DATA.league.rb_succ)})`], [sg(r.epa, 2), "EPA/rush", cls(r.epa)], [pc(r.explosive), "10+ yd runs"]]) +
     table([["Down"], ["Carries", 1], ["Success", 1], ["EPA", 1]], r.downs.map(d => [DOWN[d.down], d.n, pc(d.succ), `<span class="${cls(d.epa)}">${sg(d.epa, 2)}</span>`])) +
     `<div class="note">Stuffed (0 or fewer yards) on ${pc(r.stuffed)} of carries. Success mixes the back's work with his blocking.</div>` +
@@ -225,7 +278,7 @@ function rbCard(id) {
 }
 function recCard(id, focus) {
   const r = RC[id];
-  const sub = `${r.games} games · ${r.tgt} targets · ${r.rec} catches (${pc(r.catch)}) · ${r.yds} yds · ${r.td} TD`;
+  const sub = `${r.games} games; ${r.tgt} targets; ${r.rec} catches (${pc(r.catch)}); ${r.yds} yds; ${r.td} TD`;
   let top;
   if (focus === "wopr") top = big([[pc(r.tgt_share), "target share"], [pc(r.air_share), "air-yards share"], [r.wopr?.toFixed(2) ?? "–", "WOPR"]]);
   else if (focus === "yac") top = big([[sg(r.yacoe, 2), "YAC over exp./catch", cls(r.yacoe)], [r.yac ?? "–", "YAC per catch"], [r.adot ?? "–", "aDOT"]]);
@@ -243,14 +296,14 @@ function defCard(id) {
 }
 function kCard(id) {
   const k = KK[id];
-  return head(k.name, k.team, `${k.made}-${k.att} on field goals · long ${k.long ?? "–"}${k.miss.length ? ` · missed from ${k.miss.join(", ")}` : " · no misses"}`) +
+  return head(k.name, k.team, `${k.made}-${k.att} on field goals; long ${k.long ?? "–"}${k.miss.length ? `; missed from ${k.miss.join(", ")}` : "; no misses"}`) +
     big([[pts(k.fgoe), "FG pts over expected", cls(k.fgoe)], [k.made, "made"], [k.exp, "expected makes"]]) +
     table([["Distance"], ["Made-Att", 1], ["Expected", 1]], k.bands.map(b => [b.band, `${b.made}-${b.att}`, b.exp])) +
     `<div class="note">Expected = an average kicker's make rate from the same distances and roof (model fit on 2022-25 kicks). Points = 3 × (made − expected).</div>`;
 }
 function teamCard(t, focus) {
   const m = T[t];
-  const rec = `${m.w}-${m.l}${m.t ? "-" + m.t : ""} · ${m.pf} points for, ${m.pa} against`;
+  const rec = `${m.w}-${m.l}${m.t ? "-" + m.t : ""}; ${m.pf} points for, ${m.pa} against`;
   let top;
   if (focus === "proe") top = big([[pts(100 * m.proe), "early-down PROE (pts)", ""], [m.proe_plays, "neutral early-down plays"], [sg(m.off, 3), "off. EPA/play", cls(m.off)]]);
   else if (focus === "press") top = big([[pc(m.press), "sack or hit rate"], [sg(m.epa_db_allowed, 3), "EPA/dropback allowed", cls(-m.epa_db_allowed)], [sg(m.vs_fit, 3), "vs. the line", cls(-m.vs_fit)]]);
@@ -266,12 +319,18 @@ function teamCard(t, focus) {
 const charts = document.getElementById("charts");
 function card(n, title, sub, says, wide) {
   const s = document.createElement("section"); s.className = "chart" + (wide ? " wide" : "");
-  s.innerHTML = `<h2><span class="num-badge">${n}</span>${title}</h2><p class="sub">${sub}</p>`;
+  s.innerHTML = `<div class="meta"><span class="lot">${String(n).padStart(2, "0")}</span><h2>${title}</h2><p class="sub">${sub}</p>${says ? `<p class="says">${says}</p>` : ""}</div>` +
+    `<div class="plate"><span class="cm" aria-hidden="true"></span><div class="svgwrap"></div><details class="tbl"><summary>Table</summary><div class="scroll"></div></details></div>`;
   charts.appendChild(s);
-  const svgWrap = document.createElement("div"); s.appendChild(svgWrap);
-  if (says) { const p = document.createElement("p"); p.className = "says"; p.innerHTML = says; s.appendChild(p); }
-  return svgWrap;
+  const w = s.querySelector(".svgwrap"); w.tableEl = s.querySelector("details.tbl .scroll");
+  return w;
 }
+function fillTable(wrap, cols, rows) {
+  if (!wrap.tableEl) return;
+  wrap.tableEl.innerHTML = `<table><thead><tr>${cols.map(([c, r]) => `<th class="${r ? "r" : ""}">${c}</th>`).join("")}</tr></thead><tbody>` +
+    rows.map(row => `<tr>${row.map((v, k) => `<td class="${cols[k][1] ? "r" : ""}">${v}</td>`).join("")}</tr>`).join("") + "</tbody></table>";
+}
+const fitW = (wrap, max = 640) => Math.round(Math.max(320, Math.min(max, wrap.clientWidth || 560)));
 const scale = (d0, d1, r0, r1) => v => r0 + (v - d0) / (d1 - d0) * (r1 - r0);
 function nice(lo, hi, n = 5) {
   const span = hi - lo, step0 = span / n, mag = 10 ** Math.floor(Math.log10(step0)), err = step0 / mag;
@@ -281,7 +340,7 @@ function nice(lo, hi, n = 5) {
 
 // ---------------------------------------------------------------- scatter
 function scatter(wrap, pts, o) {
-  const W = 560, Hh = 470, m = {l: 58, r: 16, t: 14, b: 48};
+  const W = fitW(wrap), Hh = Math.round(W * .84), m = {l: 58, r: 16, t: 14, b: 48};
   const svg = el("svg", {viewBox: `0 0 ${W} ${Hh}`, role: "img", "aria-label": o.aria}, null); wrap.appendChild(svg);
   const xs = pts.map(p => p.x), ys = pts.map(p => p.y);
   let [x0, x1] = [Math.min(...xs, o.xref ?? Infinity), Math.max(...xs, o.xref ?? -Infinity)];
@@ -293,8 +352,20 @@ function scatter(wrap, pts, o) {
   for (const v of nice(x0, x1)) { el("line", {x1: sx(v), x2: sx(v), y1: m.t, y2: Hh - m.b, class: "gridline"}, ax); el("text", {x: sx(v), y: Hh - m.b + 16, "text-anchor": "middle"}, ax).textContent = o.fx(v); }
   for (const v of nice(y0, y1)) { el("line", {x1: m.l, x2: W - m.r, y1: sy(v), y2: sy(v), class: "gridline"}, ax); el("text", {x: m.l - 6, y: sy(v) + 4, "text-anchor": "end"}, ax).textContent = o.fy(v); }
   el("text", {x: (m.l + W - m.r) / 2, y: Hh - 8, "text-anchor": "middle", class: "axis-title"}, svg).textContent = o.xt;
-  el("text", {x: 14, y: (m.t + Hh - m.b) / 2, "text-anchor": "middle", class: "axis-title", transform: `rotate(-90 14 ${(m.t + Hh - m.b) / 2})`}, svg).textContent = o.yt;
-  if (o.diag) el("line", {x1: sx(x0), y1: sy(x0), x2: sx(x1), y2: sy(x1), stroke: "#9ca3af", "stroke-dasharray": "5 4"}, svg);
+  const yTitle = el("text", {x: 14, y: (m.t + Hh - m.b) / 2, "text-anchor": "middle", class: "axis-title", transform: `rotate(-90 14 ${(m.t + Hh - m.b) / 2})`}, svg);
+  yTitle.textContent = o.yt;
+  const room = Hh - m.b - m.t, len = yTitle.getComputedTextLength();
+  if (len > room) {  // too long for the plot height: two lines, split at the space nearest the middle
+    const words = o.yt.split(" "); let best = 1, bestD = 1e9;
+    for (let k = 1; k < words.length; k++) { const d = Math.abs(words.slice(0, k).join(" ").length - o.yt.length / 2); if (d < bestD) { bestD = d; best = k; } }
+    yTitle.textContent = ""; yTitle.setAttribute("x", 8);
+    [words.slice(0, best).join(" "), words.slice(best).join(" ")].forEach((t, k) => {
+      const ts = el("tspan", {x: 8, dy: k ? "1.15em" : "0"}, yTitle); ts.textContent = t; });
+    yTitle.setAttribute("transform", `rotate(-90 8 ${(m.t + Hh - m.b) / 2})`);
+    const len2 = Math.max(...[...yTitle.children].map(t => t.getComputedTextLength()));
+    if (len2 > room) yTitle.style.fontSize = Math.max(9, 12 * room / len2).toFixed(1) + "px";
+  }
+  if (o.diag) el("line", {x1: sx(x0), y1: sy(x0), x2: sx(x1), y2: sy(x1), class: "diag"}, svg);
   if (o.xref != null) el("line", {x1: sx(o.xref), x2: sx(o.xref), y1: m.t, y2: Hh - m.b, class: "ref"}, svg);
   if (o.yref != null) el("line", {x1: m.l, x2: W - m.r, y1: sy(o.yref), y2: sy(o.yref), class: "ref"}, svg);
   for (const [txt, where] of o.corners || []) {
@@ -303,14 +374,15 @@ function scatter(wrap, pts, o) {
   }
   const placed = [];
   const boxHit = b => placed.some(p => !(b.x2 < p.x1 || b.x1 > p.x2 || b.y2 < p.y1 || b.y1 > p.y2));
-  const marks = pts.map(p => ({p, x: sx(p.x), y: sy(p.y), r: o.r || 7}));
+  const narrow = W < 480, br = o.badge && narrow ? 10.5 : (o.r || 7);
+  const marks = pts.map(p => ({p, x: sx(p.x), y: sy(p.y), r: br}));
   marks.forEach(k => placed.push({x1: k.x - k.r, x2: k.x + k.r, y1: k.y - k.r, y2: k.y + k.r}));
   for (const k of marks) {
     const g = el("g", {}, svg);
     const team = o.team ? o.team(k.p) : k.p.team, [c1, c2] = C[team];
     if (o.badge) {
       el("circle", {cx: k.x, cy: k.y, r: k.r, fill: c1, stroke: c2, "stroke-width": 3, class: "mark"}, g);
-      el("text", {x: k.x, y: k.y + 3.8, "text-anchor": "middle", "font-size": 10.5, "font-weight": 800, fill: lum(c1) < .5 ? "#fff" : "#111", "pointer-events": "none"}, g).textContent = team;
+      el("text", {x: k.x, y: k.y + (narrow ? 2.7 : 3.8), "text-anchor": "middle", "font-size": narrow ? 7.5 : 10.5, "font-weight": 800, fill: lum(c1) < .5 ? "#fff" : "#111", "pointer-events": "none"}, g).textContent = team;
     } else {
       el("circle", {cx: k.x, cy: k.y, r: k.r, fill: c1, stroke: c2, "stroke-width": 2, class: "mark"}, g);
       el("circle", {cx: k.x, cy: k.y, r: 14, fill: "transparent"}, g);
@@ -319,17 +391,21 @@ function scatter(wrap, pts, o) {
         const x1 = anchor === "start" ? k.x + dx : anchor === "end" ? k.x + dx - w : k.x - w / 2, b = {x1, x2: x1 + w, y1: k.y + dy - 10, y2: k.y + dy + 2};
         if (b.x1 < m.l || b.x2 > W - m.r || b.y1 < m.t || b.y2 > Hh - m.b || boxHit(b)) continue;
         placed.push(b);
-        el("text", {x: k.x + dx, y: k.y + dy, "text-anchor": anchor, class: "pt-label", fill: readable(team)}, g).textContent = name;
+        el("text", {x: k.x + dx, y: k.y + dy, "text-anchor": anchor, class: "pt-label"}, g).textContent = name;
         break;
       }
     }
     bind(g, () => o.card(k.p), o.label(k.p));
   }
+  const tx = o.tx || o.fx, ty = o.ty || o.fy;
+  fillTable(wrap, [[o.badge ? "Team" : "Name"], ...(o.badge ? [] : [["Team"]]), [o.xt, 1], [o.yt, 1]],
+    pts.map(p => [o.badge ? p.team : esc(o.name(p)), ...(o.badge ? [] : [o.team ? o.team(p) : p.team]), tx(p.x), ty(p.y)])
+       .sort((a, b) => String(a[0]).localeCompare(String(b[0]))));
 }
 
 // ---------------------------------------------------------------- ranked bars
 function bars(wrap, rows, o) {
-  const rowH = 22, W = 560, m = {l: o.labelW || 150, r: 74, t: 22, b: 40}, Hh = m.t + m.b + rows.length * rowH;
+  const rowH = 22, W = fitW(wrap), m = {l: Math.min(o.labelW || 150, Math.round(W * .3)), r: 74, t: 22, b: 40}, Hh = m.t + m.b + rows.length * rowH;
   const svg = el("svg", {viewBox: `0 0 ${W} ${Hh}`, role: "img", "aria-label": o.aria}, null); wrap.appendChild(svg);
   const vals = rows.map(r => r.v);
   let lo = o.lo ?? Math.min(0, ...vals), hi = Math.max(...vals, o.ref ?? -Infinity);
@@ -346,22 +422,28 @@ function bars(wrap, rows, o) {
     const y = m.t + i * rowH, g = el("g", {}, svg), team = o.team(r), [c1, c2] = C[team];
     el("rect", {x: 0, y, width: W, height: rowH, fill: "transparent"}, g);
     el("text", {x: 4, y: y + 15, class: "bar-right"}, g).textContent = i + 1;
-    el("text", {x: m.l - 6, y: y + 15, "text-anchor": "end", class: "bar-label", fill: readable(team)}, g).textContent = o.name(r);
+    el("text", {x: m.l - 6, y: y + 15, "text-anchor": "end", class: "bar-label"}, g).textContent = o.name(r);
     const x0 = sx(Math.max(lo, 0 > lo ? 0 : lo)), x1 = sx(r.v);
     el("rect", {x: Math.min(x0, x1), y: y + 3, width: Math.max(1, Math.abs(x1 - x0)), height: rowH - 6, rx: 2, fill: c1, stroke: c2, "stroke-width": 1.5, class: "mark"}, g);
     el("text", {x: r.v < 0 ? x1 - 5 : x1 + 5, y: y + 15, class: "bar-val", "text-anchor": r.v < 0 ? "end" : "start"}, g).textContent = o.fv(r.v);
     el("text", {x: W - 4, y: y + 15, "text-anchor": "end", class: "bar-right"}, g).textContent = o.right(r);
     bind(g, () => o.card(r), `${o.name(r)}: ${o.fv(r.v)}`);
   });
+  fillTable(wrap, [["#", 1], ["Name"], ["Team"], [o.xt, 1], [o.rightHead, 1]],
+    rows.map((r, i) => [i + 1, esc(o.name(r)), o.team(r), o.fv(r.v), o.right(r)]));
 }
 
 // ---------------------------------------------------------------- the twelve charts
+function drawAll() {
+charts.innerHTML = "";
+
 const M = DATA.meta, CH = DATA.charts;
 // header: badges, TL;DR and key numbers, every number from findings.json
 const F = DATA.findings, nmT = r => `${r.name} (${r.team})`;
-const badge = (k, v, c) => `<span class="badge"><span class="k">${k}</span><span style="background:${c}">${v}</span></span>`;
-document.getElementById("badges").innerHTML = [badge("status", "live, rebuilt weekly", "#0b6e4f"), badge("season", `${F.season}, weeks ${F.weeks[0]}-${F.weeks[1]}`, "#1d2433"),
-  badge("data", "nflverse play-by-play", "#1d2433"), ...["EPA", "CPOE", "pass rate over expected", "xYAC", "FG make model"].map(m => badge("method", m, "#c2410c"))].join(" ");
+const tag = (k, v, cls) => `<span class="tag ${cls}">${k}: ${v}</span>`;
+document.getElementById("badges").innerHTML = [tag("status", "live, rebuilt weekly", "status"), tag("season", `${F.season}, weeks ${F.weeks[0]}-${F.weeks[1]}`, ""),
+  tag("data", "nflverse play-by-play", ""), ...["EPA", "CPOE", "pass rate over expected", "xYAC", "FG make model"].map(m => tag("method", m, "method"))].join("");
+document.getElementById("provenance").innerHTML = `<b>${F.plays.toLocaleString()}</b> plays from the ${F.season} regular season, weeks <b>${F.weeks[0]}-${F.weeks[1]}</b> (completed weeks only). Data: nflverse play-by-play. Built ${M.built}, refreshed every week.`;
 const qa = F.qb_epa_cpoe.top3_epa, tt = F.team_tiers.top5_net, rb = F.rb_success.top5[0], kk = F.kicker_fgoe.top3[0];
 const passHappy = Object.entries(F.early_down_proe.most_pass_happy), runHeavy = Object.entries(F.early_down_proe.most_run_heavy);
 document.getElementById("tldr").innerHTML = [
@@ -385,77 +467,82 @@ const avg = a => a.reduce((s, v) => s + v, 0) / a.length;
 const nm = (S, id) => S[id].name, tm = (S, id) => S[id].team;
 
 const q1 = CH.qb, q1s = q1.slice().sort((a, b) => b.x - a.x);
-scatter(card(1, "QB Efficiency: EPA vs. CPOE", "Min. 150 dropbacks · dotted lines = group average",
+scatter(card(1, "QB Efficiency: EPA vs. CPOE", "Min. 150 dropbacks; dotted lines = group average",
   `${QB[q1s[0].id].name} (${QB[q1s[0].id].team}) leads in EPA per dropback (${sg(q1s[0].x, 3)}). Hover a QB for his splits by throw depth and by down.`),
   q1, {aria: "QBs: EPA per dropback vs CPOE", xref: avg(q1.map(p => p.x)), yref: avg(q1.map(p => p.y)), fx: v => sg(v, 2), fy: v => sg(v, 0),
   xt: "EPA per dropback", yt: "Completion % over expected (CPOE)", corners: [["Efficient & accurate", "tr"], ["Struggling", "bl"]],
-  name: p => nm(QB, p.id), team: p => tm(QB, p.id), card: p => qbCard(p.id, "epa"), label: p => `${nm(QB, p.id)}: EPA ${sg(p.x, 3)}, CPOE ${pts(p.y)}`});
+  name: p => nm(QB, p.id), team: p => tm(QB, p.id), tx: v => sg(v, 3), ty: v => pts(v), card: p => qbCard(p.id, "epa"), label: p => `${nm(QB, p.id)}: EPA ${sg(p.x, 3)}, CPOE ${pts(p.y)}`});
 
-bars(card(2, "Running Back Success Rate", "Top 30 of the backs with 60+ carries · QB runs and scrambles left out · EPA per rush at right",
+bars(card(2, "Running Back Success Rate", "Top 30 of the backs with 60+ carries; QB runs and scrambles left out; EPA per rush at right",
   `${RB[CH.rb[0].id].name} (${RB[CH.rb[0].id].team}) leads at ${pc(CH.rb[0].v)}. Bars start near the leaders' range, not at zero.`), CH.rb,
   {aria: "Top 30 running backs by success rate", zoom: true, ref: DATA.league.rb_succ, refLabel: `RB avg ${pc(DATA.league.rb_succ)}`, team: r => tm(RB, r.id), name: r => nm(RB, r.id),
    fv: v => pc(v), fx: v => (100 * v).toFixed(0) + "%", right: r => sg(r.right, 2), rightHead: "EPA/rush", xt: "Rushing success rate", card: r => rbCard(r.id), labelW: 120});
 
 const tiers = CH.tiers;
-scatter(card(3, "2026 Team Tiers", "Offense EPA per play vs. defense EPA per play allowed · dotted lines = league average",
+scatter(card(3, "2026 Team Tiers", "Offense EPA per play vs. defense EPA per play allowed; dotted lines = league average",
   "Hover a team for its record, its offense and defense split into pass and run, and its net EPA week by week."),
   tiers, {aria: "Teams: offensive vs defensive EPA per play", badge: true, r: 14, invertY: true, xref: avg(tiers.map(p => p.x)), yref: avg(tiers.map(p => p.y)),
   fx: v => sg(v, 2), fy: v => sg(v, 2), xt: "Offense: EPA per play", yt: "Defense: EPA per play allowed (better is up)",
-  corners: [["Good offense, good defense", "tr"], ["Bad offense, bad defense", "bl"]], card: p => teamCard(p.team, "tiers"), label: p => `${p.team}: offense ${sg(p.x, 3)}, defense ${sg(p.y, 3)}`});
+  corners: [["Good offense, good defense", "tr"], ["Bad offense, bad defense", "bl"]], tx: v => sg(v, 3), ty: v => sg(v, 3), card: p => teamCard(p.team, "tiers"), label: p => `${p.team}: offense ${sg(p.x, 3)}, defense ${sg(p.y, 3)}`});
 
-bars(card(4, "Early-Down Pass Rate Over Expected", "1st & 2nd down · win prob. 20-80% · outside the last 2 minutes of halves · offensive EPA rank at right",
+bars(card(4, "Early-Down Pass Rate Over Expected", "1st & 2nd down; win prob. 20-80%; outside the last 2 minutes of halves; offensive EPA rank at right",
   "Hover a team for how its pass rate lines up with its offense."), CH.proe,
   {aria: "Teams by early-down pass rate over expected", team: r => r.team, name: r => r.team, fv: v => pts(100 * v), fx: v => pts(100 * v),
    right: r => "#" + r.right, rightHead: "Off. EPA", xt: "Pass rate over expected (percentage points)", card: r => teamCard(r.team, "proe"), labelW: 60});
 
-scatter(card(5, "Receiver Roles: Targets vs. Air Yards", "Top 40 by WOPR, min. 40 targets · shares in games played · dashed line = equal shares",
+scatter(card(5, "Receiver Roles: Targets vs. Air Yards", "Top 40 by WOPR, min. 40 targets; shares in games played; dashed line = equal shares",
   "Above the line, the role is downfield; below it, volume on shorter throws."), CH.wopr,
   {aria: "Receivers: target share vs air-yards share", diag: true, fx: v => (100 * v).toFixed(0) + "%", fy: v => (100 * v).toFixed(0) + "%",
    xt: "Target share", yt: "Air-yards share", corners: [["Downfield role", "tl"], ["Volume, shorter targets", "br"]],
-   name: p => nm(RC, p.id), team: p => tm(RC, p.id), card: p => recCard(p.id, "wopr"), label: p => `${nm(RC, p.id)}: ${pc(p.x)} of targets, ${pc(p.y)} of air yards`});
+   name: p => nm(RC, p.id), team: p => tm(RC, p.id), tx: pc, ty: pc, card: p => recCard(p.id, "wopr"), label: p => `${nm(RC, p.id)}: ${pc(p.x)} of targets, ${pc(p.y)} of air yards`});
 
 const pr = CH.press;
-scatter(card(6, "Pass Defense: Pressure vs. Results", "Pressure proxy = sack or QB hit per dropback faced (no hurries in play-by-play) · dotted lines = league average",
+scatter(card(6, "Pass Defense: Pressure vs. Results", "Pressure proxy = sack or QB hit per dropback faced (no hurries in play-by-play); dotted lines = league average",
   "Hover a team for how far it sits from what its pressure rate predicts."), pr,
   {aria: "Defenses: pressure rate vs EPA per dropback allowed", badge: true, r: 14, invertY: true, xref: avg(pr.map(p => p.x)), yref: avg(pr.map(p => p.y)),
    fx: v => (100 * v).toFixed(0) + "%", fy: v => sg(v, 2), xt: "Sack or QB-hit rate per dropback faced", yt: "EPA per dropback allowed (better is up)",
-   corners: [["Wins without the rush", "tl"], ["Rush gets home, coverage leaks", "br"]], card: p => teamCard(p.team, "press"), label: p => `${p.team}: ${pc(p.x)} pressure, ${sg(p.y, 3)} EPA allowed`});
+   corners: [["Wins without the rush", "tl"], ["Rush gets home, coverage leaks", "br"]], tx: pc, ty: v => sg(v, 3), card: p => teamCard(p.team, "press"), label: p => `${p.team}: ${pc(p.x)} pressure, ${sg(p.y, 3)} EPA allowed`});
 
 const q7 = CH.qb7;
-scatter(card(7, "Where QB Yards Come From", "Min. 150 attempts · YAC share = yards after catch / passing yards on completions",
+scatter(card(7, "Where QB Yards Come From", "Min. 150 attempts; YAC share = yards after catch / passing yards on completions",
   "The shorter the throws, the bigger the YAC share, so a high share is a style, not a skill by itself."), q7,
   {aria: "QBs: depth of target vs YAC share", xref: avg(q7.map(p => p.x)), yref: avg(q7.map(p => p.y)), fx: v => v.toFixed(0), fy: v => (100 * v).toFixed(0) + "%",
    xt: "Average depth of target (air yards per attempt)", yt: "Share of passing yards after the catch", corners: [["Short throws, YAC does the work", "tl"], ["Pushes it downfield", "br"]],
-   name: p => nm(QB, p.id), team: p => tm(QB, p.id), card: p => qbCard(p.id, "yac"), label: p => `${nm(QB, p.id)}: aDOT ${p.x}, YAC share ${pc(p.y)}`});
+   name: p => nm(QB, p.id), team: p => tm(QB, p.id), tx: v => v.toFixed(1), ty: pc, card: p => qbCard(p.id, "yac"), label: p => `${nm(QB, p.id)}: aDOT ${p.x}, YAC share ${pc(p.y)}`});
 
 const r8 = CH.rec8;
-scatter(card(8, "Receivers: Role vs. Value", "45 most-targeted receivers (WR, TE, RB), min. 40 targets · dotted lines = group average",
+scatter(card(8, "Receivers: Role vs. Value", "45 most-targeted receivers (WR, TE, RB), min. 40 targets; dotted lines = group average",
   "Deeper roles earn more per target, so compare a receiver with others at his depth."), r8,
   {aria: "Receivers: depth of target vs EPA per target", xref: avg(r8.map(p => p.x)), yref: avg(r8.map(p => p.y)), fx: v => v.toFixed(0), fy: v => sg(v, 1),
    xt: "Average depth of target (air yards)", yt: "EPA per target", corners: [["Deep role, big value", "tr"], ["Short role, low value", "bl"]],
-   name: p => nm(RC, p.id), team: p => tm(RC, p.id), card: p => recCard(p.id, "epa"), label: p => `${nm(RC, p.id)}: aDOT ${p.x}, EPA/target ${sg(p.y, 2)}`});
+   name: p => nm(RC, p.id), team: p => tm(RC, p.id), tx: v => v.toFixed(1), ty: v => sg(v, 2), card: p => recCard(p.id, "epa"), label: p => `${nm(RC, p.id)}: aDOT ${p.x}, EPA/target ${sg(p.y, 2)}`});
 
-bars(card(9, "YAC Over Expected per Catch", "Top 30 with 25+ catches · expected = nflverse xYAC model · YAC per catch at right",
+bars(card(9, "YAC Over Expected per Catch", "Top 30 with 25+ catches; expected = nflverse xYAC model; YAC per catch at right",
   `${RC[CH.yac[0].id].name} (${RC[CH.yac[0].id].team}) gains ${sg(CH.yac[0].v, 2)} yards per catch beyond the model.`), CH.yac,
   {aria: "Top 30 by YAC over expected", lo: 0, team: r => tm(RC, r.id), name: r => nm(RC, r.id), fv: v => sg(v, 2), fx: v => sg(v, 0),
    right: r => r.right, rightHead: "YAC/rec", xt: "Yards after the catch over expected, per reception", card: r => recCard(r.id, "yac"), labelW: 120});
 
 const drp = CH.drp;
-scatter(card(10, "Defense: Run Stopping vs. Pass Defense", "Designed runs (scrambles count as pass) · dropbacks include sacks · dotted lines = league average",
+scatter(card(10, "Defense: Run Stopping vs. Pass Defense", "Designed runs (scrambles count as pass); dropbacks include sacks; dotted lines = league average",
   "Hover a team for its defense split into run and pass, and its net EPA week by week."), drp,
   {aria: "Defenses: EPA per run allowed vs EPA per dropback allowed", badge: true, r: 14, invertX: true, invertY: true, xref: avg(drp.map(p => p.x)), yref: avg(drp.map(p => p.y)),
    fx: v => sg(v, 2), fy: v => sg(v, 2), xt: "EPA per run allowed (better is right)", yt: "EPA per dropback allowed (better is up)",
-   corners: [["Stops both", "tr"], ["Gets hit both ways", "bl"]], card: p => teamCard(p.team, "drp"), label: p => `${p.team}: ${sg(p.x, 3)} per run, ${sg(p.y, 3)} per dropback`});
+   corners: [["Stops both", "tr"], ["Gets hit both ways", "bl"]], tx: v => sg(v, 3), ty: v => sg(v, 3), card: p => teamCard(p.team, "drp"), label: p => `${p.team}: ${sg(p.x, 3)} per run, ${sg(p.y, 3)} per dropback`});
 
-bars(card(11, "Pass Rush Leaders: Sacks + QB Hits", "Top 30 · each play counted once per player · half sacks = 0.5 · sacks at right",
+bars(card(11, "Pass Rush Leaders: Sacks + QB Hits", "Top 30; each play counted once per player; half sacks = 0.5; sacks at right",
   "Hover a rusher for his hits without a sack and his week-by-week count."), CH.rush,
   {aria: "Top 30 pass rushers", lo: 0, team: r => tm(DF, r.id), name: r => nm(DF, r.id), fv: v => v, fx: v => v.toFixed(0), right: r => r.right,
    rightHead: "Sacks", xt: "Plays with a sack or QB hit", card: r => defCard(r.id), labelW: 120});
 
-bars(card(12, "Kickers: FG Points Over Expected", "Min. 8 attempts · expected make rate by distance and roof, fit on 2022-25 kicks · made-att at right",
+bars(card(12, "Kickers: FG Points Over Expected", "Min. 8 attempts; expected make rate by distance and roof, fit on 2022-25 kicks; made-att at right",
   `${KK[CH.k[0].id].name} (${KK[CH.k[0].id].team}, ${CH.k[0].right}) leads at ${pts(CH.k[0].v)} points.`), CH.k,
   {aria: "Kickers by field-goal points over expected", team: r => tm(KK, r.id), name: r => nm(KK, r.id), fv: v => pts(v), fx: v => pts(v),
    right: r => r.right, rightHead: "FG", xt: "Field-goal points over expected", card: r => kCard(r.id), labelW: 120});
+}
+drawAll();
+let lastW = innerWidth;
+addEventListener("resize", () => { clearTimeout(window.__rt); window.__rt = setTimeout(() => {
+  if (Math.abs(innerWidth - lastW) > 40) { lastW = innerWidth; hide(); drawAll(); } }, 200); });
 })();
 </script>
 </body>
