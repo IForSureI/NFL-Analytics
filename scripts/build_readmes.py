@@ -358,17 +358,22 @@ def snippets():
     r1 = rb["top5"]
     tt = t["top5_net"]
     rw = rc["top5_wopr"][0]
+    a7, r8, y9, d10, p11, k12 = (f["qb_adot_yac"], f["receiver_epa_adot"], f["yac_over_expected"], f["defense_run_pass"],
+                                 f["pass_rush_leaders"], f["kicker_fgoe"])
     pp = list(pr["most_pass_happy"].items())
     rh = list(pr["most_run_heavy"].items())
     return f"""# 2026 In-Season Snippets
 
-Six quick charts on the season in progress, the kind a staff looks at on a Monday. Same data and code standard as the studies; lighter write-ups. Through **{w} of {f['season']}** (regular season, completed weeks only; {f['plays']:,} plays). Rebuilt on every weekly refresh.
+Twelve quick charts on the season in progress, across positions, the kind a staff looks at on a Monday. Same data and code standard as the studies; lighter write-ups. Through **{w} of {f['season']}** (regular season, completed weeks only; {f['plays']:,} plays). Rebuilt on every weekly refresh.
 
 | | |
 |---|---|
 | <img src="qb_epa_cpoe.png" width="100%"> | <img src="rb_success.png" width="100%"> |
 | <img src="team_tiers.png" width="100%"> | <img src="early_down_proe.png" width="100%"> |
 | <img src="receiver_share.png" width="100%"> | <img src="defense_pressure.png" width="100%"> |
+| <img src="qb_adot_yac.png" width="100%"> | <img src="receiver_epa_adot.png" width="100%"> |
+| <img src="yac_over_expected.png" width="100%"> | <img src="defense_run_pass.png" width="100%"> |
+| <img src="pass_rush_leaders.png" width="100%"> | <img src="kicker_fgoe.png" width="100%"> |
 
 ## What each one says
 
@@ -379,11 +384,19 @@ Six quick charts on the season in progress, the kind a staff looks at on a Monda
 5. **Receiver Roles: Targets vs. Air Yards** ([chart](receiver_share.png)). {rw['receiver_player_name']} ({rw['team']}) carries the league's biggest role: {pct(rw['tgt_share'])} of targets and {pct(rw['air_share'])} of air yards (WOPR {rw['wopr']:.2f}). Points above the dashed line are used downfield; points below it are volume options on shorter throws.
 6. **Pass Defense: Pressure vs. Results** ([chart](defense_pressure.png)). Defenses that hit the QB more allow less per dropback (r = {d['corr_press_epa']:.2f}), but the spread around the line is wide: teams far above it win in coverage, teams far below it get home and still leak.
 
+7. **Where QB Yards Come From** ([chart](qb_adot_yac.png)). {a7['most_yac'][0]['name']} ({a7['most_yac'][0]['team']}) gets {pct(a7['most_yac'][0]['yac_share'])} of his passing yards after the catch on a {a7['most_yac'][0]['adot']:.1f}-yard average depth of target. The shorter the throws, the bigger the YAC share (r = {a7['corr_adot_yac_share']:.2f}), so a high YAC share is a style, not a skill by itself.
+8. **Receivers: Role vs. Value** ([chart](receiver_epa_adot.png)). Among the {r8['n']} most-targeted receivers, {r8['top5_epa_per_target'][0]['receiver_player_name']} ({r8['top5_epa_per_target'][0]['team']}) adds the most per target ({r8['top5_epa_per_target'][0]['epa']:+.2f} EPA on a {r8['top5_epa_per_target'][0]['adot']:.1f}-yard depth). Deeper roles earn more per target (r = {r8['corr_adot_epa']:.2f}), so compare a receiver with others at his depth.
+9. **YAC Over Expected per Catch** ([chart](yac_over_expected.png)). {y9['top5'][0]['receiver_player_name']} ({y9['top5'][0]['team']}) gains {y9['top5'][0]['yacoe']:+.2f} yards after the catch beyond what the nflverse xYAC model expects per reception, then {y9['top5'][1]['receiver_player_name']} ({y9['top5'][1]['team']}, {y9['top5'][1]['yacoe']:+.2f}). [Study 08](../08-yac-tax/) found a season of YAC over expected predicts next year about as well as air yards, so this is worth watching.
+10. **Defense: Run Stopping vs. Pass Defense** ([chart](defense_run_pass.png)). Best run defense by EPA per run allowed: {", ".join(list(d10['best_run_d'])[:3])}; best pass defense: {", ".join(list(d10['best_pass_d'])[:3])}. The two go together only loosely (r = {d10['corr_run_pass']:.2f}).
+11. **Pass Rush Leaders** ([chart](pass_rush_leaders.png)). {p11['top5'][0]['name']} ({p11['top5'][0]['team']}) has a sack or QB hit on {p11['top5'][0]['events']} plays, ahead of {p11['top5'][1]['name']} ({p11['top5'][1]['team']}, {p11['top5'][1]['events']}). [Study 07](../07-box-score-tax/) showed hits and pressures predict future sacks better than sacks do, which is why this counts both.
+12. **Kickers: FG Points Over Expected** ([chart](kicker_fgoe.png)). {k12['top3'][0]['kicker_player_name']} ({k12['top3'][0]['team']}, {k12['top3'][0]['made']}-{k12['top3'][0]['att']}) is {k12['top3'][0]['fgoe_pts']:+.1f} points above what an average kicker makes from the same distances; the expected rate comes from a distance-and-roof model fit on {k12['model_kicks']:,} kicks from 2022-25.
+
 ## Method notes
 
 - Data: [nflverse](https://github.com/nflverse/nflverse-data) play-by-play (EPA, CPOE, xpass from the nflfastR models) and nflverse team colors. Teams are drawn as color-coded markers with abbreviations.
 - A week counts once all of its games are in the file; a week in progress is left out.
 - Dropbacks include sacks and scrambles; two-point tries and penalty no-plays are excluded.
+- Field-goal model: logistic regression on distance, distance squared and a dome flag (regular seasons 2022-25). Blocked kicks count as misses.
 - Pressure proxy = sack or QB hit. Play-by-play has no hurries, so this undercounts pressure; treat it as a rate comparison between teams, not a pressure rate.
 - Early-down PROE: 1st and 2nd down, win probability 20-80%, outside the last two minutes of each half.
 - Receiver shares are computed over the games each player appeared in (so injuries don't shrink them).
@@ -407,8 +420,8 @@ def snippets_section():
     figs = ["qb_epa_cpoe", "team_tiers", "early_down_proe", "receiver_share", "rb_success", "defense_pressure"]
     cells = "".join(f'<td width="33%"><a href="reports/{SNIP}/"><img src="reports/{SNIP}/{x}.png" width="100%"></a></td>' for x in figs[:3])
     cells2 = "".join(f'<td width="33%"><a href="reports/{SNIP}/"><img src="reports/{SNIP}/{x}.png" width="100%"></a></td>' for x in figs[3:])
-    return (f"\n## 2026 in-season snippets\n\nSix quick charts on the season in progress, through Weeks {f['weeks'][0]}-{f['weeks'][1]}: "
-            f"QB efficiency, running back success rate, team tiers, early-down pass rate over expected, receiver roles and pass-rush results. "
+    return (f"\n## 2026 in-season snippets\n\nTwelve quick charts on the season in progress, through Weeks {f['weeks'][0]}-{f['weeks'][1]}: "
+            f"QB, running back, receiver, pass rusher, defense, kicker and team views. "
             f"[See them all](reports/{SNIP}/).\n\n<table><tr>{cells}</tr><tr>{cells2}</tr></table>\n")
 
 
