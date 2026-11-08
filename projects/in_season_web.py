@@ -319,6 +319,7 @@ def build() -> dict:
     c_k = [{"id": x.kicker_player_id, "v": round(float(x.fgoe), 1), "right": f"{int(x.made)}-{int(x.att)}"} for x in g12.itertuples()]
 
     return {"meta": {"season": f["season"], "weeks": f["weeks"], "plays": f["plays"], "built": f["built"]},
+            "findings": f,  # the page header (TL;DR, key numbers) quotes findings.json directly
             "colors": colors, "qb": QB, "rb": RB, "rec": REC, "def": DEF, "k": K, "teams": T,
             "league": {"rb_succ": r3(r.success.mean()), "yacoe": f["yac_over_expected"]["league_mean"]},
             "charts": {"qb": c_qb, "rb": c_rb, "tiers": c_tiers, "proe": c_proe, "wopr": c_wopr, "press": c_press,
