@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026 In-Season Snippets</title>
+<meta name="description" content="Twelve interactive charts on the 2026 NFL season. Hover any player or team for the breakdown. Dylan Fanelli.">
+<style>
+  :root {
+    --paper: #f3f5f8; --card: #ffffff; --ink: #1d2433; --muted: #6b7280; --line: #dfe3ea; --grid: #e9edf2;
+    --green: #1f4f8a; --clay: #c2410c; --tip: #1d2433; --tip-ink: #f6f3ec; --tip-muted: #b9b4aa;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  a { color: var(--green); }
+  header.top { max-width: 1180px; margin: 0 auto; padding: 36px 16px 8px; }
+  .eyebrow { text-transform: uppercase; letter-spacing: .08em; font-size: 12px; font-weight: 700; color: var(--clay); margin: 0 0 6px; }
+  h1 { font-size: clamp(28px, 4.5vw, 44px); line-height: 1.1; margin: 0 0 10px; font-weight: 800; }
+  .lede { max-width: 760px; color: #3a3a3a; margin: 0 0 14px; }
+  .facts { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--muted); margin: 0 0 6px; }
+  .facts b { color: var(--ink); }
+  .hint { display: inline-block; margin-top: 8px; font-size: 13px; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; color: var(--muted); }
+  main { max-width: 1180px; margin: 0 auto; padding: 12px 16px 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 540px), 1fr)); gap: 18px; }
+  section.chart { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px 16px 10px; min-width: 0; }
+  section.chart.wide { grid-column: 1 / -1; }
+  .num-badge { display: inline-block; font-size: 12px; font-weight: 700; color: #fff; background: var(--ink); border-radius: 4px; padding: 1px 7px; margin-right: 8px; vertical-align: 2px; }
+  h2 { font-size: 20px; margin: 0 0 2px; font-weight: 800; }
+  .sub { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
+  .says { font-size: 13.5px; margin: 8px 0 4px; color: #333; }
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  svg text { font-family: inherit; }
+  .axis text { font-size: 11px; fill: var(--muted); }
+  .axis-title { font-size: 12px; font-weight: 700; fill: var(--ink); }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .ref { stroke: var(--clay); stroke-width: 1.2; stroke-dasharray: 3 3; }
+  .ref-label { font-size: 11px; font-weight: 700; fill: var(--clay); }
+  .corner { font-size: 11px; font-weight: 700; fill: var(--clay); }
+  .hit { cursor: pointer; outline: none; }
+  .hit:focus-visible .mark, .hit.active .mark { stroke: var(--ink) !important; stroke-width: 3 !important; }
+  .hit .mark { transition: opacity .12s; }
+  svg.dim .hit:not(.active) .mark { opacity: .28; }
+  svg.dim .hit:not(.active) text { opacity: .35; }
+  .pt-label { font-size: 10.5px; font-weight: 700; pointer-events: none; paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; }
+  .bar-label { font-size: 12px; font-weight: 700; }
+  .bar-val { font-size: 12px; font-weight: 700; fill: var(--ink); }
+  .bar-right { font-size: 11.5px; fill: var(--muted); }
+  .ws-title { font-size: 12.5px; font-weight: 700; fill: var(--ink); }
+  .ws-cursor { stroke: var(--ink); stroke-width: 1; }
+  footer { max-width: 1180px; margin: 0 auto; padding: 0 16px 40px; font-size: 13px; color: var(--muted); }
+  footer h3 { color: var(--ink); font-size: 15px; margin: 18px 0 6px; }
+  footer ul { padding-left: 18px; margin: 0; }
+  /* hover card */
+  #tip { position: fixed; z-index: 10; pointer-events: none; opacity: 0; transform: translateY(4px); transition: opacity .1s, transform .1s;
+         width: min(340px, calc(100vw - 24px)); background: var(--tip); color: var(--tip-ink); border-radius: 10px; padding: 12px 14px;
+         box-shadow: 0 10px 30px rgba(0,0,0,.28); font-size: 12.5px; line-height: 1.4; }
+  #tip.on { opacity: 1; transform: none; }
+  #tip .t-head { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+  #tip .chip { font-size: 11px; font-weight: 800; border-radius: 4px; padding: 1px 6px; border: 2px solid; }
+  #tip .t-name { font-size: 15px; font-weight: 800; }
+  #tip .t-sub { color: var(--tip-muted); margin-bottom: 8px; }
+  #tip .big { display: flex; gap: 14px; margin: 6px 0 8px; }
+  #tip .big div { display: flex; flex-direction: column; }
+  #tip .big b { font-size: 18px; line-height: 1.1; }
+  #tip .big span { font-size: 11px; color: var(--tip-muted); }
+  #tip table { width: 100%; border-collapse: collapse; margin: 4px 0 6px; }
+  #tip th { text-align: left; font-weight: 600; color: var(--tip-muted); font-size: 11px; padding: 2px 4px 2px 0; border-bottom: 1px solid #3a3a3a; }
+  #tip td { padding: 2px 4px 2px 0; font-variant-numeric: tabular-nums; }
+  #tip td.r, #tip th.r { text-align: right; }
+  #tip .sec { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #f4b183; font-weight: 700; margin: 8px 0 2px; }
+  #tip .note { color: var(--tip-muted); font-size: 11px; margin-top: 6px; }
+  #tip .pos { color: #9fd8b3; } #tip .neg { color: #f4a3a3; }
+  @media (max-width: 640px) {
+    #tip { left: 12px !important; right: 12px; top: auto !important; bottom: 12px; width: auto; }
+    #tip.on { pointer-events: auto; }
+    .pt-label { font-size: 9.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) { #tip, .hit .mark { transition: none; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">Dylan Fanelli · NFL analytics</p>
+  <h1>2026 In-Season Snippets</h1>
+  <p class="lede">Twelve quick charts on the season in progress, the kind a staff looks at on a Monday. Every point opens its breakdown: a quarterback's efficiency by down and by throw depth, a back's success by down, a receiver's role and value by depth, a team's offense and defense split into run and pass, a pass rusher's week by week, a kicker's makes by distance. The small bars in each card are week by week.</p>
+  <p class="facts" id="facts"></p>
+  <span class="hint" id="hint">Hover any player or team for the breakdown. On a phone, tap.</span>
+</header>
+<main id="charts"></main>
+<footer>
+  <h3>Method</h3>
+  <ul>
+    <li>Data: <a href="https://github.com/nflverse/nflverse-data">nflverse</a> play-by-play (EPA, CPOE, xpass, xYAC from the nflfastR models) and nflverse team colors. Regular season, completed weeks only: a week counts once all of its games are in.</li>
+    <li>Dropbacks include sacks and scrambles; two-point tries and penalty no-plays are left out. Success = the play gains positive EPA. CPOE is in percentage points.</li>
+    <li>Early-down PROE: 1st and 2nd down, win probability 20-80%, outside the last two minutes of each half. Pressure proxy = sack or QB hit (play-by-play has no hurries). Receiver shares are over the games each player appeared in.</li>
+    <li>Field goals: expected make rate from a logistic model on distance, distance squared and a dome flag, fit on 2022-25 regular-season kicks. Blocked kicks count as misses.</li>
+    <li>Every headline number on this page is checked against the published charts' <a href="https://github.com/IForSureI/NFL-Analytics/blob/main/reports/2026-in-season-snippets/findings.json">findings.json</a> when the page is built. Code: <a href="https://github.com/IForSureI/NFL-Analytics/blob/main/projects/in_season_web.py">projects/in_season_web.py</a>. Static charts and write-up: <a href="https://github.com/IForSureI/NFL-Analytics/tree/main/reports/2026-in-season-snippets">reports/2026-in-season-snippets</a>.</li>
+  </ul>
+  <p id="built"></p>
+</footer>
+<div id="tip" role="tooltip" aria-live="polite"></div>
+<script>
+const DATA = /*DATA*/null;
+(() => {
+const NS = "http://www.w3.org/2000/svg";
+const C = DATA.colors, H = DATA.hitters, P = DATA.pitchers, T = DATA.teams, L = DATA.league;
+const f3 = v => v == null ? "–" : v.toFixed(3).replace(/^0\./, ".").replace(/^-0\./, "-.");
+const pc = v => v == null ? "–" : (100 * v).toFixed(1) + "%";
+const sg = (v, d = 2) => v == null ? "–" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(d);
+const cls = v => v > 0 ? "pos" : v < 0 ? "neg" : "";
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const lum = h => { const n = parseInt(h.slice(1), 16), r = n >> 16 & 255, g = n >> 8 & 255, b = n & 255;
+  const f = c => (c /= 255) <= .03928 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4; return .2126 * f(r) + .7152 * f(g) + .0722 * f(b); };
+const readable = t => { const [a, b] = C[t]; return lum(a) < .35 ? a : (lum(b) < .35 ? b : "#1f1f1f"); };
+const chip = t => `<span class="chip" style="background:${C[t][0]};border-color:${C[t][1]};color:${lum(C[t][0]) < .5 ? "#fff" : "#111"}">${t}</span>`;
+const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+
+// ---------------------------------------------------------------- hover card
+const tip = document.getElementById("tip");
+let pinned = null, activeEl = null;
+function place(evt, anchor) {
+  if (matchMedia("(max-width: 640px)").matches) return;
+  const r = anchor ? anchor.getBoundingClientRect() : null;
+  let x = evt && evt.clientX != null && evt.clientX ? evt.clientX : (r ? r.right : 0);
+  let y = evt && evt.clientY != null && evt.clientY ? evt.clientY : (r ? r.top : 0);
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let left = x + 16, top = y + 14;
+  if (left + w > innerWidth - 8) left = x - w - 16;
+  if (left < 8) left = 8;
+  if (top + h > innerHeight - 8) top = Math.max(8, innerHeight - h - 8);
+  tip.style.left = left + "px"; tip.style.top = top + "px";
+}
+function show(html, evt, node) {
+  tip.innerHTML = html; tip.classList.add("on"); place(evt, node);
+  if (activeEl && activeEl !== node) { activeEl.classList.remove("active"); }
+  if (node) { node.classList.add("active"); node.ownerSVGElement && node.ownerSVGElement.classList.add("dim"); activeEl = node; }
+}
+function hide() {
+  tip.classList.remove("on");
+  if (activeEl) { activeEl.classList.remove("active"); activeEl.ownerSVGElement && activeEl.ownerSVGElement.classList.remove("dim"); activeEl = null; }
+  pinned = null;
+}
+function bind(node, html, label) {
+  node.classList.add("hit"); node.setAttribute("tabindex", "0"); node.setAttribute("role", "button"); node.setAttribute("aria-label", label);
+  node.addEventListener("mouseenter", e => { if (!pinned) show(html(), e, node); });
+  node.addEventListener("mousemove", e => { if (!pinned) place(e, node); });
+  node.addEventListener("mouseleave", () => { if (!pinned) hide(); });
+  node.addEventListener("focus", e => show(html(), null, node));
+  node.addEventListener("blur", () => { if (!pinned) hide(); });
+  node.addEventListener("click", e => { e.stopPropagation(); if (pinned === node) { hide(); return; } show(html(), e, node); pinned = node; });
+}
+document.addEventListener("click", e => { if (!tip.contains(e.target)) hide(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") hide(); });
+
+// ---------------------------------------------------------------- card contents
+const W = DATA.meta.weeks, QB = DATA.qb, RB = DATA.rb, RC = DATA.rec, DF = DATA.def, KK = DATA.k;
+const wkLabels = []; for (let w = W[0]; w <= W[1]; w++) wkLabels.push(w);
+const head = (name, team, sub) => `<div class="t-head">${chip(team)}<span class="t-name">${esc(name)}</span></div><div class="t-sub">${sub}</div>`;
+const big = items => `<div class="big">${items.map(([v, l, c]) => `<div><b class="${c || ""}">${v}</b><span>${l}</span></div>`).join("")}</div>`;
+const table = (cols, rows) => `<table><tr>${cols.map(([l, r]) => `<th class="${r ? "r" : ""}">${l}</th>`).join("")}</tr>${rows.map(rw => `<tr>${rw.map((v, i) => `<td class="${cols[i][1] ? "r" : ""}">${v}</td>`).join("")}</tr>`).join("")}</table>`;
+const pts = v => v == null ? "–" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(1);
+// week-by-week bars inside a card: positive up, negative down; blank = bye or no snaps
+function spark(vals, label, fmt) {
+  const w = 14, h = 34, mid = vals.some(v => v != null && v < 0) ? h / 2 : h - 2;
+  const max = Math.max(1e-9, ...vals.map(v => Math.abs(v ?? 0)));
+  const bars = vals.map((v, i) => {
+    if (v == null) return `<rect x="${i * w + 2}" y="${mid - 1}" width="${w - 4}" height="2" fill="#555"/>`;
+    const hh = Math.max(1.5, Math.abs(v) / max * (mid === h / 2 ? h / 2 - 2 : h - 4));
+    return `<rect x="${i * w + 2}" y="${v >= 0 ? mid - hh : mid}" width="${w - 4}" height="${hh}" rx="1" fill="${v >= 0 ? "#9fd8b3" : "#f4a3a3"}"><title>Week ${wkLabels[i]}: ${fmt(v)}</title></rect>`;
+  }).join("");
+  const ticks = wkLabels.map((wk, i) => `<text x="${i * w + w / 2}" y="${h + 10}" font-size="8" fill="#b9b4aa" text-anchor="middle">${wk}</text>`).join("");
+  return `<div class="sec">${label}, week by week</div><svg viewBox="0 0 ${vals.length * w} ${h + 12}" style="width:${vals.length * 15}px;height:auto">${bars}${ticks}</svg>`;
+}
+const DOWN = ["", "1st", "2nd", "3rd"];
+
+function qbCard(id, focus) {
+  const q = QB[id];
+  const sub = `${q.games} games · ${q.dropbacks} dropbacks · ${q.att} att, ${pc(q.comp)} comp · ${q.yds.toLocaleString()} yds, ${q.td} TD, ${q.int} INT · ${q.sacks} sacks`;
+  const top = focus === "yac"
+    ? big([[q.adot ?? "–", "aDOT (yds)"], [pc(q.yac_share), "yards after catch"], [pts(q.cpoe), "CPOE"]])
+    : big([[sg(q.epa, 3), "EPA/dropback", cls(q.epa)], [pts(q.cpoe), "CPOE (pts)", cls(q.cpoe)], [pc(q.succ), "success"]]);
+  return head(q.name, q.team, sub) + top +
+    `<div class="sec">By throw depth</div>` + table([["Air yards"], ["Att", 1], ["Comp", 1], ["EPA/att", 1]], q.bands.map(b => [b.band, b.att, pc(b.comp), `<span class="${cls(b.epa)}">${sg(b.epa, 2)}</span>`])) +
+    (focus === "yac" ? "" : `<div class="sec">By down</div>` + table([["Down"], ["Dropbacks", 1], ["EPA", 1], ["Success", 1]], q.downs.map(d => [DOWN[d.down], d.n, `<span class="${cls(d.epa)}">${sg(d.epa, 2)}</span>`, pc(d.succ)]))) +
+    spark(q.weeks, "EPA per dropback", v => sg(v, 3));
+}
+function rbCard(id) {
+  const r = RB[id];
+  return head(r.name, r.team, `${r.games} games · ${r.carries} carries · ${r.yds} yds (${r.ypc}/carry) · ${r.td} TD · ${r.fumbles} fumbles lost`) +
+    big([[pc(r.succ), `success (RB avg ${pc(DATA.league.rb_succ)})`], [sg(r.epa, 2), "EPA/rush", cls(r.epa)], [pc(r.explosive), "10+ yd runs"]]) +
+    table([["Down"], ["Carries", 1], ["Success", 1], ["EPA", 1]], r.downs.map(d => [DOWN[d.down], d.n, pc(d.succ), `<span class="${cls(d.epa)}">${sg(d.epa, 2)}</span>`])) +
+    `<div class="note">Stuffed (0 or fewer yards) on ${pc(r.stuffed)} of carries. Success mixes the back's work with his blocking.</div>` +
+    spark(r.weeks, "Success rate", v => pc(v));
+}
+function recCard(id, focus) {
+  const r = RC[id];
+  const sub = `${r.games} games · ${r.tgt} targets · ${r.rec} catches (${pc(r.catch)}) · ${r.yds} yds · ${r.td} TD`;
+  let top;
+  if (focus === "wopr") top = big([[pc(r.tgt_share), "target share"], [pc(r.air_share), "air-yards share"], [r.wopr?.toFixed(2) ?? "–", "WOPR"]]);
+  else if (focus === "yac") top = big([[sg(r.yacoe, 2), "YAC over exp./catch", cls(r.yacoe)], [r.yac ?? "–", "YAC per catch"], [r.adot ?? "–", "aDOT"]]);
+  else top = big([[sg(r.epa, 2), "EPA/target", cls(r.epa)], [r.adot ?? "–", "aDOT (yds)"], [pc(r.catch), "catch rate"]]);
+  return head(r.name, r.team, sub) + top +
+    `<div class="sec">By target depth</div>` + table([["Air yards"], ["Tgt", 1], ["Catch", 1], ["EPA/tgt", 1]], r.bands.map(b => [b.band, b.tgt, pc(b.catch), `<span class="${cls(b.epa)}">${sg(b.epa, 2)}</span>`])) +
+    spark(r.weeks, "Targets", v => v);
+}
+function defCard(id) {
+  const d = DF[id];
+  return head(d.name, d.team, `${d.games_with} weeks with a sack or hit`) +
+    big([[d.events, "plays with sack/hit"], [d.sacks, "sacks"], [d.hits_only, "hits, no sack"]]) +
+    `<div class="note">${d.third_down} of the ${d.events} came on 3rd down. Offense EPA on those plays: ${sg(d.epa_on, 2)}. A sack that is also a hit counts once; half sacks count 0.5.</div>` +
+    spark(d.weeks, "Plays with a sack or hit", v => v);
+}
+function kCard(id) {
+  const k = KK[id];
+  return head(k.name, k.team, `${k.made}-${k.att} on field goals · long ${k.long ?? "–"}${k.miss.length ? ` · missed from ${k.miss.join(", ")}` : " · no misses"}`) +
+    big([[pts(k.fgoe), "FG pts over expected", cls(k.fgoe)], [k.made, "made"], [k.exp, "expected makes"]]) +
+    table([["Distance"], ["Made-Att", 1], ["Expected", 1]], k.bands.map(b => [b.band, `${b.made}-${b.att}`, b.exp])) +
+    `<div class="note">Expected = an average kicker's make rate from the same distances and roof (model fit on 2022-25 kicks). Points = 3 × (made − expected).</div>`;
+}
+function teamCard(t, focus) {
+  const m = T[t];
+  const rec = `${m.w}-${m.l}${m.t ? "-" + m.t : ""} · ${m.pf} points for, ${m.pa} against`;
+  let top;
+  if (focus === "proe") top = big([[pts(100 * m.proe), "early-down PROE (pts)", ""], [m.proe_plays, "neutral early-down plays"], [sg(m.off, 3), "off. EPA/play", cls(m.off)]]);
+  else if (focus === "press") top = big([[pc(m.press), "sack or hit rate"], [sg(m.epa_db_allowed, 3), "EPA/dropback allowed", cls(-m.epa_db_allowed)], [sg(m.vs_fit, 3), "vs. the line", cls(-m.vs_fit)]]);
+  else if (focus === "drp") top = big([[sg(m.def_run, 3), "EPA/run allowed", cls(-m.def_run)], [sg(m.def_pass, 3), "EPA/dropback allowed", cls(-m.def_pass)], [pc(m.def_succ), "success allowed"]]);
+  else top = big([[sg(m.net, 3), "net EPA/play", cls(m.net)], [sg(m.off, 3), "offense", cls(m.off)], [sg(m.def, 3), "defense allowed", cls(-m.def)]]);
+  return head(t, t, rec) + top +
+    table([[""], ["Pass", 1], ["Run", 1], ["Success", 1]], [["Offense EPA", sg(m.off_pass, 3), sg(m.off_run, 3), pc(m.off_succ)], ["Defense allowed", sg(m.def_pass, 3), sg(m.def_run, 3), pc(m.def_succ)]]) +
+    `<div class="note">Defense: ${m.sacks} sacks, sack or hit on ${pc(m.press)} of ${m.db_faced} dropbacks faced. Early downs: ${pts(100 * m.proe)} pts pass rate over expected.</div>` +
+    spark(m.weeks, "Net EPA per play", v => sg(v, 3));
+}
+
+// ---------------------------------------------------------------- layout helpers
+const charts = document.getElementById("charts");
+function card(n, title, sub, says, wide) {
+  const s = document.createElement("section"); s.className = "chart" + (wide ? " wide" : "");
+  s.innerHTML = `<h2><span class="num-badge">${n}</span>${title}</h2><p class="sub">${sub}</p>`;
+  charts.appendChild(s);
+  const svgWrap = document.createElement("div"); s.appendChild(svgWrap);
+  if (says) { const p = document.createElement("p"); p.className = "says"; p.innerHTML = says; s.appendChild(p); }
+  return svgWrap;
+}
+const scale = (d0, d1, r0, r1) => v => r0 + (v - d0) / (d1 - d0) * (r1 - r0);
+function nice(lo, hi, n = 5) {
+  const span = hi - lo, step0 = span / n, mag = 10 ** Math.floor(Math.log10(step0)), err = step0 / mag;
+  const step = (err >= 7.5 ? 10 : err >= 3.5 ? 5 : err >= 1.5 ? 2 : 1) * mag;
+  const out = []; for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push(+v.toFixed(10)); return out;
+}
+
+// ---------------------------------------------------------------- scatter
+function scatter(wrap, pts, o) {
+  const W = 560, Hh = 470, m = {l: 58, r: 16, t: 14, b: 48};
+  const svg = el("svg", {viewBox: `0 0 ${W} ${Hh}`, role: "img", "aria-label": o.aria}, null); wrap.appendChild(svg);
+  const xs = pts.map(p => p.x), ys = pts.map(p => p.y);
+  let [x0, x1] = [Math.min(...xs, o.xref ?? Infinity), Math.max(...xs, o.xref ?? -Infinity)];
+  let [y0, y1] = [Math.min(...ys, o.yref ?? Infinity), Math.max(...ys, o.yref ?? -Infinity)];
+  if (o.diag) { x0 = y0 = Math.min(x0, y0); x1 = y1 = Math.max(x1, y1); }
+  const padf = o.badge ? .13 : .08, px = (x1 - x0) * padf, py = (y1 - y0) * padf; x0 -= px; x1 += px; y0 -= py; y1 += py;
+  const sx = o.invertX ? scale(x0, x1, W - m.r, m.l) : scale(x0, x1, m.l, W - m.r), sy = o.invertY ? scale(y0, y1, m.t, Hh - m.b) : scale(y0, y1, Hh - m.b, m.t);
+  const ax = el("g", {class: "axis"}, svg);
+  for (const v of nice(x0, x1)) { el("line", {x1: sx(v), x2: sx(v), y1: m.t, y2: Hh - m.b, class: "gridline"}, ax); el("text", {x: sx(v), y: Hh - m.b + 16, "text-anchor": "middle"}, ax).textContent = o.fx(v); }
+  for (const v of nice(y0, y1)) { el("line", {x1: m.l, x2: W - m.r, y1: sy(v), y2: sy(v), class: "gridline"}, ax); el("text", {x: m.l - 6, y: sy(v) + 4, "text-anchor": "end"}, ax).textContent = o.fy(v); }
+  el("text", {x: (m.l + W - m.r) / 2, y: Hh - 8, "text-anchor": "middle", class: "axis-title"}, svg).textContent = o.xt;
+  el("text", {x: 14, y: (m.t + Hh - m.b) / 2, "text-anchor": "middle", class: "axis-title", transform: `rotate(-90 14 ${(m.t + Hh - m.b) / 2})`}, svg).textContent = o.yt;
+  if (o.diag) el("line", {x1: sx(x0), y1: sy(x0), x2: sx(x1), y2: sy(x1), stroke: "#9ca3af", "stroke-dasharray": "5 4"}, svg);
+  if (o.xref != null) el("line", {x1: sx(o.xref), x2: sx(o.xref), y1: m.t, y2: Hh - m.b, class: "ref"}, svg);
+  if (o.yref != null) el("line", {x1: m.l, x2: W - m.r, y1: sy(o.yref), y2: sy(o.yref), class: "ref"}, svg);
+  for (const [txt, where] of o.corners || []) {
+    const x = where.includes("r") ? W - m.r - 6 : m.l + 6, y = where.includes("t") ? m.t + 14 : Hh - m.b - 8;
+    el("text", {x, y, "text-anchor": where.includes("r") ? "end" : "start", class: "corner"}, svg).textContent = txt;
+  }
+  const placed = [];
+  const boxHit = b => placed.some(p => !(b.x2 < p.x1 || b.x1 > p.x2 || b.y2 < p.y1 || b.y1 > p.y2));
+  const marks = pts.map(p => ({p, x: sx(p.x), y: sy(p.y), r: o.r || 7}));
+  marks.forEach(k => placed.push({x1: k.x - k.r, x2: k.x + k.r, y1: k.y - k.r, y2: k.y + k.r}));
+  for (const k of marks) {
+    const g = el("g", {}, svg);
+    const team = o.team ? o.team(k.p) : k.p.team, [c1, c2] = C[team];
+    if (o.badge) {
+      el("circle", {cx: k.x, cy: k.y, r: k.r, fill: c1, stroke: c2, "stroke-width": 3, class: "mark"}, g);
+      el("text", {x: k.x, y: k.y + 3.8, "text-anchor": "middle", "font-size": 10.5, "font-weight": 800, fill: lum(c1) < .5 ? "#fff" : "#111", "pointer-events": "none"}, g).textContent = team;
+    } else {
+      el("circle", {cx: k.x, cy: k.y, r: k.r, fill: c1, stroke: c2, "stroke-width": 2, class: "mark"}, g);
+      el("circle", {cx: k.x, cy: k.y, r: 14, fill: "transparent"}, g);
+      const name = o.name(k.p), w = name.length * 5.9 + 2;
+      for (const [dx, dy, anchor] of [[10, 4, "start"], [-10, 4, "end"], [0, -11, "middle"], [0, 18, "middle"], [10, -9, "start"], [-10, -9, "end"], [10, 15, "start"], [-10, 15, "end"]]) {
+        const x1 = anchor === "start" ? k.x + dx : anchor === "end" ? k.x + dx - w : k.x - w / 2, b = {x1, x2: x1 + w, y1: k.y + dy - 10, y2: k.y + dy + 2};
+        if (b.x1 < m.l || b.x2 > W - m.r || b.y1 < m.t || b.y2 > Hh - m.b || boxHit(b)) continue;
+        placed.push(b);
+        el("text", {x: k.x + dx, y: k.y + dy, "text-anchor": anchor, class: "pt-label", fill: readable(team)}, g).textContent = name;
+        break;
+      }
+    }
+    bind(g, () => o.card(k.p), o.label(k.p));
+  }
+}
+
+// ---------------------------------------------------------------- ranked bars
+function bars(wrap, rows, o) {
+  const rowH = 22, W = 560, m = {l: o.labelW || 150, r: 74, t: 22, b: 40}, Hh = m.t + m.b + rows.length * rowH;
+  const svg = el("svg", {viewBox: `0 0 ${W} ${Hh}`, role: "img", "aria-label": o.aria}, null); wrap.appendChild(svg);
+  const vals = rows.map(r => r.v);
+  let lo = o.lo ?? Math.min(0, ...vals), hi = Math.max(...vals, o.ref ?? -Infinity);
+  if (lo < 0) lo -= (hi - lo) * .1;
+  if (o.lo == null && Math.min(...vals) > 0 && o.zoom) lo = Math.min(...vals, o.ref ?? Infinity) - (hi - Math.min(...vals)) * .6;
+  hi += (hi - lo) * .04;
+  const sx = scale(lo, hi, m.l, W - m.r);
+  const ax = el("g", {class: "axis"}, svg);
+  for (const v of nice(lo, hi, 4)) { el("line", {x1: sx(v), x2: sx(v), y1: m.t, y2: Hh - m.b, class: "gridline"}, ax); el("text", {x: sx(v), y: Hh - m.b + 15, "text-anchor": "middle"}, ax).textContent = o.fx(v); }
+  el("text", {x: (m.l + W - m.r) / 2, y: Hh - 6, "text-anchor": "middle", class: "axis-title"}, svg).textContent = o.xt;
+  el("text", {x: W - 4, y: m.t - 8, "text-anchor": "end", class: "bar-right", "font-weight": 700}, svg).textContent = o.rightHead;
+  if (o.ref != null) { el("line", {x1: sx(o.ref), x2: sx(o.ref), y1: m.t - 4, y2: Hh - m.b, class: "ref"}, svg); el("text", {x: sx(o.ref) + 4, y: m.t - 8, class: "ref-label"}, svg).textContent = o.refLabel; }
+  rows.forEach((r, i) => {
+    const y = m.t + i * rowH, g = el("g", {}, svg), team = o.team(r), [c1, c2] = C[team];
+    el("rect", {x: 0, y, width: W, height: rowH, fill: "transparent"}, g);
+    el("text", {x: 4, y: y + 15, class: "bar-right"}, g).textContent = i + 1;
+    el("text", {x: m.l - 6, y: y + 15, "text-anchor": "end", class: "bar-label", fill: readable(team)}, g).textContent = o.name(r);
+    const x0 = sx(Math.max(lo, 0 > lo ? 0 : lo)), x1 = sx(r.v);
+    el("rect", {x: Math.min(x0, x1), y: y + 3, width: Math.max(1, Math.abs(x1 - x0)), height: rowH - 6, rx: 2, fill: c1, stroke: c2, "stroke-width": 1.5, class: "mark"}, g);
+    el("text", {x: r.v < 0 ? x1 - 5 : x1 + 5, y: y + 15, class: "bar-val", "text-anchor": r.v < 0 ? "end" : "start"}, g).textContent = o.fv(r.v);
+    el("text", {x: W - 4, y: y + 15, "text-anchor": "end", class: "bar-right"}, g).textContent = o.right(r);
+    bind(g, () => o.card(r), `${o.name(r)}: ${o.fv(r.v)}`);
+  });
+}
+
+// ---------------------------------------------------------------- the twelve charts
+const M = DATA.meta, CH = DATA.charts;
+document.getElementById("facts").innerHTML = `<span><b>${M.season}</b> regular season</span><span>Weeks <b>${M.weeks[0]}-${M.weeks[1]}</b></span><span><b>${M.plays.toLocaleString()}</b> plays</span><span>Data: nflverse play-by-play</span>`;
+document.getElementById("built").textContent = `Numbers as of the ${M.built} build. Rebuilt with every weekly refresh.`;
+if (matchMedia("(hover: none)").matches) document.getElementById("hint").textContent = "Tap any player or team for the breakdown. Tap again to close.";
+const avg = a => a.reduce((s, v) => s + v, 0) / a.length;
+const nm = (S, id) => S[id].name, tm = (S, id) => S[id].team;
+
+const q1 = CH.qb, q1s = q1.slice().sort((a, b) => b.x - a.x);
+scatter(card(1, "QB Efficiency: EPA vs. CPOE", "Min. 150 dropbacks · dotted lines = group average",
+  `${QB[q1s[0].id].name} (${QB[q1s[0].id].team}) leads in EPA per dropback (${sg(q1s[0].x, 3)}). Hover a QB for his splits by throw depth and by down.`),
+  q1, {aria: "QBs: EPA per dropback vs CPOE", xref: avg(q1.map(p => p.x)), yref: avg(q1.map(p => p.y)), fx: v => sg(v, 2), fy: v => sg(v, 0),
+  xt: "EPA per dropback", yt: "Completion % over expected (CPOE)", corners: [["Efficient & accurate", "tr"], ["Struggling", "bl"]],
+  name: p => nm(QB, p.id), team: p => tm(QB, p.id), card: p => qbCard(p.id, "epa"), label: p => `${nm(QB, p.id)}: EPA ${sg(p.x, 3)}, CPOE ${pts(p.y)}`});
+
+bars(card(2, "Running Back Success Rate", "Top 30 of the backs with 60+ carries · QB runs and scrambles left out · EPA per rush at right",
+  `${RB[CH.rb[0].id].name} (${RB[CH.rb[0].id].team}) leads at ${pc(CH.rb[0].v)}. Bars start near the leaders' range, not at zero.`), CH.rb,
+  {aria: "Top 30 running backs by success rate", zoom: true, ref: DATA.league.rb_succ, refLabel: `RB avg ${pc(DATA.league.rb_succ)}`, team: r => tm(RB, r.id), name: r => nm(RB, r.id),
+   fv: v => pc(v), fx: v => (100 * v).toFixed(0) + "%", right: r => sg(r.right, 2), rightHead: "EPA/rush", xt: "Rushing success rate", card: r => rbCard(r.id), labelW: 120});
+
+const tiers = CH.tiers;
+scatter(card(3, "2026 Team Tiers", "Offense EPA per play vs. defense EPA per play allowed · dotted lines = league average",
+  "Hover a team for its record, its offense and defense split into pass and run, and its net EPA week by week."),
+  tiers, {aria: "Teams: offensive vs defensive EPA per play", badge: true, r: 14, invertY: true, xref: avg(tiers.map(p => p.x)), yref: avg(tiers.map(p => p.y)),
+  fx: v => sg(v, 2), fy: v => sg(v, 2), xt: "Offense: EPA per play", yt: "Defense: EPA per play allowed (better is up)",
+  corners: [["Good offense, good defense", "tr"], ["Bad offense, bad defense", "bl"]], card: p => teamCard(p.team, "tiers"), label: p => `${p.team}: offense ${sg(p.x, 3)}, defense ${sg(p.y, 3)}`});
+
+bars(card(4, "Early-Down Pass Rate Over Expected", "1st & 2nd down · win prob. 20-80% · outside the last 2 minutes of halves · offensive EPA rank at right",
+  "Hover a team for how its pass rate lines up with its offense."), CH.proe,
+  {aria: "Teams by early-down pass rate over expected", team: r => r.team, name: r => r.team, fv: v => pts(100 * v), fx: v => pts(100 * v),
+   right: r => "#" + r.right, rightHead: "Off. EPA", xt: "Pass rate over expected (percentage points)", card: r => teamCard(r.team, "proe"), labelW: 60});
+
+scatter(card(5, "Receiver Roles: Targets vs. Air Yards", "Top 40 by WOPR, min. 40 targets · shares in games played · dashed line = equal shares",
+  "Above the line, the role is downfield; below it, volume on shorter throws."), CH.wopr,
+  {aria: "Receivers: target share vs air-yards share", diag: true, fx: v => (100 * v).toFixed(0) + "%", fy: v => (100 * v).toFixed(0) + "%",
+   xt: "Target share", yt: "Air-yards share", corners: [["Downfield role", "tl"], ["Volume, shorter targets", "br"]],
+   name: p => nm(RC, p.id), team: p => tm(RC, p.id), card: p => recCard(p.id, "wopr"), label: p => `${nm(RC, p.id)}: ${pc(p.x)} of targets, ${pc(p.y)} of air yards`});
+
+const pr = CH.press;
+scatter(card(6, "Pass Defense: Pressure vs. Results", "Pressure proxy = sack or QB hit per dropback faced (no hurries in play-by-play) · dotted lines = league average",
+  "Hover a team for how far it sits from what its pressure rate predicts."), pr,
+  {aria: "Defenses: pressure rate vs EPA per dropback allowed", badge: true, r: 14, invertY: true, xref: avg(pr.map(p => p.x)), yref: avg(pr.map(p => p.y)),
+   fx: v => (100 * v).toFixed(0) + "%", fy: v => sg(v, 2), xt: "Sack or QB-hit rate per dropback faced", yt: "EPA per dropback allowed (better is up)",
+   corners: [["Wins without the rush", "tl"], ["Rush gets home, coverage leaks", "br"]], card: p => teamCard(p.team, "press"), label: p => `${p.team}: ${pc(p.x)} pressure, ${sg(p.y, 3)} EPA allowed`});
+
+const q7 = CH.qb7;
+scatter(card(7, "Where QB Yards Come From", "Min. 150 attempts · YAC share = yards after catch / passing yards on completions",
+  "The shorter the throws, the bigger the YAC share, so a high share is a style, not a skill by itself."), q7,
+  {aria: "QBs: depth of target vs YAC share", xref: avg(q7.map(p => p.x)), yref: avg(q7.map(p => p.y)), fx: v => v.toFixed(0), fy: v => (100 * v).toFixed(0) + "%",
+   xt: "Average depth of target (air yards per attempt)", yt: "Share of passing yards after the catch", corners: [["Short throws, YAC does the work", "tl"], ["Pushes it downfield", "br"]],
+   name: p => nm(QB, p.id), team: p => tm(QB, p.id), card: p => qbCard(p.id, "yac"), label: p => `${nm(QB, p.id)}: aDOT ${p.x}, YAC share ${pc(p.y)}`});
+
+const r8 = CH.rec8;
+scatter(card(8, "Receivers: Role vs. Value", "45 most-targeted receivers (WR, TE, RB), min. 40 targets · dotted lines = group average",
+  "Deeper roles earn more per target, so compare a receiver with others at his depth."), r8,
+  {aria: "Receivers: depth of target vs EPA per target", xref: avg(r8.map(p => p.x)), yref: avg(r8.map(p => p.y)), fx: v => v.toFixed(0), fy: v => sg(v, 1),
+   xt: "Average depth of target (air yards)", yt: "EPA per target", corners: [["Deep role, big value", "tr"], ["Short role, low value", "bl"]],
+   name: p => nm(RC, p.id), team: p => tm(RC, p.id), card: p => recCard(p.id, "epa"), label: p => `${nm(RC, p.id)}: aDOT ${p.x}, EPA/target ${sg(p.y, 2)}`});
+
+bars(card(9, "YAC Over Expected per Catch", "Top 30 with 25+ catches · expected = nflverse xYAC model · YAC per catch at right",
+  `${RC[CH.yac[0].id].name} (${RC[CH.yac[0].id].team}) gains ${sg(CH.yac[0].v, 2)} yards per catch beyond the model.`), CH.yac,
+  {aria: "Top 30 by YAC over expected", lo: 0, team: r => tm(RC, r.id), name: r => nm(RC, r.id), fv: v => sg(v, 2), fx: v => sg(v, 0),
+   right: r => r.right, rightHead: "YAC/rec", xt: "Yards after the catch over expected, per reception", card: r => recCard(r.id, "yac"), labelW: 120});
+
+const drp = CH.drp;
+scatter(card(10, "Defense: Run Stopping vs. Pass Defense", "Designed runs (scrambles count as pass) · dropbacks include sacks · dotted lines = league average",
+  "Hover a team for its defense split into run and pass, and its net EPA week by week."), drp,
+  {aria: "Defenses: EPA per run allowed vs EPA per dropback allowed", badge: true, r: 14, invertX: true, invertY: true, xref: avg(drp.map(p => p.x)), yref: avg(drp.map(p => p.y)),
+   fx: v => sg(v, 2), fy: v => sg(v, 2), xt: "EPA per run allowed (better is right)", yt: "EPA per dropback allowed (better is up)",
+   corners: [["Stops both", "tr"], ["Gets hit both ways", "bl"]], card: p => teamCard(p.team, "drp"), label: p => `${p.team}: ${sg(p.x, 3)} per run, ${sg(p.y, 3)} per dropback`});
+
+bars(card(11, "Pass Rush Leaders: Sacks + QB Hits", "Top 30 · each play counted once per player · half sacks = 0.5 · sacks at right",
+  "Hover a rusher for his hits without a sack and his week-by-week count."), CH.rush,
+  {aria: "Top 30 pass rushers", lo: 0, team: r => tm(DF, r.id), name: r => nm(DF, r.id), fv: v => v, fx: v => v.toFixed(0), right: r => r.right,
+   rightHead: "Sacks", xt: "Plays with a sack or QB hit", card: r => defCard(r.id), labelW: 120});
+
+bars(card(12, "Kickers: FG Points Over Expected", "Min. 8 attempts · expected make rate by distance and roof, fit on 2022-25 kicks · made-att at right",
+  `${KK[CH.k[0].id].name} (${KK[CH.k[0].id].team}, ${CH.k[0].right}) leads at ${pts(CH.k[0].v)} points.`), CH.k,
+  {aria: "Kickers by field-goal points over expected", team: r => tm(KK, r.id), name: r => nm(KK, r.id), fv: v => pts(v), fx: v => pts(v),
+   right: r => r.right, rightHead: "FG", xt: "Field-goal points over expected", card: r => kCard(r.id), labelW: 120});
+})();
+</script>
+</body>
+</html>
