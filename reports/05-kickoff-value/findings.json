@@ -71,10 +71,10 @@
       "ep_first_snap":1.384
     },
     "2026":{
-      "kickoffs":1210,
+      "kickoffs":1220,
       "touchback_rate":0.164,
       "return_rate":0.806,
-      "avg_start_own":30.469,
+      "avg_start_own":30.45,
       "ep_first_snap":1.374
     }
   },
@@ -132,5 +132,5 @@
       -1.68
     ]
   ],
-  "returned_vs_tb_league":-5.63
+  "returned_vs_tb_league":-5.64
 }

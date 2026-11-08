@@ -5,7 +5,7 @@ kickoff_returner_player_id,name,team,returns,yards_vs_tb,start_own
 00-0037093,D.Young,SEA,20,-1.8,33.2
 00-0036842,K.Nwangwu,NYJ,27,-2.04,32.96
 00-0038090,S.Moore,SF,44,-2.11,32.89
-00-0032104,A.Abdullah,IND,31,-2.65,32.35
+00-0032104,A.Abdullah,IND,32,-2.91,32.09
 00-0039355,L.McCaffrey,WAS,35,-3.09,31.91
 00-0039407,D.Laube,LV,47,-3.19,31.81
 00-0035719,D.Samuel,SF,26,-3.19,31.81
@@ -13,7 +13,7 @@ kickoff_returner_player_id,name,team,returns,yards_vs_tb,start_own
 00-0039000,D.Banks,NYG,20,-3.8,31.2
 00-0039874,J.Wright,MIA,22,-3.86,31.14
 00-0037545,R.Shaheed,SEA,30,-4.0,31.0
-00-0039796,R.Ali,BAL,41,-4.22,30.78
+00-0039796,R.Ali,BAL,44,-4.14,30.86
 00-0039746,W.Shipley,PHI,33,-4.33,30.67
 00-0035544,T.Kennedy,DET,25,-4.4,30.6
 00-0036620,D.Eskridge,MIA,27,-4.44,30.56
@@ -28,7 +28,7 @@ kickoff_returner_player_id,name,team,returns,yards_vs_tb,start_own
 00-0039589,K.Johnson,TB,40,-5.48,29.52
 00-0039920,M.Corley,CLE,35,-5.6,29.4
 00-0041051,Z.Thomas,CHI,25,-5.6,29.4
-00-0040075,L.Wester,BAL,23,-5.61,29.39
+00-0040075,L.Wester,BAL,24,-5.62,29.38
 00-0036331,D.Duvernay,ARI,59,-5.78,29.22
 00-0038976,M.Mims,DEN,33,-5.79,29.21
 00-0040506,M.Price,MIN,74,-5.84,29.16

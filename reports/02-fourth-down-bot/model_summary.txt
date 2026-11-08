@@ -2,7 +2,7 @@ Conversion extra-yards table:
      bucket  extra
 0    (0, 1]    2.0
 1    (1, 2]    4.0
-2    (2, 4]    5.0
+2    (2, 4]    4.5
 3    (4, 7]    5.0
 4   (7, 10]    5.0
 5  (10, 99]    5.0
@@ -19,5 +19,5 @@ season
 2023    74.6
 2024    70.3
 2025    69.5
-2026    69.5
+2026    69.6
 Name: yardline_100, dtype: float64

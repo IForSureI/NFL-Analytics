@@ -1,11 +1,11 @@
 week,posteam,defteam,qtr,game_seconds_remaining,score_differential,yardline_100,ydstogo,choice,rec,go_boost,wp_lost,desc
-2,IND,KC,4.0,34.0,0.0,51.0,4.0,punt,go,11.578611462921451,11.578611462921451,"(:34) 8-R.Sanchez punts 41 yards to KC 10, Center-46-L.Rhodes. 81-N.Remigio to KC 16 for 6 yards (80-D.Burks; 29-C.Taylor-Britt)."
-1,DET,NO,4.0,37.0,0.0,56.0,1.0,punt,go,9.069854706771075,9.069854706771075,"(:37) 3-J.Fox punts 56 yards to end zone, Center-49-H.Hatten, Touchback."
-6,PIT,TB,4.0,83.0,0.0,1.0,1.0,fg,go,8.852714536885953,8.852714536885953,"(1:23) 9-C.Boswell 20 yard field goal is GOOD, Center-46-C.Kuntz, Holder-19-C.Johnston."
-2,LAC,LV,4.0,506.0,-3.0,72.0,2.0,punt,go,8.27689893743599,8.27689893743599,"(8:26) 16-J.Scott punts 55 yards to LV 17, Center-47-J.Harris, fair catch by 23-D.Laube."
-5,LA,BUF,2.0,1920.0,-6.0,43.0,9.0,punt,fg,-4.160411674576636,8.03785097804578,"(2:00) 42-E.Evans punts 31 yards to BUF 12, Center-49-J.Cardona, fair catch by 19-G.Dortch."
-3,CIN,PIT,4.0,466.0,0.0,51.0,2.0,punt,go,8.009086222413542,8.009086222413542,"(7:46) 8-R.Rehkow punts 43 yards to PIT 8, Center-46-W.Wagner, fair catch by 10-K.Wetjen."
-6,ARI,LA,2.0,1849.0,-3.0,3.0,3.0,fg,go,7.938869856325678,7.938869856325678,"(:49) 38-C.Ryland 22 yard field goal is GOOD, Center-59-C.Kreiter, Holder-12-B.Gillikin."
-1,ARI,LAC,2.0,2214.0,0.0,9.0,3.0,fg,go,7.745877402438156,7.745877402438156,"(6:54) 38-C.Ryland 27 yard field goal is GOOD, Center-59-C.Kreiter, Holder-12-B.Gillikin."
-2,GB,NYJ,4.0,2.0,0.0,50.0,10.0,go,punt,-7.7196426690056885,7.7196426690056885,(:02) (Shotgun) 10-J.Love sacked at GB 45 for -5 yards (52-K.Enagbare).
-3,BAL,DAL,4.0,460.0,-4.0,55.0,5.0,punt,go,7.443028872887137,7.443028872887137,"(7:40) 30-R.Eckley punts 48 yards to DAL 7, Center-46-N.Moore. 9-K.Turpin to DAL 24 for 17 yards (46-N.Moore)."
+2,IND,KC,4.0,34.0,0.0,51.0,4.0,punt,go,11.357692971324852,11.357692971324852,"(:34) 8-R.Sanchez punts 41 yards to KC 10, Center-46-L.Rhodes. 81-N.Remigio to KC 16 for 6 yards (80-D.Burks; 29-C.Taylor-Britt)."
+1,DET,NO,4.0,37.0,0.0,56.0,1.0,punt,go,9.053886138030332,9.053886138030332,"(:37) 3-J.Fox punts 56 yards to end zone, Center-49-H.Hatten, Touchback."
+6,PIT,TB,4.0,83.0,0.0,1.0,1.0,fg,go,8.816099972980284,8.816099972980284,"(1:23) 9-C.Boswell 20 yard field goal is GOOD, Center-46-C.Kuntz, Holder-19-C.Johnston."
+2,LAC,LV,4.0,506.0,-3.0,72.0,2.0,punt,go,8.148406784070843,8.148406784070843,"(8:26) 16-J.Scott punts 55 yards to LV 17, Center-47-J.Harris, fair catch by 23-D.Laube."
+5,LA,BUF,2.0,1920.0,-6.0,43.0,9.0,punt,fg,-4.1699678470459745,8.043325072388463,"(2:00) 42-E.Evans punts 31 yards to BUF 12, Center-49-J.Cardona, fair catch by 19-G.Dortch."
+3,CIN,PIT,4.0,466.0,0.0,51.0,2.0,punt,go,7.890380102526184,7.890380102526184,"(7:46) 8-R.Rehkow punts 43 yards to PIT 8, Center-46-W.Wagner, fair catch by 10-K.Wetjen."
+6,ARI,LA,2.0,1849.0,-3.0,3.0,3.0,fg,go,7.877477404246555,7.877477404246555,"(:49) 38-C.Ryland 22 yard field goal is GOOD, Center-59-C.Kreiter, Holder-12-B.Gillikin."
+2,GB,NYJ,4.0,2.0,0.0,50.0,10.0,go,punt,-7.725545891444241,7.725545891444241,(:02) (Shotgun) 10-J.Love sacked at GB 45 for -5 yards (52-K.Enagbare).
+1,ARI,LAC,2.0,2214.0,0.0,9.0,3.0,fg,go,7.625693662307942,7.625693662307942,"(6:54) 38-C.Ryland 27 yard field goal is GOOD, Center-59-C.Kreiter, Holder-12-B.Gillikin."
+3,BAL,DAL,4.0,460.0,-4.0,55.0,5.0,punt,go,7.357483038705492,7.357483038705492,"(7:40) 30-R.Eckley punts 48 yards to DAL 7, Center-46-N.Moore. 9-K.Turpin to DAL 24 for 17 yards (46-N.Moore)."

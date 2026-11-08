@@ -38,7 +38,7 @@
 
 ## Data
 
-nflverse play-by-play and officials, 2016-2026 (2,882 games, 35,094 accepted flags). Declined and offsetting flags removed.
+nflverse play-by-play and officials, 2016-2026 (2,883 games, 35,104 accepted flags). Declined and offsetting flags removed.
 
 ## Results
 
@@ -70,7 +70,7 @@ Among 41 QBs with 1,500+ dropbacks since 2018, he ranks #22 (by shrunk rate) at 
 
 ### 6. Big calls are real but random.
 
-923 accepted flags (888 in the regular season) moved win probability by 10+ points, about 84 per full regular season. Pass interference leads. A team's net big calls this year predicts next year at r = 0.03: no team is owed them.
+921 accepted flags (886 in the regular season) moved win probability by 10+ points, about 84 per full regular season. Pass interference leads. A team's net big calls this year predicts next year at r = 0.04: no team is owed them.
 
 ## Method
 

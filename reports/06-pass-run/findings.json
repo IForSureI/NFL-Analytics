@@ -20,7 +20,7 @@
     "2023":0.159,
     "2024":0.159,
     "2025":0.139,
-    "2026":0.178
+    "2026":0.179
   },
   "pass_rate_by_season":{
     "2006":0.475,
@@ -47,7 +47,7 @@
   },
   "seasons_pass_better":21,
   "seasons_total":21,
-  "corr_pass_rate_vs_gap":0.537,
+  "corr_pass_rate_vs_gap":0.536,
   "success_rate_gap_by_season":{
     "2006":0.09,
     "2007":0.121,
@@ -69,7 +69,7 @@
     "2023":0.102,
     "2024":0.095,
     "2025":0.094,
-    "2026":0.106
+    "2026":0.105
   },
   "team_corr_proe_epa_last_full":0.195
 }

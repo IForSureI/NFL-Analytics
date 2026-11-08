@@ -7,7 +7,7 @@
 
 > **TL;DR**
 > - I built a win-probability model that matches nflfastR out of sample (Brier 0.1495 vs 0.1488 on 80,613 plays) and a fourth-down bot on top of it.
-> - Coaches now go for it in 53% of clear go spots, up from 33% in 2018; there is still win probability left on the table.
+> - Coaches now go for it in 54% of clear go spots, up from 34% in 2018; there is still win probability left on the table.
 > - 2026 report card: HOU has lost the most per game on clear calls, BUF the least.
 
 <p align="center"><img src="go_rate_trend.png" width="720" alt="Go rate when going adds 2+ win-probability points."></p>
@@ -21,8 +21,8 @@
 | Brier score, nflfastR (same plays) | **0.1488** |
 | Agreement with nflfastR (r) | **0.993** |
 | Test plays | **80,613** |
-| Go rate in clear go spots, 2018 | **33%** |
-| Go rate in clear go spots, 2025 | **53%** |
+| Go rate in clear go spots, 2018 | **34%** |
+| Go rate in clear go spots, 2025 | **54%** |
 
 ## Why it matters for a club
 
@@ -51,18 +51,18 @@ Trained on 2006-2023 and tested on 80,613 plays from 2024-25: Brier score 0.1495
 
 ### 2. Coaches go for it far more than they used to, and still not enough.
 
-In clear "go" spots (going adds 2+ win-probability points, score within 16, outside the last 5 minutes), teams went 33% of the time in 2018 and 53% in 2025. 2026 so far: 48%.
+In clear "go" spots (going adds 2+ win-probability points, score within 16, outside the last 5 minutes), teams went 34% of the time in 2018 and 54% in 2025. 2026 so far: 47%.
 
 ### 3. 2026 report card (regular season).
 
-Most win probability lost per game on clear 4th-down calls: HOU (6.0 points), ARI (5.8), PIT (5.8). Least: BUF (0.8), TB (1.1), MIA (1.4). Totals add up small misses, so read them as a ranking, not an exact count of lost wins.
+Most win probability lost per game on clear 4th-down calls: HOU (6.0 points), PIT (5.7), ARI (5.6). Least: BUF (0.8), TB (1.0), MIA (1.4). Totals add up small misses, so read them as a ranking, not an exact count of lost wins.
 
 <p align="center"><img src="team_scorecard.png" width="720" alt="Win-probability points lost per game on clear fourth-down calls, this season."></p>
 <p align="center"><sub>Win-probability points lost per game on clear fourth-down calls, this season.</sub></p>
 
 ### 4. Sanity checks pass.
 
-4th-and-1 at midfield, tied, early, even teams: going adds 2.8 WP points. 4th-and-10 at your own 20: going costs 11.6.
+4th-and-1 at midfield, tied, early, even teams: going adds 2.8 WP points. 4th-and-10 at your own 20: going costs 11.9.
 
 ## How the bot works
 
@@ -82,7 +82,7 @@ Most win probability lost per game on clear 4th-down calls: HOU (6.0 points), AR
 
 - Trained on 2006-2023, tested on 80,613 plays from 2024-25: Brier 0.1495 vs nflfastR 0.1488 on the same rows; r = 0.993.
 - Calibration plot under result 1: predicted vs actual win rate by bin, close to the 45-degree line.
-- Football sanity checks run as unit tests: 4th-and-1 at midfield favors going (+2.8 WP), 4th-and-10 at your own 20 favors kicking (-11.6).
+- Football sanity checks run as unit tests: 4th-and-1 at midfield favors going (+2.8 WP), 4th-and-10 at your own 20 favors kicking (-11.9).
 - Monotone constraints keep the model football-logical (a bigger lead never lowers WP).
 
 ## Limitations
