@@ -5,10 +5,11 @@
 
 ![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![seasons: 2016-2026](https://img.shields.io/badge/seasons-2016--2026-1d2433) ![method: empirical Bayes](https://img.shields.io/badge/method-empirical%20Bayes-c2410c) ![method: Wilson intervals](https://img.shields.io/badge/method-Wilson%20intervals-c2410c) ![method: split-half reliability](https://img.shields.io/badge/method-split--half%20reliability-c2410c)
 
-> **TL;DR**
-> - Road teams drew 0.27 more judgment-call flags a game than home teams in 2016-22; since 2023 the gap has averaged 0.00. What remains is a small pre-snap gap (neutral zone infractions, delay of game), not judgment calls.
-> - Referee crews have a modest, real style (year-to-year r = 0.24); a team's flag luck does not carry over (r = 0.08).
-> - Mahomes ranks #22 of 41 QBs in roughing flags drawn, right at the league rate.
+**TL;DR**
+
+- Road teams drew 0.27 more judgment-call flags a game than home teams in 2016-22; since 2023 the gap has averaged 0.00. What remains is a small pre-snap gap (neutral zone infractions, delay of game), not judgment calls.
+- Referee crews have a modest, real style (year-to-year r = 0.24); a team's flag luck does not carry over (r = 0.08).
+- Mahomes ranks #22 of 41 QBs in roughing flags drawn, right at the league rate.
 
 <p align="center"><img src="home_edge.png" width="720" alt="Road team's extra flags per game, by flag type and season."></p>
 <p align="center"><sub>Road team's extra flags per game, by flag type and season.</sub></p>

@@ -5,10 +5,11 @@
 
 ![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![seasons: 2016-2026](https://img.shields.io/badge/seasons-2016--2026-1d2433) ![method: rule-change analysis](https://img.shields.io/badge/method-rule--change%20analysis-c2410c) ![method: special teams](https://img.shields.io/badge/method-special%20teams-c2410c) ![method: player valuation](https://img.shields.io/badge/method-player%20valuation-c2410c)
 
-> **TL;DR**
-> - The new kickoff brought returns back: 21% of kickoffs returned in 2023, 75% in 2025.
-> - Drives start 5.2 yards further up than in 2023, but the average return still lands 5.6 yards behind a touchback.
-> - Kickers now create field position: J.Karty holds opponents 10.2 yards short of the touchback spot on average (41 kickoffs, so a small sample).
+**TL;DR**
+
+- The new kickoff brought returns back: 21% of kickoffs returned in 2023, 75% in 2025.
+- Drives start 5.2 yards further up than in 2023, but the average return still lands 5.6 yards behind a touchback.
+- Kickers now create field position: J.Karty holds opponents 10.2 yards short of the touchback spot on average (41 kickoffs, so a small sample).
 
 <p align="center"><img src="kickoff_era.png" width="720" alt="Return rate and drive start by season, across the 2024 and 2025 rule changes."></p>
 <p align="center"><sub>Return rate and drive start by season, across the 2024 and 2025 rule changes.</sub></p>

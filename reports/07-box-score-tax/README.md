@@ -5,10 +5,11 @@
 
 ![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![seasons: 2018-2026](https://img.shields.io/badge/seasons-2018--2026-1d2433) ![method: clustered OLS](https://img.shields.io/badge/method-clustered%20OLS-c2410c) ![method: bootstrap](https://img.shields.io/badge/method-bootstrap-c2410c) ![method: contract valuation](https://img.shields.io/badge/method-contract%20valuation-c2410c) ![method: market pricing](https://img.shields.io/badge/method-market%20pricing-c2410c)
 
-> **TL;DR**
-> - Pressures repeat (r = 0.71); sacks bounce (r = 0.46); sacks beyond what pressures predict barely repeat at all (r = 0.10).
-> - Teams still pay about \$0.62M a year for each sack beyond what pressures predict (850 contracts, 95% CI \$0.29-0.94M).
-> - A future sack costs \$3.92M bought through sack luck vs \$2.14M through pressures. Evidence of a market inefficiency, not proof; includes the 2027 free-agent target list.
+**TL;DR**
+
+- Pressures repeat (r = 0.71); sacks bounce (r = 0.46); sacks beyond what pressures predict barely repeat at all (r = 0.10).
+- Teams still pay about \$0.62M a year for each sack beyond what pressures predict (850 contracts, 95% CI \$0.29-0.94M).
+- A future sack costs \$3.92M bought through sack luck vs \$2.14M through pressures. Evidence of a market inefficiency, not proof; includes the 2027 free-agent target list.
 
 <p align="center"><img src="sack_tax.png" width="720" alt="What the market pays for a sack vs what a sack predicts, in non-sack pressures."></p>
 <p align="center"><sub>What the market pays for a sack vs what a sack predicts, in non-sack pressures.</sub></p>

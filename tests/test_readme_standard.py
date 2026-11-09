@@ -8,7 +8,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import build_readmes  # noqa: E402
 from report_meta import META  # noqa: E402
 
-SECTIONS = ["> **TL;DR**", "## Key numbers", "## Why it matters for a club", "## The question", "## Results",
+SECTIONS = ["**TL;DR**", "## Key numbers", "## Why it matters for a club", "## The question", "## Results",
             "## Validation", "## Limitations", "## Next steps", "## Reproduce", "## Files in this folder"]
 FIELDS = ["short", "tldr", "question", "seasons", "tags", "hero", "figs", "key", "why", "validation", "next", "files"]
 

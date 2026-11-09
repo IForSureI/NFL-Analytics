@@ -5,10 +5,11 @@
 
 ![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![seasons: 2016-now](https://img.shields.io/badge/seasons-2016--now-1d2433) ![method: expected points](https://img.shields.io/badge/method-expected%20points-c2410c) ![method: replication](https://img.shields.io/badge/method-replication-c2410c) ![method: player valuation](https://img.shields.io/badge/method-player%20valuation-c2410c)
 
-> **TL;DR**
-> - Down and distance decide a sack's worth: short 3rd-down sacks take the most (3rd-and-1-2: 2.46 expected points), and an average 2nd-down sack (1.70) beats a 3rd-and-11+ sack (1.53).
-> - 82% of 2nd-down sacks leave 3rd-and-11 or longer, and the series survives only 21% of the time.
-> - Brett Kollmann's third-down table replicates with public data (3rd-and-1-2 conversion 63.9% vs his 62.8%), and ranking rushers by value instead of sack count reorders the list.
+**TL;DR**
+
+- Down and distance decide a sack's worth: short 3rd-down sacks take the most (3rd-and-1-2: 2.46 expected points), and an average 2nd-down sack (1.70) beats a 3rd-and-11+ sack (1.53).
+- 82% of 2nd-down sacks leave 3rd-and-11 or longer, and the series survives only 21% of the time.
+- Brett Kollmann's third-down table replicates with public data (3rd-and-1-2 conversion 63.9% vs his 62.8%), and ranking rushers by value instead of sack count reorders the list.
 
 <p align="center"><img src="epa_per_sack.png" width="720" alt="Expected points taken away per sack, by down and distance."></p>
 <p align="center"><sub>Expected points taken away per sack, by down and distance.</sub></p>

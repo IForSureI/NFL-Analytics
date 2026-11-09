@@ -5,10 +5,11 @@
 
 ![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![seasons: 2006-now](https://img.shields.io/badge/seasons-2006--now-1d2433) ![method: Pythagorean expectation](https://img.shields.io/badge/method-Pythagorean%20expectation-c2410c) ![method: regression to the mean](https://img.shields.io/badge/method-regression%20to%20the%20mean-c2410c) ![method: year-to-year stability](https://img.shields.io/badge/method-year--to--year%20stability-c2410c)
 
-> **TL;DR**
-> - Fumble, field-goal and close-game luck do not repeat (year-to-year r = 0.04, 0.07, 0.06).
-> - Points predict next season better than record (r = 0.39 vs 0.35).
-> - Teams that won 2+ more games than their points said changed by -2.9 wins the next year; the unlucky ones by +3.5.
+**TL;DR**
+
+- Fumble, field-goal and close-game luck do not repeat (year-to-year r = 0.04, 0.07, 0.06).
+- Points predict next season better than record (r = 0.39 vs 0.35).
+- Teams that won 2+ more games than their points said changed by -2.9 wins the next year; the unlucky ones by +3.5.
 
 <p align="center"><img src="luck_regression.png" width="720" alt="Wins above points this year vs change in wins next year."></p>
 <p align="center"><sub>Wins above points this year vs change in wins next year.</sub></p>

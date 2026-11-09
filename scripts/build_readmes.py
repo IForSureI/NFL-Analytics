@@ -634,9 +634,9 @@ def wrap(slug, body, idx):
     out = [f"<sub>{navline}</sub>", "", f"# {num} {name}", f"### {sub[0].upper() + sub[1:]}" if sub else "", ""]
     out.append(" ".join([badge("status", "published", COLORS["status"]), badge("seasons", m["seasons"](f), COLORS["seasons"])]
                         + [badge("method", t, COLORS["method"]) for t in m["tags"]]))
-    out += ["", "> **TL;DR**"]
+    out += ["", "**TL;DR**", ""]  # a bold heading and a plain list, never a quote block (GitHub draws a side bar)
     for t in (m["tldr"](f) if "tldr" in m else [lead for _, lead, _ in items[:5]]):
-        out.append(f"> - {t}")
+        out.append(f"- {t}")
     out += ["", _fig(slug, *m["hero"]), ""]
     out += ["## Key numbers", "", "| Measure | Value |", "|---|---|"] + [f"| {a} | **{b}** |" for a, b in m["key"](f)] + [""]
     out += ["## Why it matters for a club", ""] + [f"- {w}" for w in m["why"]] + [""]

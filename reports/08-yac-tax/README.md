@@ -5,10 +5,11 @@
 
 ![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![seasons: 2016-2025](https://img.shields.io/badge/seasons-2016--2025-1d2433) ![method: Next Gen Stats](https://img.shields.io/badge/method-Next%20Gen%20Stats-c2410c) ![method: clustered OLS](https://img.shields.io/badge/method-clustered%20OLS-c2410c) ![method: contract valuation](https://img.shields.io/badge/method-contract%20valuation-c2410c) ![method: null result](https://img.shields.io/badge/method-null%20result-c2410c)
 
-> **TL;DR**
-> - YAC over expected is noisy per catch (r = 0.36), but a season of it predicts next year like air yards (0.66 vs 0.55 yards per yard).
-> - Contracts price each part of receiving production about the same per future yard (\$4.89M per 100 YAC-over-expected yards vs \$4.44M per 100 air yards): no YAC tax.
-> - The receiver market looks efficient where the pass-rush market (study 07) does not; 397 veteran WR/TE contracts.
+**TL;DR**
+
+- YAC over expected is noisy per catch (r = 0.36), but a season of it predicts next year like air yards (0.66 vs 0.55 yards per yard).
+- Contracts price each part of receiving production about the same per future yard (\$4.89M per 100 YAC-over-expected yards vs \$4.44M per 100 air yards): no YAC tax.
+- The receiver market looks efficient where the pass-rush market (study 07) does not; 397 veteran WR/TE contracts.
 
 <p align="center"><img src="yac_tax.png" width="720" alt="Price per 100 future yards for each part of a receiver's production."></p>
 <p align="center"><sub>Price per 100 future yards for each part of a receiver's production.</sub></p>

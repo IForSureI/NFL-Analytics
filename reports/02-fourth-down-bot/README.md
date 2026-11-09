@@ -5,10 +5,11 @@
 
 ![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![seasons: 2006-2026](https://img.shields.io/badge/seasons-2006--2026-1d2433) ![method: gradient boosting](https://img.shields.io/badge/method-gradient%20boosting-c2410c) ![method: win probability](https://img.shields.io/badge/method-win%20probability-c2410c) ![method: decision analysis](https://img.shields.io/badge/method-decision%20analysis-c2410c) ![method: calibration](https://img.shields.io/badge/method-calibration-c2410c)
 
-> **TL;DR**
-> - I built a win-probability model that matches nflfastR out of sample (Brier 0.1495 vs 0.1488 on 80,613 plays) and a fourth-down bot on top of it.
-> - Coaches now go for it in 54% of clear go spots, up from 34% in 2018; there is still win probability left on the table.
-> - 2026 report card: HOU has lost the most per game on clear calls, BUF the least.
+**TL;DR**
+
+- I built a win-probability model that matches nflfastR out of sample (Brier 0.1495 vs 0.1488 on 80,613 plays) and a fourth-down bot on top of it.
+- Coaches now go for it in 54% of clear go spots, up from 34% in 2018; there is still win probability left on the table.
+- 2026 report card: HOU has lost the most per game on clear calls, BUF the least.
 
 <p align="center"><img src="go_rate_trend.png" width="720" alt="Go rate when going adds 2+ win-probability points."></p>
 <p align="center"><sub>Go rate when going adds 2+ win-probability points.</sub></p>

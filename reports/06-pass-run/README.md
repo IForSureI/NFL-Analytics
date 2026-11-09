@@ -5,10 +5,11 @@
 
 ![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![seasons: 2006-2026](https://img.shields.io/badge/seasons-2006--2026-1d2433) ![method: EPA](https://img.shields.io/badge/method-EPA-c2410c) ![method: pass rate over expected](https://img.shields.io/badge/method-pass%20rate%20over%20expected-c2410c) ![method: team-level correlation](https://img.shields.io/badge/method-team--level%20correlation-c2410c)
 
-> **TL;DR**
-> - Passing beat running on neutral early downs in 21 of 21 seasons.
-> - Teams moved slowly: early-down pass rate 48% to 52%.
-> - At team level, passing more tracks efficiency only at r = 0.20: the edge depends on the quarterback and line.
+**TL;DR**
+
+- Passing beat running on neutral early downs in 21 of 21 seasons.
+- Teams moved slowly: early-down pass rate 48% to 52%.
+- At team level, passing more tracks efficiency only at r = 0.20: the edge depends on the quarterback and line.
 
 <p align="center"><img src="epa_pass_vs_run.png" width="720" alt="EPA per play on neutral early downs: dropbacks vs designed runs, by season."></p>
 <p align="center"><sub>EPA per play on neutral early downs: dropbacks vs designed runs, by season.</sub></p>
