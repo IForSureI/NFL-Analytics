@@ -66,3 +66,34 @@ def test_page_is_self_contained(page):
     assert not re.search(r"<script[^>]+src=|@import|url\(http", html)  # no outside code or styles
     links = re.findall(r'<link[^>]+href="([^"]+)"', html)
     assert all(h.startswith(("https://fonts.googleapis.com", "https://fonts.gstatic.com")) for h in links)  # fonts only
+
+
+def _sum_cube(c):
+    out = {}
+    for r in c["rows"]:
+        a = out.setdefault(c["ents"][r[0]], [0.0] * len(c["cols"]))
+        for i, v in enumerate(r[4:]):
+            a[i] += v
+    return {e: dict(zip(c["cols"], v)) for e, v in out.items()}
+
+
+def test_filters_add_back_to_the_charts(page):
+    """Every chart can be cut by week, down and quarter; with no filter the cube cells add back to the chart."""
+    _, d, _ = page
+    cu, c = d["cubes"], d["charts"]
+    for row in d["cubes"]["qb"]["rows"] + d["cubes"]["team"]["rows"]:
+        assert row[1] in range(d["meta"]["weeks"][0], d["meta"]["weeks"][1] + 1) and 0 <= row[2] <= 4 and 1 <= row[3] <= 5
+    qb, tm, rc, rb, k = (_sum_cube(cu[x]) for x in ("qb", "team", "rec", "rb", "k"))
+    for r in c["qb"]:
+        assert abs(qb[r["id"]]["epa"] / qb[r["id"]]["db"] - r["x"]) < 6e-4
+    for r in c["rb"]:
+        assert abs(rb[r["id"]]["succ"] / rb[r["id"]]["car"] - r["v"]) < 6e-4
+    for r in c["tiers"]:
+        assert abs(tm[r["team"]]["off_e"] / tm[r["team"]]["off_n"] - r["x"]) < 6e-4
+    for r in c["proe"]:
+        assert abs(tm[r["team"]]["proe_s"] / tm[r["team"]]["proe_n"] - r["v"]) < 6e-4
+    for r in c["wopr"]:
+        assert abs(rc[r["id"]]["w_t"] / rc[r["id"]]["w_tt"] - r["x"]) < 6e-4
+    for r in c["k"]:
+        assert abs(3 * (k[r["id"]]["made"] - k[r["id"]]["exp"]) - r["v"]) < 0.06
+    assert all(i in d["names"]["qb"] for i in cu["qb"]["ents"]) and all(i in d["names"]["rec"] for i in cu["rec"]["ents"])

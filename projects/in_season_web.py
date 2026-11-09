@@ -26,7 +26,7 @@ TEMPLATE = Path(__file__).with_name("in_season_web.html")
 FINDINGS = sn.OUT / "findings.json"
 
 EXTRA = ["pass_length", "pass_location", "home_team", "away_team", "home_score", "away_score", "touchdown",
-         "interception", "fumble_lost", "rushing_yards", "first_down"]
+         "interception", "fumble_lost", "rushing_yards", "first_down", "qtr"]
 
 
 def r3(x):
@@ -166,8 +166,128 @@ def rush_events(p):
             if pd.notna(pid) and pid not in seen:
                 seen[pid] = (getattr(r, f"qb_hit_{i}_player_name"), 0.0)
         for pid, (nm, sk) in seen.items():
-            rows.append((pid, nm, r.defteam, sk, r.week, r.down, r.epa))
-    return pd.DataFrame(rows, columns=["pid", "name", "team", "sacks", "week", "down", "epa"])
+            rows.append((pid, nm, r.defteam, sk, r.week, r.down, r.epa, r.qtr))
+    return pd.DataFrame(rows, columns=["pid", "name", "team", "sacks", "week", "down", "epa", "qtr"])
+
+
+# ---------------------------------------------------------------- filter cubes
+# Every chart can be cut by week range, down and quarter on the page. Each cube holds additive sums per
+# (entity, week, down, quarter): counts and sums, never means, so the page re-adds the cells that pass the filter
+# and recomputes the same statistic. Down 0 = no down (kicks); quarter 5 = overtime. With every filter at "All"
+# the cells add back to the published charts exactly (checked in build()).
+KEYS = ["week", "down", "qtr"]
+
+
+def _keys(df):
+    return df.assign(down=df.down.fillna(0).astype(int), qtr=df.qtr.fillna(1).clip(upper=5).astype(int),
+                     week=df.week.astype(int))
+
+
+def _cells(parts: list[tuple[pd.DataFrame, str, dict]]) -> pd.DataFrame:
+    """parts: (rows, entity column, {out column: (source column or None for a count, how)}) -> one summed frame."""
+    out = None
+    for df, ent, cols in parts:
+        df = _keys(df).rename(columns={ent: "ent"})
+        agg = {}
+        for name, src in cols.items():
+            agg[name] = ("week", "size") if src is None else (src, "sum")
+        g = df.groupby(["ent"] + KEYS).agg(**agg).reset_index()
+        out = g if out is None else out.merge(g, on=["ent"] + KEYS, how="outer")
+    return out.fillna(0)
+
+
+def _pack(g: pd.DataFrame, keep=None, digits=6) -> dict:
+    if keep is not None:
+        g = g[g.ent.isin(keep)]
+    cols = [c for c in g.columns if c not in ["ent"] + KEYS]
+    ents = sorted(g.ent.unique())
+    ix = {e: i for i, e in enumerate(ents)}
+    rows = []
+    for r in g.itertuples(index=False):
+        d = r._asdict()
+        vals = [d[c] for c in cols]
+        rows.append([ix[d["ent"]], d["week"], d["down"], d["qtr"]] +
+                    [int(v) if float(v).is_integer() else round(float(v), digits) for v in vals])
+    return {"ents": ents, "cols": cols, "rows": rows}
+
+
+def cubes(p, r, e, k):
+    """The filter cubes for all twelve charts, plus names and teams for every entity in them."""
+    names = {}
+
+    def name_of(df, ent, nm, team="posteam"):
+        g = df.groupby(ent).agg(n=(nm, lambda s: s.mode().iat[0]), t=(team, lambda s: s.mode().iat[0]))
+        return {i: [x.n, x.t] for i, x in g.iterrows()}
+
+    # quarterbacks: dropbacks (chart 1) and attempts (chart 7)
+    db = p[(p.qb_dropback == 1) & p.epa.notna() & (p.two_point_attempt != 1)]
+    att = p[(p.pass_attempt == 1) & (p.sack != 1) & (p.two_point_attempt != 1)].copy()
+    att["cpoe_n"], att["cpoe_s"] = att.cpoe.notna().astype(int), att.cpoe.fillna(0)
+    att["air_n"], att["air_s"] = att.air_yards.notna().astype(int), att.air_yards.fillna(0)
+    cp = att.complete_pass == 1
+    att["cyds"], att["cyac"] = np.where(cp, att.passing_yards.fillna(0), 0), np.where(cp, att.yards_after_catch.fillna(0), 0)
+    qb = _cells([(db, "id", {"db": None, "epa": "epa"}),
+                 (att, "passer_player_id", {"att": None, "cpoe_n": "cpoe_n", "cpoe_s": "cpoe_s", "air_n": "air_n",
+                                            "air_s": "air_s", "cyds": "cyds", "cyac": "cyac"})])
+    tot = qb.groupby("ent")[["db", "att"]].sum()
+    keep_qb = set(tot[(tot.db >= 30) | (tot.att >= 30)].index)
+    names["qb"] = {i: v for i, v in name_of(db, "id", "name").items() if i in keep_qb}
+
+    # running backs (chart 2) and the RB average over every back
+    rr = r.assign(succ=r.success.fillna(0))
+    rb = _cells([(rr, "rusher_player_id", {"car": None, "succ": "succ", "epa": "epa"})])
+    tot = rb.groupby("ent").car.sum()
+    keep_rb = set(tot[tot >= 15].index)
+    names["rb"] = {i: v for i, v in name_of(r, "rusher_player_id", "rusher_player_name").items() if i in keep_rb}
+    rb_all = _cells([(rr.assign(all="ALL"), "all", {"car": None, "succ": "succ"})])
+
+    # teams (charts 3, 4, 6 and 10)
+    sc = data.scrimmage(p)
+    sc2 = sc[sc.two_point_attempt != 1]
+    neu = sc[sc.down.isin([1, 2]) & sc.wp.between(0.2, 0.8) & (sc.half_seconds_remaining > 120) & sc.pass_oe.notna()]
+    dbt = db.assign(press=((db.sack == 1) | (db.qb_hit == 1)).astype(int))
+    runs, drops = sc2[(sc2.play_type == "run") & (sc2.qb_scramble != 1)], sc2[sc2.qb_dropback == 1]
+    tm = _cells([(sc2, "posteam", {"off_n": None, "off_e": "epa"}), (sc2, "defteam", {"def_n": None, "def_e": "epa"}),
+                 (neu.assign(oe=neu.pass_oe / 100), "posteam", {"proe_n": None, "proe_s": "oe"}),
+                 (dbt, "defteam", {"db_n": None, "press": "press", "db_e": "epa"}),
+                 (runs, "defteam", {"run_n": None, "run_e": "epa"}), (drops, "defteam", {"pas_n": None, "pas_e": "epa"})])
+
+    # receivers: shares (chart 5, over the games each player was targeted in), value (8), YAC over expected (9)
+    tg = p[(p.pass_attempt == 1) & p.receiver_player_id.notna() & (p.two_point_attempt != 1)].copy()
+    tg["air"] = tg.air_yards.fillna(0)
+    tg = _keys(tg)
+    team_cell = tg.groupby(["posteam", "game_id"] + KEYS).agg(t_tgt=("air", "size"), t_air=("air", "sum")).reset_index()
+    games = tg[["receiver_player_id", "posteam", "game_id"]].drop_duplicates()
+    sh = games.merge(team_cell, on=["posteam", "game_id"])
+    own = tg.groupby(["receiver_player_id", "posteam", "game_id"] + KEYS).agg(w_t=("air", "size"), w_a=("air", "sum")).reset_index()
+    sh = sh.merge(own, on=["receiver_player_id", "posteam", "game_id"] + KEYS, how="left").fillna({"w_t": 0, "w_a": 0})
+    sh = sh.groupby(["receiver_player_id"] + KEYS).agg(w_t=("w_t", "sum"), w_a=("w_a", "sum"), w_tt=("t_tgt", "sum"),
+                                                         w_ta=("t_air", "sum")).reset_index().rename(columns={"receiver_player_id": "ent"})
+    t8 = p[(p.pass_attempt == 1) & (p.sack != 1) & p.receiver_player_id.notna() & p.epa.notna() & (p.two_point_attempt != 1)].copy()
+    t8["an"], t8["as_"] = t8.air_yards.notna().astype(int), t8.air_yards.fillna(0)
+    c9 = p[(p.complete_pass == 1) & p.receiver_player_id.notna() & p.yards_after_catch.notna() & p.xyac_mean_yardage.notna()
+           & (p.two_point_attempt != 1)].copy()
+    c9["oe"] = c9.yards_after_catch - c9.xyac_mean_yardage
+    rc = _cells([(t8, "receiver_player_id", {"v_n": None, "v_e": "epa", "v_an": "an", "v_as": "as_"}),
+                 (c9, "receiver_player_id", {"y_n": None, "y_oe": "oe", "y_yac": "yards_after_catch"})])
+    rc = sh.merge(rc, on=["ent"] + KEYS, how="outer").fillna(0)
+    tot = rc.groupby("ent")[["w_t", "y_n"]].sum()
+    keep_rc = set(tot[(tot.w_t >= 15) | (tot.y_n >= 10)].index)
+    names["rec"] = {i: v for i, v in name_of(tg, "receiver_player_id", "receiver_player_name").items() if i in keep_rc}
+
+    # pass rushers (chart 11)
+    ev = _cells([(e, "pid", {"ev": None, "sk": "sacks"})])
+    tot = ev.groupby("ent").ev.sum()
+    keep_ev = set(tot[tot >= 3].index)
+    names["def"] = {i: v for i, v in name_of(e, "pid", "name", "team").items() if i in keep_ev}
+
+    # kickers (chart 12)
+    kk = _cells([(k, "kicker_player_id", {"att": None, "made": "made", "exp": "p"})])
+    names["k"] = name_of(k, "kicker_player_id", "kicker_player_name")
+
+    out = {"qb": _pack(qb, keep_qb), "rb": _pack(rb, keep_rb), "rb_all": _pack(rb_all), "team": _pack(tm),
+           "rec": _pack(rc, keep_rc), "def": _pack(ev, keep_ev), "k": _pack(kk)}
+    return out, names, {"qb": qb, "rb": rb, "rb_all": rb_all, "team": tm, "rec": rc, "def": ev, "k": kk}
 
 
 def build() -> dict:
@@ -261,7 +381,9 @@ def build() -> dict:
     # 8: receivers, role vs value (45 most targeted, 40+ targets)
     t8 = p[(p.pass_attempt == 1) & (p.sack != 1) & p.receiver_player_id.notna() & p.epa.notna() & (p.two_point_attempt != 1)]
     g8 = t8.groupby("receiver_player_id").agg(tgt=("epa", "size"), epa=("epa", "mean"), adot=("air_yards", "mean")).reset_index()
-    g8 = g8[g8.tgt >= 40].sort_values("tgt", ascending=False).head(45)
+    g8 = g8[g8.tgt >= 40].sort_values("tgt", ascending=False)
+    tie8 = list(g8.receiver_player_id)  # the page breaks ties in target count in this same order
+    g8 = g8.head(45)
     check("receivers charted", len(g8), f["receiver_epa_adot"]["n"], 0)
     check("top EPA/target", g8.epa.max(), f["receiver_epa_adot"]["top5_epa_per_target"][0]["epa"])
     c_rec8 = [{"id": x.receiver_player_id, "x": r1(x.adot), "y": r3(x.epa)} for x in g8.itertuples()]
@@ -318,7 +440,52 @@ def build() -> dict:
                                  "miss": [int(d) for d in q12[q12.made == 0].kick_distance], "bands": bands}
     c_k = [{"id": x.kicker_player_id, "v": round(float(x.fgoe), 1), "right": f"{int(x.made)}-{int(x.att)}"} for x in g12.itertuples()]
 
+    # filter cubes: with every filter at "All" they must add back to the charts above
+    k["made"] = k["made"].astype(int)
+    CU, NAMES, raw = cubes(p, r, e, k)
+    S = {kk: v.groupby("ent").sum(numeric_only=True) for kk, v in raw.items()}
+    for row in c_qb:
+        q_ = S["qb"].loc[row["id"]]
+        check("cube QB EPA", q_.epa / q_.db, row["x"], 6e-4); check("cube QB CPOE", q_.cpoe_s / q_.cpoe_n, row["y"], 6e-4)
+    for row in c_qb7:
+        q_ = S["qb"].loc[row["id"]]
+        check("cube aDOT", q_.air_s / q_.air_n, row["x"], 0.06); check("cube YAC share", q_.cyac / q_.cyds, row["y"], 6e-4)
+    for row in c_rb:
+        q_ = S["rb"].loc[row["id"]]
+        check("cube RB success", q_.succ / q_.car, row["v"], 6e-4); check("cube RB carries", q_.car, row["n"], 0)
+    check("cube RB avg", S["rb_all"].succ.sum() / S["rb_all"].car.sum(), r.success.mean(), 1e-9)
+    st = S["team"]
+    for row in c_tiers:
+        check("cube off", st.loc[row["team"]].off_e / st.loc[row["team"]].off_n, row["x"], 6e-4)
+        check("cube def", st.loc[row["team"]].def_e / st.loc[row["team"]].def_n, row["y"], 6e-4)
+    off_full = (st.off_e / st.off_n).sort_values(ascending=False)  # rank on unrounded EPA, as the static chart does
+    for row in c_proe:
+        row["right"] = int((off_full > off_full[row["team"]]).sum() + 1)
+    for row in c_proe:
+        check("cube PROE", st.loc[row["team"]].proe_s / st.loc[row["team"]].proe_n, row["v"], 6e-4)
+    for row in c_press:
+        check("cube press", st.loc[row["team"]].press / st.loc[row["team"]].db_n, row["x"], 6e-4)
+        check("cube EPA/db", st.loc[row["team"]].db_e / st.loc[row["team"]].db_n, row["y"], 6e-4)
+    for row in c_drp:
+        check("cube run D", st.loc[row["team"]].run_e / st.loc[row["team"]].run_n, row["x"], 6e-4)
+        check("cube pass D", st.loc[row["team"]].pas_e / st.loc[row["team"]].pas_n, row["y"], 6e-4)
+    sr = S["rec"]
+    for row in c_wopr:
+        check("cube tgt share", sr.loc[row["id"]].w_t / sr.loc[row["id"]].w_tt, row["x"], 6e-4)
+        check("cube air share", sr.loc[row["id"]].w_a / sr.loc[row["id"]].w_ta, row["y"], 6e-4)
+    for row in c_rec8:
+        check("cube EPA/tgt", sr.loc[row["id"]].v_e / sr.loc[row["id"]].v_n, row["y"], 6e-4)
+        check("cube rec aDOT", sr.loc[row["id"]].v_as / sr.loc[row["id"]].v_an, row["x"], 0.06)
+    for row in c_yac:
+        check("cube YACOE", sr.loc[row["id"]].y_oe / sr.loc[row["id"]].y_n, row["v"], 0.006)
+    for row in c_rush:
+        check("cube events", S["def"].loc[row["id"]].ev, row["v"], 0); check("cube sacks", S["def"].loc[row["id"]].sk, row["right"], 1e-9)
+    for row in c_k:
+        q_ = S["k"].loc[row["id"]]
+        check("cube FGOE", 3 * (q_.made - q_.exp), row["v"], 0.06)
+
     return {"meta": {"season": f["season"], "weeks": f["weeks"], "plays": f["plays"], "built": f["built"]},
+            "cubes": CU, "names": NAMES, "tie8": tie8,
             "findings": f,  # the page header (TL;DR, key numbers) quotes findings.json directly
             "colors": colors, "qb": QB, "rb": RB, "rec": REC, "def": DEF, "k": K, "teams": T,
             "league": {"rb_succ": r3(r.success.mean()), "yacoe": f["yac_over_expected"]["league_mean"]},

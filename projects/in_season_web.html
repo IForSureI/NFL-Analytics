@@ -9,26 +9,27 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
 <style>
-/* Direction: an index / catalogue of the season, set like a carbon-copy ledger. Violet carbon ink, a red correction
-   ribbon, crop marks on every plate. Display: Unbounded. Text: Literata. Scale 1.25. Square panels; one radius (6px)
-   for controls only. Tokens are selected per mode, not flipped. */
+/* Direction: an index / catalogue of the season, set like a printed ledger: neutral paper, black ink, turf green for
+   links and the status line, a flag orange for reference lines and the corrections. No violet, no tinted greys.
+   Display: Unbounded. Text: Literata. Scale 1.25. Square panels; one radius (6px) for controls only. Accents checked
+   with the dataviz palette validator in both modes. Tokens are selected per mode, not flipped. */
 :root {
-  --paper: #f2f0f5; --plate: #fbfaff; --ink: #221532; --muted: #5f5672; --soft: #8a829a; --rule: #d9d4e3; --grid: #e7e3ee;
-  --violet: #5524b0; --red: #b8202c; --tip: #221532; --tip-ink: #f2f0f5; --tip-muted: #b9b1c9; --tip-rule: #3d3150; --pos: #6fd39b; --neg: #ff8a93;
+  --paper: #f5f4ef; --plate: #fdfdfb; --ink: #151613; --muted: #5b5d57; --soft: #8d8f88; --rule: #dcdbd4; --grid: #e8e7e1;
+  --a1: #1a7f4b; --a2: #c2410c; --tip: #151613; --tip-ink: #f5f4ef; --tip-muted: #a9aaa3; --tip-rule: #34352f; --pos: #5fcf8f; --neg: #ff9a6b;
   --display: "Unbounded", "Arial Black", sans-serif; --text: "Literata", Georgia, serif;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --paper: #15111c; --plate: #1d1826; --ink: #ece8f3; --muted: #b0a8c0; --soft: #8c849c; --rule: #342c40; --grid: #2a2335;
-  --violet: #b39aff; --red: #ff7a83; --tip: #ece8f3; --tip-ink: #1b1524; --tip-muted: #5f5672; --tip-rule: #cfc8db; --pos: #1d7a46; --neg: #b8202c; color-scheme: dark } }
+  --paper: #121311; --plate: #1a1b19; --ink: #ebebe6; --muted: #a9aaa3; --soft: #85867f; --rule: #30312d; --grid: #262724;
+  --a1: #2f9a62; --a2: #e0692c; --tip: #ebebe6; --tip-ink: #161714; --tip-muted: #5b5d57; --tip-rule: #cfcfc8; --pos: #1a7f4b; --neg: #c2410c; color-scheme: dark } }
 :root[data-theme="dark"] {
-  --paper: #15111c; --plate: #1d1826; --ink: #ece8f3; --muted: #b0a8c0; --soft: #8c849c; --rule: #342c40; --grid: #2a2335;
-  --violet: #b39aff; --red: #ff7a83; --tip: #ece8f3; --tip-ink: #1b1524; --tip-muted: #5f5672; --tip-rule: #cfc8db; --pos: #1d7a46; --neg: #b8202c; color-scheme: dark }
+  --paper: #121311; --plate: #1a1b19; --ink: #ebebe6; --muted: #a9aaa3; --soft: #85867f; --rule: #30312d; --grid: #262724;
+  --a1: #2f9a62; --a2: #e0692c; --tip: #ebebe6; --tip-ink: #161714; --tip-muted: #5b5d57; --tip-rule: #cfcfc8; --pos: #1a7f4b; --neg: #c2410c; color-scheme: dark }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.55 var(--text); font-variant-numeric: tabular-nums; }
-a { color: var(--violet); text-underline-offset: 3px; }
-a:focus-visible, .hit:focus-visible, summary:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+a { color: var(--a1); text-underline-offset: 3px; }
+a:focus-visible, .hit:focus-visible, summary:focus-visible { outline: 2px solid var(--a2); outline-offset: 2px; }
 .wrap { max-width: 1160px; margin: 0 auto; padding: 0 16px; }
 
 /* title page */
@@ -36,33 +37,33 @@ header.top { padding: 40px 0 8px; }
 .crumbs { font-size: 14px; display: flex; gap: 18px; flex-wrap: wrap; margin: 0 0 28px; }
 .title-plate { position: relative; padding: 28px 0 24px; border-top: 3px solid var(--ink); border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: end; }
 h1 { font: 700 clamp(30px, 6.2vw, 64px)/1.02 var(--display); letter-spacing: -.01em; margin: 0; }
-h1 .yr { color: var(--violet); }
+h1 .yr { color: var(--a1); }
 .subtitle { font: italic 400 clamp(18px, 2.2vw, 22px)/1.4 var(--text); color: var(--muted); margin: 14px 0 0; max-width: 34ch; }
-.reg { width: 64px; height: 64px; color: var(--red); }
+.reg { width: 64px; height: 64px; color: var(--a2); }
 .provenance { font-size: 14px; color: var(--muted); margin: 14px 0 18px; }
 .provenance b { color: var(--ink); font-weight: 600; white-space: nowrap; }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 26px; }
 .tag { font: 500 11px/1 var(--display); letter-spacing: .02em; border: 1px solid currentColor; border-radius: 6px; padding: 6px 8px; color: var(--muted); }
-.tag.status { color: var(--violet); } .tag.method { color: var(--red); }
+.tag.status { color: var(--a1); } .tag.method { color: var(--a2); }
 .front { display: grid; grid-template-columns: 1.35fr 1fr; gap: 0; border-top: 1px solid var(--rule); }
 .front > section { padding: 20px 24px 20px 0; }
 .front > section + section { padding: 20px 0 20px 24px; border-left: 1px solid var(--rule); }
-.front h2 { font: 500 13px/1.3 var(--display); text-transform: none; margin: 0 0 10px; color: var(--red); }
+.front h2 { font: 500 13px/1.3 var(--display); text-transform: none; margin: 0 0 10px; color: var(--a2); }
 .tldr ul { margin: 0; padding: 0; list-style: none; counter-reset: t; }
 .tldr li { counter-increment: t; position: relative; padding-left: 30px; margin: 0 0 12px; font-size: 17px; }
-.tldr li::before { content: counter(t); position: absolute; left: 0; top: 2px; font: 700 13px/1 var(--display); color: var(--violet); }
+.tldr li::before { content: counter(t); position: absolute; left: 0; top: 2px; font: 700 13px/1 var(--display); color: var(--a1); }
 .keynums { width: 100%; border-collapse: collapse; font-size: 15px; }
 .keynums td { padding: 6px 0; border-top: 1px solid var(--rule); vertical-align: top; }
 .keynums td + td { text-align: right; font-weight: 600; padding-left: 12px; white-space: nowrap; }
 .why { border-top: 1px solid var(--rule); padding: 18px 0 6px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 6px 28px; }
-.why h2 { grid-column: 1 / -1; font: 500 13px/1.3 var(--display); margin: 0 0 4px; color: var(--red); }
+.why h2 { grid-column: 1 / -1; font: 500 13px/1.3 var(--display); margin: 0 0 4px; color: var(--a2); }
 .why p { margin: 0 0 10px; font-size: 15px; }
 .hint { display: inline-block; margin: 14px 0 0; font-size: 14px; color: var(--muted); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 10px; }
 
 /* the catalogue: one plate per chart */
 main { padding: 8px 0 40px; }
 section.chart { display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 28px; padding: 36px 0; border-top: 1px solid var(--rule); min-width: 0; }
-.meta .lot { font: 700 44px/1 var(--display); color: var(--violet); display: block; margin-bottom: 12px; letter-spacing: -.02em; }
+.meta .lot { font: 700 44px/1 var(--display); color: var(--a1); display: block; margin-bottom: 12px; letter-spacing: -.02em; }
 .meta h2 { font: 700 18px/1.25 var(--display); margin: 0 0 8px; }
 .meta .sub { font-size: 14px; color: var(--muted); margin: 0 0 12px; }
 .meta .says { font-size: 15px; margin: 0; }
@@ -73,7 +74,7 @@ section.chart { display: grid; grid-template-columns: minmax(0, 260px) minmax(0,
 .plate > .cm::before { bottom: -8px; left: -8px; border-bottom-width: 1px; border-left-width: 1px; }
 .plate > .cm::after { bottom: -8px; right: -8px; border-bottom-width: 1px; border-right-width: 1px; }
 details.tbl { margin-top: 8px; font-size: 14px; }
-details.tbl summary { cursor: pointer; color: var(--violet); font-weight: 600; }
+details.tbl summary { cursor: pointer; color: var(--a1); font-weight: 600; }
 details.tbl table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 13.5px; }
 details.tbl th { text-align: left; font-weight: 600; color: var(--muted); border-bottom: 1px solid var(--rule); padding: 4px 6px 4px 0; }
 details.tbl td { border-bottom: 1px solid var(--grid); padding: 3px 6px 3px 0; }
@@ -86,9 +87,9 @@ svg text { font-family: var(--text); }
 .axis text { font-size: 11px; fill: var(--muted); }
 .axis-title { font-size: 12px; font-weight: 600; fill: var(--ink); }
 .gridline { stroke: var(--grid); stroke-width: 1; }
-.ref { stroke: var(--red); stroke-width: 1.2; stroke-dasharray: 3 3; }
-.ref-label { font-size: 11px; font-weight: 600; fill: var(--red); }
-.corner { font-size: 11px; font-style: italic; fill: var(--red); }
+.ref { stroke: var(--a2); stroke-width: 1.2; stroke-dasharray: 3 3; }
+.ref-label { font-size: 11px; font-weight: 600; fill: var(--a2); }
+.corner { font-size: 11px; font-style: italic; fill: var(--a2); }
 .diag { stroke: var(--soft); stroke-dasharray: 5 4; }
 .hit { cursor: pointer; outline: none; }
 .hit:focus-visible .mark, .hit.active .mark { stroke: var(--ink) !important; stroke-width: 3 !important; }
@@ -102,8 +103,32 @@ svg.dim .hit:not(.active) text { opacity: .35; }
 .ws-title { font-size: 12.5px; font-weight: 600; fill: var(--ink); }
 .ws-cursor { stroke: var(--ink); stroke-width: 1; }
 
+/* per-chart filters: weeks (two-thumb range), down, quarter */
+.filters { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; font-size: 13px; margin: 0 0 12px; }
+.fgroup { display: flex; align-items: center; gap: 8px; }
+.flabel { font-weight: 600; color: var(--muted); }
+.range { position: relative; width: 150px; height: 24px; }
+.range::before { content: ""; position: absolute; left: 8px; right: 8px; top: 11px; height: 2px; background: var(--rule); }
+.rfill { position: absolute; top: 11px; height: 2px; background: var(--a1); pointer-events: none; }
+.range input { position: absolute; inset: 0; width: 100%; margin: 0; background: none; pointer-events: none; -webkit-appearance: none; appearance: none; height: 24px; }
+.range input::-webkit-slider-thumb { -webkit-appearance: none; pointer-events: auto; width: 16px; height: 16px; border-radius: 50%; background: var(--plate); border: 2px solid var(--a1); cursor: grab; }
+.range input::-moz-range-thumb { pointer-events: auto; width: 12px; height: 12px; border-radius: 50%; background: var(--plate); border: 2px solid var(--a1); cursor: grab; }
+.range input::-moz-range-track { background: none; }
+.range input:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--a2); outline-offset: 2px; }
+.range input:focus-visible::-moz-range-thumb { outline: 2px solid var(--a2); outline-offset: 2px; }
+.rlabel { font-weight: 600; min-width: 2.6em; }
+.seg { display: inline-flex; }
+.seg button { font: 500 12.5px/1 var(--text); color: var(--ink); background: transparent; border: 1px solid var(--rule); margin-left: -1px; padding: 6px 8px; cursor: pointer; min-height: 30px; }
+.seg button:first-child { border-radius: 6px 0 0 6px; margin-left: 0; } .seg button:last-child { border-radius: 0 6px 6px 0; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); position: relative; }
+.seg button:focus-visible, .reset:focus-visible { outline: 2px solid var(--a2); outline-offset: 2px; position: relative; z-index: 1; }
+.reset { font: 600 13px/1 var(--text); color: var(--a1); background: none; border: 0; padding: 6px 2px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.empty { color: var(--muted); font-style: italic; padding: 40px 8px; }
+#tip .slice { border-left: 3px solid var(--a1); padding-left: 8px; margin: 6px 0 4px; }
+@media (max-width: 640px) { .range { width: 120px; } .seg button { padding: 6px 7px; } .filters { gap: 8px 14px; } }
+
 footer { padding: 8px 0 48px; font-size: 14px; color: var(--muted); border-top: 3px solid var(--ink); }
-footer h2 { font: 500 13px/1.3 var(--display); color: var(--red); margin: 18px 0 8px; }
+footer h2 { font: 500 13px/1.3 var(--display); color: var(--a2); margin: 18px 0 8px; }
 footer ul { padding-left: 18px; margin: 0; }
 
 /* hover card */
@@ -151,7 +176,6 @@ footer ul { padding-left: 18px; margin: 0; }
       <h1><span class="yr">2026</span> In-Season Snippets</h1>
       <p class="subtitle">What does the season look like so far?</p>
     </div>
-    <svg class="reg" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="18" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="32" cy="32" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M32 4v56M4 32h56" stroke="currentColor" stroke-width="1.5"/></svg>
   </div>
   <p class="provenance" id="provenance"></p>
   <div class="tags" id="badges"></div>
@@ -239,10 +263,13 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") hide(); });
 // ---------------------------------------------------------------- card contents
 const W = DATA.meta.weeks, QB = DATA.qb, RB = DATA.rb, RC = DATA.rec, DF = DATA.def, KK = DATA.k;
 const wkLabels = []; for (let w = W[0]; w <= W[1]; w++) wkLabels.push(w);
-const head = (name, team, sub) => `<div class="t-head">${chip(team)}<span class="t-name">${esc(name)}</span></div><div class="t-sub">${sub}</div>`;
+let SLICE = null;  // set while a filtered chart builds its card: {label, items}
+const head = (name, team, sub) => `<div class="t-head">${chip(team)}<span class="t-name">${esc(name)}</span></div>` +
+  (SLICE ? `<div class="slice"><div class="sec">${SLICE.label}</div>${big(SLICE.items)}${SLICE.n ? `<div class="note">${SLICE.n}</div>` : ""}</div><div class="sec">Full season</div>` : "") +
+  `<div class="t-sub">${sub}</div>`;
 const big = items => `<div class="big">${items.map(([v, l, c]) => `<div><b class="${c || ""}">${v}</b><span>${l}</span></div>`).join("")}</div>`;
 const table = (cols, rows) => `<table><tr>${cols.map(([l, r]) => `<th class="${r ? "r" : ""}">${l}</th>`).join("")}</tr>${rows.map(rw => `<tr>${rw.map((v, i) => `<td class="${cols[i][1] ? "r" : ""}">${v}</td>`).join("")}</tr>`).join("")}</table>`;
-const pts = v => v == null ? "–" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(1);
+const PTS = v => v == null ? "–" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(1);
 // week-by-week bars inside a card: positive up, negative down; blank = bye or no snaps
 function spark(vals, label, fmt) {
   const w = 14, h = 34, mid = vals.some(v => v != null && v < 0) ? h / 2 : h - 2;
@@ -261,8 +288,8 @@ function qbCard(id, focus) {
   const q = QB[id];
   const sub = `${q.games} games; ${q.dropbacks} dropbacks; ${q.att} att, ${pc(q.comp)} comp; ${q.yds.toLocaleString()} yds, ${q.td} TD, ${q.int} INT; ${q.sacks} sacks`;
   const top = focus === "yac"
-    ? big([[q.adot ?? "–", "aDOT (yds)"], [pc(q.yac_share), "yards after catch"], [pts(q.cpoe), "CPOE"]])
-    : big([[sg(q.epa, 3), "EPA/dropback", cls(q.epa)], [pts(q.cpoe), "CPOE (pts)", cls(q.cpoe)], [pc(q.succ), "success"]]);
+    ? big([[q.adot ?? "–", "aDOT (yds)"], [pc(q.yac_share), "yards after catch"], [PTS(q.cpoe), "CPOE"]])
+    : big([[sg(q.epa, 3), "EPA/dropback", cls(q.epa)], [PTS(q.cpoe), "CPOE (pts)", cls(q.cpoe)], [pc(q.succ), "success"]]);
   return head(q.name, q.team, sub) + top +
     `<div class="sec">By throw depth</div>` + table([["Air yards"], ["Att", 1], ["Comp", 1], ["EPA/att", 1]], q.bands.map(b => [b.band, b.att, pc(b.comp), `<span class="${cls(b.epa)}">${sg(b.epa, 2)}</span>`])) +
     (focus === "yac" ? "" : `<div class="sec">By down</div>` + table([["Down"], ["Dropbacks", 1], ["EPA", 1], ["Success", 1]], q.downs.map(d => [DOWN[d.down], d.n, `<span class="${cls(d.epa)}">${sg(d.epa, 2)}</span>`, pc(d.succ)]))) +
@@ -297,7 +324,7 @@ function defCard(id) {
 function kCard(id) {
   const k = KK[id];
   return head(k.name, k.team, `${k.made}-${k.att} on field goals; long ${k.long ?? "–"}${k.miss.length ? `; missed from ${k.miss.join(", ")}` : "; no misses"}`) +
-    big([[pts(k.fgoe), "FG pts over expected", cls(k.fgoe)], [k.made, "made"], [k.exp, "expected makes"]]) +
+    big([[PTS(k.fgoe), "FG pts over expected", cls(k.fgoe)], [k.made, "made"], [k.exp, "expected makes"]]) +
     table([["Distance"], ["Made-Att", 1], ["Expected", 1]], k.bands.map(b => [b.band, `${b.made}-${b.att}`, b.exp])) +
     `<div class="note">Expected = an average kicker's make rate from the same distances and roof (model fit on 2022-25 kicks). Points = 3 × (made − expected).</div>`;
 }
@@ -305,13 +332,13 @@ function teamCard(t, focus) {
   const m = T[t];
   const rec = `${m.w}-${m.l}${m.t ? "-" + m.t : ""}; ${m.pf} points for, ${m.pa} against`;
   let top;
-  if (focus === "proe") top = big([[pts(100 * m.proe), "early-down PROE (pts)", ""], [m.proe_plays, "neutral early-down plays"], [sg(m.off, 3), "off. EPA/play", cls(m.off)]]);
+  if (focus === "proe") top = big([[PTS(100 * m.proe), "early-down PROE (pts)", ""], [m.proe_plays, "neutral early-down plays"], [sg(m.off, 3), "off. EPA/play", cls(m.off)]]);
   else if (focus === "press") top = big([[pc(m.press), "sack or hit rate"], [sg(m.epa_db_allowed, 3), "EPA/dropback allowed", cls(-m.epa_db_allowed)], [sg(m.vs_fit, 3), "vs. the line", cls(-m.vs_fit)]]);
   else if (focus === "drp") top = big([[sg(m.def_run, 3), "EPA/run allowed", cls(-m.def_run)], [sg(m.def_pass, 3), "EPA/dropback allowed", cls(-m.def_pass)], [pc(m.def_succ), "success allowed"]]);
   else top = big([[sg(m.net, 3), "net EPA/play", cls(m.net)], [sg(m.off, 3), "offense", cls(m.off)], [sg(m.def, 3), "defense allowed", cls(-m.def)]]);
   return head(t, t, rec) + top +
     table([[""], ["Pass", 1], ["Run", 1], ["Success", 1]], [["Offense EPA", sg(m.off_pass, 3), sg(m.off_run, 3), pc(m.off_succ)], ["Defense allowed", sg(m.def_pass, 3), sg(m.def_run, 3), pc(m.def_succ)]]) +
-    `<div class="note">Defense: ${m.sacks} sacks, sack or hit on ${pc(m.press)} of ${m.db_faced} dropbacks faced. Early downs: ${pts(100 * m.proe)} pts pass rate over expected.</div>` +
+    `<div class="note">Defense: ${m.sacks} sacks, sack or hit on ${pc(m.press)} of ${m.db_faced} dropbacks faced. Early downs: ${PTS(100 * m.proe)} pts pass rate over expected.</div>` +
     spark(m.weeks, "Net EPA per play", v => sg(v, 3));
 }
 
@@ -320,9 +347,10 @@ const charts = document.getElementById("charts");
 function card(n, title, sub, says, wide) {
   const s = document.createElement("section"); s.className = "chart" + (wide ? " wide" : "");
   s.innerHTML = `<div class="meta"><span class="lot">${String(n).padStart(2, "0")}</span><h2>${title}</h2><p class="sub">${sub}</p>${says ? `<p class="says">${says}</p>` : ""}</div>` +
-    `<div class="plate"><span class="cm" aria-hidden="true"></span><div class="svgwrap"></div><details class="tbl"><summary>Table</summary><div class="scroll"></div></details></div>`;
+    `<div class="plate"><span class="cm" aria-hidden="true"></span><div class="filters"></div><div class="svgwrap"></div><details class="tbl"><summary>Table</summary><div class="scroll"></div></details></div>`;
   charts.appendChild(s);
   const w = s.querySelector(".svgwrap"); w.tableEl = s.querySelector("details.tbl .scroll");
+  w.filtersEl = s.querySelector(".filters"); w.subEl = s.querySelector(".meta .sub"); w.saysEl = s.querySelector(".meta .says");
   return w;
 }
 function fillTable(wrap, cols, rows) {
@@ -341,6 +369,8 @@ function nice(lo, hi, n = 5) {
 // ---------------------------------------------------------------- scatter
 function scatter(wrap, pts, o) {
   const W = fitW(wrap), Hh = Math.round(W * .84), m = {l: 58, r: 16, t: 14, b: 48};
+  wrap.innerHTML = "";
+  if (!pts.length) { wrap.innerHTML = `<p class="empty">No one qualifies in this slice. Widen the weeks or set a filter back to All.</p>`; fillTable(wrap, [["Name"]], []); return; }
   const svg = el("svg", {viewBox: `0 0 ${W} ${Hh}`, role: "img", "aria-label": o.aria}, null); wrap.appendChild(svg);
   const xs = pts.map(p => p.x), ys = pts.map(p => p.y);
   let [x0, x1] = [Math.min(...xs, o.xref ?? Infinity), Math.max(...xs, o.xref ?? -Infinity)];
@@ -406,6 +436,8 @@ function scatter(wrap, pts, o) {
 // ---------------------------------------------------------------- ranked bars
 function bars(wrap, rows, o) {
   const rowH = 22, W = fitW(wrap), m = {l: Math.min(o.labelW || 150, Math.round(W * .3)), r: 74, t: 22, b: 40}, Hh = m.t + m.b + rows.length * rowH;
+  wrap.innerHTML = "";
+  if (!rows.length) { wrap.innerHTML = `<p class="empty">No one qualifies in this slice. Widen the weeks or set a filter back to All.</p>`; fillTable(wrap, [["Name"]], []); return; }
   const svg = el("svg", {viewBox: `0 0 ${W} ${Hh}`, role: "img", "aria-label": o.aria}, null); wrap.appendChild(svg);
   const vals = rows.map(r => r.v);
   let lo = o.lo ?? Math.min(0, ...vals), hi = Math.max(...vals, o.ref ?? -Infinity);
@@ -449,14 +481,14 @@ const passHappy = Object.entries(F.early_down_proe.most_pass_happy), runHeavy = 
 document.getElementById("tldr").innerHTML = [
   `${nmT(qa[0])} leads in EPA per dropback (${sg(qa[0].epa, 3)}), ahead of ${nmT(qa[1])} (${sg(qa[1].epa, 3)}); accuracy and efficiency move together (r = ${F.qb_epa_cpoe.corr_epa_cpoe} across ${F.qb_epa_cpoe.n_qbs} QBs).`,
   `${tt[0].team} has the best net EPA per play (${sg(tt[0].net, 3)}), then ${tt[1].team} (${sg(tt[1].net, 3)}) and ${tt[2].team} (${sg(tt[2].net, 3)}); defenses that hit the QB more allow less per dropback (r = ${sg(F.defense_pressure.corr_press_epa, 2)}).`,
-  `${rb.rusher_player_name} (${rb.team}) leads backs at ${pc(rb.success)} success (RB average ${pc(F.rb_success.rb_average_success)}), and ${kk.kicker_player_name} (${kk.team}, ${kk.made}-${kk.att}) is ${pts(kk.fgoe_pts)} field-goal points over expected.`
+  `${rb.rusher_player_name} (${rb.team}) leads backs at ${pc(rb.success)} success (RB average ${pc(F.rb_success.rb_average_success)}), and ${kk.kicker_player_name} (${kk.team}, ${kk.made}-${kk.att}) is ${PTS(kk.fgoe_pts)} field-goal points over expected.`
 ].map(t => `<li>${t}</li>`).join("");
 const yc = F.yac_over_expected.top5[0], rush = F.pass_rush_leaders.top5[0];
 document.getElementById("keynums").innerHTML = [
   ["Plays, regular season weeks " + F.weeks[0] + "-" + F.weeks[1], F.plays.toLocaleString()],
   ["Best EPA per dropback (150+ dropbacks)", `${qa[0].name} ${sg(qa[0].epa, 3)}`],
   ["Best net EPA per play", `${tt[0].team} ${sg(tt[0].net, 3)}`],
-  ["Early-down pass rate over expected, high / low", `${passHappy[0][0]} ${pts(100 * passHappy[0][1])} / ${runHeavy[runHeavy.length - 1][0]} ${pts(100 * runHeavy[runHeavy.length - 1][1])}`],
+  ["Early-down pass rate over expected, high / low", `${passHappy[0][0]} ${PTS(100 * passHappy[0][1])} / ${runHeavy[runHeavy.length - 1][0]} ${PTS(100 * runHeavy[runHeavy.length - 1][1])}`],
   ["Pressure rate vs EPA per dropback allowed", `r = ${sg(F.defense_pressure.corr_press_epa, 2)}`],
   ["Best YAC over expected per catch (25+ catches)", `${yc.receiver_player_name} ${sg(yc.yacoe, 2)}`],
   ["Most plays with a sack or QB hit", `${rush.name} ${rush.events}`]
@@ -464,80 +496,264 @@ document.getElementById("keynums").innerHTML = [
 document.getElementById("built").textContent = `Numbers as of the ${M.built} build. Rebuilt with every weekly refresh.`;
 if (matchMedia("(hover: none)").matches) document.getElementById("hint").textContent = "Tap any player or team for the breakdown. Tap again to close.";
 const avg = a => a.reduce((s, v) => s + v, 0) / a.length;
-const nm = (S, id) => S[id].name, tm = (S, id) => S[id].team;
+const NM = DATA.names, CU = DATA.cubes, TIE8 = new Map(DATA.tie8.map((id, i) => [id, i]));
+const nm = (S, id) => (S[id] ? S[id].name : NM[S === QB ? "qb" : S === RB ? "rb" : S === RC ? "rec" : S === DF ? "def" : "k"][id][0]);
+const tm = (S, id) => (S[id] ? S[id].team : NM[S === QB ? "qb" : S === RB ? "rb" : S === RC ? "rec" : S === DF ? "def" : "k"][id][1]);
 
-const q1 = CH.qb, q1s = q1.slice().sort((a, b) => b.x - a.x);
-scatter(card(1, "QB Efficiency: EPA vs. CPOE", "Min. 150 dropbacks; dotted lines = group average",
-  `${QB[q1s[0].id].name} (${QB[q1s[0].id].team}) leads in EPA per dropback (${sg(q1s[0].x, 3)}). Hover a QB for his splits by throw depth and by down.`),
-  q1, {aria: "QBs: EPA per dropback vs CPOE", xref: avg(q1.map(p => p.x)), yref: avg(q1.map(p => p.y)), fx: v => sg(v, 2), fy: v => sg(v, 0),
-  xt: "EPA per dropback", yt: "Completion % over expected (CPOE)", corners: [["Efficient & accurate", "tr"], ["Struggling", "bl"]],
-  name: p => nm(QB, p.id), team: p => tm(QB, p.id), tx: v => sg(v, 3), ty: v => pts(v), card: p => qbCard(p.id, "epa"), label: p => `${nm(QB, p.id)}: EPA ${sg(p.x, 3)}, CPOE ${pts(p.y)}`});
+// ---- filters: week range, down, quarter; every cube row is [entity, week, down, quarter, ...sums]
+for (const c of Object.values(CU)) { c.ci = {}; c.cols.forEach((k, i) => c.ci[k] = i + 4); }
+const ALL = () => ({w0: W[0], w1: W[1], down: 0, q: 0});
+const isAll = f => f.w0 === W[0] && f.w1 === W[1] && !f.down && !f.q;
+const ORD = ["", "1st", "2nd", "3rd", "4th"], QTR = ["", "1st quarter", "2nd quarter", "3rd quarter", "4th quarter", "overtime"];
+const cap1 = t => t.charAt(0).toUpperCase() + t.slice(1);
+const fLabel = f => cap1([f.w0 === W[0] && f.w1 === W[1] && (f.down || f.q) ? "" : f.w0 === f.w1 ? `Week ${f.w0}` : `Weeks ${f.w0}-${f.w1}`, f.down ? `${ORD[f.down]} down` : "", f.q ? QTR[f.q] : ""].filter(Boolean).join(", "));
+function agg(c, f) {  // entity -> summed columns (index by c.ci), plus the slice total in key -1
+  const out = new Map(), tot = new Array(c.cols.length + 4).fill(0);
+  for (const r of c.rows) {
+    if (r[1] < f.w0 || r[1] > f.w1 || (f.down && r[2] !== f.down) || (f.q && r[3] !== f.q)) continue;
+    let a = out.get(r[0]); if (!a) { a = new Array(r.length).fill(0); out.set(r[0], a); }
+    for (let i = 4; i < r.length; i++) { a[i] += r[i]; tot[i] += r[i]; }
+  }
+  out.total = tot; return out;
+}
+const fullTot = {}; for (const k in CU) fullTot[k] = agg(CU[k], ALL()).total;
+// a minimum sample shrinks with the slice: the same share of the full-season plays, never below a floor
+const thr = (k, col, base, f, floor) => isAll(f) ? base : Math.max(floor, Math.round(base * agg(CU[k], f).total[CU[k].ci[col]] / fullTot[k][CU[k].ci[col]]));
+const minNote = (base, t, unit) => t === base ? `min. ${base} ${unit}` : `min. ${t} ${unit} in this slice (${base} over the full season, scaled to the slice)`;
 
-bars(card(2, "Running Back Success Rate", "Top 30 of the backs with 60+ carries; QB runs and scrambles left out; EPA per rush at right",
-  `${RB[CH.rb[0].id].name} (${RB[CH.rb[0].id].team}) leads at ${pc(CH.rb[0].v)}. Bars start near the leaders' range, not at zero.`), CH.rb,
-  {aria: "Top 30 running backs by success rate", zoom: true, ref: DATA.league.rb_succ, refLabel: `RB avg ${pc(DATA.league.rb_succ)}`, team: r => tm(RB, r.id), name: r => nm(RB, r.id),
-   fv: v => pc(v), fx: v => (100 * v).toFixed(0) + "%", right: r => sg(r.right, 2), rightHead: "EPA/rush", xt: "Rushing success rate", card: r => rbCard(r.id), labelW: 120});
+function controls(wrap, f, redraw, opts = {}) {
+  const el0 = wrap.filtersEl, id = "f" + Math.random().toString(36).slice(2, 8);
+  const downs = opts.downs || [0, 1, 2, 3, 4];
+  const seg = (name, key, vals, lab) => `<div class="fgroup"><span class="flabel" id="${id}${key}">${name}</span><div class="seg" role="group" aria-labelledby="${id}${key}">` +
+    vals.map(v => `<button type="button" data-k="${key}" data-v="${v}" aria-pressed="${f[key] === v}">${lab(v)}</button>`).join("") + `</div></div>`;
+  el0.innerHTML =
+    `<div class="fgroup"><span class="flabel">Weeks</span><div class="range"><input type="range" min="${W[0]}" max="${W[1]}" step="1" value="${f.w0}" aria-label="First week">` +
+    `<input type="range" min="${W[0]}" max="${W[1]}" step="1" value="${f.w1}" aria-label="Last week"><span class="rfill"></span></div><span class="rlabel"></span></div>` +
+    (opts.noDown ? "" : seg("Down", "down", downs, v => v ? ORD[v] : "All")) +
+    seg("Quarter", "q", [0, 1, 2, 3, 4, 5], v => v ? (v === 5 ? "OT" : "Q" + v) : "All") +
+    `<button type="button" class="reset" hidden>Reset</button>`;
+  const [r0, r1] = el0.querySelectorAll("input[type=range]"), lab = el0.querySelector(".rlabel"), fill = el0.querySelector(".rfill"), reset = el0.querySelector(".reset");
+  const sync = () => {
+    const span = W[1] - W[0] || 1;
+    lab.textContent = f.w0 === f.w1 ? `${f.w0}` : `${f.w0}-${f.w1}`;
+    fill.style.left = `calc(${(f.w0 - W[0]) / span} * (100% - 16px) + 8px)`; fill.style.width = `calc(${(f.w1 - f.w0) / span} * (100% - 16px))`;
+    el0.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(f[b.dataset.k] === +b.dataset.v)));
+    reset.hidden = isAll(f);
+  };
+  const go = () => { sync(); hide(); redraw(); };
+  r0.addEventListener("input", () => { f.w0 = Math.min(+r0.value, f.w1); r0.value = f.w0; go(); });
+  r1.addEventListener("input", () => { f.w1 = Math.max(+r1.value, f.w0); r1.value = f.w1; go(); });
+  el0.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => { f[b.dataset.k] = +b.dataset.v; go(); }));
+  reset.addEventListener("click", () => { Object.assign(f, ALL()); r0.value = f.w0; r1.value = f.w1; go(); });
+  sync();
+}
+// one chart = a card, its filter state, and a draw function that reads the cube for the current slice
+const STATE = window.__snipState || (window.__snipState = {});
+function chart(n, title, subFn, says, draw, opts) {
+  const wrap = card(n, title, "", typeof says === "function" ? "" : says);
+  const f = STATE[n] || (STATE[n] = ALL());
+  const run = () => {
+    const out = draw(f, wrap); (window.__out || (window.__out = {}))[n] = out;
+    wrap.subEl.textContent = subFn(f, out);
+    if (typeof says === "function" && wrap.saysEl) wrap.saysEl.innerHTML = says(f, out); else if (typeof says === "function") {
+      const p = document.createElement("p"); p.className = "says"; p.innerHTML = says(f, out); wrap.subEl.after(p); wrap.saysEl = p; }
+    return out;
+  };
+  wrap.draw = run; controls(wrap, f, run, opts); run();
+  return wrap;
+}
+// wraps a card function so a filtered chart shows its slice numbers first
+const sliced = (f, items, n, fn) => () => { SLICE = isAll(f) ? null : {label: fLabel(f), items, n}; try { return fn(); } finally { SLICE = null; } };
+const minimal = (name, team) => head(name, team, "") + `<div class="note">Qualifies only in this slice, so there is no full-season breakdown.</div>`;
+const sliceTag = f => isAll(f) ? "" : ` ${fLabel(f)}.`;
 
-const tiers = CH.tiers;
-scatter(card(3, "2026 Team Tiers", "Offense EPA per play vs. defense EPA per play allowed; dotted lines = league average",
-  "Hover a team for its record, its offense and defense split into pass and run, and its net EPA week by week."),
-  tiers, {aria: "Teams: offensive vs defensive EPA per play", badge: true, r: 14, invertY: true, xref: avg(tiers.map(p => p.x)), yref: avg(tiers.map(p => p.y)),
-  fx: v => sg(v, 2), fy: v => sg(v, 2), xt: "Offense: EPA per play", yt: "Defense: EPA per play allowed (better is up)",
-  corners: [["Good offense, good defense", "tr"], ["Bad offense, bad defense", "bl"]], tx: v => sg(v, 3), ty: v => sg(v, 3), card: p => teamCard(p.team, "tiers"), label: p => `${p.team}: offense ${sg(p.x, 3)}, defense ${sg(p.y, 3)}`});
+// ---- the twelve charts
+const byX = pts => pts.slice().sort((a, b) => b.x - a.x)[0];
 
-bars(card(4, "Early-Down Pass Rate Over Expected", "1st & 2nd down; win prob. 20-80%; outside the last 2 minutes of halves; offensive EPA rank at right",
-  "Hover a team for how its pass rate lines up with its offense."), CH.proe,
-  {aria: "Teams by early-down pass rate over expected", team: r => r.team, name: r => r.team, fv: v => pts(100 * v), fx: v => pts(100 * v),
-   right: r => "#" + r.right, rightHead: "Off. EPA", xt: "Pass rate over expected (percentage points)", card: r => teamCard(r.team, "proe"), labelW: 60});
+// 1: QBs, EPA vs CPOE
+chart(1, "QB Efficiency: EPA vs. CPOE", (f, o) => `${minNote(150, o.t, "dropbacks")}; dotted lines = group average.${sliceTag(f)}`,
+  (f, o) => o.pts.length ? `${nm(QB, o.lead.id)} (${tm(QB, o.lead.id)}) leads in EPA per dropback (${sg(o.lead.x, 3)})${isAll(f) ? "" : " in this slice"}. Hover a QB for his splits by throw depth and by down.` : "",
+  (f, wrap) => {
+    const c = CU.qb, ci = c.ci, s = agg(c, f), t = thr("qb", "db", 150, f, 20), pts = [];
+    for (const [i, a] of s) if (a[ci.db] >= t && a[ci.cpoe_n] > 0) pts.push({id: c.ents[i], x: a[ci.epa] / a[ci.db], y: a[ci.cpoe_s] / a[ci.cpoe_n], n: a[ci.db]});
+    scatter(wrap, pts, {aria: "QBs: EPA per dropback vs CPOE", xref: avg(pts.map(p => p.x)), yref: avg(pts.map(p => p.y)), fx: v => sg(v, 2), fy: v => sg(v, 0),
+      xt: "EPA per dropback", yt: "Completion % over expected (CPOE)", corners: [["Efficient & accurate", "tr"], ["Struggling", "bl"]],
+      name: p => nm(QB, p.id), team: p => tm(QB, p.id), tx: v => sg(v, 3), ty: v => PTS(v),
+      card: p => sliced(f, [[sg(p.x, 3), "EPA/dropback", cls(p.x)], [PTS(p.y), "CPOE (pts)", cls(p.y)], [p.n, "dropbacks"]], "",
+        () => QB[p.id] ? qbCard(p.id, "epa") : minimal(nm(QB, p.id), tm(QB, p.id)))(),
+      label: p => `${nm(QB, p.id)}: EPA ${sg(p.x, 3)}, CPOE ${PTS(p.y)}`});
+    return {pts, t, lead: byX(pts)};
+  });
 
-scatter(card(5, "Receiver Roles: Targets vs. Air Yards", "Top 40 by WOPR, min. 40 targets; shares in games played; dashed line = equal shares",
-  "Above the line, the role is downfield; below it, volume on shorter throws."), CH.wopr,
-  {aria: "Receivers: target share vs air-yards share", diag: true, fx: v => (100 * v).toFixed(0) + "%", fy: v => (100 * v).toFixed(0) + "%",
-   xt: "Target share", yt: "Air-yards share", corners: [["Downfield role", "tl"], ["Volume, shorter targets", "br"]],
-   name: p => nm(RC, p.id), team: p => tm(RC, p.id), tx: pc, ty: pc, card: p => recCard(p.id, "wopr"), label: p => `${nm(RC, p.id)}: ${pc(p.x)} of targets, ${pc(p.y)} of air yards`});
+// 2: running backs
+chart(2, "Running Back Success Rate", (f, o) => `Top 30 of the ${o.nq} backs with ${o.t === 60 ? "60+" : o.t + "+"} carries${o.t === 60 ? "" : " (60 over the full season, scaled to the slice)"}; QB runs and scrambles left out; EPA per rush at right.${sliceTag(f)}`,
+  (f, o) => o.rows.length ? `${nm(RB, o.rows[0].id)} (${tm(RB, o.rows[0].id)}) leads at ${pc(o.rows[0].v)}. Bars start near the leaders' range, not at zero.` : "",
+  (f, wrap) => {
+    const c = CU.rb, ci = c.ci, s = agg(c, f), t = thr("rb", "car", 60, f, 8), la = agg(CU.rb_all, f).total, ref = la[CU.rb_all.ci.succ] / la[CU.rb_all.ci.car];
+    const all = []; for (const [i, a] of s) if (a[ci.car] >= t) all.push({id: c.ents[i], v: a[ci.succ] / a[ci.car], right: a[ci.epa] / a[ci.car], n: a[ci.car]});
+    const rows = all.sort((a, b) => b.v - a.v).slice(0, 30);
+    bars(wrap, rows, {aria: "Top 30 running backs by success rate", zoom: true, ref, refLabel: `RB avg ${pc(ref)}`, team: r => tm(RB, r.id), name: r => nm(RB, r.id),
+      fv: v => pc(v), fx: v => (100 * v).toFixed(0) + "%", right: r => sg(r.right, 2), rightHead: "EPA/rush", xt: "Rushing success rate",
+      card: r => sliced(f, [[pc(r.v), `success (RB avg ${pc(ref)})`], [sg(r.right, 2), "EPA/rush", cls(r.right)], [r.n, "carries"]], "",
+        () => RB[r.id] ? rbCard(r.id) : minimal(nm(RB, r.id), tm(RB, r.id)))(), labelW: 120});
+    return {rows, t, nq: all.length};
+  });
 
-const pr = CH.press;
-scatter(card(6, "Pass Defense: Pressure vs. Results", "Pressure proxy = sack or QB hit per dropback faced (no hurries in play-by-play); dotted lines = league average",
-  "Hover a team for how far it sits from what its pressure rate predicts."), pr,
-  {aria: "Defenses: pressure rate vs EPA per dropback allowed", badge: true, r: 14, invertY: true, xref: avg(pr.map(p => p.x)), yref: avg(pr.map(p => p.y)),
-   fx: v => (100 * v).toFixed(0) + "%", fy: v => sg(v, 2), xt: "Sack or QB-hit rate per dropback faced", yt: "EPA per dropback allowed (better is up)",
-   corners: [["Wins without the rush", "tl"], ["Rush gets home, coverage leaks", "br"]], tx: pc, ty: v => sg(v, 3), card: p => teamCard(p.team, "press"), label: p => `${p.team}: ${pc(p.x)} pressure, ${sg(p.y, 3)} EPA allowed`});
+// teams: one aggregate per slice serves charts 3, 4, 6 and 10
+function teamSlice(f) {
+  const c = CU.team, ci = c.ci, s = agg(c, f), out = {};
+  for (const [i, a] of s) {
+    const q = (n, e) => a[ci[n]] > 0 ? a[ci[e]] / a[ci[n]] : null;
+    out[c.ents[i]] = {off: q("off_n", "off_e"), def: q("def_n", "def_e"), proe: q("proe_n", "proe_s"), proe_n: a[ci.proe_n],
+      press: q("db_n", "press"), dbe: q("db_n", "db_e"), db_n: a[ci.db_n], run: q("run_n", "run_e"), pass: q("pas_n", "pas_e"), off_n: a[ci.off_n]};
+  }
+  return out;
+}
+const teamCardF = (f, t, focus, items, n) => sliced(f, items, n, () => teamCard(t, focus))();
 
-const q7 = CH.qb7;
-scatter(card(7, "Where QB Yards Come From", "Min. 150 attempts; YAC share = yards after catch / passing yards on completions",
-  "The shorter the throws, the bigger the YAC share, so a high share is a style, not a skill by itself."), q7,
-  {aria: "QBs: depth of target vs YAC share", xref: avg(q7.map(p => p.x)), yref: avg(q7.map(p => p.y)), fx: v => v.toFixed(0), fy: v => (100 * v).toFixed(0) + "%",
-   xt: "Average depth of target (air yards per attempt)", yt: "Share of passing yards after the catch", corners: [["Short throws, YAC does the work", "tl"], ["Pushes it downfield", "br"]],
-   name: p => nm(QB, p.id), team: p => tm(QB, p.id), tx: v => v.toFixed(1), ty: pc, card: p => qbCard(p.id, "yac"), label: p => `${nm(QB, p.id)}: aDOT ${p.x}, YAC share ${pc(p.y)}`});
+chart(3, "2026 Team Tiers", f => `Offense EPA per play vs. defense EPA per play allowed; dotted lines = league average.${sliceTag(f)}`,
+  "Hover a team for its record, its offense and defense split into pass and run, and its net EPA week by week.",
+  (f, wrap) => {
+    const ts = teamSlice(f), pts = Object.entries(ts).filter(([, v]) => v.off != null && v.def != null).map(([team, v]) => ({team, x: v.off, y: v.def, n: v.off_n}));
+    scatter(wrap, pts, {aria: "Teams: offensive vs defensive EPA per play", badge: true, r: 14, invertY: true, xref: avg(pts.map(p => p.x)), yref: avg(pts.map(p => p.y)),
+      fx: v => sg(v, 2), fy: v => sg(v, 2), xt: "Offense: EPA per play", yt: "Defense: EPA per play allowed (better is up)",
+      corners: [["Good offense, good defense", "tr"], ["Bad offense, bad defense", "bl"]], tx: v => sg(v, 3), ty: v => sg(v, 3),
+      card: p => teamCardF(f, p.team, "tiers", [[sg(p.x - p.y, 3), "net EPA/play", cls(p.x - p.y)], [sg(p.x, 3), "offense", cls(p.x)], [sg(p.y, 3), "defense allowed", cls(-p.y)]], `${p.n} offensive plays in this slice.`),
+      label: p => `${p.team}: offense ${sg(p.x, 3)}, defense ${sg(p.y, 3)}`});
+    return {pts};
+  });
 
-const r8 = CH.rec8;
-scatter(card(8, "Receivers: Role vs. Value", "45 most-targeted receivers (WR, TE, RB), min. 40 targets; dotted lines = group average",
-  "Deeper roles earn more per target, so compare a receiver with others at his depth."), r8,
-  {aria: "Receivers: depth of target vs EPA per target", xref: avg(r8.map(p => p.x)), yref: avg(r8.map(p => p.y)), fx: v => v.toFixed(0), fy: v => sg(v, 1),
-   xt: "Average depth of target (air yards)", yt: "EPA per target", corners: [["Deep role, big value", "tr"], ["Short role, low value", "bl"]],
-   name: p => nm(RC, p.id), team: p => tm(RC, p.id), tx: v => v.toFixed(1), ty: v => sg(v, 2), card: p => recCard(p.id, "epa"), label: p => `${nm(RC, p.id)}: aDOT ${p.x}, EPA/target ${sg(p.y, 2)}`});
+chart(4, "Early-Down Pass Rate Over Expected", f => `1st & 2nd down; win prob. 20-80%; outside the last 2 minutes of halves; offensive EPA rank at right.${sliceTag(f)}`,
+  "Hover a team for how its pass rate lines up with its offense.",
+  (f, wrap) => {
+    const ts = teamSlice(f), offRank = {};
+    Object.entries(ts).filter(([, v]) => v.off != null).sort((a, b) => b[1].off - a[1].off).forEach(([t], i) => offRank[t] = i + 1);
+    const rows = Object.entries(ts).filter(([, v]) => v.proe != null).map(([team, v]) => ({team, v: v.proe, right: offRank[team], n: v.proe_n})).sort((a, b) => b.v - a.v);
+    bars(wrap, rows, {aria: "Teams by early-down pass rate over expected", team: r => r.team, name: r => r.team, fv: v => PTS(100 * v), fx: v => PTS(100 * v),
+      right: r => "#" + r.right, rightHead: "Off. EPA", xt: "Pass rate over expected (percentage points)",
+      card: r => teamCardF(f, r.team, "proe", [[PTS(100 * r.v), "early-down PROE (pts)"], [r.n, "neutral early-down plays"], ["#" + r.right, "off. EPA rank"]], ""), labelW: 60});
+    return {rows};
+  }, {downs: [0, 1, 2]});
 
-bars(card(9, "YAC Over Expected per Catch", "Top 30 with 25+ catches; expected = nflverse xYAC model; YAC per catch at right",
-  `${RC[CH.yac[0].id].name} (${RC[CH.yac[0].id].team}) gains ${sg(CH.yac[0].v, 2)} yards per catch beyond the model.`), CH.yac,
-  {aria: "Top 30 by YAC over expected", lo: 0, team: r => tm(RC, r.id), name: r => nm(RC, r.id), fv: v => sg(v, 2), fx: v => sg(v, 0),
-   right: r => r.right, rightHead: "YAC/rec", xt: "Yards after the catch over expected, per reception", card: r => recCard(r.id, "yac"), labelW: 120});
+// 5: receiver roles
+chart(5, "Receiver Roles: Targets vs. Air Yards", (f, o) => `Top 40 by WOPR, ${minNote(40, o.t, "targets")}; shares in games played; dashed line = equal shares.${sliceTag(f)}`,
+  "Above the line, the role is downfield; below it, volume on shorter throws.",
+  (f, wrap) => {
+    const c = CU.rec, ci = c.ci, s = agg(c, f), t = thr("rec", "w_t", 40, f, 6), all = [];
+    for (const [i, a] of s) if (a[ci.w_t] >= t && a[ci.w_tt] > 0 && a[ci.w_ta] > 0) {
+      const x = a[ci.w_t] / a[ci.w_tt], y = a[ci.w_a] / a[ci.w_ta]; all.push({id: c.ents[i], x, y, wopr: 1.5 * x + 0.7 * y, n: a[ci.w_t]}); }
+    const pts = all.sort((a, b) => b.wopr - a.wopr).slice(0, 40);
+    scatter(wrap, pts, {aria: "Receivers: target share vs air-yards share", diag: true, fx: v => (100 * v).toFixed(0) + "%", fy: v => (100 * v).toFixed(0) + "%",
+      xt: "Target share", yt: "Air-yards share", corners: [["Downfield role", "tl"], ["Volume, shorter targets", "br"]],
+      name: p => nm(RC, p.id), team: p => tm(RC, p.id), tx: pc, ty: pc,
+      card: p => sliced(f, [[pc(p.x), "target share"], [pc(p.y), "air-yards share"], [p.wopr.toFixed(2), "WOPR"]], `${p.n} targets in this slice.`,
+        () => RC[p.id] ? recCard(p.id, "wopr") : minimal(nm(RC, p.id), tm(RC, p.id)))(),
+      label: p => `${nm(RC, p.id)}: ${pc(p.x)} of targets, ${pc(p.y)} of air yards`});
+    return {pts, t};
+  });
 
-const drp = CH.drp;
-scatter(card(10, "Defense: Run Stopping vs. Pass Defense", "Designed runs (scrambles count as pass); dropbacks include sacks; dotted lines = league average",
-  "Hover a team for its defense split into run and pass, and its net EPA week by week."), drp,
-  {aria: "Defenses: EPA per run allowed vs EPA per dropback allowed", badge: true, r: 14, invertX: true, invertY: true, xref: avg(drp.map(p => p.x)), yref: avg(drp.map(p => p.y)),
-   fx: v => sg(v, 2), fy: v => sg(v, 2), xt: "EPA per run allowed (better is right)", yt: "EPA per dropback allowed (better is up)",
-   corners: [["Stops both", "tr"], ["Gets hit both ways", "bl"]], tx: v => sg(v, 3), ty: v => sg(v, 3), card: p => teamCard(p.team, "drp"), label: p => `${p.team}: ${sg(p.x, 3)} per run, ${sg(p.y, 3)} per dropback`});
+// 6: pressure vs results
+chart(6, "Pass Defense: Pressure vs. Results", f => `Pressure proxy = sack or QB hit per dropback faced (no hurries in play-by-play); dotted lines = league average.${sliceTag(f)}`,
+  "Hover a team for how far it sits from what its pressure rate predicts.",
+  (f, wrap) => {
+    const ts = teamSlice(f), pts = Object.entries(ts).filter(([, v]) => v.press != null).map(([team, v]) => ({team, x: v.press, y: v.dbe, n: v.db_n}));
+    const mx = avg(pts.map(p => p.x)), my = avg(pts.map(p => p.y)), sxx = pts.reduce((s, p) => s + (p.x - mx) ** 2, 0);
+    const b1 = sxx ? pts.reduce((s, p) => s + (p.x - mx) * (p.y - my), 0) / sxx : 0;
+    pts.forEach(p => p.fit = p.y - (my + b1 * (p.x - mx)));
+    scatter(wrap, pts, {aria: "Defenses: pressure rate vs EPA per dropback allowed", badge: true, r: 14, invertY: true, xref: mx, yref: my,
+      fx: v => (100 * v).toFixed(0) + "%", fy: v => sg(v, 2), xt: "Sack or QB-hit rate per dropback faced", yt: "EPA per dropback allowed (better is up)",
+      corners: [["Wins without the rush", "tl"], ["Rush gets home, coverage leaks", "br"]], tx: pc, ty: v => sg(v, 3),
+      card: p => teamCardF(f, p.team, "press", [[pc(p.x), "sack or hit rate"], [sg(p.y, 3), "EPA/dropback allowed", cls(-p.y)], [sg(p.fit, 3), "vs. the line", cls(-p.fit)]], `${p.n} dropbacks faced in this slice.`),
+      label: p => `${p.team}: ${pc(p.x)} pressure, ${sg(p.y, 3)} EPA allowed`});
+    return {pts};
+  });
 
-bars(card(11, "Pass Rush Leaders: Sacks + QB Hits", "Top 30; each play counted once per player; half sacks = 0.5; sacks at right",
-  "Hover a rusher for his hits without a sack and his week-by-week count."), CH.rush,
-  {aria: "Top 30 pass rushers", lo: 0, team: r => tm(DF, r.id), name: r => nm(DF, r.id), fv: v => v, fx: v => v.toFixed(0), right: r => r.right,
-   rightHead: "Sacks", xt: "Plays with a sack or QB hit", card: r => defCard(r.id), labelW: 120});
+// 7: where QB yards come from
+chart(7, "Where QB Yards Come From", (f, o) => `${minNote(150, o.t, "attempts")}; YAC share = yards after catch / passing yards on completions.${sliceTag(f)}`,
+  "The shorter the throws, the bigger the YAC share, so a high share is a style, not a skill by itself.",
+  (f, wrap) => {
+    const c = CU.qb, ci = c.ci, s = agg(c, f), t = thr("qb", "att", 150, f, 20), pts = [];
+    for (const [i, a] of s) if (a[ci.att] >= t && a[ci.air_n] > 0 && a[ci.cyds] > 0) pts.push({id: c.ents[i], x: a[ci.air_s] / a[ci.air_n], y: a[ci.cyac] / a[ci.cyds], n: a[ci.att]});
+    scatter(wrap, pts, {aria: "QBs: depth of target vs YAC share", xref: avg(pts.map(p => p.x)), yref: avg(pts.map(p => p.y)), fx: v => v.toFixed(0), fy: v => (100 * v).toFixed(0) + "%",
+      xt: "Average depth of target (air yards per attempt)", yt: "Share of passing yards after the catch", corners: [["Short throws, YAC does the work", "tl"], ["Pushes it downfield", "br"]],
+      name: p => nm(QB, p.id), team: p => tm(QB, p.id), tx: v => v.toFixed(1), ty: pc,
+      card: p => sliced(f, [[p.x.toFixed(1), "aDOT (yds)"], [pc(p.y), "yards after catch"], [p.n, "attempts"]], "",
+        () => QB[p.id] ? qbCard(p.id, "yac") : minimal(nm(QB, p.id), tm(QB, p.id)))(),
+      label: p => `${nm(QB, p.id)}: aDOT ${p.x.toFixed(1)}, YAC share ${pc(p.y)}`});
+    return {pts, t};
+  });
 
-bars(card(12, "Kickers: FG Points Over Expected", "Min. 8 attempts; expected make rate by distance and roof, fit on 2022-25 kicks; made-att at right",
-  `${KK[CH.k[0].id].name} (${KK[CH.k[0].id].team}, ${CH.k[0].right}) leads at ${pts(CH.k[0].v)} points.`), CH.k,
-  {aria: "Kickers by field-goal points over expected", team: r => tm(KK, r.id), name: r => nm(KK, r.id), fv: v => pts(v), fx: v => pts(v),
-   right: r => r.right, rightHead: "FG", xt: "Field-goal points over expected", card: r => kCard(r.id), labelW: 120});
+// 8: receivers, role vs value
+chart(8, "Receivers: Role vs. Value", (f, o) => `45 most-targeted receivers (WR, TE, RB), ${minNote(40, o.t, "targets")}; dotted lines = group average.${sliceTag(f)}`,
+  "Deeper roles earn more per target, so compare a receiver with others at his depth.",
+  (f, wrap) => {
+    const c = CU.rec, ci = c.ci, s = agg(c, f), t = thr("rec", "v_n", 40, f, 6), all = [];
+    for (const [i, a] of s) if (a[ci.v_n] >= t && a[ci.v_an] > 0) all.push({id: c.ents[i], x: a[ci.v_as] / a[ci.v_an], y: a[ci.v_e] / a[ci.v_n], n: a[ci.v_n]});
+    const tie = id => { const i = TIE8.get(id); return i == null ? 1e9 : i; };
+    const pts = all.sort((a, b) => b.n - a.n || tie(a.id) - tie(b.id)).slice(0, 45);
+    scatter(wrap, pts, {aria: "Receivers: depth of target vs EPA per target", xref: avg(pts.map(p => p.x)), yref: avg(pts.map(p => p.y)), fx: v => v.toFixed(0), fy: v => sg(v, 1),
+      xt: "Average depth of target (air yards)", yt: "EPA per target", corners: [["Deep role, big value", "tr"], ["Short role, low value", "bl"]],
+      name: p => nm(RC, p.id), team: p => tm(RC, p.id), tx: v => v.toFixed(1), ty: v => sg(v, 2),
+      card: p => sliced(f, [[sg(p.y, 2), "EPA/target", cls(p.y)], [p.x.toFixed(1), "aDOT (yds)"], [p.n, "targets"]], "",
+        () => RC[p.id] ? recCard(p.id, "epa") : minimal(nm(RC, p.id), tm(RC, p.id)))(),
+      label: p => `${nm(RC, p.id)}: aDOT ${p.x.toFixed(1)}, EPA/target ${sg(p.y, 2)}`});
+    return {pts, t};
+  });
+
+// 9: YAC over expected
+chart(9, "YAC Over Expected per Catch", (f, o) => `Top 30 with ${o.t}+ catches${o.t === 25 ? "" : " (25 over the full season, scaled to the slice)"}; expected = nflverse xYAC model; YAC per catch at right.${sliceTag(f)}`,
+  (f, o) => o.rows.length ? `${nm(RC, o.rows[0].id)} (${tm(RC, o.rows[0].id)}) gains ${sg(o.rows[0].v, 2)} yards per catch beyond the model${isAll(f) ? "" : " in this slice"}.` : "",
+  (f, wrap) => {
+    const c = CU.rec, ci = c.ci, s = agg(c, f), t = thr("rec", "y_n", 25, f, 4), all = [];
+    for (const [i, a] of s) if (a[ci.y_n] >= t) all.push({id: c.ents[i], v: a[ci.y_oe] / a[ci.y_n], right: a[ci.y_yac] / a[ci.y_n], n: a[ci.y_n]});
+    const rows = all.sort((a, b) => b.v - a.v).slice(0, 30);
+    bars(wrap, rows, {aria: "Top 30 by YAC over expected", lo: Math.min(0, ...rows.map(r => r.v)) < 0 ? undefined : 0, team: r => tm(RC, r.id), name: r => nm(RC, r.id), fv: v => sg(v, 2), fx: v => sg(v, 0),
+      right: r => r.right.toFixed(1), rightHead: "YAC/rec", xt: "Yards after the catch over expected, per reception",
+      card: r => sliced(f, [[sg(r.v, 2), "YAC over exp./catch", cls(r.v)], [r.right.toFixed(1), "YAC per catch"], [r.n, "catches"]], "",
+        () => RC[r.id] ? recCard(r.id, "yac") : minimal(nm(RC, r.id), tm(RC, r.id)))(), labelW: 120});
+    return {rows, t};
+  });
+
+// 10: run defense vs pass defense
+chart(10, "Defense: Run Stopping vs. Pass Defense", f => `Designed runs (scrambles count as pass); dropbacks include sacks; dotted lines = league average.${sliceTag(f)}`,
+  "Hover a team for its defense split into run and pass, and its net EPA week by week.",
+  (f, wrap) => {
+    const ts = teamSlice(f), pts = Object.entries(ts).filter(([, v]) => v.run != null && v.pass != null).map(([team, v]) => ({team, x: v.run, y: v.pass}));
+    scatter(wrap, pts, {aria: "Defenses: EPA per run allowed vs EPA per dropback allowed", badge: true, r: 14, invertX: true, invertY: true, xref: avg(pts.map(p => p.x)), yref: avg(pts.map(p => p.y)),
+      fx: v => sg(v, 2), fy: v => sg(v, 2), xt: "EPA per run allowed (better is right)", yt: "EPA per dropback allowed (better is up)",
+      corners: [["Stops both", "tr"], ["Gets hit both ways", "bl"]], tx: v => sg(v, 3), ty: v => sg(v, 3),
+      card: p => teamCardF(f, p.team, "drp", [[sg(p.x, 3), "EPA/run allowed", cls(-p.x)], [sg(p.y, 3), "EPA/dropback allowed", cls(-p.y)]], ""),
+      label: p => `${p.team}: ${sg(p.x, 3)} per run, ${sg(p.y, 3)} per dropback`});
+    return {pts};
+  });
+
+// 11: pass rush
+chart(11, "Pass Rush Leaders: Sacks + QB Hits", f => `Top 30; each play counted once per player; half sacks = 0.5; sacks at right.${sliceTag(f)}`,
+  "Hover a rusher for his hits without a sack and his week-by-week count.",
+  (f, wrap) => {
+    const c = CU.def, ci = c.ci, s = agg(c, f), all = [];
+    for (const [i, a] of s) if (a[ci.ev] > 0) all.push({id: c.ents[i], v: a[ci.ev], right: a[ci.sk]});
+    const rows = all.sort((a, b) => b.v - a.v || b.right - a.right).slice(0, 30);
+    bars(wrap, rows, {aria: "Top 30 pass rushers", lo: 0, team: r => tm(DF, r.id), name: r => nm(DF, r.id), fv: v => v, fx: v => v.toFixed(0), right: r => r.right,
+      rightHead: "Sacks", xt: "Plays with a sack or QB hit",
+      card: r => sliced(f, [[r.v, "plays with sack/hit"], [r.right, "sacks"]], "", () => DF[r.id] ? defCard(r.id) : minimal(nm(DF, r.id), tm(DF, r.id)))(), labelW: 120});
+    return {rows};
+  });
+
+// 12: kickers (field goals come on 4th down, so no down filter)
+chart(12, "Kickers: FG Points Over Expected", (f, o) => `${minNote(8, o.t, "attempts")}; expected make rate by distance and roof, fit on 2022-25 kicks; made-att at right.${sliceTag(f)}`,
+  (f, o) => o.rows.length ? `${nm(KK, o.rows[0].id)} (${tm(KK, o.rows[0].id)}, ${o.rows[0].right}) leads at ${PTS(o.rows[0].v)} points${isAll(f) ? "" : " in this slice"}.` : "",
+  (f, wrap) => {
+    const c = CU.k, ci = c.ci, s = agg(c, f), t = thr("k", "att", 8, f, 2), all = [];
+    for (const [i, a] of s) if (a[ci.att] >= t) all.push({id: c.ents[i], v: 3 * (a[ci.made] - a[ci.exp]), right: `${a[ci.made]}-${a[ci.att]}`, exp: a[ci.exp]});
+    const rows = all.sort((a, b) => b.v - a.v);
+    bars(wrap, rows, {aria: "Kickers by field-goal points over expected", team: r => tm(KK, r.id), name: r => nm(KK, r.id), fv: v => PTS(v), fx: v => PTS(v),
+      right: r => r.right, rightHead: "FG", xt: "Field-goal points over expected",
+      card: r => sliced(f, [[PTS(r.v), "FG pts over expected", cls(r.v)], [r.right, "made-att"], [r.exp.toFixed(1), "expected makes"]], "",
+        () => KK[r.id] ? kCard(r.id) : minimal(nm(KK, r.id), tm(KK, r.id)))(), labelW: 120});
+    return {rows, t};
+  }, {noDown: true});
+
 }
 drawAll();
 let lastW = innerWidth;
