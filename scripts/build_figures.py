@@ -23,8 +23,8 @@ import matplotlib.pyplot as plt  # noqa: E402
 R = ROOT / "reports"
 A = ROOT / "assets"
 PAPER = plot.PAPER
-FIELD = plot.ACCENT  # violet: the main series
-ORANGE = plot.ACCENT2  # red: the highlighted series
+FIELD = plot.ACCENT  # turf green: the main series
+ORANGE = plot.ACCENT2  # flag orange: the highlighted series
 DISPLAY, TEXT = plot.DISPLAY, plot.TEXT
 INK = plot.INK
 MUTED = plot.MUTED
@@ -103,7 +103,7 @@ def at_a_glance():
     era = {k.strip("()").replace("'", "").replace(" ", ""): v for k, v in f1["home_edge_by_era"].items()}
     new = sorted({k.split(",")[0] for k in era})[-1]
     old = sorted({k.split(",")[0] for k in era})[0]
-    _card(ax, "01", "Flag Audit", f"{era[old + ',subjective']:.2f} to {abs(era[new + ',subjective']):.2f}", f"Road teams' extra judgment-call flags per game, {old} (red) vs since 2023 (violet)")
+    _card(ax, "01", "Flag Audit", f"{era[old + ',subjective']:.2f} to {abs(era[new + ',subjective']):.2f}", f"Road teams' extra judgment-call flags per game, {old} (orange) vs since 2023 (green)")
 
     # 02 go rate
     f2 = F("02-fourth-down-bot")
@@ -123,14 +123,14 @@ def at_a_glance():
     ax.bar(range(len(keys)), [e[k] for k in keys], color=[FIELD if k.startswith("2") else MUTED for k in keys], width=0.7)
     ax.bar([keys.index("3&11+")], [e["3&11+"]], color=ORANGE, width=0.7)
     ax.set_ylim(0, max(e[k] for k in keys) * 1.15)
-    _card(ax, "03", "Sack Leverage", f"{f3['epa_lost_2nd_down_sack_avg']:.2f} EPA", f"Average 2nd-down sack. Bars: 2nd down (violet), 3rd-and-1 to 10 (grey), 3rd-and-11+ (red, {e['3&11+']:.2f})")
+    _card(ax, "03", "Sack Leverage", f"{f3['epa_lost_2nd_down_sack_avg']:.2f} EPA", f"Average 2nd-down sack. Bars: 2nd down (green), 3rd-and-1 to 10 (grey), 3rd-and-11+ (orange, {e['3&11+']:.2f})")
 
     # 04 luck
     f4 = F("04-luck-index")
     ax = axs[3]
     ax.bar([0, 1], [f4["lucky_change_wins_per17"], f4["unlucky_change_wins_per17"]], color=[ORANGE, FIELD], width=0.55)
     ax.axhline(0, color=MUTED, lw=0.8)
-    _card(ax, "04", "Luck Index", f"{f4['lucky_change_wins_per17']:+.1f} wins", "Next-year change for teams 2+ wins over their points (red) vs 2+ under (violet)")
+    _card(ax, "04", "Luck Index", f"{f4['lucky_change_wins_per17']:+.1f} wins", "Next-year change for teams 2+ wins over their points (orange) vs 2+ under (green)")
 
     # 05 kickoffs
     k = pd.read_csv(R / "05-kickoff-value/kickoffs_by_season.csv").sort_values("season")
@@ -153,7 +153,7 @@ def at_a_glance():
     ax = axs[6]
     ax.bar([0, 1], [f7["market_ratio_sack_to_pressure"], f7["predict_count_ratio"]], color=[ORANGE, FIELD], width=0.55)
     ax.set_ylim(0, f7["market_ratio_sack_to_pressure"] * 1.2)
-    _card(ax, "07", "Box-Score Tax", f"{f7['market_ratio_sack_to_pressure']:.2f}x vs {f7['predict_count_ratio']:.2f}x", f"A sack is priced like {f7['market_ratio_sack_to_pressure']:.2f} non-sack pressures (red) but predicts like {f7['predict_count_ratio']:.2f} (violet)")
+    _card(ax, "07", "Box-Score Tax", f"{f7['market_ratio_sack_to_pressure']:.2f}x vs {f7['predict_count_ratio']:.2f}x", f"A sack is priced like {f7['market_ratio_sack_to_pressure']:.2f} non-sack pressures (orange) but predicts like {f7['predict_count_ratio']:.2f} (green)")
 
     # 08 YAC tax
     f8 = F("08-yac-tax")
@@ -161,7 +161,7 @@ def at_a_glance():
     ax = axs[7]
     ax.bar([0, 1, 2], [fut["air_yds"], fut["xyac_yds"], fut["yacoe_yds"]], color=[FIELD, FIELD, ORANGE], width=0.6)
     ax.set_ylim(0, max(fut.values()) * 1.25)
-    _card(ax, "08", "YAC Tax", "No tax", "Price per 100 future yards: air yards, expected YAC, YAC over expected (red) all close")
+    _card(ax, "08", "YAC Tax", "No tax", "Price per 100 future yards: air yards, expected YAC, YAC over expected (orange) all close")
 
     fig.text(0.03, 0.955, "Selected studies at a glance", fontsize=20, fontweight="bold", color=INK, fontfamily=DISPLAY)
     fig.text(0.03, 0.915, "Headline number and the evidence behind it. Every figure is rebuilt from the data on each refresh.", fontsize=11, color=MUTED, fontfamily=TEXT, style="italic")

@@ -52,8 +52,8 @@ import matplotlib.patheffects as _pe  # noqa: E402
 for _f in "Unbounded-Medium Unbounded-Bold Literata-Regular Literata-SemiBold Literata-Italic".split():
     _fm.fontManager.addfont(str(ROOT / "assets" / "fonts" / f"{_f}.ttf"))
 DISPLAY, TEXT = "Unbounded", "Literata"
-PAPER, PLATE, INK, MUTED, SOFT, GRID = "#f2f0f5", "#fbfaff", "#221532", "#5f5672", "#8a829a", "#e4dfeb"
-ACCENT, LOT, LOT2 = "#b8202c", "#5524b0", None
+PAPER, PLATE, INK, MUTED, SOFT, GRID = "#f5f4ef", "#fdfdfb", "#151613", "#5b5d57", "#8d8f88", "#e8e7e1"
+ACCENT, LOT, LOT2 = "#c2410c", "#1a7f4b", None
 HALO = [_pe.withStroke(linewidth=3, foreground=PLATE)]
 HANDLE = "Dylan Fanelli, github.com/IForSureI/NFL-Analytics"
 

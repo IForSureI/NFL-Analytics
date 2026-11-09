@@ -1,8 +1,8 @@
 """One house style for every chart: plain, readable, labeled, sourced.
 
-The look matches the interactive snippets page: a plate on carbon-copy paper, the title set left in Unbounded,
-text in Literata (both in assets/fonts, OFL), violet and red as the two series colours (checked for colour-blind
-separation and contrast), words in ink, the study number printed in the plate's corner.
+The look matches the interactive snippets page: a plate on neutral paper, the title set left in Unbounded,
+text in Literata (both in assets/fonts, OFL), turf green and flag orange as the two series colours (checked for
+colour-blind separation and contrast), words in ink, the study number printed in the plate's corner.
 """
 from __future__ import annotations
 
@@ -19,14 +19,14 @@ for _f in ("Unbounded-Medium", "Unbounded-Bold", "Literata-Regular", "Literata-S
     font_manager.fontManager.addfont(str(FONTS / f"{_f}.ttf"))
 DISPLAY, TEXT = "Unbounded", "Literata"
 
-PAPER = "#f2f0f5"
-PLATE = "#fbfaff"
-INK = "#221532"
-MUTED = "#5f5672"
-SOFT = "#8a829a"
-ACCENT = "#6a3ac8"   # violet: the first series (validated with ACCENT2: CVD and normal-vision separation, contrast)
-ACCENT2 = "#b8202c"  # red: the second series, and reference lines
-GRID = "#e4dfeb"
+PAPER = "#f5f4ef"
+PLATE = "#fdfdfb"
+INK = "#151613"
+MUTED = "#5b5d57"
+SOFT = "#8d8f88"
+ACCENT = "#1a7f4b"   # turf green: the first series (validated with ACCENT2: CVD and normal-vision separation, contrast)
+ACCENT2 = "#c2410c"  # flag orange: the second series, and reference lines
+GRID = "#e8e7e1"
 
 
 def style():
