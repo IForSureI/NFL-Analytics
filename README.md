@@ -1,6 +1,6 @@
 <p align="center"><img src="assets/banner.png" alt="NFL Analytics by Dylan Fanelli" width="100%"></p>
 
-<p align="center"><a href="https://github.com/IForSureI/NFL-Analytics/actions/workflows/tests.yml"><img src="https://github.com/IForSureI/NFL-Analytics/actions/workflows/tests.yml/badge.svg" alt="tests"></a> <img src="https://img.shields.io/badge/python-3.10%2B-1d2433" alt="python: 3.10+"> <img src="https://img.shields.io/badge/data-nflverse%202006--2026-1d2433" alt="data: nflverse 2006-2026"> <img src="https://img.shields.io/badge/studies-8-c2410c" alt="studies: 8"> <img src="https://img.shields.io/badge/refreshed-Nov%2008%202026-6b7280" alt="refreshed: Nov 08 2026"> <img src="https://img.shields.io/badge/license-all%20rights%20reserved-6b7280" alt="license: all rights reserved"></p>
+<p align="center"><a href="https://github.com/IForSureI/NFL-Analytics/actions/workflows/tests.yml"><img src="https://github.com/IForSureI/NFL-Analytics/actions/workflows/tests.yml/badge.svg" alt="tests"></a> <img src="https://img.shields.io/badge/python-3.10%2B-1d2433" alt="python: 3.10+"> <img src="https://img.shields.io/badge/data-nflverse%202006--2026-1d2433" alt="data: nflverse 2006-2026"> <img src="https://img.shields.io/badge/studies-8-c2410c" alt="studies: 8"> <img src="https://img.shields.io/badge/refreshed-Nov%2009%202026-6b7280" alt="refreshed: Nov 09 2026"> <img src="https://img.shields.io/badge/license-all%20rights%20reserved-6b7280" alt="license: all rights reserved"></p>
 
 <p align="center"><b><a href="#the-studies">Studies</a> &nbsp;|&nbsp; <a href="#what-a-club-gets">What a club gets</a> &nbsp;|&nbsp; <a href="#how-i-work">How I work</a> &nbsp;|&nbsp; <a href="#under-the-hood">Under the hood</a> &nbsp;|&nbsp; <a href="docs/glossary.md">Glossary</a> &nbsp;|&nbsp; <a href="#about">About</a></b></p>
 
@@ -118,11 +118,11 @@ Each study also runs alone, for example `python -m projects.fourth_down_bot`.
 
 ## Changelog
 
-- 2026-11-08: Snippets page redesigned as an index of plates (Unbounded and Literata, violet and red on carbon-copy paper, crop marks): charts redraw at the screen's width so phone text stays readable, a dark mode with its own colors, names in ink with team colors on the marks, a table under every chart, and the provenance line at the top.
 - 2026-11-08: Snippet charts restyled to match the page: Unbounded and Literata (in assets/fonts, OFL), numbered plates with crop marks, the title set left, a plain footer in place of the dark band, names in ink with team colours on the marks, no bar-end badges or shadows. Same data and numbers; findings.json unchanged.
 - 2026-11-08: Every study figure, the banner and the at-a-glance panel restyled to the snippets design through nflan/plot.py (Unbounded and Literata, carbon-copy paper, violet and red series checked for colour-blind separation, study number on each plate); the yard-line banner and Inter are gone. Rebuilt with a refresh: nflverse revised past seasons, so a few numbers moved slightly (2025 go rate in clear spots 53% to 54%; flags 35,094 to 35,104).
+- 2026-11-09: Snippets page: one filter row for every chart (week range, down, quarter) re-cuts all twelve from additive per-week, per-down, per-quarter cells, with minimum samples scaled to the slice; with no filter it reproduces the published charts exactly (tested). Player headshots on the four player scatters (linked from the NFL's image server, team-colour dot as the fallback). Light only. Charts and study figures move from violet and red to neutral paper with turf green and flag orange, validated for colour-blind separation and contrast.
 
-Full history: [LOG.md](LOG.md). Data refreshes weekly in season (last: November 08, 2026, through the latest completed week of 2026).
+Full history: [LOG.md](LOG.md). Data refreshes weekly in season (last: November 09, 2026, through the latest completed week of 2026).
 
 ## License and citation
 

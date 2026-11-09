@@ -4,8 +4,8 @@
 Dep. Variable:             sk100_next   R-squared:                       0.319
 Model:                            OLS   Adj. R-squared:                  0.318
 Method:                 Least Squares   F-statistic:                     209.8
-Date:                Sun, 08 Nov 2026   Prob (F-statistic):           1.03e-76
-Time:                        21:20:29   Log-Likelihood:                -553.32
+Date:                Mon, 09 Nov 2026   Prob (F-statistic):           1.03e-76
+Time:                        05:59:07   Log-Likelihood:                -553.32
 No. Observations:                 995   AIC:                             1113.
 Df Residuals:                     992   BIC:                             1127.
 Df Model:                           2                                         
@@ -32,8 +32,8 @@ Notes:
 Dep. Variable:                apy_pct   R-squared:                       0.535
 Model:                            OLS   Adj. R-squared:                  0.533
 Method:                 Least Squares   F-statistic:                     147.5
-Date:                Sun, 08 Nov 2026   Prob (F-statistic):           7.34e-63
-Time:                        21:20:29   Log-Likelihood:                -1845.5
+Date:                Mon, 09 Nov 2026   Prob (F-statistic):           7.34e-63
+Time:                        05:59:07   Log-Likelihood:                -1845.5
 No. Observations:                 850   AIC:                             3699.
 Df Residuals:                     846   BIC:                             3718.
 Df Model:                           3                                         
@@ -61,8 +61,8 @@ Notes:
 Dep. Variable:                sk_next   R-squared:                       0.392
 Model:                            OLS   Adj. R-squared:                  0.390
 Method:                 Least Squares   F-statistic:                     98.83
-Date:                Sun, 08 Nov 2026   Prob (F-statistic):           1.49e-45
-Time:                        21:20:29   Log-Likelihood:                -2491.7
+Date:                Mon, 09 Nov 2026   Prob (F-statistic):           1.49e-45
+Time:                        05:59:07   Log-Likelihood:                -2491.7
 No. Observations:                 995   AIC:                             4991.
 Df Residuals:                     991   BIC:                             5011.
 Df Model:                           3                                         
@@ -90,8 +90,8 @@ Notes:
 Dep. Variable:                apy_pct   R-squared:                       0.535
 Model:                            OLS   Adj. R-squared:                  0.533
 Method:                 Least Squares   F-statistic:                     147.5
-Date:                Sun, 08 Nov 2026   Prob (F-statistic):           7.34e-63
-Time:                        21:20:29   Log-Likelihood:                -1845.5
+Date:                Mon, 09 Nov 2026   Prob (F-statistic):           7.34e-63
+Time:                        05:59:07   Log-Likelihood:                -1845.5
 No. Observations:                 850   AIC:                             3699.
 Df Residuals:                     846   BIC:                             3718.
 Df Model:                           3                                         
@@ -119,8 +119,8 @@ Notes:
 Dep. Variable:                apy_pct   R-squared:                       0.253
 Model:                            OLS   Adj. R-squared:                  0.249
 Method:                 Least Squares   F-statistic:                     68.55
-Date:                Sun, 08 Nov 2026   Prob (F-statistic):           1.13e-34
-Time:                        21:20:29   Log-Likelihood:                -1383.1
+Date:                Mon, 09 Nov 2026   Prob (F-statistic):           1.13e-34
+Time:                        05:59:07   Log-Likelihood:                -1383.1
 No. Observations:                 642   AIC:                             2774.
 Df Residuals:                     638   BIC:                             2792.
 Df Model:                           3                                         
@@ -148,8 +148,8 @@ Notes:
 Dep. Variable:               ypt_next   R-squared:                       0.018
 Model:                            OLS   Adj. R-squared:                  0.015
 Method:                 Least Squares   F-statistic:                     5.209
-Date:                Sun, 08 Nov 2026   Prob (F-statistic):            0.00572
-Time:                        21:20:29   Log-Likelihood:                -1059.1
+Date:                Mon, 09 Nov 2026   Prob (F-statistic):            0.00572
+Time:                        05:59:07   Log-Likelihood:                -1059.1
 No. Observations:                 605   AIC:                             2124.
 Df Residuals:                     602   BIC:                             2137.
 Df Model:                           2                                         
