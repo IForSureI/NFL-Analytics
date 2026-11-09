@@ -290,6 +290,14 @@ def cubes(p, r, e, k):
     return out, names, {"qb": qb, "rb": rb, "rb_all": rb_all, "team": tm, "rec": rc, "def": ev, "k": kk}
 
 
+def headshots(ids) -> dict:
+    """Player headshots for the scatter markers: nflverse's players file points at the NFL's image server, asked for a
+    96px face crop. The page links to them (nothing is copied here) and falls back to the team-colour dot."""
+    pl = data.load_players()[["gsis_id", "headshot"]].dropna()
+    pl = pl[pl.gsis_id.isin(ids) & pl.headshot.str.contains("/f_auto,q_auto/")]
+    return {r.gsis_id: r.headshot.replace("/f_auto,q_auto/", "/f_auto,q_auto,w_96,h_96,c_fill,g_face/") for r in pl.itertuples()}
+
+
 def build() -> dict:
     p, weeks = load()
     f = json.loads(FINDINGS.read_text())
@@ -485,7 +493,7 @@ def build() -> dict:
         check("cube FGOE", 3 * (q_.made - q_.exp), row["v"], 0.06)
 
     return {"meta": {"season": f["season"], "weeks": f["weeks"], "plays": f["plays"], "built": f["built"]},
-            "cubes": CU, "names": NAMES, "tie8": tie8,
+            "cubes": CU, "names": NAMES, "tie8": tie8, "heads": headshots(set(NAMES["qb"]) | set(NAMES["rec"])),
             "findings": f,  # the page header (TL;DR, key numbers) quotes findings.json directly
             "colors": colors, "qb": QB, "rb": RB, "rec": REC, "def": DEF, "k": K, "teams": T,
             "league": {"rb_succ": r3(r.success.mean()), "yacoe": f["yac_over_expected"]["league_mean"]},
