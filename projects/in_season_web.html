@@ -12,22 +12,16 @@
 /* Direction: an index / catalogue of the season, set like a printed ledger: neutral paper, black ink, turf green for
    links and the status line, a flag orange for reference lines and the corrections. No violet, no tinted greys.
    Display: Unbounded. Text: Literata. Scale 1.25. Square panels; one radius (6px) for controls only. Accents checked
-   with the dataviz palette validator in both modes. Tokens are selected per mode, not flipped. */
+   with the dataviz palette validator. Light only. */
 :root {
   --paper: #f5f4ef; --plate: #fdfdfb; --ink: #151613; --muted: #5b5d57; --soft: #8d8f88; --rule: #dcdbd4; --grid: #e8e7e1;
   --a1: #1a7f4b; --a2: #c2410c; --tip: #151613; --tip-ink: #f5f4ef; --tip-muted: #a9aaa3; --tip-rule: #34352f; --pos: #5fcf8f; --neg: #ff9a6b;
   --display: "Unbounded", "Arial Black", sans-serif; --text: "Literata", Georgia, serif;
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --paper: #121311; --plate: #1a1b19; --ink: #ebebe6; --muted: #a9aaa3; --soft: #85867f; --rule: #30312d; --grid: #262724;
-  --a1: #2f9a62; --a2: #e0692c; --tip: #ebebe6; --tip-ink: #161714; --tip-muted: #5b5d57; --tip-rule: #cfcfc8; --pos: #1a7f4b; --neg: #c2410c; color-scheme: dark } }
-:root[data-theme="dark"] {
-  --paper: #121311; --plate: #1a1b19; --ink: #ebebe6; --muted: #a9aaa3; --soft: #85867f; --rule: #30312d; --grid: #262724;
-  --a1: #2f9a62; --a2: #e0692c; --tip: #ebebe6; --tip-ink: #161714; --tip-muted: #5b5d57; --tip-rule: #cfcfc8; --pos: #1a7f4b; --neg: #c2410c; color-scheme: dark }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.55 var(--text); font-variant-numeric: tabular-nums; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.55 var(--text); }
 a { color: var(--a1); text-underline-offset: 3px; }
 a:focus-visible, .hit:focus-visible, summary:focus-visible { outline: 2px solid var(--a2); outline-offset: 2px; }
 .wrap { max-width: 1160px; margin: 0 auto; padding: 0 16px; }
@@ -52,7 +46,7 @@ h1 .yr { color: var(--a1); }
 .tldr ul { margin: 0; padding: 0; list-style: none; counter-reset: t; }
 .tldr li { counter-increment: t; position: relative; padding-left: 30px; margin: 0 0 12px; font-size: 17px; }
 .tldr li::before { content: counter(t); position: absolute; left: 0; top: 2px; font: 700 13px/1 var(--display); color: var(--a1); }
-.keynums { width: 100%; border-collapse: collapse; font-size: 15px; }
+.keynums { width: 100%; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; }
 .keynums td { padding: 6px 0; border-top: 1px solid var(--rule); vertical-align: top; }
 .keynums td + td { text-align: right; font-weight: 600; padding-left: 12px; white-space: nowrap; }
 .why { border-top: 1px solid var(--rule); padding: 18px 0 6px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 6px 28px; }
@@ -75,7 +69,7 @@ section.chart { display: grid; grid-template-columns: minmax(0, 260px) minmax(0,
 .plate > .cm::after { bottom: -8px; right: -8px; border-bottom-width: 1px; border-right-width: 1px; }
 details.tbl { margin-top: 8px; font-size: 14px; }
 details.tbl summary { cursor: pointer; color: var(--a1); font-weight: 600; }
-details.tbl table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 13.5px; }
+details.tbl table { font-variant-numeric: tabular-nums; width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 13.5px; }
 details.tbl th { text-align: left; font-weight: 600; color: var(--muted); border-bottom: 1px solid var(--rule); padding: 4px 6px 4px 0; }
 details.tbl td { border-bottom: 1px solid var(--grid); padding: 3px 6px 3px 0; }
 details.tbl .r { text-align: right; }
@@ -84,6 +78,8 @@ details.tbl .scroll { max-height: 320px; overflow: auto; }
 /* chart marks: text wears ink tokens, the team colour lives on the mark */
 svg { display: block; width: 100%; height: auto; overflow: visible; }
 svg text { font-family: var(--text); }
+.axis text, .bar-val, .bar-right { font-variant-numeric: tabular-nums; }
+#tip table { font-variant-numeric: tabular-nums; }
 .axis text { font-size: 11px; fill: var(--muted); }
 .axis-title { font-size: 12px; font-weight: 600; fill: var(--ink); }
 .gridline { stroke: var(--grid); stroke-width: 1; }
@@ -92,7 +88,8 @@ svg text { font-family: var(--text); }
 .corner { font-size: 11px; font-style: italic; fill: var(--a2); }
 .diag { stroke: var(--soft); stroke-dasharray: 5 4; }
 .hit { cursor: pointer; outline: none; }
-.hit:focus-visible .mark, .hit.active .mark { stroke: var(--ink) !important; stroke-width: 3 !important; }
+.m1 { fill: var(--a1); } .m2 { fill: var(--a2); } .dot { fill: var(--a1); stroke: var(--plate); stroke-width: 2; }
+.hit:focus-visible .mark, .hit.active .mark { stroke: var(--ink) !important; stroke-width: 2 !important; }
 .hit .mark { transition: opacity 120ms ease-out; }
 svg.dim .hit:not(.active) .mark { opacity: .28; }
 svg.dim .hit:not(.active) text { opacity: .35; }
@@ -103,8 +100,11 @@ svg.dim .hit:not(.active) text { opacity: .35; }
 .ws-title { font-size: 12.5px; font-weight: 600; fill: var(--ink); }
 .ws-cursor { stroke: var(--ink); stroke-width: 1; }
 
-/* per-chart filters: weeks (two-thumb range), down, quarter */
-.filters { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; font-size: 13px; margin: 0 0 12px; }
+/* one filter row, sticky above the charts, scoping all of them: weeks (two-thumb range), down, quarter */
+.filterbar { position: sticky; top: 0; z-index: 5; background: var(--paper); box-shadow: -16px 0 0 var(--paper), 16px 0 0 var(--paper); border-bottom: 1px solid var(--rule); padding: 10px 0 2px; margin: 0; }
+.fsum { display: none; }
+.filterbar .scope { font-size: 12.5px; color: var(--muted); margin: 0 0 8px; }
+.filters { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; font-size: 13px; margin: 0 0 8px; }
 .fgroup { display: flex; align-items: center; gap: 8px; }
 .flabel { font-weight: 600; color: var(--muted); }
 .range { position: relative; width: 150px; height: 24px; }
@@ -125,7 +125,16 @@ svg.dim .hit:not(.active) text { opacity: .35; }
 .reset { font: 600 13px/1 var(--text); color: var(--a1); background: none; border: 0; padding: 6px 2px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .empty { color: var(--muted); font-style: italic; padding: 40px 8px; }
 #tip .slice { border-left: 3px solid var(--a1); padding-left: 8px; margin: 6px 0 4px; }
-@media (max-width: 640px) { .range { width: 120px; } .seg button { padding: 6px 7px; } .filters { gap: 8px 14px; } }
+@media (max-width: 640px) {
+  .range { width: 120px; } .seg button { padding: 6px 7px; } .filters { gap: 8px 14px; }
+  /* on a phone the full row would cover a fifth of the screen: it stays in place, and a one-line summary rides along */
+  .filterbar { position: static; box-shadow: none; }
+  .fsum { display: flex; position: sticky; top: 0; z-index: 5; background: var(--paper); box-shadow: -16px 0 0 var(--paper), 16px 0 0 var(--paper);
+          border-bottom: 1px solid var(--rule); align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; font-size: 13px; }
+  .fsum[hidden] { display: none; }
+  .fsum span { color: var(--muted); } .fsum b { color: var(--ink); font-weight: 600; }
+  .fsum button { font: 600 13px/1 var(--text); color: var(--a1); background: none; border: 1px solid var(--rule); border-radius: 6px; padding: 7px 10px; min-height: 32px; }
+}
 
 footer { padding: 8px 0 48px; font-size: 14px; color: var(--muted); border-top: 3px solid var(--ink); }
 footer h2 { font: 500 13px/1.3 var(--display); color: var(--a2); margin: 18px 0 8px; }
@@ -134,7 +143,7 @@ footer ul { padding-left: 18px; margin: 0; }
 /* hover card */
 #tip { position: fixed; z-index: 10; pointer-events: none; opacity: 0; transform: translateY(4px); transition: opacity 120ms ease-out, transform 120ms ease-out;
        width: min(340px, calc(100vw - 24px)); background: var(--tip); color: var(--tip-ink); border-radius: 6px; padding: 12px 14px;
-       border: 1px solid var(--tip-rule); font: 13px/1.4 var(--text); font-variant-numeric: tabular-nums; }
+       border: 1px solid var(--tip-rule); font: 13px/1.4 var(--text); }
 #tip.on { opacity: 1; transform: none; }
 #tip .t-head { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
 #tip .chip { font: 700 10px/1.2 var(--display); border-radius: 4px; padding: 2px 5px; border: 2px solid; }
@@ -190,6 +199,8 @@ footer ul { padding-left: 18px; margin: 0; }
   </section>
   <span class="hint" id="hint">Hover any player or team for the breakdown. On a phone, tap. Every chart also has a table.</span>
 </header>
+<div class="fsum" id="fsum" hidden><span>Showing <b id="fsum-t"></b></span><button type="button" id="fsum-b">Change</button></div>
+<div class="filterbar" id="filterbar" role="region" aria-label="Filters for every chart"><div class="filters" id="filters"></div><p class="scope" id="scope"></p></div>
 <main id="charts"></main>
 <footer>
   <h2>Method</h2>
@@ -218,6 +229,9 @@ const lum = h => { const n = parseInt(h.slice(1), 16), r = n >> 16 & 255, g = n 
   const f = c => (c /= 255) <= .03928 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4; return .2126 * f(r) + .7152 * f(g) + .0722 * f(b); };
 const readable = t => { const [a, b] = C[t]; return lum(a) < .35 ? a : (lum(b) < .35 ? b : "#1f1f1f"); };
 const chip = t => `<span class="chip" style="background:${C[t][0]};border-color:${C[t][1]};color:${lum(C[t][0]) < .5 ? "#fff" : "#111"}">${t}</span>`;
+const FONT = getComputedStyle(document.documentElement).getPropertyValue("--text").trim() || "Georgia, serif";
+const _mctx = document.createElement("canvas").getContext("2d");
+const textW = (t, font) => { _mctx.font = font; return _mctx.measureText(t).width; };
 const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
 
 // ---------------------------------------------------------------- hover card
@@ -347,10 +361,10 @@ const charts = document.getElementById("charts");
 function card(n, title, sub, says, wide) {
   const s = document.createElement("section"); s.className = "chart" + (wide ? " wide" : "");
   s.innerHTML = `<div class="meta"><span class="lot">${String(n).padStart(2, "0")}</span><h2>${title}</h2><p class="sub">${sub}</p>${says ? `<p class="says">${says}</p>` : ""}</div>` +
-    `<div class="plate"><span class="cm" aria-hidden="true"></span><div class="filters"></div><div class="svgwrap"></div><details class="tbl"><summary>Table</summary><div class="scroll"></div></details></div>`;
+    `<div class="plate"><span class="cm" aria-hidden="true"></span><div class="svgwrap"></div><details class="tbl"><summary>Table</summary><div class="scroll"></div></details></div>`;
   charts.appendChild(s);
   const w = s.querySelector(".svgwrap"); w.tableEl = s.querySelector("details.tbl .scroll");
-  w.filtersEl = s.querySelector(".filters"); w.subEl = s.querySelector(".meta .sub"); w.saysEl = s.querySelector(".meta .says");
+  w.subEl = s.querySelector(".meta .sub"); w.saysEl = s.querySelector(".meta .says");
   return w;
 }
 function fillTable(wrap, cols, rows) {
@@ -404,19 +418,34 @@ function scatter(wrap, pts, o) {
   }
   const placed = [];
   const boxHit = b => placed.some(p => !(b.x2 < p.x1 || b.x1 > p.x2 || b.y2 < p.y1 || b.y1 > p.y2));
-  const narrow = W < 480, br = o.badge && narrow ? 10.5 : (o.r || 7);
-  const marks = pts.map(p => ({p, x: sx(p.x), y: sy(p.y), r: br}));
+  const narrow = W < 480, br = o.badge ? (narrow ? 10.5 : 15) : 5;
+  const marks = pts.map(p => ({p, x: sx(p.x), y: sy(p.y), x0: sx(p.x), y0: sy(p.y), r: br}));
+  if (o.badge) {  // badges are big: nudge overlapping ones apart; a hairline and a small dot keep the true spot
+    for (let it = 0; it < 120; it++) {
+      let moved = false;
+      for (let i = 0; i < marks.length; i++) for (let j = i + 1; j < marks.length; j++) {
+        const a = marks[i], b = marks[j], dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || .01, need = a.r + b.r + 2;
+        if (d < need) { const k = (need - d) / 2, ux = dx / d, uy = dy / d; a.x -= ux * k; a.y -= uy * k; b.x += ux * k; b.y += uy * k; moved = true; }
+      }
+      for (const k of marks) { k.x = Math.min(W - m.r - k.r, Math.max(m.l + k.r, k.x)); k.y = Math.min(Hh - m.b - k.r, Math.max(m.t + k.r, k.y)); }
+      if (!moved) break;
+    }
+  }
   marks.forEach(k => placed.push({x1: k.x - k.r, x2: k.x + k.r, y1: k.y - k.r, y2: k.y + k.r}));
   for (const k of marks) {
     const g = el("g", {}, svg);
     const team = o.team ? o.team(k.p) : k.p.team, [c1, c2] = C[team];
     if (o.badge) {
-      el("circle", {cx: k.x, cy: k.y, r: k.r, fill: c1, stroke: c2, "stroke-width": 3, class: "mark"}, g);
-      el("text", {x: k.x, y: k.y + (narrow ? 2.7 : 3.8), "text-anchor": "middle", "font-size": narrow ? 7.5 : 10.5, "font-weight": 800, fill: lum(c1) < .5 ? "#fff" : "#111", "pointer-events": "none"}, g).textContent = team;
+      if (Math.hypot(k.x - k.x0, k.y - k.y0) > 3) {
+        el("line", {x1: k.x0, y1: k.y0, x2: k.x, y2: k.y, style: "stroke: var(--soft); stroke-width: 1"}, g);
+        el("circle", {cx: k.x0, cy: k.y0, r: 2, style: "fill: var(--ink)"}, g);
+      }
+      el("circle", {cx: k.x, cy: k.y, r: k.r, fill: c1, style: "stroke: var(--plate); stroke-width: 2", class: "mark"}, g);
+      el("text", {x: k.x, y: k.y + (narrow ? 2.6 : 3.4), "text-anchor": "middle", "font-size": narrow ? 7 : 9.5, "font-weight": 700, "letter-spacing": "-0.02em", fill: lum(c1) < .5 ? "#fff" : "#111", "pointer-events": "none"}, g).textContent = team;
     } else {
-      el("circle", {cx: k.x, cy: k.y, r: k.r, fill: c1, stroke: c2, "stroke-width": 2, class: "mark"}, g);
-      el("circle", {cx: k.x, cy: k.y, r: 14, fill: "transparent"}, g);
-      const name = o.name(k.p), w = name.length * 5.9 + 2;
+      el("circle", {cx: k.x, cy: k.y, r: k.r, class: "mark dot"}, g);  // one data hue; the team is in the card and the table
+      el("circle", {cx: k.x, cy: k.y, r: 14, fill: "transparent"}, g);  // 28px hit area
+      const name = o.name(k.p), w = textW(name, "600 10.5px " + FONT) + 4;
       for (const [dx, dy, anchor] of [[10, 4, "start"], [-10, 4, "end"], [0, -11, "middle"], [0, 18, "middle"], [10, -9, "start"], [-10, -9, "end"], [10, 15, "start"], [-10, 15, "end"]]) {
         const x1 = anchor === "start" ? k.x + dx : anchor === "end" ? k.x + dx - w : k.x - w / 2, b = {x1, x2: x1 + w, y1: k.y + dy - 10, y2: k.y + dy + 2};
         if (b.x1 < m.l || b.x2 > W - m.r || b.y1 < m.t || b.y2 > Hh - m.b || boxHit(b)) continue;
@@ -435,7 +464,12 @@ function scatter(wrap, pts, o) {
 
 // ---------------------------------------------------------------- ranked bars
 function bars(wrap, rows, o) {
-  const rowH = 22, W = fitW(wrap), m = {l: Math.min(o.labelW || 150, Math.round(W * .3)), r: 74, t: 22, b: 40}, Hh = m.t + m.b + rows.length * rowH;
+  const rowH = 22, W = fitW(wrap), Hh0 = 0;
+  const rankW = textW(String(rows.length), "400 11.5px " + FONT) + 10, longest = Math.max(0, ...rows.map(r => textW(o.name(r), "600 12px " + FONT)));
+  let labFs = 12, lw = rankW + longest + 24;
+  const cap = Math.round(W * .42);
+  if (lw > cap) { labFs = Math.max(9.5, 12 * (cap - rankW - 24) / longest); lw = cap; }
+  const m = {l: Math.round(lw), r: 74, t: 22, b: 40}, Hh = m.t + m.b + rows.length * rowH;
   wrap.innerHTML = "";
   if (!rows.length) { wrap.innerHTML = `<p class="empty">No one qualifies in this slice. Widen the weeks or set a filter back to All.</p>`; fillTable(wrap, [["Name"]], []); return; }
   const svg = el("svg", {viewBox: `0 0 ${W} ${Hh}`, role: "img", "aria-label": o.aria}, null); wrap.appendChild(svg);
@@ -444,6 +478,11 @@ function bars(wrap, rows, o) {
   if (lo < 0) lo -= (hi - lo) * .1;
   if (o.lo == null && Math.min(...vals) > 0 && o.zoom) lo = Math.min(...vals, o.ref ?? Infinity) - (hi - Math.min(...vals)) * .6;
   hi += (hi - lo) * .04;
+  // leave room for the value labels outside the bar ends, so the longest bar's label never meets the right column
+  const plotW = W - m.r - m.l, labW = v => o.fv(v).toString().length * 7 + 8;
+  const vmax = Math.max(...vals), vmin = Math.min(...vals);
+  if (vmax > 0) hi = Math.max(hi, lo + (vmax - lo) * plotW / Math.max(40, plotW - labW(vmax)));
+  if (vmin < 0 && o.lo == null) lo = Math.min(lo, hi - (hi - vmin) * plotW / Math.max(40, plotW - labW(vmin)));
   const sx = scale(lo, hi, m.l, W - m.r);
   const ax = el("g", {class: "axis"}, svg);
   for (const v of nice(lo, hi, 4)) { el("line", {x1: sx(v), x2: sx(v), y1: m.t, y2: Hh - m.b, class: "gridline"}, ax); el("text", {x: sx(v), y: Hh - m.b + 15, "text-anchor": "middle"}, ax).textContent = o.fx(v); }
@@ -454,9 +493,13 @@ function bars(wrap, rows, o) {
     const y = m.t + i * rowH, g = el("g", {}, svg), team = o.team(r), [c1, c2] = C[team];
     el("rect", {x: 0, y, width: W, height: rowH, fill: "transparent"}, g);
     el("text", {x: 4, y: y + 15, class: "bar-right"}, g).textContent = i + 1;
-    el("text", {x: m.l - 6, y: y + 15, "text-anchor": "end", class: "bar-label"}, g).textContent = o.name(r);
-    const x0 = sx(Math.max(lo, 0 > lo ? 0 : lo)), x1 = sx(r.v);
-    el("rect", {x: Math.min(x0, x1), y: y + 3, width: Math.max(1, Math.abs(x1 - x0)), height: rowH - 6, rx: 2, fill: c1, stroke: c2, "stroke-width": 1.5, class: "mark"}, g);
+    el("text", {x: m.l - 18, y: y + 15, "text-anchor": "end", class: "bar-label", style: labFs < 12 ? `font-size:${labFs.toFixed(1)}px` : ""}, g).textContent = o.name(r);
+    el("rect", {x: m.l - 13, y: y + 7, width: 8, height: 8, rx: 2, fill: c1}, g);  // team key: identity beside the name, never on the bar
+    const x0 = sx(Math.max(lo, 0 > lo ? 0 : lo)), x1 = sx(r.v), h = rowH - 6, rr = Math.min(4, Math.abs(x1 - x0) / 2), yt = y + 3, sgn = x1 >= x0 ? 1 : -1;
+    // one data hue; below zero takes the second accent. Rounded at the data end, square at the baseline.
+    const d = Math.abs(x1 - x0) < 1 ? `M${x0},${yt}h${sgn}h${-sgn}v${h}z` :
+      `M${x0},${yt}H${x1 - sgn * rr}Q${x1},${yt} ${x1},${yt + rr}V${yt + h - rr}Q${x1},${yt + h} ${x1 - sgn * rr},${yt + h}H${x0}Z`;
+    el("path", {d, class: "mark " + (r.v < 0 ? "m2" : "m1")}, g);
     el("text", {x: r.v < 0 ? x1 - 5 : x1 + 5, y: y + 15, class: "bar-val", "text-anchor": r.v < 0 ? "end" : "start"}, g).textContent = o.fv(r.v);
     el("text", {x: W - 4, y: y + 15, "text-anchor": "end", class: "bar-right"}, g).textContent = o.right(r);
     bind(g, () => o.card(r), `${o.name(r)}: ${o.fv(r.v)}`);
@@ -521,48 +564,61 @@ const fullTot = {}; for (const k in CU) fullTot[k] = agg(CU[k], ALL()).total;
 const thr = (k, col, base, f, floor) => isAll(f) ? base : Math.max(floor, Math.round(base * agg(CU[k], f).total[CU[k].ci[col]] / fullTot[k][CU[k].ci[col]]));
 const minNote = (base, t, unit) => t === base ? `min. ${base} ${unit}` : `min. ${t} ${unit} in this slice (${base} over the full season, scaled to the slice)`;
 
-function controls(wrap, f, redraw, opts = {}) {
-  const el0 = wrap.filtersEl, id = "f" + Math.random().toString(36).slice(2, 8);
-  const downs = opts.downs || [0, 1, 2, 3, 4];
-  const seg = (name, key, vals, lab) => `<div class="fgroup"><span class="flabel" id="${id}${key}">${name}</span><div class="seg" role="group" aria-labelledby="${id}${key}">` +
-    vals.map(v => `<button type="button" data-k="${key}" data-v="${v}" aria-pressed="${f[key] === v}">${lab(v)}</button>`).join("") + `</div></div>`;
+// one filter row for the whole page: every chart re-renders against the same slice
+const FS = window.__snipF || (window.__snipF = ALL()), RUNS = []; let ctlBuilt = false;
+function controls() {
+  const el0 = document.getElementById("filters");
+  const seg = (name, key, vals, lab) => `<div class="fgroup"><span class="flabel" id="fl-${key}">${name}</span><div class="seg" role="group" aria-labelledby="fl-${key}">` +
+    vals.map(v => `<button type="button" data-k="${key}" data-v="${v}" aria-pressed="${FS[key] === v}">${lab(v)}</button>`).join("") + `</div></div>`;
   el0.innerHTML =
-    `<div class="fgroup"><span class="flabel">Weeks</span><div class="range"><input type="range" min="${W[0]}" max="${W[1]}" step="1" value="${f.w0}" aria-label="First week">` +
-    `<input type="range" min="${W[0]}" max="${W[1]}" step="1" value="${f.w1}" aria-label="Last week"><span class="rfill"></span></div><span class="rlabel"></span></div>` +
-    (opts.noDown ? "" : seg("Down", "down", downs, v => v ? ORD[v] : "All")) +
+    `<div class="fgroup"><span class="flabel">Weeks</span><div class="range"><input type="range" min="${W[0]}" max="${W[1]}" step="1" value="${FS.w0}" aria-label="First week">` +
+    `<input type="range" min="${W[0]}" max="${W[1]}" step="1" value="${FS.w1}" aria-label="Last week"><span class="rfill"></span></div><span class="rlabel" aria-live="polite"></span></div>` +
+    seg("Down", "down", [0, 1, 2, 3, 4], v => v ? ORD[v] : "All") +
     seg("Quarter", "q", [0, 1, 2, 3, 4, 5], v => v ? (v === 5 ? "OT" : "Q" + v) : "All") +
     `<button type="button" class="reset" hidden>Reset</button>`;
   const [r0, r1] = el0.querySelectorAll("input[type=range]"), lab = el0.querySelector(".rlabel"), fill = el0.querySelector(".rfill"), reset = el0.querySelector(".reset");
+  const scope = document.getElementById("scope");
   const sync = () => {
     const span = W[1] - W[0] || 1;
-    lab.textContent = f.w0 === f.w1 ? `${f.w0}` : `${f.w0}-${f.w1}`;
-    fill.style.left = `calc(${(f.w0 - W[0]) / span} * (100% - 16px) + 8px)`; fill.style.width = `calc(${(f.w1 - f.w0) / span} * (100% - 16px))`;
-    el0.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(f[b.dataset.k] === +b.dataset.v)));
-    reset.hidden = isAll(f);
+    lab.textContent = FS.w0 === FS.w1 ? `${FS.w0}` : `${FS.w0}-${FS.w1}`;
+    fill.style.left = `calc(${(FS.w0 - W[0]) / span} * (100% - 16px) + 8px)`; fill.style.width = `calc(${(FS.w1 - FS.w0) / span} * (100% - 16px))`;
+    el0.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(FS[b.dataset.k] === +b.dataset.v)));
+    reset.hidden = isAll(FS);
+    scope.textContent = isAll(FS) ? `All twelve charts: the full season, weeks ${W[0]}-${W[1]}. Narrow the weeks, or pick a down or a quarter.`
+      : `All twelve charts: ${fLabel(FS).replace(/^./, c => c.toLowerCase())}. Minimum samples shrink with the slice; each chart says its own.`;
+    document.getElementById("fsum-t").textContent = isAll(FS) ? `full season, weeks ${W[0]}-${W[1]}` : fLabel(FS).replace(/^./, c => c.toLowerCase());
   };
-  const go = () => { sync(); hide(); redraw(); };
-  r0.addEventListener("input", () => { f.w0 = Math.min(+r0.value, f.w1); r0.value = f.w0; go(); });
-  r1.addEventListener("input", () => { f.w1 = Math.max(+r1.value, f.w0); r1.value = f.w1; go(); });
-  el0.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => { f[b.dataset.k] = +b.dataset.v; go(); }));
-  reset.addEventListener("click", () => { Object.assign(f, ALL()); r0.value = f.w0; r1.value = f.w1; go(); });
+  const bar = document.getElementById("filterbar"), sum = document.getElementById("fsum");
+  document.getElementById("fsum-b").onclick = () => { bar.scrollIntoView({block: "start"}); el0.querySelector("input").focus({preventScroll: true}); };
+  if ("IntersectionObserver" in window) new IntersectionObserver(([e]) => { sum.hidden = e.isIntersecting || e.boundingClientRect.top > 0; }).observe(bar);
+  const go = () => { sync(); hide(); RUNS.forEach(r => r()); };
+  r0.addEventListener("input", () => { FS.w0 = Math.min(+r0.value, FS.w1); r0.value = FS.w0; go(); });
+  r1.addEventListener("input", () => { FS.w1 = Math.max(+r1.value, FS.w0); r1.value = FS.w1; go(); });
+  el0.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => { FS[b.dataset.k] = +b.dataset.v; go(); }));
+  reset.addEventListener("click", () => { Object.assign(FS, ALL()); r0.value = FS.w0; r1.value = FS.w1; go(); });
   sync();
 }
-// one chart = a card, its filter state, and a draw function that reads the cube for the current slice
-const STATE = window.__snipState || (window.__snipState = {});
-function chart(n, title, subFn, says, draw, opts) {
+// one chart = a card and a draw function that reads its cube for the page's slice. opts.noDown: the down filter
+// can't apply (field goals); opts.downs: the downs the chart is defined on (early-down pass rate: 1st and 2nd).
+function chart(n, title, subFn, says, draw, opts = {}) {
+  if (!ctlBuilt) { controls(); ctlBuilt = true; }
   const wrap = card(n, title, "", typeof says === "function" ? "" : says);
-  const f = STATE[n] || (STATE[n] = ALL());
   const run = () => {
-    const out = draw(f, wrap); (window.__out || (window.__out = {}))[n] = out;
-    wrap.subEl.textContent = subFn(f, out);
+    const f = opts.noDown ? {...FS, down: 0} : FS;
+    let out;
+    if (opts.downs && FS.down && !opts.downs.includes(FS.down)) {
+      wrap.innerHTML = `<p class="empty">This chart is about early downs (1st and 2nd), so it has nothing for ${ORD[FS.down]} down. Set Down to All, 1st or 2nd.</p>`;
+      fillTable(wrap, [["Team"]], []); out = {rows: [], pts: []};
+    } else out = draw(f, wrap);
+    (window.__out || (window.__out = {}))[n] = out;
+    wrap.subEl.textContent = subFn(f, out) + (opts.noDown && FS.down ? " The down filter doesn't apply here: field goals come on 4th down." : "");
     if (typeof says === "function" && wrap.saysEl) wrap.saysEl.innerHTML = says(f, out); else if (typeof says === "function") {
       const p = document.createElement("p"); p.className = "says"; p.innerHTML = says(f, out); wrap.subEl.after(p); wrap.saysEl = p; }
     return out;
   };
-  wrap.draw = run; controls(wrap, f, run, opts); run();
+  RUNS.push(run); run();
   return wrap;
 }
-// wraps a card function so a filtered chart shows its slice numbers first
 const sliced = (f, items, n, fn) => () => { SLICE = isAll(f) ? null : {label: fLabel(f), items, n}; try { return fn(); } finally { SLICE = null; } };
 const minimal = (name, team) => head(name, team, "") + `<div class="note">Qualifies only in this slice, so there is no full-season breakdown.</div>`;
 const sliceTag = f => isAll(f) ? "" : ` ${fLabel(f)}.`;
@@ -586,7 +642,7 @@ chart(1, "QB Efficiency: EPA vs. CPOE", (f, o) => `${minNote(150, o.t, "dropback
   });
 
 // 2: running backs
-chart(2, "Running Back Success Rate", (f, o) => `Top 30 of the ${o.nq} backs with ${o.t === 60 ? "60+" : o.t + "+"} carries${o.t === 60 ? "" : " (60 over the full season, scaled to the slice)"}; QB runs and scrambles left out; EPA per rush at right.${sliceTag(f)}`,
+chart(2, "Running Back Success Rate", (f, o) => `${o.nq > 30 ? `Top 30 of the ${o.nq}` : `All ${o.nq}`} backs with ${o.t === 60 ? "60+" : o.t + "+"} carries${o.t === 60 ? "" : " (60 over the full season, scaled to the slice)"}; QB runs and scrambles left out; EPA per rush at right.${sliceTag(f)}`,
   (f, o) => o.rows.length ? `${nm(RB, o.rows[0].id)} (${tm(RB, o.rows[0].id)}) leads at ${pc(o.rows[0].v)}. Bars start near the leaders' range, not at zero.` : "",
   (f, wrap) => {
     const c = CU.rb, ci = c.ci, s = agg(c, f), t = thr("rb", "car", 60, f, 8), la = agg(CU.rb_all, f).total, ref = la[CU.rb_all.ci.succ] / la[CU.rb_all.ci.car];
@@ -636,7 +692,7 @@ chart(4, "Early-Down Pass Rate Over Expected", f => `1st & 2nd down; win prob. 2
   }, {downs: [0, 1, 2]});
 
 // 5: receiver roles
-chart(5, "Receiver Roles: Targets vs. Air Yards", (f, o) => `Top 40 by WOPR, ${minNote(40, o.t, "targets")}; shares in games played; dashed line = equal shares.${sliceTag(f)}`,
+chart(5, "Receiver Roles: Targets vs. Air Yards", (f, o) => `${o.pts.length < 40 ? `All ${o.pts.length} receivers` : "Top 40"} by WOPR, ${minNote(40, o.t, "targets")}; shares in games played; dashed line = equal shares.${sliceTag(f)}`,
   "Above the line, the role is downfield; below it, volume on shorter throws.",
   (f, wrap) => {
     const c = CU.rec, ci = c.ci, s = agg(c, f), t = thr("rec", "w_t", 40, f, 6), all = [];
@@ -684,7 +740,7 @@ chart(7, "Where QB Yards Come From", (f, o) => `${minNote(150, o.t, "attempts")}
   });
 
 // 8: receivers, role vs value
-chart(8, "Receivers: Role vs. Value", (f, o) => `45 most-targeted receivers (WR, TE, RB), ${minNote(40, o.t, "targets")}; dotted lines = group average.${sliceTag(f)}`,
+chart(8, "Receivers: Role vs. Value", (f, o) => `${o.pts.length < 45 ? `All ${o.pts.length}` : "45 most-targeted"} receivers (WR, TE, RB), ${minNote(40, o.t, "targets")}; dotted lines = group average.${sliceTag(f)}`,
   "Deeper roles earn more per target, so compare a receiver with others at his depth.",
   (f, wrap) => {
     const c = CU.rec, ci = c.ci, s = agg(c, f), t = thr("rec", "v_n", 40, f, 6), all = [];
@@ -701,7 +757,7 @@ chart(8, "Receivers: Role vs. Value", (f, o) => `45 most-targeted receivers (WR,
   });
 
 // 9: YAC over expected
-chart(9, "YAC Over Expected per Catch", (f, o) => `Top 30 with ${o.t}+ catches${o.t === 25 ? "" : " (25 over the full season, scaled to the slice)"}; expected = nflverse xYAC model; YAC per catch at right.${sliceTag(f)}`,
+chart(9, "YAC Over Expected per Catch", (f, o) => `${o.rows.length < 30 ? `All ${o.rows.length} players` : "Top 30"} with ${o.t}+ catches${o.t === 25 ? "" : " (25 over the full season, scaled to the slice)"}; expected = nflverse xYAC model; YAC per catch at right.${sliceTag(f)}`,
   (f, o) => o.rows.length ? `${nm(RC, o.rows[0].id)} (${tm(RC, o.rows[0].id)}) gains ${sg(o.rows[0].v, 2)} yards per catch beyond the model${isAll(f) ? "" : " in this slice"}.` : "",
   (f, wrap) => {
     const c = CU.rec, ci = c.ci, s = agg(c, f), t = thr("rec", "y_n", 25, f, 4), all = [];
@@ -728,7 +784,7 @@ chart(10, "Defense: Run Stopping vs. Pass Defense", f => `Designed runs (scrambl
   });
 
 // 11: pass rush
-chart(11, "Pass Rush Leaders: Sacks + QB Hits", f => `Top 30; each play counted once per player; half sacks = 0.5; sacks at right.${sliceTag(f)}`,
+chart(11, "Pass Rush Leaders: Sacks + QB Hits", (f, o) => `${o.rows.length < 30 ? `All ${o.rows.length} players with one` : "Top 30"}; each play counted once per player; half sacks = 0.5; sacks at right.${sliceTag(f)}`,
   "Hover a rusher for his hits without a sack and his week-by-week count.",
   (f, wrap) => {
     const c = CU.def, ci = c.ci, s = agg(c, f), all = [];
@@ -756,6 +812,8 @@ chart(12, "Kickers: FG Points Over Expected", (f, o) => `${minNote(8, o.t, "atte
 
 }
 drawAll();
+// labels are measured, so draw again once the web fonts are in
+if (document.fonts && document.fonts.status !== "loaded") document.fonts.ready.then(() => { hide(); drawAll(); });
 let lastW = innerWidth;
 addEventListener("resize", () => { clearTimeout(window.__rt); window.__rt = setTimeout(() => {
   if (Math.abs(innerWidth - lastW) > 40) { lastW = innerWidth; hide(); drawAll(); } }, 200); });
