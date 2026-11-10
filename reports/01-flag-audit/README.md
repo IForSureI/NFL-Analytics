@@ -7,9 +7,9 @@
 
 **TL;DR**
 
-- Road teams drew 0.27 more judgment-call flags a game than home teams in 2016-22; since 2023 the gap has averaged 0.00. What remains is a small pre-snap gap (neutral zone infractions, delay of game), not judgment calls.
+- Road teams drew 0.27 more judgment-call flags a game than home teams in 2016-22; since 2023 the gap has averaged -0.00. What remains is a small pre-snap gap (neutral zone infractions, delay of game), not judgment calls.
 - Referee crews have a modest, real style (year-to-year r = 0.24); a team's flag luck does not carry over (r = 0.08).
-- Mahomes ranks #22 of 41 QBs in roughing flags drawn, right at the league rate.
+- Mahomes ranks #20 of 42 QBs in roughing flags drawn, right at the league rate.
 
 <p align="center"><img src="home_edge.png" width="720" alt="Road team's extra flags per game, by flag type and season."></p>
 <p align="center"><sub>Road team's extra flags per game, by flag type and season.</sub></p>
@@ -19,10 +19,10 @@
 | Measure | Value |
 |---|---|
 | Road team's extra judgment-call flags per game, 2016-22 | **0.27** |
-| Same, 2023-26 | **0.00** |
+| Same, 2023-26 | **-0.00** |
 | Crew flags per game, year-to-year r | **0.24** |
 | Team net flags, odd vs even weeks r | **0.08** |
-| Mahomes' rank in roughing flags drawn | **#22 of 41** |
+| Mahomes' rank in roughing flags drawn | **#20 of 42** |
 | Flags that swung win probability 10+ points, per season | **84** |
 
 ## Why it matters for a club
@@ -39,17 +39,17 @@
 
 ## Data
 
-nflverse play-by-play and officials, 2016-2026 (2,883 games, 35,104 accepted flags). Declined and offsetting flags removed.
+nflverse play-by-play and officials, 2016-2026 (2,897 games, 35,317 accepted flags). Declined and offsetting flags removed.
 
 ## Results
 
 ### 1. The road team's extra judgment-call flags are gone.
 
-In 2016-22, road teams drew 0.27 more subjective flags per game than home teams (holding, pass interference, roughing). Since 2023 the gap is 0.00.
+In 2016-22, road teams drew 0.27 more subjective flags per game than home teams (holding, pass interference, roughing). Since 2023 the gap is -0.00.
 
 ### 2. The road gap that remains is noise and communication, not referees' judgment.
 
-Road teams still take about 0.17 extra rule-book flags a game. Neutral zone infractions go against the road defense 60% of the time, and delay of game against the road offense 56%. False starts, the flag fans blame on crowd noise, split almost evenly (49.6% on the road team).
+Road teams still take about 0.18 extra rule-book flags a game. Neutral zone infractions go against the road defense 60% of the time, and delay of game against the road offense 56%. False starts, the flag fans blame on crowd noise, split almost evenly (49.6% on the road team).
 
 ### 3. Referee crews have a real, modest style.
 
@@ -60,18 +60,18 @@ A crew's flags per game this season predicts next season at r = 0.24 (141 back-t
 
 ### 4. A team's flag luck does not carry over.
 
-Within a season, a team's net subjective flags (drawn minus committed) in odd weeks predicts even weeks at only r = 0.08. Committing flags is a bit more stable (r = 0.28) than drawing them (r = 0.17): discipline is partly real, getting calls is mostly not.
+Within a season, a team's net subjective flags (drawn minus committed) in odd weeks predicts even weeks at only r = 0.08. Committing flags is a bit more stable (r = 0.29) than drawing them (r = 0.18): discipline is partly real, getting calls is mostly not.
 
 ### 5. Mahomes is not the roughing-flag king.
 
-Among 41 QBs with 1,500+ dropbacks since 2018, he ranks #22 (by shrunk rate) at 0.22 roughing flags per 100 dropbacks, about the league rate of 0.23. The top of the list is J.Goff (0.35 raw), A.Dalton (0.45) and M.Ryan (0.39). Only J.Goff and A.Dalton sit clearly above the league rate (95% interval); everyone else overlaps it.
+Among 42 QBs with 1,500+ dropbacks since 2018, he ranks #20 (by shrunk rate) at 0.22 roughing flags per 100 dropbacks, about the league rate of 0.23. The top of the list is J.Goff (0.35 raw), A.Dalton (0.45) and M.Ryan (0.39). Only J.Goff and A.Dalton sit clearly above the league rate (95% interval); everyone else overlaps it.
 
 <p align="center"><img src="qb_roughing.png" width="720" alt="Roughing-the-passer flags drawn per 100 dropbacks, shrunk toward the league rate, with 95% intervals."></p>
 <p align="center"><sub>Roughing-the-passer flags drawn per 100 dropbacks, shrunk toward the league rate, with 95% intervals.</sub></p>
 
 ### 6. Big calls are real but random.
 
-921 accepted flags (886 in the regular season) moved win probability by 10+ points, about 84 per full regular season. Pass interference leads. A team's net big calls this year predicts next year at r = 0.04: no team is owed them.
+926 accepted flags (891 in the regular season) moved win probability by 10+ points, about 84 per full regular season. Pass interference leads. A team's net big calls this year predicts next year at r = 0.04: no team is owed them.
 
 ## Method
 
@@ -87,7 +87,7 @@ Among 41 QBs with 1,500+ dropbacks since 2018, he ranks #22 (by shrunk rate) at 
 
 ## Validation
 
-- Stability is tested before anything is called a skill: crews 0.24, team flags committed 0.28, drawn 0.17, net 0.08.
+- Stability is tested before anything is called a skill: crews 0.24, team flags committed 0.29, drawn 0.18, net 0.08.
 - Quarterback rates are shrunk and shown with Wilson 95% intervals, so small samples are not ranked on noise.
 - Unit tests check the flag categories and that the published stability numbers stay in sane ranges (`tests/`).
 

@@ -57,7 +57,7 @@ Teams that won 2+ games more than their points said (44 of them) changed by -2.9
 
 ### 4. This season so far.
 
-Above their points: CLE (5 wins, 3.0 expected), DEN (6 wins, 4.2 expected), BUF (6 wins, 4.5 expected). Below: TB (3 wins, 4.8 expected), TEN (1 win, 2.5 expected), NYJ (2 wins, 3.5 expected).
+Above their points: DEN (7 wins, 4.8 expected), BUF (7 wins, 5.4 expected), CLE (5 wins, 3.5 expected). Below: TB (3 wins, 5.2 expected), LAC (0 wins, 1.6 expected), TEN (1 win, 2.5 expected).
 
 <p align="center"><img src="luck_2026.png" width="720" alt="This season: actual wins vs what points scored and allowed predict."></p>
 <p align="center"><sub>This season: actual wins vs what points scored and allowed predict.</sub></p>

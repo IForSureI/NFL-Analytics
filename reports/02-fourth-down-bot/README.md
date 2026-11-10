@@ -9,7 +9,7 @@
 
 - I built a win-probability model that matches nflfastR out of sample (Brier 0.1495 vs 0.1488 on 80,613 plays) and a fourth-down bot on top of it.
 - Coaches now go for it in 54% of clear go spots, up from 34% in 2018; there is still win probability left on the table.
-- 2026 report card: HOU has lost the most per game on clear calls, BUF the least.
+- 2026 report card: PIT has lost the most per game on clear calls, BUF the least.
 
 <p align="center"><img src="go_rate_trend.png" width="720" alt="Go rate when going adds 2+ win-probability points."></p>
 <p align="center"><sub>Go rate when going adds 2+ win-probability points.</sub></p>
@@ -56,7 +56,7 @@ In clear "go" spots (going adds 2+ win-probability points, score within 16, outs
 
 ### 3. 2026 report card (regular season).
 
-Most win probability lost per game on clear 4th-down calls: HOU (6.0 points), PIT (5.7), ARI (5.6). Least: BUF (0.8), TB (1.0), MIA (1.4). Totals add up small misses, so read them as a ranking, not an exact count of lost wins.
+Most win probability lost per game on clear 4th-down calls: PIT (5.6 points), ARI (5.2), HOU (5.2). Least: BUF (0.9), MIA (1.2), TB (1.6). Totals add up small misses, so read them as a ranking, not an exact count of lost wins.
 
 <p align="center"><img src="team_scorecard.png" width="720" alt="Win-probability points lost per game on clear fourth-down calls, this season."></p>
 <p align="center"><sub>Win-probability points lost per game on clear fourth-down calls, this season.</sub></p>

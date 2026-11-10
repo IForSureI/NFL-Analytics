@@ -2,89 +2,81 @@
  "season": 2026,
  "weeks": [
   1,
-  8
+  9
  ],
- "built": "2026-11-09",
- "plays": 21191,
+ "built": "2026-11-10",
+ "plays": 23822,
  "qb_epa_cpoe": {
-  "n_qbs": 30,
+  "n_qbs": 31,
   "top3_epa": [
-   {
-    "name": "J.Allen",
-    "team": "BUF",
-    "epa": 0.303,
-    "cpoe": 4.011
-   },
    {
     "name": "B.Purdy",
     "team": "SF",
-    "epa": 0.287,
-    "cpoe": 4.251
+    "epa": 0.303,
+    "cpoe": 4.854
    },
    {
-    "name": "C.Williams",
-    "team": "CHI",
-    "epa": 0.283,
-    "cpoe": 7.602
+    "name": "T.Lawrence",
+    "team": "JAX",
+    "epa": 0.284,
+    "cpoe": 2.811
+   },
+   {
+    "name": "J.Burrow",
+    "team": "CIN",
+    "epa": 0.265,
+    "cpoe": 9.713
    }
   ],
   "bottom3_epa": [
    {
-    "name": "C.Ward",
-    "team": "TEN",
-    "epa": -0.104,
-    "cpoe": -0.875
-   },
-   {
     "name": "D.Jones",
     "team": "IND",
-    "epa": -0.197,
-    "cpoe": -3.674
+    "epa": -0.204,
+    "cpoe": -4.33
    },
    {
     "name": "J.Herbert",
     "team": "LAC",
-    "epa": -0.27,
-    "cpoe": -4.184
+    "epa": -0.249,
+    "cpoe": -4.879
+   },
+   {
+    "name": "B.Mayfield",
+    "team": "TB",
+    "epa": -0.259,
+    "cpoe": -1.524
    }
   ],
-  "corr_epa_cpoe": 0.75
+  "corr_epa_cpoe": 0.74
  },
  "rb_success": {
-  "rb_average_success": 0.398,
-  "n_qualified": 33,
+  "rb_average_success": 0.395,
+  "n_qualified": 37,
   "top5": [
-   {
-    "rusher_player_name": "C.McCaffrey",
-    "team": "SF",
-    "carries": 84,
-    "success": 0.536,
-    "epa": 0.144,
-    "explosive": 0.131
-   },
    {
     "rusher_player_name": "B.Corum",
     "team": "LA",
-    "carries": 75,
-    "success": 0.52,
-    "epa": 0.144,
-    "explosive": 0.147
+    "carries": 86,
+    "success": 0.547,
+    "epa": 0.143,
+    "explosive": 0.151
    },
    {
-    "rusher_player_name": "J.Cook",
-    "team": "BUF",
-    "carries": 138,
-    "success": 0.507,
-    "epa": 0.054,
-    "explosive": 0.167
+    "rusher_player_name": "C.McCaffrey",
+    "team": "SF",
+    "carries": 102,
+    "success": 0.51,
+    "epa": 0.129,
+    "explosive": 0.127
    },
    {
     "rusher_player_name": "J.Gibbs",
     "team": "DET",
-    "carries": 157,
-    "success": 0.49,
-    "epa": -0.019,
-    "explosive": 0.172
+    "carries": 177,
+    "success": 0.48,
+    "epa": -0.016,
+    "explosive": 0.164
    },
    {
     "rusher_player_name": "J.Warren",
@@ -93,41 +85,49 @@
     "success": 0.479,
     "epa": 0.128,
     "explosive": 0.126
+   },
+   {
+    "rusher_player_name": "K.Walker",
+    "team": "KC",
+    "carries": 159,
+    "success": 0.465,
+    "epa": 0.085,
+    "explosive": 0.151
    }
   ],
-  "corr_success_epa": 0.85
+  "corr_success_epa": 0.83
  },
  "team_tiers": {
   "top5_net": [
    {
     "team": "JAX",
-    "off": 0.164,
-    "def": -0.099,
-    "net": 0.263
+    "off": 0.15,
+    "def": -0.128,
+    "net": 0.278
    },
    {
     "team": "SF",
-    "off": 0.175,
-    "def": -0.045,
-    "net": 0.22
+    "off": 0.178,
+    "def": -0.075,
+    "net": 0.253
    },
    {
     "team": "KC",
-    "off": 0.128,
-    "def": -0.039,
-    "net": 0.167
+    "off": 0.133,
+    "def": -0.072,
+    "net": 0.205
    },
    {
     "team": "LA",
-    "off": 0.05,
-    "def": -0.107,
-    "net": 0.157
+    "off": 0.044,
+    "def": -0.114,
+    "net": 0.158
    },
    {
-    "team": "CIN",
-    "off": 0.118,
-    "def": -0.014,
-    "net": 0.132
+    "team": "BUF",
+    "off": 0.145,
+    "def": -0.01,
+    "net": 0.155
    }
   ],
   "bottom5_net": [
@@ -139,43 +139,43 @@
    },
    {
     "team": "MIA",
-    "off": -0.046,
-    "def": 0.129,
-    "net": -0.175
+    "off": -0.064,
+    "def": 0.114,
+    "net": -0.178
    },
    {
     "team": "IND",
-    "off": -0.115,
-    "def": 0.065,
-    "net": -0.18
-   },
-   {
-    "team": "LAC",
-    "off": -0.256,
-    "def": -0.04,
-    "net": -0.215
+    "off": -0.125,
+    "def": 0.075,
+    "net": -0.2
    },
    {
     "team": "PHI",
-    "off": -0.127,
-    "def": 0.103,
-    "net": -0.23
+    "off": -0.149,
+    "def": 0.084,
+    "net": -0.233
+   },
+   {
+    "team": "LAC",
+    "off": -0.244,
+    "def": 0.003,
+    "net": -0.247
    }
   ]
  },
  "early_down_proe": {
   "most_pass_happy": {
-   "CIN": 0.113,
-   "CAR": 0.092,
-   "LA": 0.056
+   "CIN": 0.118,
+   "CAR": 0.071,
+   "LA": 0.064
   },
   "most_run_heavy": {
-   "ATL": -0.081,
+   "MIA": -0.082,
    "LAC": -0.123,
-   "TB": -0.134
+   "TB": -0.133
   },
-  "corr_proe_off_epa": 0.49,
-  "min_plays": 166
+  "corr_proe_off_epa": 0.51,
+  "min_plays": 186
  },
  "receiver_share": {
   "top5_wopr": [
@@ -183,8 +183,15 @@
     "receiver_player_name": "J.Smith-Njigba",
     "team": "SEA",
     "tgt_share": 0.357,
-    "air_share": 0.519,
-    "wopr": 0.899
+    "air_share": 0.508,
+    "wopr": 0.892
+   },
+   {
+    "receiver_player_name": "P.Nacua",
+    "team": "LA",
+    "tgt_share": 0.36,
+    "air_share": 0.413,
+    "wopr": 0.83
    },
    {
     "receiver_player_name": "D.Smith",
@@ -194,56 +201,49 @@
     "wopr": 0.83
    },
    {
-    "receiver_player_name": "P.Nacua",
-    "team": "LA",
-    "tgt_share": 0.341,
-    "air_share": 0.383,
-    "wopr": 0.78
-   },
-   {
     "receiver_player_name": "C.Lamb",
     "team": "DAL",
-    "tgt_share": 0.313,
-    "air_share": 0.397,
-    "wopr": 0.747
+    "tgt_share": 0.329,
+    "air_share": 0.428,
+    "wopr": 0.794
    },
    {
-    "receiver_player_name": "D.London",
-    "team": "ATL",
-    "tgt_share": 0.288,
-    "air_share": 0.424,
-    "wopr": 0.729
+    "receiver_player_name": "C.Olave",
+    "team": "NO",
+    "tgt_share": 0.281,
+    "air_share": 0.479,
+    "wopr": 0.757
    }
   ]
  },
  "defense_pressure": {
-  "corr_press_epa": -0.31,
+  "corr_press_epa": -0.24,
   "best_vs_fit": {
-   "TB": -0.25,
-   "LA": -0.17,
-   "MIN": -0.153
+   "TB": -0.248,
+   "LA": -0.159,
+   "JAX": -0.138
   },
   "worst_vs_fit": {
-   "DET": 0.172,
-   "ARI": 0.185,
-   "MIA": 0.226
+   "LV": 0.151,
+   "ARI": 0.19,
+   "MIA": 0.211
   }
  },
  "qb_adot_yac": {
-  "n_qbs": 29,
-  "corr_adot_yac_share": -0.6,
+  "n_qbs": 30,
+  "corr_adot_yac_share": -0.67,
   "most_yac": [
    {
     "name": "P.Mahomes",
     "team": "KC",
-    "adot": 5.815,
-    "yac_share": 0.653
+    "adot": 5.559,
+    "yac_share": 0.674
    },
    {
     "name": "B.Nix",
     "team": "DEN",
-    "adot": 5.384,
-    "yac_share": 0.629
+    "adot": 5.561,
+    "yac_share": 0.605
    },
    {
     "name": "A.Rodgers",
@@ -256,14 +256,14 @@
    {
     "name": "D.Prescott",
     "team": "DAL",
-    "adot": 7.768,
-    "yac_share": 0.384
+    "adot": 8.22,
+    "yac_share": 0.378
    },
    {
     "name": "C.Stroud",
     "team": "HOU",
-    "adot": 9.186,
-    "yac_share": 0.37
+    "adot": 9.528,
+    "yac_share": 0.375
    },
    {
     "name": "J.Hurts",
@@ -279,44 +279,44 @@
    {
     "receiver_player_name": "T.Higgins",
     "team": "CIN",
-    "tgt": 61,
-    "adot": 13.623,
-    "epa": 0.866
+    "tgt": 67,
+    "adot": 13.03,
+    "epa": 0.851
+   },
+   {
+    "receiver_player_name": "S.LaPorta",
+    "team": "DET",
+    "tgt": 49,
+    "adot": 5.653,
+    "epa": 0.679
    },
    {
     "receiver_player_name": "J.Smith-Njigba",
     "team": "SEA",
-    "tgt": 89,
-    "adot": 10.528,
-    "epa": 0.725
+    "tgt": 99,
+    "adot": 10.081,
+    "epa": 0.634
    },
    {
-    "receiver_player_name": "B.Bowers",
-    "team": "LV",
-    "tgt": 61,
-    "adot": 9.967,
-    "epa": 0.559
+    "receiver_player_name": "C.Watson",
+    "team": "GB",
+    "tgt": 74,
+    "adot": 14.486,
+    "epa": 0.611
    },
    {
-    "receiver_player_name": "J.Williams",
-    "team": "DET",
-    "tgt": 44,
-    "adot": 14.932,
-    "epa": 0.544
-   },
-   {
-    "receiver_player_name": "C.Olave",
-    "team": "NO",
-    "tgt": 71,
-    "adot": 12.268,
-    "epa": 0.528
+    "receiver_player_name": "J.Chase",
+    "team": "CIN",
+    "tgt": 73,
+    "adot": 10.11,
+    "epa": 0.561
    }
   ],
-  "corr_adot_epa": 0.38
+  "corr_adot_epa": 0.33
  },
  "yac_over_expected": {
-  "league_mean": -0.197,
-  "n_qualified": 68,
+  "league_mean": -0.193,
+  "n_qualified": 79,
   "top5": [
    {
     "receiver_player_name": "J.Warren",
@@ -328,16 +328,9 @@
    {
     "receiver_player_name": "T.Kelce",
     "team": "KC",
-    "rec": 28,
-    "yacoe": 4.13,
-    "yac": 9.75
-   },
-   {
-    "receiver_player_name": "K.Shakir",
-    "team": "BUF",
-    "rec": 27,
-    "yacoe": 2.98,
-    "yac": 9.04
+    "rec": 32,
+    "yacoe": 4.58,
+    "yac": 10.31
    },
    {
     "receiver_player_name": "R.Harvey",
@@ -347,88 +340,102 @@
     "yac": 11.96
    },
    {
-    "receiver_player_name": "Z.Flowers",
-    "team": "BAL",
-    "rec": 40,
-    "yacoe": 2.75,
-    "yac": 7.78
+    "receiver_player_name": "K.Shakir",
+    "team": "BUF",
+    "rec": 31,
+    "yacoe": 2.76,
+    "yac": 8.97
+   },
+   {
+    "receiver_player_name": "H.Fannin",
+    "team": "CLE",
+    "rec": 34,
+    "yacoe": 2.53,
+    "yac": 8.0
    }
   ]
  },
  "defense_run_pass": {
   "best_run_d": {
-   "JAX": -0.192,
-   "SF": -0.182,
-   "LA": -0.164
+   "SF": -0.187,
+   "LA": -0.176,
+   "JAX": -0.172
   },
   "best_pass_d": {
-   "MIN": -0.207,
-   "TB": -0.159,
-   "SEA": -0.076
+   "MIN": -0.179,
+   "TB": -0.165,
+   "JAX": -0.101
   },
-  "corr_run_pass": 0.33
+  "corr_run_pass": 0.41
  },
  "pass_rush_leaders": {
   "top5": [
    {
     "name": "G.Rousseau",
     "team": "BUF",
-    "events": 22,
-    "sacks": 7.0
+    "events": 25,
+    "sacks": 8.0
    },
    {
     "name": "D.Turner",
     "team": "MIN",
-    "events": 20,
-    "sacks": 6.0
+    "events": 21,
+    "sacks": 7.0
    },
    {
     "name": "Z.Allen",
     "team": "DEN",
-    "events": 20,
+    "events": 21,
     "sacks": 4.5
    },
    {
     "name": "M.Crosby",
     "team": "LV",
-    "events": 18,
-    "sacks": 3.0
+    "events": 20,
+    "sacks": 4.0
    },
    {
-    "name": "A.Hutchinson",
-    "team": "DET",
-    "events": 17,
-    "sacks": 5.0
+    "name": "G.Karlaftis",
+    "team": "KC",
+    "events": 19,
+    "sacks": 4.0
    }
   ]
  },
  "kicker_fgoe": {
-  "n": 31,
+  "n": 32,
   "model_kicks": 4325,
   "top3": [
    {
-    "kicker_player_name": "C.McLaughlin",
-    "team": "TB",
-    "made": 19,
-    "att": 19,
-    "fgoe_pts": 9.4
-   },
-   {
     "kicker_player_name": "S.Shrader",
     "team": "IND",
-    "made": 19,
-    "att": 21,
-    "fgoe_pts": 7.34
+    "made": 22,
+    "att": 24,
+    "fgoe_pts": 10.17
    },
    {
-    "kicker_player_name": "R.Fitzgerald",
-    "team": "CAR",
-    "made": 13,
-    "att": 13,
-    "fgoe_pts": 6.51
+    "kicker_player_name": "C.McLaughlin",
+    "team": "TB",
+    "made": 22,
+    "att": 22,
+    "fgoe_pts": 9.74
+   },
+   {
+    "kicker_player_name": "K.Fairbairn",
+    "team": "HOU",
+    "made": 18,
+    "att": 19,
+    "fgoe_pts": 7.87
    }
   ],
   "bottom3": [
+   {
+    "kicker_player_name": "N.Folk",
+    "team": "ATL",
+    "made": 13,
+    "att": 18,
+    "fgoe_pts": -6.97
+   },
    {
     "kicker_player_name": "H.Mevis",
     "team": "LA",
@@ -440,15 +447,8 @@
     "kicker_player_name": "H.Butker",
     "team": "KC",
     "made": 12,
-    "att": 18,
-    "fgoe_pts": -7.76
-   },
-   {
-    "kicker_player_name": "T.Smack",
-    "team": "GB",
-    "made": 11,
-    "att": 16,
-    "fgoe_pts": -8.45
+    "att": 19,
+    "fgoe_pts": -9.86
    }
   ]
  }

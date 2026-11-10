@@ -1,16 +1,16 @@
 {
-  "games":2883,
-  "flags":35104,
+  "games":2897,
+  "flags":35317,
   "seasons":"2016-2026",
-  "away_share_objective":0.5173308352,
-  "away_share_subjective":0.5125391095,
+  "away_share_objective":0.5176756834,
+  "away_share_subjective":0.5124485301,
   "home_edge_by_era":{
     "('2016-22', 'objective')":0.168,
     "('2016-22', 'other')":0.005,
     "('2016-22', 'subjective')":0.273,
-    "('2023-26', 'objective')":0.165,
-    "('2023-26', 'other')":0.008,
-    "('2023-26', 'subjective')":0.0
+    "('2023-26', 'objective')":0.176,
+    "('2023-26', 'other')":0.009,
+    "('2023-26', 'subjective')":-0.001
   },
   "objective_road_skew_top":{
     "Neutral Zone Infraction":0.597,
@@ -18,7 +18,7 @@
     "Encroachment":0.569,
     "Illegal Formation":0.535
   },
-  "false_start_road_share":0.4955266049,
+  "false_start_road_share":0.4959476309,
   "crew_yoy_r":0.2382110704,
   "crew_pairs":141,
   "crew_latest_season":2025,
@@ -28,15 +28,15 @@
     9.9333333333,
     "Brad Allen"
   ],
-  "split_r_net":0.0786856058,
-  "split_r_committed":0.2751463091,
-  "split_r_drawn":0.1698350808,
-  "rtp_league_per100":0.226273185,
+  "split_r_net":0.0822159156,
+  "split_r_committed":0.2861470304,
+  "split_r_drawn":0.1802233457,
+  "rtp_league_per100":0.2255904124,
   "rtp_top":[
     [
       "J.Goff",
       19.0,
-      5358,
+      5386,
       0.35,
       0.23,
       0.55
@@ -60,18 +60,18 @@
     [
       "J.Allen",
       17.0,
-      5118,
+      5153,
       0.33,
       0.21,
       0.53
     ],
     [
-      "D.Prescott",
-      15.0,
-      4615,
-      0.33,
-      0.2,
-      0.54
+      "B.Young",
+      8.0,
+      1885,
+      0.42,
+      0.22,
+      0.84
     ]
   ],
   "rtp_above_league":[
@@ -79,19 +79,19 @@
     "A.Dalton"
   ],
   "rtp_mahomes":[
-    0.2201151371,
-    22,
-    41
+    0.2188920694,
+    20,
+    42
   ],
-  "big_calls":921,
-  "big_calls_reg":886,
+  "big_calls":926,
+  "big_calls_reg":891,
   "big_calls_per_full_season_reg":84.5,
   "big_call_top_types":{
-    "Defensive Pass Interference":241,
+    "Defensive Pass Interference":243,
     "Unnecessary Roughness":125,
     "Roughing the Passer":97,
-    "Unsportsmanlike Conduct":70,
+    "Unsportsmanlike Conduct":71,
     "Offensive Holding":61
   },
-  "big_call_net_yoy_r":0.0394374461
+  "big_call_net_yoy_r":0.0397167216
 }

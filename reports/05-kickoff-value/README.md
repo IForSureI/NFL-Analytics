@@ -9,7 +9,7 @@
 
 - The new kickoff brought returns back: 21% of kickoffs returned in 2023, 75% in 2025.
 - Drives start 5.2 yards further up than in 2023, but the average return still lands 5.6 yards behind a touchback.
-- Kickers now create field position: J.Karty holds opponents 10.2 yards short of the touchback spot on average (41 kickoffs, so a small sample).
+- Kickers now create field position: J.Karty holds opponents 10.2 yards short of the touchback spot on average (45 kickoffs, so a small sample).
 
 <p align="center"><img src="kickoff_era.png" width="720" alt="Return rate and drive start by season, across the 2024 and 2025 rule changes."></p>
 <p align="center"><sub>Return rate and drive start by season, across the 2024 and 2025 rule changes.</sub></p>
@@ -22,7 +22,7 @@
 | Kickoffs returned, 2025 | **75%** |
 | Average drive start, 2023 to 2025 | **own 25.3 to 30.5** |
 | Average return vs a touchback (2025 on) | **-5.6 yards** |
-| Best kicker: opponent start short of the touchback spot | **J.Karty, 10.2 yards (41 kickoffs)** |
+| Best kicker: opponent start short of the touchback spot | **J.Karty, 10.2 yards (45 kickoffs)** |
 
 ## Why it matters for a club
 
@@ -44,7 +44,7 @@ nflverse play-by-play, regular seasons 2016-2026. The NFL adopted the dynamic ki
 
 ### 1. Returns came back.
 
-Return rate: 21% in 2023, 33% in 2024, 75% in 2025, 81% in 2026 so far.
+Return rate: 21% in 2023, 33% in 2024, 75% in 2025, 80% in 2026 so far.
 
 ### 2. Drives start about five yards further up.
 
@@ -52,14 +52,14 @@ Average start: own 25.3 in 2023, 29.8 in 2024, 30.5 in 2025. Expected points at 
 
 ### 3. Returners are in hell, as Kollmann said.
 
-Since 2025 the average return starts 5.6 yards behind where a touchback would have put the ball. Even the best returners (min. 20 returns) average behind it: I.Williams (NYJ, -1.4), Br.Robinson (ATL, -1.6), R.Davis (BUF, -1.7).
+Since 2025 the average return starts 5.6 yards behind where a touchback would have put the ball. Even the best returners (min. 20 returns) average behind it: I.Williams (NYJ, -1.5), Br.Robinson (ATL, -1.6), R.Davis (BUF, -1.7).
 
 <p align="center"><img src="returners.png" width="720" alt="Returners since 2025: average start vs where a touchback would have put the ball."></p>
 <p align="center"><sub>Returners since 2025: average start vs where a touchback would have put the ball.</sub></p>
 
 ### 4. Kickers now create value.
 
-With returns forced, the kicker decides field position. Best since 2025 (opponent start vs the touchback, 40+ kicks): J.Karty (-10.2 yards, 41 kicks), R.Fitzgerald (-6.8 yards, 104 kicks), J.Myers (-6.4 yards, 141 kicks).
+With returns forced, the kicker decides field position. Best since 2025 (opponent start vs the touchback, 40+ kicks): J.Karty (-10.2 yards, 45 kicks), R.Fitzgerald (-6.6 yards, 108 kicks), J.Myers (-6.5 yards, 145 kicks).
 
 ## Method
 

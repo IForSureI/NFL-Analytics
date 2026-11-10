@@ -71,53 +71,53 @@
       "ep_first_snap":1.384
     },
     "2026":{
-      "kickoffs":1220,
+      "kickoffs":1367,
       "touchback_rate":0.164,
-      "return_rate":0.806,
-      "avg_start_own":30.45,
-      "ep_first_snap":1.374
+      "return_rate":0.802,
+      "avg_start_own":30.473,
+      "ep_first_snap":1.38
     }
   },
   "best_kickers":[
     [
       "J.Karty",
-      41,
-      -10.2
+      45,
+      -10.16
     ],
     [
       "R.Fitzgerald",
-      104,
-      -6.77
+      108,
+      -6.61
     ],
     [
       "J.Myers",
-      141,
-      -6.44
+      145,
+      -6.47
     ]
   ],
   "worst_kickers":[
     [
       "N.Folk",
-      64,
-      -2.11
+      68,
+      -2.34
     ],
     [
       "B.Pinion",
-      47,
-      -1.91
+      50,
+      -1.86
     ],
     [
       "C.Ryland",
-      119,
-      -1.19
+      121,
+      -1.26
     ]
   ],
   "best_returners":[
     [
       "I.Williams",
       "NYJ",
-      40,
-      -1.42
+      42,
+      -1.5
     ],
     [
       "Br.Robinson",
@@ -132,5 +132,5 @@
       -1.68
     ]
   ],
-  "returned_vs_tb_league":-5.64
+  "returned_vs_tb_league":-5.61
 }
