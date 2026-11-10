@@ -339,7 +339,9 @@ def build() -> dict:
     g = r.groupby("rusher_player_id").agg(carries=("epa", "size"), success=("success", "mean"), epa=("epa", "mean")).reset_index()
     check("RB average", r.success.mean(), f["rb_success"]["rb_average_success"])
     check("RBs qualified", int((g.carries >= 60).sum()), f["rb_success"]["n_qualified"], 0)
-    rb = g[g.carries >= 60].sort_values("success", ascending=False).head(30)
+    rb = g[g.carries >= 60].sort_values("success", ascending=False)
+    tie_rb = list(rb.rusher_player_id)  # the page breaks ties in success rate in this same order
+    rb = rb.head(30)
     for got, want in zip(rb.itertuples(), f["rb_success"]["top5"]):
         check(f"RB {want['rusher_player_name']} success", got.success, want["success"])
     for i in rb.rusher_player_id:
@@ -493,7 +495,7 @@ def build() -> dict:
         check("cube FGOE", 3 * (q_.made - q_.exp), row["v"], 0.06)
 
     return {"meta": {"season": f["season"], "weeks": f["weeks"], "plays": f["plays"], "built": f["built"]},
-            "cubes": CU, "names": NAMES, "tie8": tie8, "heads": headshots(set(NAMES["qb"]) | set(NAMES["rec"])),
+            "cubes": CU, "names": NAMES, "tie8": tie8, "tie_rb": tie_rb, "heads": headshots(set(NAMES["qb"]) | set(NAMES["rec"])),
             "findings": f,  # the page header (TL;DR, key numbers) quotes findings.json directly
             "colors": colors, "qb": QB, "rb": RB, "rec": REC, "def": DEF, "k": K, "teams": T,
             "league": {"rb_succ": r3(r.success.mean()), "yacoe": f["yac_over_expected"]["league_mean"]},

@@ -570,7 +570,7 @@ document.getElementById("keynums").innerHTML = [
 document.getElementById("built").textContent = `Numbers as of the ${M.built} build. Rebuilt with every weekly refresh.`;
 if (matchMedia("(hover: none)").matches) document.getElementById("hint").textContent = "Tap any player or team for the breakdown. Tap again to close.";
 const avg = a => a.reduce((s, v) => s + v, 0) / a.length;
-const NM = DATA.names, CU = DATA.cubes, HEADS = DATA.heads || {}, TIE8 = new Map(DATA.tie8.map((id, i) => [id, i]));
+const NM = DATA.names, CU = DATA.cubes, HEADS = DATA.heads || {}, TIE8 = new Map(DATA.tie8.map((id, i) => [id, i])), TIERB = new Map((DATA.tie_rb || []).map((id, i) => [id, i]));
 const nm = (S, id) => (S[id] ? S[id].name : NM[S === QB ? "qb" : S === RB ? "rb" : S === RC ? "rec" : S === DF ? "def" : "k"][id][0]);
 const tm = (S, id) => (S[id] ? S[id].team : NM[S === QB ? "qb" : S === RB ? "rb" : S === RC ? "rec" : S === DF ? "def" : "k"][id][1]);
 
@@ -678,7 +678,8 @@ chart(2, "Running Back Success Rate", (f, o) => `${o.nq > 30 ? `Top 30 of the ${
   (f, wrap) => {
     const c = CU.rb, ci = c.ci, s = agg(c, f), t = thr("rb", "car", 60, f, 8), la = agg(CU.rb_all, f).total, ref = la[CU.rb_all.ci.succ] / la[CU.rb_all.ci.car];
     const all = []; for (const [i, a] of s) if (a[ci.car] >= t) all.push({id: c.ents[i], v: a[ci.succ] / a[ci.car], right: a[ci.epa] / a[ci.car], n: a[ci.car]});
-    const rows = all.sort((a, b) => b.v - a.v).slice(0, 30);
+    const tie = id => { const i = TIERB.get(id); return i == null ? 1e9 : i; };
+    const rows = all.sort((a, b) => b.v - a.v || tie(a.id) - tie(b.id)).slice(0, 30);
     bars(wrap, rows, {aria: "Top 30 running backs by success rate", zoom: true, ref, refLabel: `RB avg ${pc(ref)}`, team: r => tm(RB, r.id), name: r => nm(RB, r.id),
       fv: v => pc(v), fx: v => (100 * v).toFixed(0) + "%", right: r => sg(r.right, 2), rightHead: "EPA/rush", xt: "Rushing success rate",
       card: r => sliced(f, [[pc(r.v), `success (RB avg ${pc(ref)})`], [sg(r.right, 2), "EPA/rush", cls(r.right)], [r.n, "carries"]], "",
