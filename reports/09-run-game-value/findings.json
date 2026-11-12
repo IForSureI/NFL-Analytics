@@ -1,0 +1,675 @@
+{
+  "seasons":"2018-2025",
+  "current_season":2026,
+  "qualified_seasons":405,
+  "qualified_players":146,
+  "cap_2026_musd":301.2,
+  "ngs_untracked_yards_mean":13.4,
+  "ngs_team_filled_from_pbp":7,
+  "through_week":9,
+  "pairs":232,
+  "pair_players":88,
+  "yoy_r":{
+    "ypc":0.276,
+    "xypc":0.456,
+    "ryoe_pc":0.2,
+    "sr":0.148,
+    "epa":0.121,
+    "box8":0.369,
+    "efficiency":0.233
+  },
+  "yoy_r_ci":{
+    "ypc":[
+      0.129,
+      0.4
+    ],
+    "xypc":[
+      0.331,
+      0.553
+    ],
+    "ryoe_pc":[
+      0.02,
+      0.353
+    ],
+    "sr":[
+      0.027,
+      0.272
+    ],
+    "epa":[
+      -0.01,
+      0.244
+    ],
+    "box8":[
+      0.189,
+      0.512
+    ],
+    "efficiency":[
+      0.072,
+      0.385
+    ]
+  },
+  "share_of_repeatable_ypc_expected":0.497,
+  "share_of_repeatable_ypc_ryoe":0.503,
+  "r_next_ypc_from":{
+    "ypc":0.276,
+    "xypc":0.235,
+    "ryoe_pc":0.165
+  },
+  "var_share_ypc":{
+    "expected":0.319,
+    "ryoe":0.757,
+    "cov2":-0.076
+  },
+  "league_ypc":4.38,
+  "r_box8_xypc":-0.313,
+  "pbp_100car_pairs":216,
+  "pbp_100car_yoy_r_ypc":0.346,
+  "yoy_r_150car":{
+    "n":130,
+    "ypc":0.28,
+    "xypc":0.409,
+    "ryoe_pc":0.328
+  },
+  "yoy_r_carry_weighted":{
+    "ypc":0.284,
+    "xypc":0.443,
+    "ryoe_pc":0.259
+  },
+  "stability_gap_ci":[
+    0.046,
+    0.47
+  ],
+  "stability_gap_share_positive":0.99,
+  "portability":{
+    "ryoe_pc":{
+      "stayers":0.167,
+      "stayers_ci":[
+        -0.063,
+        0.363
+      ],
+      "changers":0.213,
+      "changers_ci":[
+        -0.079,
+        0.436
+      ]
+    },
+    "xypc":{
+      "stayers":0.482,
+      "stayers_ci":[
+        0.34,
+        0.6
+      ],
+      "changers":0.348,
+      "changers_ci":[
+        0.013,
+        0.578
+      ]
+    },
+    "ypc":{
+      "stayers":0.287,
+      "stayers_ci":[
+        0.135,
+        0.438
+      ],
+      "changers":0.122,
+      "changers_ci":[
+        -0.142,
+        0.37
+      ]
+    },
+    "box8":{
+      "stayers":0.365,
+      "stayers_ci":[
+        0.163,
+        0.528
+      ],
+      "changers":0.359,
+      "changers_ci":[
+        0.035,
+        0.618
+      ]
+    }
+  },
+  "changer_minus_stayer_ci":{
+    "ryoe_pc":[
+      -0.296,
+      0.356
+    ],
+    "xypc":[
+      -0.502,
+      0.184
+    ]
+  },
+  "changers_n":50,
+  "stayers_n":182,
+  "changers_mean_abs_change":{
+    "xypc":0.304,
+    "ryoe_pc":0.532
+  },
+  "stayers_mean_abs_change":{
+    "xypc":0.285,
+    "ryoe_pc":0.513
+  },
+  "predict_epa_n":222,
+  "r_next_epa":{
+    "epa":0.123,
+    "ypc":0.144,
+    "xypc":0.147,
+    "ryoe_pc":0.068,
+    "sr":0.043,
+    "box8":-0.026
+  },
+  "r_next_epa_ci":{
+    "epa":[
+      -0.013,
+      0.256
+    ],
+    "ypc":[
+      0.017,
+      0.263
+    ],
+    "xypc":[
+      0.013,
+      0.274
+    ],
+    "ryoe_pc":[
+      -0.074,
+      0.194
+    ],
+    "sr":[
+      -0.064,
+      0.158
+    ],
+    "box8":[
+      -0.165,
+      0.115
+    ]
+  },
+  "epa_model_r2":0.028,
+  "epa_model_coef":{
+    "epa":0.0158,
+    "xypc":0.0346,
+    "ryoe_pc":0.0111,
+    "box8":0.0084
+  },
+  "epa_model_p":{
+    "epa":0.893,
+    "xypc":0.06,
+    "ryoe_pc":0.529,
+    "box8":0.912
+  },
+  "league_epa_per_carry_next":-0.055,
+  "predict_yards_n":354,
+  "predict_yards_zero_next":21,
+  "predict_next_yards_per":{
+    "x_yds":0.606,
+    "ryoe_yds":0.779,
+    "td":4.528,
+    "rec_yds":0.275
+  },
+  "predict_next_yards_ci":{
+    "x_yds":[
+      0.401,
+      0.812
+    ],
+    "ryoe_yds":[
+      0.384,
+      1.175
+    ],
+    "td":[
+      -13.348,
+      22.404
+    ],
+    "rec_yds":[
+      0.05,
+      0.499
+    ]
+  },
+  "predict_yards_r2":0.272,
+  "r_xyds_with_carries":0.973,
+  "r_ryoe_yds_with_carries":0.382,
+  "predict_ypc_n":278,
+  "predict_next_ypc_per":{
+    "xypc":0.242,
+    "ryoe_pc":0.289
+  },
+  "predict_next_ypc_ci":{
+    "xypc":[
+      -0.019,
+      0.502
+    ],
+    "ryoe_pc":[
+      0.093,
+      0.486
+    ]
+  },
+  "predict_next_ypc_diff_p":0.787,
+  "predict_plus_carries_per":{
+    "x_yds":0.629,
+    "ryoe_yds":0.781,
+    "carries":-0.096
+  },
+  "predict_plus_carries_ci":{
+    "x_yds":[
+      -0.183,
+      1.44
+    ],
+    "ryoe_yds":[
+      0.381,
+      1.182
+    ]
+  },
+  "predict_with_age_per":{
+    "x_yds":0.616,
+    "ryoe_yds":0.675
+  },
+  "predict_with_age_ratio":1.1,
+  "yoy_r_rush_td":0.27,
+  "r_next_td_from_yds":0.227,
+  "yoy_r_rush_yards":0.398,
+  "vet_rb_deals_all":631,
+  "market_median_age":27.3,
+  "market_contracts":160,
+  "market_players":99,
+  "musd_per_100_yards":{
+    "x_yds":0.662,
+    "ryoe_yds":1.684,
+    "rec_yds":1.343
+  },
+  "musd_per_100_yards_ci":{
+    "x_yds":[
+      0.334,
+      0.99
+    ],
+    "ryoe_yds":[
+      1.123,
+      2.245
+    ],
+    "rec_yds":[
+      0.919,
+      1.766
+    ]
+  },
+  "musd_per_td":0.215,
+  "musd_per_td_ci":[
+    0.0,
+    0.43
+  ],
+  "market_r2":0.659,
+  "price_ratio_ryoe_to_expected_yard":2.54,
+  "price_diff_p":0.002,
+  "musd_per_ypc_part":{
+    "xypc":2.207,
+    "ryoe_pc":3.057
+  },
+  "musd_per_ypc_part_ci":{
+    "xypc":[
+      0.416,
+      3.999
+    ],
+    "ryoe_pc":[
+      2.037,
+      4.077
+    ]
+  },
+  "price_per_carry_diff_p":0.417,
+  "predict_ratio_ryoe_to_expected_yard":1.29,
+  "musd_per_100_future_yards":{
+    "x_yds":1.09,
+    "ryoe_yds":2.16
+  },
+  "boxscore_model":{
+    "musd_per_100_rush_yards":1.661,
+    "musd_per_100_carries":-4.281,
+    "musd_per_td":0.241,
+    "r2":0.663,
+    "carries_ci":[
+      -7.12,
+      -1.442
+    ]
+  },
+  "musd_per_ryoe_pc_beyond_boxscore":0.558,
+  "musd_per_ryoe_pc_beyond_boxscore_ci":[
+    -1.078,
+    2.194
+  ],
+  "r2_gain_from_ryoe":0.001,
+  "future_yard_cost_ratio_ryoe_vs_expected":1.98,
+  "future_yard_cost_ratio_ci90":[
+    0.94,
+    5.23
+  ],
+  "share_boot_ryoe_route_dearer":0.933,
+  "robustness":[
+    {
+      "sample":"base",
+      "contracts":160,
+      "x_yds_musd_per_100":0.662,
+      "x_yds_ci_low":0.334,
+      "x_yds_ci_high":0.99,
+      "ryoe_yds_musd_per_100":1.684,
+      "ryoe_yds_ci_low":1.123,
+      "ryoe_yds_ci_high":2.245,
+      "ryoe_to_expected_price_ratio":2.54,
+      "p_difference":0.002
+    },
+    {
+      "sample":"base + age",
+      "contracts":160,
+      "x_yds_musd_per_100":0.656,
+      "x_yds_ci_low":0.344,
+      "x_yds_ci_high":0.967,
+      "ryoe_yds_musd_per_100":1.553,
+      "ryoe_yds_ci_low":1.03,
+      "ryoe_yds_ci_high":2.077,
+      "ryoe_to_expected_price_ratio":2.37,
+      "p_difference":0.003
+    },
+    {
+      "sample":"deals >= 1% of cap",
+      "contracts":107,
+      "x_yds_musd_per_100":0.579,
+      "x_yds_ci_low":0.205,
+      "x_yds_ci_high":0.953,
+      "ryoe_yds_musd_per_100":1.551,
+      "ryoe_yds_ci_low":0.96,
+      "ryoe_yds_ci_high":2.142,
+      "ryoe_to_expected_price_ratio":2.68,
+      "p_difference":0.005
+    },
+    {
+      "sample":"multi-year deals",
+      "contracts":77,
+      "x_yds_musd_per_100":0.869,
+      "x_yds_ci_low":0.453,
+      "x_yds_ci_high":1.285,
+      "ryoe_yds_musd_per_100":1.449,
+      "ryoe_yds_ci_low":0.72,
+      "ryoe_yds_ci_high":2.179,
+      "ryoe_to_expected_price_ratio":1.67,
+      "p_difference":0.222
+    },
+    {
+      "sample":"signed 2023-2026",
+      "contracts":87,
+      "x_yds_musd_per_100":0.703,
+      "x_yds_ci_low":0.399,
+      "x_yds_ci_high":1.008,
+      "ryoe_yds_musd_per_100":1.591,
+      "ryoe_yds_ci_low":0.964,
+      "ryoe_yds_ci_high":2.217,
+      "ryoe_to_expected_price_ratio":2.26,
+      "p_difference":0.008
+    },
+    {
+      "sample":"signed 2019-2022",
+      "contracts":73,
+      "x_yds_musd_per_100":0.608,
+      "x_yds_ci_low":-0.141,
+      "x_yds_ci_high":1.356,
+      "ryoe_yds_musd_per_100":1.763,
+      "ryoe_yds_ci_low":0.821,
+      "ryoe_yds_ci_high":2.705,
+      "ryoe_to_expected_price_ratio":2.9,
+      "p_difference":0.03
+    },
+    {
+      "sample":"no receiving-yards control",
+      "contracts":160,
+      "x_yds_musd_per_100":1.051,
+      "x_yds_ci_low":0.695,
+      "x_yds_ci_high":1.407,
+      "ryoe_yds_musd_per_100":1.631,
+      "ryoe_yds_ci_low":0.944,
+      "ryoe_yds_ci_high":2.317,
+      "ryoe_to_expected_price_ratio":1.55,
+      "p_difference":0.129
+    },
+    {
+      "sample":"plus platform carries",
+      "contracts":160,
+      "x_yds_musd_per_100":1.412,
+      "x_yds_ci_low":0.263,
+      "x_yds_ci_high":2.561,
+      "ryoe_yds_musd_per_100":1.736,
+      "ryoe_yds_ci_low":1.174,
+      "ryoe_yds_ci_high":2.299,
+      "ryoe_to_expected_price_ratio":1.23,
+      "p_difference":0.606
+    },
+    {
+      "sample":"NGS expected-yards column",
+      "contracts":160,
+      "x_yds_musd_per_100":0.679,
+      "x_yds_ci_low":0.342,
+      "x_yds_ci_high":1.015,
+      "ryoe_yds_musd_per_100":1.691,
+      "ryoe_yds_ci_low":1.134,
+      "ryoe_yds_ci_high":2.248,
+      "ryoe_to_expected_price_ratio":2.49,
+      "p_difference":0.002
+    }
+  ],
+  "robust_ratio_min":1.23,
+  "robust_ratio_max":2.9,
+  "robust_ryoe_ci_above_zero":9,
+  "robust_n":9,
+  "robust_diff_significant":6,
+  "robust_p":{
+    "base":0.002,
+    "base + age":0.003,
+    "deals >= 1% of cap":0.005,
+    "multi-year deals":0.222,
+    "signed 2023-2026":0.008,
+    "signed 2019-2022":0.03,
+    "no receiving-yards control":0.129,
+    "plus platform carries":0.606,
+    "NGS expected-yards column":0.002
+  },
+  "robust_ratio":{
+    "base":2.54,
+    "base + age":2.37,
+    "deals >= 1% of cap":2.68,
+    "multi-year deals":1.67,
+    "signed 2023-2026":2.26,
+    "signed 2019-2022":2.9,
+    "no receiving-yards control":1.55,
+    "plus platform carries":1.23,
+    "NGS expected-yards column":2.49
+  },
+  "fa_removed_after_news_check":[
+    [
+      "Christian McCaffrey",
+      "not a 2027 free agent: his 2024 two-year extension runs through 2027; Over The Cap's end year misses the fifth-year option year on his rookie deal"
+    ]
+  ],
+  "fa_contracts_ending":56,
+  "fa_without_ngs":42,
+  "ryoe_shrink_k_carries":774,
+  "fa_seasons":{
+    "Jordan Mason":"2025",
+    "Tony Pollard":"2025+2026",
+    "Kimani Vidal":"2025",
+    "Zach Charbonnet":"2025",
+    "Chase Brown":"2025+2026",
+    "Brian Robinson Jr.":"2025+2026",
+    "Devin Singletary":"2025",
+    "Rachaad White":"2025+2026",
+    "Aaron Jones":"2025+2026",
+    "Emanuel Wilson":"2025+2026",
+    "Alvin Kamara":"2025+2026"
+  },
+  "fa_class":2027,
+  "fa_n":11,
+  "fa_median_apy_musd":2.0,
+  "fa_list":[
+    [
+      "Jordan Mason",
+      "MIN",
+      159.0,
+      4.77,
+      3.85,
+      0.92,
+      5.25,
+      28.3,
+      "beats expectation; age 28+ in 2027",
+      "2025"
+    ],
+    [
+      "Tony Pollard",
+      "TEN",
+      375.0,
+      4.47,
+      3.95,
+      0.53,
+      7.25,
+      30.3,
+      "beats expectation; age 28+ in 2027",
+      "2025+2026"
+    ],
+    [
+      "Kimani Vidal",
+      "LAC",
+      155.0,
+      4.15,
+      3.77,
+      0.37,
+      1.08,
+      26.0,
+      "value: beats expectation at a modest price; restricted free agent",
+      "2025"
+    ],
+    [
+      "Zach Charbonnet",
+      "SEA",
+      184.0,
+      3.97,
+      3.67,
+      0.3,
+      1.72,
+      26.6,
+      "value: beats expectation at a modest price",
+      "2025"
+    ],
+    [
+      "Chase Brown",
+      "CIN",
+      335.0,
+      4.23,
+      4.06,
+      0.16,
+      1.03,
+      27.4,
+      "",
+      "2025+2026"
+    ],
+    [
+      "Brian Robinson Jr.",
+      "ATL",
+      145.0,
+      4.21,
+      4.3,
+      -0.08,
+      2.5,
+      28.4,
+      "age 28+ in 2027",
+      "2025+2026"
+    ],
+    [
+      "Devin Singletary",
+      "NYG",
+      119.0,
+      3.67,
+      3.86,
+      -0.19,
+      1.3,
+      30.0,
+      "age 28+ in 2027",
+      "2025"
+    ],
+    [
+      "Rachaad White",
+      "WAS",
+      186.0,
+      4.3,
+      4.57,
+      -0.26,
+      2.0,
+      28.6,
+      "age 28+ in 2027",
+      "2025+2026"
+    ],
+    [
+      "Aaron Jones",
+      "MIN",
+      247.0,
+      4.14,
+      4.46,
+      -0.32,
+      5.56,
+      32.7,
+      "below expectation; age 28+ in 2027",
+      "2025+2026"
+    ],
+    [
+      "Emanuel Wilson",
+      "SEA",
+      236.0,
+      3.81,
+      4.18,
+      -0.38,
+      1.6,
+      28.3,
+      "below expectation; age 28+ in 2027",
+      "2025+2026"
+    ],
+    [
+      "Alvin Kamara",
+      "NO",
+      178.0,
+      3.53,
+      4.28,
+      -0.75,
+      6.0,
+      32.1,
+      "below expectation; age 28+ in 2027",
+      "2025+2026"
+    ]
+  ],
+  "fa_other_100car":[
+    [
+      "Samaje Perine",
+      "CIN",
+      130,
+      4.32,
+      1.8
+    ],
+    [
+      "Zonovan Knight",
+      "ARI",
+      110,
+      3.97,
+      1.2
+    ],
+    [
+      "Kendre Miller",
+      "NO",
+      104,
+      3.38,
+      1.41
+    ],
+    [
+      "Sean Tucker",
+      "TB",
+      101,
+      3.96,
+      2.5
+    ]
+  ],
+  "fa_other_notes":{
+    "Samaje Perine":"final year of a two-year Cincinnati deal, 2025-26",
+    "Zonovan Knight":"one-year deal with Arizona for 2026",
+    "Kendre Miller":"released by New Orleans on November 7, 2026, a year after an October 2025 ACL tear; a free agent now unless claimed",
+    "Sean Tucker":"signed a one-year deal with Tampa Bay in August 2026"
+  }
+}
