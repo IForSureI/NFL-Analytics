@@ -27,6 +27,7 @@ This portfolio started from two YouTube creators who make football analysis that
 | 04 Luck Index | MacKelvie: We Measured "Luck" in the NFL |
 | 05 Kickoff Value | Kollmann: Kick Returners are in Absolute Hell.; Kickers are taking over the NFL. |
 | 06 Pass vs Run | MacKelvie: Passing is better...so, why run?; Kollmann: Does "establishing the run" even work? |
+| 09 Run Game Value | Kollmann: The Running Back Problem.; Should Running Backs go in the Top 10? |
 
 ## Next studies on the list
 

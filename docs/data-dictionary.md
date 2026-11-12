@@ -6,13 +6,14 @@ All data is public and loaded by `nflan/data.py` from the [nflverse data release
 
 | Source | nflverse release | Seasons used | Used in |
 |---|---|---|---|
-| Play-by-play (with nflfastR EPA, WP, xpass) | `pbp` | 2006-present | 01-06 |
+| Play-by-play (with nflfastR EPA, WP, xpass) | `pbp` | 2006-present | 01-06, 09 |
 | Officials | `officials` | 2016-present | 01 |
 | Pro Football Reference advanced defense | `pfr_advstats` (def) | 2018-present | 07 |
 | NFL Next Gen Stats receiving | `nextgen_stats` (receiving) | 2016-2025 | 08 |
-| Snap counts | `snap_counts` | 2018-present | 07 |
-| Over The Cap contracts | `contracts` | deals signed 2019-2026 | 07, 08 |
-| Players (ID crosswalk) | `players` | | 07, 08 |
+| NFL Next Gen Stats rushing | `nextgen_stats` (rushing; RYOE from 2018) | 2018-present | 09 |
+| Snap counts | `snap_counts` | 2018-present | 07, 08, 09 |
+| Over The Cap contracts | `contracts` | deals signed 2019-2026 | 07, 08, 09 |
+| Players (ID crosswalk) | `players` | | 07, 08, 09 |
 
 ## Key play-by-play columns
 

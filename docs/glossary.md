@@ -24,4 +24,5 @@ Terms used across the studies, in plain language first and the formal version se
 | **Pressure** (PFR) | Sacks plus hurries plus QB knockdowns | Pro Football Reference charting |
 | **Sack luck** | Sacks beyond what a player's pressures predict | Sacks minus 0.264 times pressures |
 | **YAC over expected** (YACOE) | Yards after the catch beyond what a typical receiver gets on the same catches | NFL Next Gen Stats |
+| **Rush yards over expected** (RYOE) | A back's rushing yards beyond what a typical back gains on the same carries, given blockers, defenders and box count at the handoff; expected yards are the rest | NFL Next Gen Stats |
 | **Touchback spot** | Where a kickoff touchback puts the ball (own 25 through 2023, 30 in 2024, 35 from 2025) | |
