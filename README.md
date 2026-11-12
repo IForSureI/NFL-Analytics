@@ -1,6 +1,6 @@
 <p align="center"><img src="assets/banner.png" alt="NFL Analytics by Dylan Fanelli" width="100%"></p>
 
-<p align="center"><a href="https://github.com/IForSureI/NFL-Analytics/actions/workflows/tests.yml"><img src="https://github.com/IForSureI/NFL-Analytics/actions/workflows/tests.yml/badge.svg" alt="tests"></a> <img src="https://img.shields.io/badge/python-3.10%2B-1d2433" alt="python: 3.10+"> <img src="https://img.shields.io/badge/data-nflverse%202006--2026-1d2433" alt="data: nflverse 2006-2026"> <img src="https://img.shields.io/badge/studies-8-c2410c" alt="studies: 8"> <img src="https://img.shields.io/badge/refreshed-Nov%2010%202026-6b7280" alt="refreshed: Nov 10 2026"> <img src="https://img.shields.io/badge/license-all%20rights%20reserved-6b7280" alt="license: all rights reserved"></p>
+<p align="center"><a href="https://github.com/IForSureI/NFL-Analytics/actions/workflows/tests.yml"><img src="https://github.com/IForSureI/NFL-Analytics/actions/workflows/tests.yml/badge.svg" alt="tests"></a> <img src="https://img.shields.io/badge/python-3.10%2B-1d2433" alt="python: 3.10+"> <img src="https://img.shields.io/badge/data-nflverse%202006--2026-1d2433" alt="data: nflverse 2006-2026"> <img src="https://img.shields.io/badge/studies-9-c2410c" alt="studies: 9"> <img src="https://img.shields.io/badge/refreshed-Nov%2012%202026-6b7280" alt="refreshed: Nov 12 2026"> <img src="https://img.shields.io/badge/license-all%20rights%20reserved-6b7280" alt="license: all rights reserved"></p>
 
 <p align="center"><b><a href="#the-studies">Studies</a> &nbsp;|&nbsp; <a href="#what-a-club-gets">What a club gets</a> &nbsp;|&nbsp; <a href="#how-i-work">How I work</a> &nbsp;|&nbsp; <a href="#under-the-hood">Under the hood</a> &nbsp;|&nbsp; <a href="docs/glossary.md">Glossary</a> &nbsp;|&nbsp; <a href="#about">About</a></b></p>
 
@@ -24,10 +24,12 @@ I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward 
 | 06 | [**Pass vs Run**](reports/06-pass-run/) | Passing has been more efficient for years. So why do teams still run, and does passing more make a team better? | Passing beat running on neutral early downs in 21 of 21 seasons. | EPA, pass rate over expected, team-level correlation |
 | 07 | [**The Box-Score Tax**](reports/07-box-score-tax/) | Do NFL teams pay pass rushers for sacks that won't repeat, when pressures predict future sacks better? | Teams still pay about \$0.62M a year for each sack beyond what pressures predict (850 contracts, 95% CI \$0.29-0.94M). | clustered OLS, bootstrap, contract valuation, market pricing |
 | 08 | [**The YAC Tax**](reports/08-yac-tax/) | Do teams pay receivers for yards after the catch that won't come back? | Contracts price each part of receiving production about the same per future yard (\$4.89M per 100 YAC-over-expected yards vs \$4.44M per 100 air yards): no YAC tax. | Next Gen Stats, clustered OLS, contract valuation, null result |
+| 09 | [**Run Game Value**](reports/09-run-game-value/) | How much of a running back's production is his, and do contracts pay for that part? | Hypothesis failed: teams don't pay blocked yards like the back's own. Holding carries fixed, +1 yard over expected per carry adds \$3.06M a year vs \$2.21M for +1 expected yard per carry (160 contracts); per yard the gap is 2.54x but fades to 1.23x with workload controlled. | Next Gen Stats, clustered OLS, bootstrap, contract valuation, null result |
 
 <table>
 <tr><td width="25%" valign="top"><a href="reports/01-flag-audit/"><img src="reports/01-flag-audit/home_edge.png" width="100%"></a><br><sub><b>01 Flag Audit</b></sub></td><td width="25%" valign="top"><a href="reports/02-fourth-down-bot/"><img src="reports/02-fourth-down-bot/go_rate_trend.png" width="100%"></a><br><sub><b>02 Fourth-Down Bot</b></sub></td><td width="25%" valign="top"><a href="reports/03-sack-leverage/"><img src="reports/03-sack-leverage/epa_per_sack.png" width="100%"></a><br><sub><b>03 Sack Leverage</b></sub></td><td width="25%" valign="top"><a href="reports/04-luck-index/"><img src="reports/04-luck-index/luck_regression.png" width="100%"></a><br><sub><b>04 Luck Index</b></sub></td></tr>
 <tr><td width="25%" valign="top"><a href="reports/05-kickoff-value/"><img src="reports/05-kickoff-value/kickoff_era.png" width="100%"></a><br><sub><b>05 Kickoff Value</b></sub></td><td width="25%" valign="top"><a href="reports/06-pass-run/"><img src="reports/06-pass-run/epa_pass_vs_run.png" width="100%"></a><br><sub><b>06 Pass vs Run</b></sub></td><td width="25%" valign="top"><a href="reports/07-box-score-tax/"><img src="reports/07-box-score-tax/sack_tax.png" width="100%"></a><br><sub><b>07 The Box-Score Tax</b></sub></td><td width="25%" valign="top"><a href="reports/08-yac-tax/"><img src="reports/08-yac-tax/yac_tax.png" width="100%"></a><br><sub><b>08 The YAC Tax</b></sub></td></tr>
+<tr><td width="25%" valign="top"><a href="reports/09-run-game-value/"><img src="reports/09-run-game-value/rb_price.png" width="100%"></a><br><sub><b>09 Run Game Value</b></sub></td></tr>
 </table>
 
 ## 2026 in-season snippets
@@ -42,7 +44,6 @@ New studies are on the way; each follows the same [report standard](docs/report-
 
 | # | Study | The question |
 |---|---|---|
-| 09 | Run Game Value | How much of a running back's production is his, and do contracts pay for that part? |
 | 10 | Draft Value | In rounds 3-7, which positions return the most value per pick? |
 | 11 | Turnovers Forced | Do defenses that force turnovers keep doing it, and does a takeaway-heavy year fool people? |
 | 12 | Backup QB Value | What is a good backup quarterback worth, in expected wins and in cap dollars? |
@@ -53,7 +54,7 @@ New studies are on the way; each follows the same [report standard](docs/report-
 | Department | Question it answers | Study |
 |---|---|---|
 | Head coach and game management | Go, kick or punt on this fourth down? | [02 Fourth-Down Bot](reports/02-fourth-down-bot/) |
-| Pro personnel and free agency | Are pass rushers and receivers priced for what repeats? Who to target in free agency? | [07 Box-Score Tax](reports/07-box-score-tax/), [08 YAC Tax](reports/08-yac-tax/) |
+| Pro personnel and free agency | Are pass rushers, receivers and running backs priced for what repeats? Who to target in free agency? | [07 Box-Score Tax](reports/07-box-score-tax/), [08 YAC Tax](reports/08-yac-tax/), [09 Run Game Value](reports/09-run-game-value/) |
 | Defensive staff | When is a sack worth the most, and who produces those? | [03 Sack Leverage](reports/03-sack-leverage/) |
 | Offensive staff | Should we pass more on early downs? | [06 Pass vs Run](reports/06-pass-run/) |
 | Special teams | Who creates field position under the new kickoff? | [05 Kickoff Value](reports/05-kickoff-value/) |
@@ -118,11 +119,11 @@ Each study also runs alone, for example `python -m projects.fourth_down_bot`.
 
 ## Changelog
 
-- 2026-11-08: Every study figure, the banner and the at-a-glance panel restyled to the snippets design through nflan/plot.py (Unbounded and Literata, carbon-copy paper, violet and red series checked for colour-blind separation, study number on each plate); the yard-line banner and Inter are gone. Rebuilt with a refresh: nflverse revised past seasons, so a few numbers moved slightly (2025 go rate in clear spots 53% to 54%; flags 35,094 to 35,104).
 - 2026-11-09: Snippets page: one filter row for every chart (week range, down, quarter) re-cuts all twelve from additive per-week, per-down, per-quarter cells, with minimum samples scaled to the slice; with no filter it reproduces the published charts exactly (tested). Player headshots on the four player scatters (linked from the NFL's image server, team-colour dot as the fallback). Light only. Charts and study figures move from violet and red to neutral paper with turf green and flag orange, validated for colour-blind separation and contrast.
 - 2026-11-10: Weekly refresh through Week 9 (23,822 regular-season plays in the snippets; nflverse play-by-play pulled 2026-11-10). Every study, the snippets, the interactive page, the figures and the READMEs rebuilt; tests pass.
+- 2026-11-12: Study 09 Run Game Value: teams pay a little more for the back's part, and neither part looks mispriced (the hypothesis that teams pay blocked yards like the back's own failed). Per carry the expected (blocking and box) part of yards per carry repeats more than the back's part (r = 0.46 vs 0.20 for RYOE); contracts pay \$3.06M a year per +1 yard over expected per carry vs \$2.21M per +1 expected yard per carry (per yard \$1.68M vs \$0.66M per 100, a gap that fades once workload is controlled); per carry both parts predict next season about equally, so no mispricing either way, and no rushing stat predicts next season's rushing EPA well. 2027 free-agent backs ranked by RYOE, every name news-checked (McCaffrey removed: signed through 2027). Independent review corrections applied. Raw nflverse data from the cloud cache (the My Passport drive was not connected). The README refresh badge now reads the last weekly refresh from this log.
 
-Full history: [LOG.md](LOG.md). Data refreshes weekly in season (last: November 10, 2026, through the latest completed week of 2026).
+Full history: [LOG.md](LOG.md). Data refreshes weekly in season (last: November 12, 2026, through the latest completed week of 2026).
 
 ## License and citation
 
