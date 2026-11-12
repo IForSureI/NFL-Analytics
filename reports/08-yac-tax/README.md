@@ -1,4 +1,4 @@
-<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 07 The Box-Score Tax](../07-box-score-tax/)</sub>
+<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 07 The Box-Score Tax](../07-box-score-tax/) &nbsp;|&nbsp; [09 Run Game Value →](../09-run-game-value/)</sub>
 
 # 08 The YAC Tax
 ### Do teams pay receivers for yards after the catch that won't come back?
@@ -114,6 +114,6 @@ Code: [`projects/yac_tax.py`](../../projects/yac_tax.py)
 | [`findings.json`](findings.json) | Every number quoted on this page, machine-readable |
 
 ---
-<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 07 The Box-Score Tax](../07-box-score-tax/)</sub>
+<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 07 The Box-Score Tax](../07-box-score-tax/) &nbsp;|&nbsp; [09 Run Game Value →](../09-run-game-value/)</sub>
 
 <sub>© 2026 Dylan Fanelli. All rights reserved. To cite: Fanelli, D. (2026). *The YAC Tax*. NFL Analytics. https://github.com/IForSureI/NFL-Analytics/tree/main/reports/08-yac-tax</sub>
