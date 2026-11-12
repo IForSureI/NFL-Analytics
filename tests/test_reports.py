@@ -60,6 +60,29 @@ def test_yac_tax_components():
         assert -0.5 < v < 1.5
 
 
+def test_run_game_value_split_and_sanity():
+    f = load("09-run-game-value")
+    y = f["yoy_r"]
+    for k in ["ypc", "xypc", "ryoe_pc", "epa"]:
+        assert -0.3 < y[k] < 0.9, k                                       # per-carry rushing stats are noisy, never near-perfect
+    assert abs(f["share_of_repeatable_ypc_expected"] + f["share_of_repeatable_ypc_ryoe"] - 1) < 0.01  # the two parts add to YPC
+    assert 3.8 < f["league_ypc"] < 4.8
+    assert f["pairs"] > 150 and f["market_contracts"] > 100
+    assert max(f["r_next_epa"].values()) < 0.4                           # rushing EPA does not carry over strongly
+    assert 0 < f["musd_per_100_yards"]["ryoe_yds"] < 10 and f["musd_per_100_yards_ci"]["ryoe_yds"][0] > 0
+
+
+def test_run_game_value_free_agents_checked():
+    import csv
+    f = load("09-run-game-value")
+    rows = list(csv.DictReader(open(R / "09-run-game-value" / f"free_agents_{f['fa_class']}_rbs.csv")))
+    names = {r["player"] for r in rows}
+    assert "Christian McCaffrey" not in names                            # under contract through 2027 (news check)
+    rows2 = list(csv.DictReader(open(R / "09-run-game-value" / f"free_agents_{f['fa_class']}_rbs_no_ngs.csv")))
+    assert all(r["news_note"] for r in rows + rows2)                      # every listed name carries a news note
+    assert len(rows) == f["fa_n"]
+
+
 def test_contract_end_year():
     from nflan.data import contract_end_year
     h = [{"contract_type": "Drafted", "year_signed": 2021, "yrs": 4},
