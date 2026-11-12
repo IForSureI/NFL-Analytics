@@ -325,8 +325,63 @@ def yac_tax():
 """
 
 
+def run_game_value():
+    f = F("09-run-game-value")
+    y = f["yoy_r"]; ci = f["yoy_r_ci"]; po = f["portability"]; pay = f["musd_per_100_yards"]; pci = f["musd_per_100_yards_ci"]
+    pr = f["predict_next_yards_per"]; pq = f["predict_next_ypc_per"]; pqc = f["predict_next_ypc_ci"]
+    pp = f["musd_per_ypc_part"]; ppc = f["musd_per_ypc_part_ci"]; bs = f["boxscore_model"]; ne = f["r_next_epa"]; nec = f["r_next_epa_ci"]
+    fa = f["fa_list"]; last = f["current_season"]; c150 = f["yoy_r_150car"]; cw = f["yoy_r_carry_weighted"]; rp = f["robust_p"]; rr = f["robust_ratio"]
+    def yrs(s):
+        return s.replace("+", " and ")
+    def back(x):
+        return f"{x[0]} ({x[1]}, {x[5]:+.2f} on {x[2]:.0f} carries, {yrs(x[9])})"
+    pos = [x for x in fa if x[5] > 0]; neg = [x for x in fa if x[5] < 0]
+    val = [x for x in fa if str(x[8]).startswith("value")]
+    rem = f["fa_removed_after_news_check"]
+    other = f["fa_other_100car"]; on = f["fa_other_notes"]
+    return f"""# 09 Run Game Value: teams pay a little more for the back's part, and neither part looks mispriced
+
+**The question:** Brett Kollmann's line is that the offensive line sets a back's floor and the back sets his ceiling. NFL Next Gen Stats lets that be measured. It splits every carry into the yards a typical back would gain given his blockers, the defenders, the box count and the space at the handoff (**expected yards**), and the yards he gains over that (**rush yards over expected, RYOE**). If RYOE is the back's part, it should repeat, follow him to a new team, predict next season and be what contracts pay for. My hypothesis going in was that teams pay backs for yards their blocking made as if the back had made them. It failed: contracts pay more for the back's part than for the blocking part, though they pay for both. The back's part also turned out noisier than I expected (most of the spread in yards per carry, but the part that repeats less), and I cannot show the market misprices either part.
+**Inspired by:** Brett Kollmann, [The Running Back Problem.]({YT}PLGJLH4xQcA) and [Should Running Backs go in the Top 10?]({YT}8ymN2_OBGuE). Method mirrors studies [07](../07-box-score-tax/) and [08](../08-yac-tax/).
+**Data:** NFL Next Gen Stats rushing ({f['seasons']}, qualified rushers only: {f['qualified_seasons']} back-seasons, {f['qualified_players']} backs), nflverse play-by-play {f['seasons'].split('-')[0]}-{last} (through Week {f['through_week']} of {last}), and {f['market_contracts']} veteran RB contracts from Over The Cap ({f['market_players']} backs, signed 2019-2026), all via [nflverse](https://github.com/nflverse/nflverse-data). Dollars in 2026 cap terms (${f['cap_2026_musd']}M).
+**Code:** [`projects/run_game_value.py`](../../projects/run_game_value.py)
+
+## What I found
+1. **The blocking part of yards per carry repeats more than the back's part.** Year to year ({f['pairs']} back-to-back qualified seasons, {f['pair_players']} backs): expected yards per carry r = {y['xypc']:.2f} (95% interval {ci['xypc'][0]:.2f} to {ci['xypc'][1]:.2f}), raw yards per carry r = {y['ypc']:.2f}, RYOE per carry r = {y['ryoe_pc']:.2f} ({ci['ryoe_pc'][0]:.2f} to {ci['ryoe_pc'][1]:.2f}). The gap is positive in {100 * f['stability_gap_share_positive']:.0f}% of 1,000 bootstrap samples that resample backs, but it narrows for workhorse backs: with 150+ carries in both seasons ({c150['n']} pairs) it is {c150['xypc']:.2f} against {c150['ryoe_pc']:.2f}. RYOE makes up most of the spread in yards per carry ({100 * f['var_share_ypc']['ryoe']:.0f}% of its variance), yet of the yards per carry that carry into next season, {100 * f['share_of_repeatable_ypc_expected']:.0f}% comes through the expected part. Facing more eight-man boxes goes with fewer expected yards (r = {f['r_box8_xypc']:.2f}), and the box share itself repeats (r = {y['box8']:.2f}).
+2. **Changing teams: neither part clearly travels better.** For backs who changed teams ({f['changers_n']} pairs), RYOE per carry repeated at r = {po['ryoe_pc']['changers']:.2f} ({po['ryoe_pc']['changers_ci'][0]:.2f} to {po['ryoe_pc']['changers_ci'][1]:.2f}) and expected yards per carry at r = {po['xypc']['changers']:.2f} ({po['xypc']['changers_ci'][0]:.2f} to {po['xypc']['changers_ci'][1]:.2f}); for those who stayed ({f['stayers_n']} pairs), {po['ryoe_pc']['stayers']:.2f} and {po['xypc']['stayers']:.2f}. The changer-minus-stayer differences have 95% intervals of {f['changer_minus_stayer_ci']['ryoe_pc'][0]:.2f} to {f['changer_minus_stayer_ci']['ryoe_pc'][1]:.2f} (RYOE) and {f['changer_minus_stayer_ci']['xypc'][0]:.2f} to {f['changer_minus_stayer_ci']['xypc'][1]:.2f} (expected yards): too few team changes to tell. Expected yards following a back to a new team at all says they are not only the line's; they also carry the back's role and how he is used.
+3. **No rushing stat predicts next season's rushing EPA well.** Among {f['predict_epa_n']} qualified back-seasons followed by 100+ carries, expected yards per carry (r = {ne['xypc']:.2f}, {nec['xypc'][0]:.2f} to {nec['xypc'][1]:.2f}) and raw yards per carry (r = {ne['ypc']:.2f}) do best; this season's EPA per carry gives r = {ne['epa']:.2f} and RYOE per carry r = {ne['ryoe_pc']:.2f}. A model with four of them explains {100 * f['epa_model_r2']:.0f}% of next season's EPA per carry.
+4. **Contracts pay more per yard for the back's part, not less.** In veteran deals, each 100 platform-year rush yards over expected is paid ${pay['ryoe_yds']:.2f}M a year (95% interval ${pci['ryoe_yds'][0]:.2f}M to ${pci['ryoe_yds'][1]:.2f}M) against ${pay['x_yds']:.2f}M per 100 expected yards (${pci['x_yds'][0]:.2f}M to ${pci['x_yds'][1]:.2f}M), holding rushing touchdowns and receiving yards fixed: {f['price_ratio_ryoe_to_expected_yard']:.2f} times as much (difference p = {f['price_diff_p']:.3f}). Teams pay for the expected part too; its interval excludes zero. The premium is fragile: it stays significant in {f['robust_diff_significant']} of {f['robust_n']} model versions, but falls to {rr['no receiving-yards control']:.2f} times without the receiving control (p = {rp['no receiving-yards control']:.2f}), {rr['plus platform carries']:.2f} times once platform carries are added (p = {rp['plus platform carries']:.2f}) and {rr['multi-year deals']:.2f} times in multi-year deals (p = {rp['multi-year deals']:.2f}). Per carry, +1 yard over expected per carry is paid ${pp['ryoe_pc']:.2f}M a year and +1 expected yard per carry ${pp['xypc']:.2f}M, holding carries, touchdowns and receiving fixed (difference p = {f['price_per_carry_diff_p']:.2f}). Seen through the box score, the market pays for yards per carry, not workload: with yards fixed, 100 more carries lowers pay by {_usd(abs(bs['musd_per_100_carries']))} a year (interval {_usd(abs(bs['carries_ci'][1]))} to {_usd(abs(bs['carries_ci'][0]))}), and RYOE per carry adds nothing measurable once yards and carries are known (R² +{f['r2_gain_from_ryoe']:.3f}). A rushing touchdown adds about ${f['musd_per_td']:.2f}M, and its 95% interval reaches zero (up to ${f['musd_per_td_ci'][1]:.2f}M).
+5. **Per carry, both parts carry over about equally, so I can't call the premium a mistake.** Next season's yards per carry (backs with 50+ carries, weighted by carries, {f['predict_ypc_n']} back-seasons) rise {pq['ryoe_pc']:.2f} for each yard over expected per carry ({pqc['ryoe_pc'][0]:.2f} to {pqc['ryoe_pc'][1]:.2f}) and {pq['xypc']:.2f} for each expected yard per carry ({pqc['xypc'][0]:.2f} to {pqc['xypc'][1]:.2f}); the difference is not significant (p = {f['predict_next_ypc_diff_p']:.2f}). In season totals, a yard over expected comes back as {pr['ryoe_yds']:.2f} rushing yards next season and an expected yard as {pr['x_yds']:.2f}, but expected yards are mostly workload (r = {f['r_xyds_with_carries']:.2f} with carries), and a signing team sets the workload itself. Paid somewhat more and predicting slightly more per carry, the back's part looks roughly fairly priced. The evidence does not support a tax in either direction.
+6. **The {f['fa_class']} free-agent backs.** Contracts ending after {last} (Over The Cap, extensions counted), active in {last}, first-round option deals left out, each name checked against news on November 12, 2026. {len(fa)} have 100+ carries in NGS season rows for {last - 1} and {last}; ranked by RYOE per carry, above expectation: {'; '.join(back(x) for x in pos)}. Below: {'; '.join(back(x) for x in neg)}. Value flags (RYOE over +0.3 a carry, at or below the list's median pay of ${f['fa_median_apy_musd']:.2f}M): {', '.join(x[0] for x in val)}. Kimani Vidal is a restricted free agent; Zach Charbonnet tore his ACL in the January 2026 playoffs; Brian Robinson Jr. went on injured reserve on November 7. Given finding 1, one or two seasons of RYOE per carry is a weak signal; the CSV also gives each back's RYOE shrunk toward zero, and the news note behind every name. {('Removed after the news check: ' + '; '.join(f'{a} ({b})' for a, b in rem) + '.') if rem else ''} {len(other)} more free-agent backs have 100+ carries in play-by-play but fewer than 100 in NGS season rows, so no RYOE: {'; '.join(f'{x[0]} ({x[1]}, {x[2]} carries: {on.get(x[0], "")})' for x in other)}.
+
+![Stability](stability.png)
+![Team changers](team_changers.png)
+![Prediction](predict_epa.png)
+![Price](rb_price.png)
+![Free agents](free_agent_rbs.png)
+
+## Method
+- **Yards split:** for each back-season, RYOE = NGS `rush_yards_over_expected`; expected yards = rushing yards minus RYOE, so the two parts add to his rushing yards exactly. Per-carry versions divide both by all carries, so yards per carry = expected yards per carry + RYOE per carry. NGS's own expected-yards column runs about {f['ngs_untracked_yards_mean']:.0f} yards a season below this because a few carries have no tracking; using it instead leaves the price ratio about the same (see `robustness_price_per_100_yards.csv`).
+- **Samples:** NGS season rows (week 0, regular season) list qualified rushers only; RYOE starts in 2018. EPA, success rate and touchdowns come from nflverse play-by-play (designed runs: `rush_attempt` with no QB scramble and no two-point try). "Changed teams" means the NGS team differs between seasons; {f['ngs_team_filled_from_pbp']} NGS rows with no team are filled with the team the back carried for most that season.
+- **Prediction:** next season comes from play-by-play for every back. The season-total yards model counts zero for a back who did not carry the ball; the per-carry model uses backs with 50+ carries next season, weighted by those carries. Models cluster standard errors by player; output in `models.txt`.
+- **Contracts:** veteran RB deals (rookie deals dropped), at least 0.4% of the cap, one deal per back per signing year (a tag or tender and a long-term deal in the same year count once, as the longer deal), platform season = the NGS-qualified season before signing. Pay is APY as a share of that year's cap, priced in 2026 dollars.
+- **Free agents:** end year from each player's Over The Cap contract history (extensions added; the active deal wins a same-year tie), checked against news; RYOE combines the {last - 1} and {last} NGS season rows. RYOE shrunk toward zero adds about {f['ryoe_shrink_k_carries']} carries of league-average play, set by the year-to-year r of RYOE per carry.
+
+## Limits
+- Only qualified rushers have NGS season rows (about 50 a season), so backups and part-time backs are missing and the samples are small ({f['pairs']} back-to-back pairs, {f['changers_n']} of them team changes, {f['market_contracts']} contracts).
+- Expected yards is the NFL's model. It sees the blockers and defenders at the handoff, not how well the line sustains its blocks, so some line play sits inside RYOE; and it reflects the back's role and usage, so some of the back sits inside expected yards.
+- A contract buys several years, pass protection and receiving; receiving yards are controlled for, pass protection is not measured.
+- Back-to-back pairs need two qualified seasons, so backs who lost the job are missing from the stability numbers (the season-total yards prediction counts them, with zero yards).
+- Over The Cap end years miss fifth-year option years on older first-round deals (Christian McCaffrey's case), which is why every name was checked by hand.
+
+## Files
+`back_to_back_seasons.csv`, `rb_contracts_with_platform.csv`, `robustness_price_per_100_yards.csv`, `free_agents_{f['fa_class']}_rbs.csv`, `free_agents_{f['fa_class']}_rbs_no_ngs.csv`, `models.txt`, `findings.json`
+"""
+
+
 REPORTS = [("01-flag-audit", flag_audit), ("02-fourth-down-bot", fourth), ("03-sack-leverage", sacks),
-           ("04-luck-index", luck), ("05-kickoff-value", kickoff), ("06-pass-run", passrun), ("07-box-score-tax", box_score_tax), ("08-yac-tax", yac_tax)]
+           ("04-luck-index", luck), ("05-kickoff-value", kickoff), ("06-pass-run", passrun), ("07-box-score-tax", box_score_tax), ("08-yac-tax", yac_tax),
+           ("09-run-game-value", run_game_value)]
 
 
 UPCOMING = [("09", "Run Game Value", "How much of a running back's production is his, and do contracts pay for that part?"),
@@ -429,6 +484,14 @@ def snippets_section():
             f"**Hover for the breakdown:** the [interactive version]({WEB}) opens every player's and team's numbers by down, by depth and week by week.\n\n<table><tr>{cells}</tr><tr>{cells2}</tr></table>\n")
 
 
+def _refreshed():
+    """Date of the last data refresh in LOG.md (a new study is not a refresh); today if none is logged."""
+    for l in reversed((ROOT / "LOG.md").read_text().splitlines()):
+        if "weekly refresh" in l.lower() and l.startswith("- 20"):
+            return date.fromisoformat(l[2:12])
+    return date.today()
+
+
 def top_readme():
     f2 = F("02-fourth-down-bot")
     g = f2["go_rate_clear_spots"]; ys = sorted(g)
@@ -452,7 +515,7 @@ def top_readme():
     badges = " ".join(_html_badge(b) for b in [
         badge("python", "3.10+", "1d2433"),
         badge("data", f"nflverse 2006-{ys[-1]}", "1d2433"), badge("studies", str(len(REPORTS)), "c2410c"),
-        badge("refreshed", f"{date.today():%b %d %Y}", "6b7280"), badge("license", "all rights reserved", "6b7280")])
+        badge("refreshed", f"{_refreshed():%b %d %Y}", "6b7280"), badge("license", "all rights reserved", "6b7280")])
     ci = f'<a href="{REPO}/actions/workflows/tests.yml"><img src="{REPO}/actions/workflows/tests.yml/badge.svg" alt="tests"></a>'
     return f"""<p align="center"><img src="assets/banner.png" alt="NFL Analytics by Dylan Fanelli" width="100%"></p>
 
@@ -482,7 +545,7 @@ I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward 
 | Department | Question it answers | Study |
 |---|---|---|
 | Head coach and game management | Go, kick or punt on this fourth down? | [02 Fourth-Down Bot](reports/02-fourth-down-bot/) |
-| Pro personnel and free agency | Are pass rushers and receivers priced for what repeats? Who to target in free agency? | [07 Box-Score Tax](reports/07-box-score-tax/), [08 YAC Tax](reports/08-yac-tax/) |
+| Pro personnel and free agency | Are pass rushers, receivers and running backs priced for what repeats? Who to target in free agency? | [07 Box-Score Tax](reports/07-box-score-tax/), [08 YAC Tax](reports/08-yac-tax/), [09 Run Game Value](reports/09-run-game-value/) |
 | Defensive staff | When is a sack worth the most, and who produces those? | [03 Sack Leverage](reports/03-sack-leverage/) |
 | Offensive staff | Should we pass more on early downs? | [06 Pass vs Run](reports/06-pass-run/) |
 | Special teams | Who creates field position under the new kickoff? | [05 Kickoff Value](reports/05-kickoff-value/) |
@@ -549,7 +612,7 @@ Each study also runs alone, for example `python -m projects.fourth_down_bot`.
 
 {chr(10).join(log)}
 
-Full history: [LOG.md](LOG.md). Data refreshes weekly in season (last: {date.today():%B %d, %Y}, through the latest completed week of {ys[-1]}).
+Full history: [LOG.md](LOG.md). Data refreshes weekly in season (last: {_refreshed():%B %d, %Y}, through the latest completed week of {ys[-1]}).
 
 ## License and citation
 
