@@ -38,6 +38,12 @@ Twelve quick charts on the season in progress, through Weeks 1-9: QB, running ba
 
 <table><tr><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/qb_epa_cpoe.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/team_tiers.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/early_down_proe.png" width="100%"></a></td></tr><tr><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/receiver_share.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/rb_success.png" width="100%"></a></td><td width="33%"><a href="reports/2026-in-season-snippets/"><img src="reports/2026-in-season-snippets/defense_pressure.png" width="100%"></a></td></tr></table>
 
+## Draft board: 2027 quarterbacks
+
+[**Drew Mestemaker, QB, Oklahoma State: the case for QB1**](reports/draft-2027-drew-mestemaker/). Through 9 games: 2,962 yards, 29 touchdowns, 9.6 yards per attempt, and a 25+ yard completion on 11.7% of attempts (#2 of 100 FBS passers, ahead of 16 of the 18 first-round quarterbacks since 2021 in their final college season). The report compares him with every first-round quarterback since 2021, tests which of his numbers repeat, and says where Mensah and Sayin beat him.
+
+<p align="center"><a href="reports/draft-2027-drew-mestemaker/"><img src="reports/draft-2027-drew-mestemaker/explosive_vs_first_round.png" width="720"></a></p>
+
 ## Coming next
 
 New studies are on the way; each follows the same [report standard](docs/report-standard.md).
@@ -119,9 +125,9 @@ Each study also runs alone, for example `python -m projects.fourth_down_bot`.
 
 ## Changelog
 
-- 2026-11-09: Snippets page: one filter row for every chart (week range, down, quarter) re-cuts all twelve from additive per-week, per-down, per-quarter cells, with minimum samples scaled to the slice; with no filter it reproduces the published charts exactly (tested). Player headshots on the four player scatters (linked from the NFL's image server, team-colour dot as the fallback). Light only. Charts and study figures move from violet and red to neutral paper with turf green and flag orange, validated for colour-blind separation and contrast.
 - 2026-11-10: Weekly refresh through Week 9 (23,822 regular-season plays in the snippets; nflverse play-by-play pulled 2026-11-10). Every study, the snippets, the interactive page, the figures and the READMEs rebuilt; tests pass.
 - 2026-11-12: Study 09 Run Game Value: teams pay a little more for the back's part, and neither part looks mispriced (the hypothesis that teams pay blocked yards like the back's own failed). Per carry the expected (blocking and box) part of yards per carry repeats more than the back's part (r = 0.46 vs 0.20 for RYOE); contracts pay \$3.06M a year per +1 yard over expected per carry vs \$2.21M per +1 expected yard per carry (per yard \$1.68M vs \$0.66M per 100, a gap that fades once workload is controlled); per carry both parts predict next season about equally, so no mispricing either way, and no rushing stat predicts next season's rushing EPA well. 2027 free-agent backs ranked by RYOE, every name news-checked (McCaffrey removed: signed through 2027). Independent review corrections applied. Built from the raw nflverse files on the My Passport drive (Next Gen Stats rushing added there; 2026 play-by-play, snap counts, contracts and players refreshed there). The README refresh badge now reads the last weekly refresh from this log.
+- 2026-11-14: Draft report: Drew Mestemaker, QB, Oklahoma State, the case for QB1 (reports/draft-2027-drew-mestemaker). Through 9 games: 2,962 yards, 29 TD, 9.6 yards per attempt; a 25+ yard completion on 11.7% of attempts, more often than 16 of the 18 first-round quarterbacks since 2021 in their final college season. His rating rose +4.3 moving from the American to the Big 12; the other 19 Group of Five to Power Four transfers averaged -5.6. Interception rate (2.6%) and third-down rating (122) are below average; year to year they repeat at r = 0.14 and 0.24. Mensah and Sayin have the better 2026 efficiency, and the page says so. Data: cfbstats.com season, situational and game-log tables (pulled 2026-11-14, before Texas Tech) and nflverse draft picks. Independent review corrections applied. New code: projects/draft_mestemaker.py; tests added.
 
 Full history: [LOG.md](LOG.md). Data refreshes weekly in season (last: November 12, 2026, through the latest completed week of 2026).
 
