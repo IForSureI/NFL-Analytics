@@ -1,0 +1,20 @@
+draft,pick,team,name,college,age,cfbstats_name,final_season,in_fbs_data
+2021,1,JAX,Trevor Lawrence,Clemson,21.0,Trevor Lawrence,2020,True
+2021,2,NYJ,Zach Wilson,BYU,22.0,Zach Wilson,2020,True
+2021,3,SFO,Trey Lance,North Dakota St.,21.0,Trey Lance,2020,False
+2021,11,CHI,Justin Fields,Ohio St.,22.0,Justin Fields,2020,True
+2021,15,NWE,Mac Jones,Alabama,23.0,Mac Jones,2020,True
+2022,20,PIT,Kenny Pickett,Pittsburgh,24.0,Kenny Pickett,2021,True
+2023,1,CAR,Bryce Young,Alabama,22.0,Bryce Young,2022,True
+2023,2,HOU,C.J. Stroud,Ohio St.,21.0,C.J. Stroud,2022,True
+2023,4,IND,Anthony Richardson,Florida,21.0,Anthony Richardson,2022,True
+2024,1,CHI,Caleb Williams,USC,22.0,Caleb Williams,2023,True
+2024,2,WAS,Jayden Daniels,LSU,23.0,Jayden Daniels,2023,True
+2024,3,NWE,Drake Maye,North Carolina,22.0,Drake Maye,2023,True
+2024,8,ATL,Michael Penix,Washington,24.0,Michael Penix Jr.,2023,True
+2024,10,MIN,J.J. McCarthy,Michigan,21.0,J.J. McCarthy,2023,True
+2024,12,DEN,Bo Nix,Oregon,24.0,Bo Nix,2023,True
+2025,1,TEN,Cam Ward,Miami (FL),23.0,Cam Ward,2024,True
+2025,25,NYG,Jaxson Dart,Mississippi,22.0,Jaxson Dart,2024,True
+2026,1,LVR,Fernando Mendoza,Indiana,22.0,Fernando Mendoza,2025,True
+2026,13,LAR,Ty Simpson,Alabama,23.0,Ty Simpson,2025,True
