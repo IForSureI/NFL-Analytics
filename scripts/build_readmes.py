@@ -484,6 +484,23 @@ def snippets_section():
             f"**Hover for the breakdown:** the [interactive version]({WEB}) opens every player's and team's numbers by down, by depth and week by week.\n\n<table><tr>{cells}</tr><tr>{cells2}</tr></table>\n")
 
 
+DRAFT = "draft-2027-drew-mestemaker"
+
+
+def draft_section():
+    """Link to the draft prospect report (built by projects/draft_mestemaker.py); numbers from its findings.json."""
+    p = R / DRAFT / "findings.json"
+    if not p.exists():
+        return ""
+    f = F(DRAFT)
+    L, r, v = f["line"], f["ranks"], f["vs_first_round"]
+    return (f"\n## Draft board: 2027 quarterbacks\n\n[**Drew Mestemaker, QB, Oklahoma State: the case for QB1**](reports/{DRAFT}/). "
+            f"Through {L['G']} games: {L['Yards']:,} yards, {L['TD']} touchdowns, {L['YPA']:.1f} yards per attempt, and a 25+ yard completion on {L['x25']:.1f}% of attempts "
+            f"(#{r['x25'][0]} of {r['x25'][1]} FBS passers, ahead of {v['x25']['beats']} of the {f['first_round_n']} first-round quarterbacks since 2021 in their final college season). "
+            f"The report compares him with every first-round quarterback since 2021, tests which of his numbers repeat, and says where Mensah and Sayin beat him.\n\n"
+            f'<p align="center"><a href="reports/{DRAFT}/"><img src="reports/{DRAFT}/explosive_vs_first_round.png" width="720"></a></p>\n')
+
+
 def _refreshed():
     """Date of the last data refresh in LOG.md (a new study is not a refresh); today if none is logged."""
     for l in reversed((ROOT / "LOG.md").read_text().splitlines()):
@@ -538,7 +555,7 @@ I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward 
 {chr(10).join(rows)}
 
 {gallery}
-{snippets_section()}{upcoming}
+{snippets_section()}{draft_section()}{upcoming}
 <a id="what-a-club-gets"></a>
 ## What a club gets
 
