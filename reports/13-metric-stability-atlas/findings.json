@@ -4207,8 +4207,8 @@
   ],
   "odd_even_vs_random_mean_abs_gap":0.023,
   "repo_context":{
-    "02_scorecard_split_half_r":0.17,
-    "02_scorecard_yoy_r":0.28,
+    "02_scorecard_split_half_r":0.1,
+    "02_scorecard_yoy_r":0.14,
     "03_epa_per_sack_yoy_r":0.01,
     "05_returner_split_half_r":0.11,
     "05_kicker_split_half_r":0.26,
@@ -4218,9 +4218,9 @@
   },
   "repo_context_nearest":{
     "02_scorecard_split_half_r":[
-      "off_int_rate",
-      "Interception rate thrown",
-      0.169
+      "def_int_rate",
+      "Interceptions per dropback",
+      0.14
     ],
     "05_returner_split_half_r":[
       "def_int_rate",

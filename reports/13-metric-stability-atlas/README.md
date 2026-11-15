@@ -158,7 +158,7 @@ Each metric's k was fit on the earlier seasons (2006-2015 for play-by-play numbe
 
 ### 8. Earlier boards in this portfolio sit at the noisy end of the atlas.
 
-The fourth-down team card in study 02 repeats at odd vs even weeks r = 0.17, about where interception rate thrown sits here (split-half r = 0.17). Study 03 found a rusher's EPA per sack does not repeat (year-to-year r = 0.01); here a rusher's sacks per snap repeat at 0.47 (0.40 to 0.55) and pressures per snap at 0.73 (0.68 to 0.77), so the count is a skill and the timing of the sacks is not. Study 05's returner rating repeats at r = 0.11, like the noisiest numbers in this table.
+The fourth-down team card in study 02 repeats at odd vs even weeks r = 0.10, about where interceptions per dropback sits here (split-half r = 0.14). Study 03 found a rusher's EPA per sack does not repeat (year-to-year r = 0.01); here a rusher's sacks per snap repeat at 0.47 (0.40 to 0.55) and pressures per snap at 0.73 (0.68 to 0.77), so the count is a skill and the timing of the sacks is not. Study 05's returner rating repeats at r = 0.11, like the noisiest numbers in this table.
 
 ### 9. 2026 through Week 10: regress offense EPA about 38%, defense EPA about 63%.
 
