@@ -19,5 +19,5 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Published numbers and report standard
+      - name: Logic tests, consistency checks and report standard
         run: python -m pytest -q
