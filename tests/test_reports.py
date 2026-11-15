@@ -36,6 +36,47 @@ def test_fourth_down_findings_are_consistent():
         assert 0 <= lo <= f["go_rate_clear_spots"][season] <= hi <= 1, season
 
 
+def test_fourth_down_holdout_findings_are_consistent():
+    f = load("02-fourth-down-bot")
+    h = f["holdout"]
+    assert int(h["train"][-4:]) < int(h["test"][:4])                       # the test seasons come after the training seasons
+    for key in ("convert", "convert_4th", "fg", "fg_in_range"):
+        c = h[key]
+        assert c["n"] > 0 and 0 <= c["actual"] <= 1 and 0 <= c["predicted"] <= 1
+        for metric in ("brier", "log_loss"):
+            assert all(v[1] <= v[0] <= v[2] for v in c[metric].values()), (key, metric)
+        assert 0 < c["brier"]["model"][0] < 1 and c["brier"]["league_avg"][0] <= 0.26   # a constant rate cannot score worse than about 0.25
+    assert h["convert_4th"]["n"] < h["convert"]["n"] and h["fg_in_range"]["n"] <= h["fg"]["n"]
+    assert all(v[1] <= v[0] <= v[2] for v in h["punt"]["rmse"].values()) and h["punt"]["bias"][1] <= h["punt"]["bias"][0] <= h["punt"]["bias"][2]
+    fl = h["flips"]
+    for k in ("components", "components_and_wp"):
+        assert 0 <= fl[k][1] <= fl[k][0] <= fl[k][2] <= 1
+    assert fl["n_flips"] == fl["flips_go_vs_kick"] + fl["flips_fg_vs_punt"]
+    assert fl["components"][0] == pytest.approx(fl["n_flips"] / fl["n"], abs=1e-4)
+    assert sum(n for _, n in fl["by_season"].values()) == fl["n"]
+    assert fl["counted_calls_flipped"] <= min(fl["counted_calls"], fl["n_flips"]) and fl["flips_margin_2plus"] <= fl["flips_margin_1plus"] <= fl["n_flips"]
+    hl = h["headline"]
+    assert hl["moves"] == bool(hl["reasons"]) and -1 <= hl["card_r"] <= 1
+    assert set(hl["go_rate"]) == set(fl["by_season"])                       # every test season is compared
+    pf = f["punt_fix"]
+    assert (pf["go_to_punt"] + pf["punt_to_go"] + pf["other"]) / pf["n"] == pytest.approx(pf["share_recs_changed"], abs=5e-5)   # the share is stored to 4 places
+    assert set(pf["go_rate_before"]) == set(f["go_rate_clear_spots"])       # every season has its before-the-fix rate
+    assert all(0 <= r <= 1 and n > 0 for r, n in pf["go_rate_before"].values())
+    assert -1 <= pf["split_half_r_before"] <= 1 and -1 <= pf["yoy_r_before"] <= 1 and len(pf["most_costly_before"]) == 3
+
+
+def test_fourth_down_page_says_what_the_holdout_rule_found():
+    f = load("02-fourth-down-bot")
+    page = (R / "02-fourth-down-bot" / "README.md").read_text()
+    moves = f["holdout"]["headline"]["moves"]                               # the wording follows the rule, whichever way it falls
+    assert ("and the headline numbers hold" in page) == (not moves) and ("the headline numbers move:" in page) == moves
+    assert f["holdout"]["train"] in page and f["holdout"]["test"] in page  # training and test seasons are named
+    assert "They are not tested out of sample" not in page
+    ys = sorted(f["go_rate_clear_spots"])
+    if any(round(f["punt_fix"]["go_rate_before"][y][0], 2) != round(f["go_rate_clear_spots"][y], 2) for y in (ys[0], ys[-2])):
+        assert "before the fix" in page.split("## Key numbers")[0]          # a headline number that moved is flagged in the TL;DR
+
+
 def test_sack_leverage_findings_are_consistent():
     f = load("03-sack-leverage")
     assert all(0 <= v <= 100 for v in f["third_down_conversion_by_distance"].values())   # percentages
