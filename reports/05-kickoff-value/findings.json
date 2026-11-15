@@ -71,66 +71,101 @@
       "ep_first_snap":1.384
     },
     "2026":{
-      "kickoffs":1367,
-      "touchback_rate":0.164,
+      "kickoffs":1375,
+      "touchback_rate":0.163,
       "return_rate":0.802,
-      "avg_start_own":30.473,
-      "ep_first_snap":1.38
+      "avg_start_own":30.457,
+      "ep_first_snap":1.378
     }
   },
-  "best_kickers":[
-    [
-      "J.Karty",
-      45,
-      -10.16
-    ],
-    [
-      "R.Fitzgerald",
-      108,
-      -6.61
-    ],
-    [
-      "J.Myers",
-      145,
-      -6.47
-    ]
-  ],
-  "worst_kickers":[
-    [
-      "N.Folk",
-      68,
-      -2.34
-    ],
-    [
-      "B.Pinion",
-      50,
-      -1.86
-    ],
-    [
-      "C.Ryland",
-      121,
-      -1.26
-    ]
-  ],
+  "era":"2025-2026",
+  "era_kickoffs":4141,
+  "onside_squib_dropped":68,
+  "returns":3166,
+  "return_tds_kept":7,
+  "return_fumbles_lost_kept":22,
+  "return_epa_by_landing_spot":{
+    "end zone":0.02,
+    "1-5":0.2,
+    "6-10":0.25,
+    "11-15":0.28,
+    "16-20":0.58
+  },
+  "touchback_epa":0.34,
+  "returned_epa":0.19,
+  "returned_vs_tb_league":-5.62,
+  "returner_split_half_r":0.11,
+  "returner_split_half_n":58,
+  "returners_rated":58,
+  "returners_clear":10,
+  "returners_clear_expected_by_chance":5.8,
+  "returner_signal_sd":0.0,
   "best_returners":[
-    [
-      "I.Williams",
-      "NYJ",
-      42,
-      -1.5
-    ],
-    [
-      "Br.Robinson",
-      "ATL",
-      20,
-      -1.6
-    ],
     [
       "R.Davis",
       "BUF",
       40,
-      -1.68
+      0.44,
+      0.2
+    ],
+    [
+      "D.Banks",
+      "NYG",
+      20,
+      0.41,
+      0.28
+    ],
+    [
+      "K.Nwangwu",
+      "NYJ",
+      31,
+      0.39,
+      0.22
     ]
   ],
-  "returned_vs_tb_league":-5.61
+  "kicker_split_half_r":0.26,
+  "kicker_split_half_n":40,
+  "kickers_rated":40,
+  "kickers_clear":0,
+  "kicker_signal_sd":0.035,
+  "best_kickers":[
+    [
+      "R.Fitzgerald",
+      112,
+      -0.043,
+      0.051
+    ],
+    [
+      "J.Myers",
+      148,
+      -0.033,
+      0.049
+    ],
+    [
+      "J.Karty",
+      45,
+      -0.024,
+      0.054
+    ]
+  ],
+  "worst_kickers":[
+    [
+      "R.Patterson",
+      92,
+      0.017,
+      0.052
+    ],
+    [
+      "C.Ryland",
+      118,
+      0.025,
+      0.051
+    ],
+    [
+      "Z.Gonzalez",
+      43,
+      0.026,
+      0.054
+    ]
+  ]
 }

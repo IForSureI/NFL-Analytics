@@ -3,13 +3,13 @@
 # 05 Kickoff Value
 ### The new kickoff, kickers and returners
 
-![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![seasons: 2016-2026](https://img.shields.io/badge/seasons-2016--2026-1d2433) ![method: rule-change analysis](https://img.shields.io/badge/method-rule--change%20analysis-c2410c) ![method: special teams](https://img.shields.io/badge/method-special%20teams-c2410c) ![method: player valuation](https://img.shields.io/badge/method-player%20valuation-c2410c)
+![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![seasons: 2016-2026](https://img.shields.io/badge/seasons-2016--2026-1d2433) ![method: rule-change analysis](https://img.shields.io/badge/method-rule--change%20analysis-c2410c) ![method: special teams](https://img.shields.io/badge/method-special%20teams-c2410c) ![method: empirical Bayes](https://img.shields.io/badge/method-empirical%20Bayes-c2410c) ![method: split-half reliability](https://img.shields.io/badge/method-split--half%20reliability-c2410c)
 
 **TL;DR**
 
-- The new kickoff brought returns back: 21% of kickoffs returned in 2023, 75% in 2025.
-- Drives start 5.2 yards further up than in 2023, but the average return still lands 5.6 yards behind a touchback.
-- Kickers now create field position: J.Karty holds opponents 10.2 yards short of the touchback spot on average (45 kickoffs, so a small sample).
+- The new kickoff brought returns back: 21% of kickoffs returned in 2023, 75% in 2025, and drives start 5.2 yards further up.
+- The average return lands 5.6 yards behind a touchback, but a returner cannot choose the touchback. Against a typical return from the same landing spot, returners cannot yet be told apart (split-half r = 0.11).
+- Kickers show a small repeatable spread (split-half r = 0.26, about 0.035 expected points per kick), and 0 of 40 is clear of average after shrinkage.
 
 <p align="center"><img src="kickoff_era.png" width="720" alt="Return rate and drive start by season, across the 2024 and 2025 rule changes."></p>
 <p align="center"><sub>Return rate and drive start by season, across the 2024 and 2025 rule changes.</sub></p>
@@ -18,21 +18,22 @@
 
 | Measure | Value |
 |---|---|
-| Kickoffs returned, 2023 | **21%** |
-| Kickoffs returned, 2025 | **75%** |
+| Kickoffs returned, 2023 / 2025 | **21% / 75%** |
 | Average drive start, 2023 to 2025 | **own 25.3 to 30.5** |
 | Average return vs a touchback (2025 on) | **-5.6 yards** |
-| Best kicker: opponent start short of the touchback spot | **J.Karty, 10.2 yards (45 kickoffs)** |
+| Returner value over expected, split-half r | **0.11 (58 returners)** |
+| Kicker EPA allowed, split-half r | **0.26 (40 kickers)** |
+| Kickers / returners clear of average | **0 of 40 / 10 of 58 (about 6 expected by chance)** |
 
 ## Why it matters for a club
 
-- **Kicker evaluation:** kickoff placement is now worth yards; it belongs in the kicker grade next to field goals.
-- **Roster spots:** a returner who lands behind the touchback spot is costing field position.
-- **Special-teams scheme:** where to aim kickoffs, by kicker and coverage unit.
+- **Roster spots:** two seasons of the new rule do not yet separate one returner from another, so do not pay or cut on a return average alone.
+- **Kicker evaluation:** kickoff placement shows a small repeatable effect; track it next to field goals, with its interval.
+- **Special-teams scheme:** the value of a return by landing spot says where a kick is cheapest to give up.
 
 ## The question
 
-**What did the new kickoff rule do to field position, and who creates value under it?**
+**What did the new kickoff rule do to field position, and can kickers and returners be told apart under it?**
 
 **Inspired by:** Brett Kollmann, [Kick Returners are in Absolute Hell.](https://www.youtube.com/watch?v=ELjLAp4eyic) and [Kickers are taking over the NFL.](https://www.youtube.com/watch?v=UufAB2UcVMw).  
 
@@ -50,40 +51,51 @@ Return rate: 21% in 2023, 33% in 2024, 75% in 2025, 80% in 2026 so far.
 
 Average start: own 25.3 in 2023, 29.8 in 2024, 30.5 in 2025. Expected points at the first snap rose from 1.11 to 1.38.
 
-### 3. Returners are in hell, as Kollmann said.
+### 3. Returns start behind the touchback, but that is the rule, not the returner.
 
-Since 2025 the average return starts 5.6 yards behind where a touchback would have put the ball. Even the best returners (min. 20 returns) average behind it: I.Williams (NYJ, -1.5), Br.Robinson (ATL, -1.6), R.Davis (BUF, -1.7).
+Since 2025 the average return starts 5.6 yards behind the touchback spot. A ball that lands in the landing zone has to be returned, so the returner cannot choose the 35. The fair baseline is a typical return from where the ball came down: worth +0.02 expected points from the end zone, +0.20 from the 1-5, +0.25 from the 6-10, +0.28 from the 11-15 and +0.58 from the 16-20 (touchback: +0.34).
 
-<p align="center"><img src="returners.png" width="720" alt="Returners since 2025: average start vs where a touchback would have put the ball."></p>
-<p align="center"><sub>Returners since 2025: average start vs where a touchback would have put the ball.</sub></p>
+### 4. Against that baseline the data cannot yet tell returners apart.
 
-### 4. Kickers now create value.
+3,166 returns in 2025-2026, with the 7 return touchdowns and 22 lost fumbles included. For returners with 20+ returns (58), value per return over expected has a split-half r of 0.11, and the estimated true spread between returners is 0.00 points per return. 10 of 58 have a 90% interval that excludes zero; about 6 would by chance. The top of the raw list (R.Davis (BUF, +0.44 ± 0.20 on 40 returns), D.Banks (NYG, +0.41 ± 0.28 on 20 returns), K.Nwangwu (NYJ, +0.39 ± 0.22 on 31 returns)) is a list of results, not of proven skill.
 
-With returns forced, the kicker decides field position. Best since 2025 (opponent start vs the touchback, 40+ kicks): J.Karty (-10.2 yards, 45 kicks), R.Fitzgerald (-6.6 yards, 108 kicks), J.Myers (-6.5 yards, 145 kicks).
+<p align="center"><img src="returners.png" width="720" alt="Returners since 2025: expected points per return above a typical return from the same landing spot, with 90% intervals."></p>
+<p align="center"><sub>Returners since 2025: expected points per return above a typical return from the same landing spot, with 90% intervals.</sub></p>
+
+### 5. Kickers show a small, real spread, and no one is clear of average yet.
+
+Expected points allowed per kickoff, all outcomes, onside kicks and squibs removed (68 dropped): split-half r = 0.26 across 40 kickers, and the estimated true spread is 0.035 points per kick, about 3.0 points over an 85-kick season for a kicker one standard deviation better. After shrinking toward average, the best estimates are R.Fitzgerald (-0.043 ± 0.051, 112 kicks), J.Myers (-0.033 ± 0.049, 148 kicks), J.Karty (-0.024 ± 0.054, 45 kicks); 0 of 40 intervals exclude zero.
 
 ## Method
 
-- The receiving team's first snap after each kickoff (merge on game and play order); return touchdowns and lost fumbles drop out.
-- Touchback spot by rule year: own 25 through 2023, 30 in 2024, 35 from 2025.
+- **Season trends:** the receiving team's first snap after each kickoff (merge on game and play order). Touchback spot by rule year: own 25 through 2023, 30 in 2024, 35 from 2025; the code raises an error for a season with no rule entered.
+- **Player value:** nflfastR EPA on the kickoff play from the receiving team's side, on kickoffs from the 35. Return touchdowns and lost fumbles stay in. Onside kicks, squibs and kicks recovered by the kicking team are removed.
+- **Expected return value:** a gradient-boosted fit of EPA on the yard line where the ball came down (65 minus kick distance), minimum 150 returns per leaf.
+- **Estimates:** empirical Bayes (normal-normal): each player's mean is shrunk by signal variance / (signal variance + play variance / n). When the estimated signal variance is zero, every player's estimate is the league average, which is the returner result here.
+- **Split-half:** each player's odd-numbered plays against his even-numbered plays, in game order.
 
 **In equations**
 
-- Yards vs touchback $`=`$ receiving team's first-snap yard line $`-`$ touchback spot for that rule year (25 through 2023, 30 in 2024, 35 from 2025).
+- Return value over expected $`= 	ext{EPA}_{	ext{kickoff}} - \widehat{E}[	ext{EPA} \mid 	ext{landing spot}]`$, receiving team's side, touchdowns and fumbles included.
+- Shrunk estimate $`= \dfrac{\sigma^2_{	ext{true}}}{\sigma^2_{	ext{true}} + \sigma^2_{	ext{play}}/n}\,ar{x}`$.
 
 ## Validation
 
-- Fair catches are not counted as returns. Kickoffs returned for a touchdown or lost on a fumble have no receiving-team first snap, so they drop out of the whole sample.
-- The rule-year touchback spot is applied by season, so eras are compared on their own terms.
+- Stability before value: split-half r = 0.11 for returners and 0.26 for kickers, so neither board is published as a ranking.
+- Return touchdowns (7) and lost fumbles (22) are in the player sample; 68 onside kicks, squibs and kicking-team recoveries are out.
+- The rule-year touchback spot is set for every season, and the code stops if a season has none.
 
 ## Limitations
 
-- Kicker value mixes hang time and coverage; play-by-play cannot split them.
-- Return touchdowns are excluded from the yards-vs-touchback average.
+- Kicker value mixes the kick, the coverage unit and the opponent's return team; play-by-play cannot split them.
+- Two seasons of the current rule (one partial) is a small sample: a returner has 20 to 60 returns, and one touchdown moves his average a lot.
+- The expected-value fit and the players it grades use the same returns.
+- Landing spot is taken from the kick distance in the play-by-play, not from tracking data.
 
 ## Next steps
 
-- Separate hang time from coverage once public tracking allows it.
-- A return-or-kneel decision model for returners.
+- Separate the kick from the coverage unit with tracking data or coverage-unit fixed effects.
+- Re-run when the current rule has three full seasons.
 
 ## Reproduce
 
@@ -98,8 +110,9 @@ Code: [`projects/kickoff_value.py`](../../projects/kickoff_value.py)
 | File | What it holds |
 |---|---|
 | [`kickoffs_by_season.csv`](kickoffs_by_season.csv) | Kickoffs, touchback and return rates, drive start and EP by season |
-| [`kickers_2025_on.csv`](kickers_2025_on.csv) | Kickers since 2025: opponent start vs the touchback |
-| [`returners_2025_on.csv`](returners_2025_on.csv) | Returners since 2025: start vs the touchback |
+| [`return_value_by_landing_spot.csv`](return_value_by_landing_spot.csv) | What a return is worth by where the ball came down |
+| [`kickers_2025_on.csv`](kickers_2025_on.csv) | Kickers since 2025: EPA allowed per kickoff vs average, raw and shrunk, with intervals |
+| [`returners_2025_on.csv`](returners_2025_on.csv) | Returners since 2025: EPA per return over expected, with intervals |
 | [`findings.json`](findings.json) | Every number quoted on this page, machine-readable |
 
 ---
