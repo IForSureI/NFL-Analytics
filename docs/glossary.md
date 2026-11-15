@@ -26,3 +26,8 @@ Terms used across the studies, in plain language first and the formal version se
 | **YAC over expected** (YACOE) | Yards after the catch beyond what a typical receiver gets on the same catches | NFL Next Gen Stats |
 | **Rush yards over expected** (RYOE) | A back's rushing yards beyond what a typical back gains on the same carries, given blockers, defenders and box count at the handoff; expected yards are the rest | NFL Next Gen Stats |
 | **Touchback spot** | Where a kickoff touchback puts the ball (own 25 through 2023, 30 in 2024, 35 from 2025) | |
+| **Regression constant** (k) | The sample at which a number is half signal and half noise; after n plays, pull the number k / (n + k) of the way to the league average | Reliability of $`n`$ trials $`= n / (n + k)`$, from a split-half $`r`$ on halves of $`n_h`$: $`k = n_h (1 - r) / r`$ |
+| **Spearman-Brown** | How reliable a sample twice as long would be | $`\rho_{2n} = 2r / (1 + r)`$ |
+| **CPOE** (completion % over expected) | Completions beyond what the throw's difficulty predicts | Completion minus nflfastR completion probability, per attempt |
+| **aDOT** (average depth of target) | How far downfield the passes travel | Mean air yards per attempt (QB) or per target (receiver) |
+| **Pressure** (FTN) | A pass play where the quarterback was pressured, sacks included | FTN charting via nflverse participation, 2023 on |
