@@ -9,6 +9,50 @@
   "lucky_change_wins_per17":-2.85,
   "unlucky_teams_n":34,
   "unlucky_change_wins_per17":3.52,
+  "team_season_pairs":608,
+  "lucky_minus_matched_wins":[
+    -1.046,
+    -2.212,
+    0.239
+  ],
+  "unlucky_minus_matched_wins":[
+    1.062,
+    -0.041,
+    2.249
+  ],
+  "next_wins_per_pythag_win":[
+    0.486,
+    0.381,
+    0.572
+  ],
+  "next_wins_per_luck_win":[
+    -0.022,
+    -0.182,
+    0.146
+  ],
+  "next_wins_per_fumble_recovery_over_exp":[
+    -0.066,
+    -0.134,
+    0.005
+  ],
+  "next_wins_per_fg_point_of_luck":[
+    0.005,
+    -0.039,
+    0.05
+  ],
+  "next_wins_per_one_score_win_over_half":[
+    -0.075,
+    -0.222,
+    0.069
+  ],
+  "r_pythag_minus_r_wins":[
+    0.04,
+    0.012,
+    0.07
+  ],
+  "boot_n":1000,
+  "lucky_cutoff_wins":2.0,
+  "match_window_wins":1.0,
   "slope_change_per_lucky_win":-1.29,
   "current_luckiest":[
     [
