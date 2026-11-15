@@ -6,7 +6,7 @@
   "cap_2026_musd":301.2,
   "ngs_untracked_yards_mean":13.4,
   "ngs_team_filled_from_pbp":7,
-  "through_week":9,
+  "through_week":10,
   "pairs":232,
   "pair_players":88,
   "yoy_r":{
@@ -313,6 +313,18 @@
     ]
   },
   "price_per_carry_diff_p":0.417,
+  "price_per_carry_diff_musd":0.849,
+  "price_per_carry_diff_ci":[
+    -1.204,
+    2.903
+  ],
+  "price_per_carry_min_detectable_musd":2.933,
+  "predict_next_ypc_diff":0.047,
+  "predict_next_ypc_diff_ci":[
+    -0.297,
+    0.392
+  ],
+  "predict_next_ypc_min_detectable":0.492,
   "predict_ratio_ryoe_to_expected_yard":1.29,
   "musd_per_100_future_yards":{
     "x_yds":1.09,
@@ -337,7 +349,7 @@
   "future_yard_cost_ratio_ryoe_vs_expected":1.98,
   "future_yard_cost_ratio_ci90":[
     0.94,
-    5.23
+    5.08
   ],
   "share_boot_ryoe_route_dearer":0.933,
   "robustness":[
@@ -484,7 +496,7 @@
     ]
   ],
   "fa_contracts_ending":56,
-  "fa_without_ngs":42,
+  "fa_without_ngs":43,
   "ryoe_shrink_k_carries":774,
   "fa_seasons":{
     "Jordan Mason":"2025",
@@ -493,11 +505,11 @@
     "Zach Charbonnet":"2025",
     "Chase Brown":"2025+2026",
     "Brian Robinson Jr.":"2025+2026",
-    "Devin Singletary":"2025",
     "Rachaad White":"2025+2026",
+    "Devin Singletary":"2025",
     "Aaron Jones":"2025+2026",
     "Emanuel Wilson":"2025+2026",
-    "Alvin Kamara":"2025+2026"
+    "Alvin Kamara":"2025"
   },
   "fa_class":2027,
   "fa_n":11,
@@ -576,6 +588,18 @@
       "2025+2026"
     ],
     [
+      "Rachaad White",
+      "WAS",
+      197.0,
+      4.3,
+      4.48,
+      -0.18,
+      2.0,
+      28.6,
+      "age 28+ in 2027",
+      "2025+2026"
+    ],
+    [
       "Devin Singletary",
       "NYG",
       119.0,
@@ -586,18 +610,6 @@
       30.0,
       "age 28+ in 2027",
       "2025"
-    ],
-    [
-      "Rachaad White",
-      "WAS",
-      186.0,
-      4.3,
-      4.57,
-      -0.26,
-      2.0,
-      28.6,
-      "age 28+ in 2027",
-      "2025+2026"
     ],
     [
       "Aaron Jones",
@@ -626,14 +638,14 @@
     [
       "Alvin Kamara",
       "NO",
-      178.0,
-      3.53,
-      4.28,
-      -0.75,
+      131.0,
+      3.6,
+      4.36,
+      -0.77,
       6.0,
       32.1,
       "below expectation; age 28+ in 2027",
-      "2025+2026"
+      "2025"
     ]
   ],
   "fa_other_100car":[

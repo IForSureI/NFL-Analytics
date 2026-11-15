@@ -1,15 +1,15 @@
 <sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 08 The YAC Tax](../08-yac-tax/)</sub>
 
 # 09 Run Game Value
-### Teams pay a little more for the back's part, and neither part looks mispriced
+### No mispricing found between the back's part and the blocked part, on a sample too small to rule one out
 
 ![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![seasons: 2018-2026](https://img.shields.io/badge/seasons-2018--2026-1d2433) ![method: Next Gen Stats](https://img.shields.io/badge/method-Next%20Gen%20Stats-c2410c) ![method: clustered OLS](https://img.shields.io/badge/method-clustered%20OLS-c2410c) ![method: bootstrap](https://img.shields.io/badge/method-bootstrap-c2410c) ![method: contract valuation](https://img.shields.io/badge/method-contract%20valuation-c2410c) ![method: null result](https://img.shields.io/badge/method-null%20result-c2410c)
 
 **TL;DR**
 
 - The blocking part of yards per carry repeats more than the back's part (expected YPC r = 0.46 vs RYOE per carry r = 0.20; 0.41 vs 0.33 for 150+ carry backs), and no rushing stat predicts next season's rushing EPA well.
-- Hypothesis failed: teams don't pay blocked yards like the back's own. Holding carries fixed, +1 yard over expected per carry adds \$3.06M a year vs \$2.21M for +1 expected yard per carry (160 contracts); per yard the gap is 2.54x but fades to 1.23x with workload controlled.
-- Per carry, both parts predict next season about equally (+1 yard per carry of each adds 0.29 vs 0.24 to next season's yards per carry), so the market looks roughly right; includes the 2027 free-agent backs, every name news-checked.
+- Inconclusive on 160 contracts: I expected teams to pay blocked yards like the back's own, and the data neither shows that nor rules it out. Holding carries fixed, +1 yard over expected per carry adds \$3.06M a year vs \$2.21M for +1 expected yard per carry (160 contracts); per yard the gap is 2.54x but fades to 1.23x with workload controlled.
+- Per carry, both parts predict next season about equally (+1 yard per carry of each adds 0.29 vs 0.24 to next season's yards per carry), so I found no mispricing, though a per-carry price gap under about \$2.9M would be too small for this sample to detect; includes the 2027 free-agent backs, every name news-checked.
 
 <p align="center"><img src="rb_price.png" width="720" alt="What contracts pay for each part of yards per carry, and what each part predicts next season."></p>
 <p align="center"><sub>What contracts pay for each part of yards per carry, and what each part predicts next season.</sub></p>
@@ -42,7 +42,7 @@ Brett Kollmann's line is that the offensive line sets a back's floor and the bac
 
 ## Data
 
-NFL Next Gen Stats rushing (2018-2025, qualified rushers only: 405 back-seasons, 146 backs), nflverse play-by-play 2018-2026 (through Week 9 of 2026), and 160 veteran RB contracts from Over The Cap (99 backs, signed 2019-2026), all via [nflverse](https://github.com/nflverse/nflverse-data). Dollars in 2026 cap terms (\$301.2M).
+NFL Next Gen Stats rushing (2018-2025, qualified rushers only: 405 back-seasons, 146 backs), nflverse play-by-play 2018-2026 (through Week 10 of 2026), and 160 veteran RB contracts from Over The Cap (99 backs, signed 2019-2026), all via [nflverse](https://github.com/nflverse/nflverse-data). Dollars in 2026 cap terms (\$301.2M).
 
 ## Results
 
@@ -77,7 +77,7 @@ Next season's yards per carry (backs with 50+ carries, weighted by carries, 278 
 
 ### 6. The 2027 free-agent backs.
 
-Contracts ending after 2026 (Over The Cap, extensions counted), active in 2026, first-round option deals left out, each name checked against news on November 12, 2026. 11 have 100+ carries in NGS season rows for 2025 and 2026; ranked by RYOE per carry, above expectation: Jordan Mason (MIN, +0.92 on 159 carries, 2025); Tony Pollard (TEN, +0.53 on 375 carries, 2025 and 2026); Kimani Vidal (LAC, +0.37 on 155 carries, 2025); Zach Charbonnet (SEA, +0.30 on 184 carries, 2025); Chase Brown (CIN, +0.16 on 335 carries, 2025 and 2026). Below: Brian Robinson Jr. (ATL, -0.08 on 145 carries, 2025 and 2026); Devin Singletary (NYG, -0.19 on 119 carries, 2025); Rachaad White (WAS, -0.26 on 186 carries, 2025 and 2026); Aaron Jones (MIN, -0.32 on 247 carries, 2025 and 2026); Emanuel Wilson (SEA, -0.38 on 236 carries, 2025 and 2026); Alvin Kamara (NO, -0.75 on 178 carries, 2025 and 2026). Value flags (RYOE over +0.3 a carry, at or below the list's median pay of \$2.00M): Kimani Vidal, Zach Charbonnet. Kimani Vidal is a restricted free agent; Zach Charbonnet tore his ACL in the January 2026 playoffs; Brian Robinson Jr. went on injured reserve on November 7. Given finding 1, one or two seasons of RYOE per carry is a weak signal; the CSV also gives each back's RYOE shrunk toward zero, and the news note behind every name. Removed after the news check: Christian McCaffrey (not a 2027 free agent: his 2024 two-year extension runs through 2027; Over The Cap's end year misses the fifth-year option year on his rookie deal). 4 more free-agent backs have 100+ carries in play-by-play but fewer than 100 in NGS season rows, so no RYOE: Samaje Perine (CIN, 130 carries: final year of a two-year Cincinnati deal, 2025-26); Zonovan Knight (ARI, 110 carries: one-year deal with Arizona for 2026); Kendre Miller (NO, 104 carries: released by New Orleans on November 7, 2026, a year after an October 2025 ACL tear; a free agent now unless claimed); Sean Tucker (TB, 101 carries: signed a one-year deal with Tampa Bay in August 2026).
+Contracts ending after 2026 (Over The Cap, extensions counted), active in 2026, first-round option deals left out, each name checked against news on November 12, 2026. 11 have 100+ carries in NGS season rows for 2025 and 2026; ranked by RYOE per carry, above expectation: Jordan Mason (MIN, +0.92 on 159 carries, 2025); Tony Pollard (TEN, +0.53 on 375 carries, 2025 and 2026); Kimani Vidal (LAC, +0.37 on 155 carries, 2025); Zach Charbonnet (SEA, +0.30 on 184 carries, 2025); Chase Brown (CIN, +0.16 on 335 carries, 2025 and 2026). Below: Brian Robinson Jr. (ATL, -0.08 on 145 carries, 2025 and 2026); Rachaad White (WAS, -0.18 on 197 carries, 2025 and 2026); Devin Singletary (NYG, -0.19 on 119 carries, 2025); Aaron Jones (MIN, -0.32 on 247 carries, 2025 and 2026); Emanuel Wilson (SEA, -0.38 on 236 carries, 2025 and 2026); Alvin Kamara (NO, -0.77 on 131 carries, 2025). Value flags (RYOE over +0.3 a carry, at or below the list's median pay of \$2.00M): Kimani Vidal, Zach Charbonnet. Kimani Vidal is a restricted free agent; Zach Charbonnet tore his ACL in the January 2026 playoffs; Brian Robinson Jr. went on injured reserve on November 7. Given finding 1, one or two seasons of RYOE per carry is a weak signal; the CSV also gives each back's RYOE shrunk toward zero, and the news note behind every name. Removed after the news check: Christian McCaffrey (not a 2027 free agent: his 2024 two-year extension runs through 2027; Over The Cap's end year misses the fifth-year option year on his rookie deal). 4 more free-agent backs have 100+ carries in play-by-play but fewer than 100 in NGS season rows, so no RYOE: Samaje Perine (CIN, 130 carries: final year of a two-year Cincinnati deal, 2025-26); Zonovan Knight (ARI, 110 carries: one-year deal with Arizona for 2026); Kendre Miller (NO, 104 carries: released by New Orleans on November 7, 2026, a year after an October 2025 ACL tear; a free agent now unless claimed); Sean Tucker (TB, 101 carries: signed a one-year deal with Tampa Bay in August 2026).
 
 <p align="center"><img src="free_agent_rbs.png" width="720" alt="The 2027 free-agent backs by rush yards over expected per carry."></p>
 <p align="center"><sub>The 2027 free-agent backs by rush yards over expected per carry.</sub></p>
@@ -106,6 +106,7 @@ Contracts ending after 2026 (Over The Cap, extensions counted), active in 2026, 
 
 ## Limitations
 
+- The pricing test is inconclusive, not a clean bill for the market. With 160 contracts, the per-carry price gap between the two parts is \$0.85M (95% interval \$-1.20M to \$2.90M), and the smallest gap this sample would find 80% of the time is about \$2.93M per yard per carry. On the prediction side the gap is 0.05 yards per carry (-0.30 to 0.39), and the smallest detectable gap is about 0.49. A real mispricing smaller than those would not show up here.
 - Only qualified rushers have NGS season rows (about 50 a season), so backups and part-time backs are missing and the samples are small (232 back-to-back pairs, 50 of them team changes, 160 contracts).
 - Expected yards is the NFL's model. It sees the blockers and defenders at the handoff, not how well the line sustains its blocks, so some line play sits inside RYOE; and it reflects the back's role and usage, so some of the back sits inside expected yards.
 - A contract buys several years, pass protection and receiving; receiving yards are controlled for, pass protection is not measured.
