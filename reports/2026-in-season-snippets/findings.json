@@ -4,7 +4,7 @@
   1,
   9
  ],
- "built": "2026-11-10",
+ "built": "2026-11-15",
  "plays": 23822,
  "qb_epa_cpoe": {
   "n_qbs": 31,
@@ -48,7 +48,11 @@
     "cpoe": -1.524
    }
   ],
-  "corr_epa_cpoe": 0.74
+  "corr_epa_cpoe": 0.74,
+  "corr_ci": [
+   0.62,
+   0.83
+  ]
  },
  "rb_success": {
   "rb_average_success": 0.395,
@@ -95,7 +99,12 @@
     "explosive": 0.151
    }
   ],
-  "corr_success_epa": 0.83
+  "corr_success_epa": 0.83,
+  "leader_success_ci": [
+   0.442,
+   0.647
+  ],
+  "top30_clear_of_average": 3
  },
  "team_tiers": {
   "top5_net": [
@@ -175,6 +184,10 @@
    "TB": -0.133
   },
   "corr_proe_off_epa": 0.51,
+  "corr_ci": [
+   0.2,
+   0.72
+  ],
   "min_plays": 186
  },
  "receiver_share": {
@@ -218,6 +231,10 @@
  },
  "defense_pressure": {
   "corr_press_epa": -0.24,
+  "corr_ci": [
+   -0.58,
+   0.23
+  ],
   "best_vs_fit": {
    "TB": -0.248,
    "LA": -0.159,
@@ -232,6 +249,10 @@
  "qb_adot_yac": {
   "n_qbs": 30,
   "corr_adot_yac_share": -0.67,
+  "corr_ci": [
+   -0.84,
+   -0.33
+  ],
   "most_yac": [
    {
     "name": "P.Mahomes",
@@ -312,11 +333,21 @@
     "epa": 0.561
    }
   ],
-  "corr_adot_epa": 0.33
+  "corr_adot_epa": 0.33,
+  "corr_ci": [
+   0.02,
+   0.58
+  ]
  },
  "yac_over_expected": {
   "league_mean": -0.193,
   "n_qualified": 79,
+  "min_catches": 25,
+  "leader_ci": [
+   -1.37,
+   11.62
+  ],
+  "top30_clear_of_league": 1,
   "top5": [
    {
     "receiver_player_name": "J.Warren",
@@ -366,7 +397,11 @@
    "TB": -0.165,
    "JAX": -0.101
   },
-  "corr_run_pass": 0.41
+  "corr_run_pass": 0.41,
+  "corr_ci": [
+   0.1,
+   0.66
+  ]
  },
  "pass_rush_leaders": {
   "top5": [
@@ -405,6 +440,9 @@
  "kicker_fgoe": {
   "n": 32,
   "model_kicks": 4325,
+  "min_attempts": 8,
+  "leader_chance_band_pts": 11.5,
+  "outside_chance_band": 3,
   "top3": [
    {
     "kicker_player_name": "S.Shrader",

@@ -15,19 +15,19 @@ Twelve quick charts on the season in progress, across positions, the kind a staf
 
 ## What each one says
 
-1. **QB Efficiency: EPA vs. CPOE** ([chart](qb_epa_cpoe.png)). B.Purdy (SF) leads in EPA per dropback (+0.303), ahead of T.Lawrence (JAX) (+0.284). Accuracy and efficiency move together this year (r = 0.74 across 31 QBs with 150+ dropbacks).
-2. **Running Back Success Rate** ([chart](rb_success.png)). B.Corum (LA) leads the 37 backs with 60+ carries at 54.7% of runs gaining positive EPA, ahead of C.McCaffrey (SF, 51.0%) and J.Gibbs (DET, 48.0%). The RB average is 39.5%. Success rate shows how often a back keeps the offense on schedule; it mixes his work with his blocking, which study 09 (Run Game Value, coming next) will separate.
+1. **QB Efficiency: EPA vs. CPOE** ([chart](qb_epa_cpoe.png)). B.Purdy (SF) leads in EPA per dropback (+0.303), ahead of T.Lawrence (JAX) (+0.284). Accuracy and efficiency move together this year (r = 0.74, 95% interval 0.62 to 0.83, across 31 QBs with 150+ dropbacks).
+2. **Running Back Success Rate** ([chart](rb_success.png)). B.Corum (LA) leads the 37 backs with 60+ carries at 54.7% of runs gaining positive EPA, ahead of C.McCaffrey (SF, 51.0%) and J.Gibbs (DET, 48.0%). The RB average is 39.5%. On 86 carries the leader's 95% interval runs 44% to 65%, and only 3 of the top 30 are clearly above average, so the order inside the list is mostly noise this early. Success rate mixes a back's work with his blocking; [study 09](../09-run-game-value/) splits the two.
 3. **2026 Team Tiers** ([chart](team_tiers.png)). Best net EPA per play: JAX (+0.278), SF (+0.253), KC (+0.205).
-4. **Early-Down Pass Rate Over Expected** ([chart](early_down_proe.png)). CIN throws +11.8 points over expectation in neutral early downs; TB sits at -13.3. Teams that throw more than expected also have the better offenses so far (r = 0.51 with offensive EPA per play), the same pattern as [study 06](../06-pass-run/).
+4. **Early-Down Pass Rate Over Expected** ([chart](early_down_proe.png)). CIN throws +11.8 points over expectation in neutral early downs; TB sits at -13.3. Teams that throw more than expected also have the better offenses so far (r = 0.51 with offensive EPA per play, 95% interval 0.20 to 0.72 on 32 teams). [Study 06](../06-pass-run/) finds the same direction across 640 team-seasons, at a smaller r = 0.28. It is a correlation: good passing teams choose to pass.
 5. **Receiver Roles: Targets vs. Air Yards** ([chart](receiver_share.png)). J.Smith-Njigba (SEA) carries the league's biggest role: 36% of targets and 51% of air yards (WOPR 0.89). Points above the dashed line are used downfield; points below it are volume options on shorter throws.
-6. **Pass Defense: Pressure vs. Results** ([chart](defense_pressure.png)). Defenses that hit the QB more allow less per dropback (r = -0.24), but the spread around the line is wide: teams far above it win in coverage, teams far below it get home and still leak.
+6. **Pass Defense: Pressure vs. Results** ([chart](defense_pressure.png)). So far there is no clear link between hitting the QB and EPA allowed per dropback (r = -0.24, 95% interval -0.58 to 0.23 on 32 teams). The proxy counts only sacks and hits, so this says little about pressure itself.
 
-7. **Where QB Yards Come From** ([chart](qb_adot_yac.png)). P.Mahomes (KC) gets 67% of his passing yards after the catch on a 5.6-yard average depth of target. The shorter the throws, the bigger the YAC share (r = -0.67), so a high YAC share is a style, not a skill by itself.
-8. **Receivers: Role vs. Value** ([chart](receiver_epa_adot.png)). Among the 45 most-targeted receivers, T.Higgins (CIN) adds the most per target (+0.85 EPA on a 13.0-yard depth). Deeper roles earn more per target (r = 0.33), so compare a receiver with others at his depth.
-9. **YAC Over Expected per Catch** ([chart](yac_over_expected.png)). J.Warren (PIT) gains +5.12 yards after the catch beyond what the nflverse xYAC model expects per reception, then T.Kelce (KC, +4.58). [Study 08](../08-yac-tax/) found a season of YAC over expected predicts next year about as well as air yards, so this is worth watching.
-10. **Defense: Run Stopping vs. Pass Defense** ([chart](defense_run_pass.png)). Best run defense by EPA per run allowed: SF, LA, JAX; best pass defense: MIN, TB, JAX. The two go together only loosely (r = 0.41).
+7. **Where QB Yards Come From** ([chart](qb_adot_yac.png)). P.Mahomes (KC) gets 67% of his passing yards after the catch on a 5.6-yard average depth of target. The shorter the throws, the bigger the YAC share (r = -0.67, 95% interval -0.84 to -0.33), so a high YAC share is a style, not a skill by itself.
+8. **Receivers: Role vs. Value** ([chart](receiver_epa_adot.png)). Among the 45 most-targeted receivers, T.Higgins (CIN) adds the most per target (+0.85 EPA on a 13.0-yard depth). Deeper roles earn somewhat more per target (r = 0.33, 95% interval 0.02 to 0.58), so compare a receiver with others at his depth.
+9. **YAC Over Expected per Catch** ([chart](yac_over_expected.png)). J.Warren (PIT) gains +5.12 yards after the catch beyond what the nflverse xYAC model expects per reception, then T.Kelce (KC, +4.58). The minimum is 25 catches, which is thin: the leader's 95% interval is -1.37 to +11.62, and 1 of the top 30 is clearly above the league mean. [Study 08](../08-yac-tax/) uses full seasons for this reason.
+10. **Defense: Run Stopping vs. Pass Defense** ([chart](defense_run_pass.png)). Best run defense by EPA per run allowed: SF, LA, JAX; best pass defense: MIN, TB, JAX. The two go together loosely (r = 0.41, 95% interval 0.10 to 0.66).
 11. **Pass Rush Leaders** ([chart](pass_rush_leaders.png)). G.Rousseau (BUF) has a sack or QB hit on 25 plays, ahead of D.Turner (MIN) and Z.Allen (DEN) with 21 each. [Study 07](../07-box-score-tax/) showed hits and pressures predict future sacks better than sacks do, which is why this counts both.
-12. **Kickers: FG Points Over Expected** ([chart](kicker_fgoe.png)). S.Shrader (IND, 22-24) is +10.2 points above what an average kicker makes from the same distances; the expected rate comes from a distance-and-roof model fit on 4,325 kicks from 2022-25.
+12. **Kickers: FG Points Over Expected** ([chart](kicker_fgoe.png)). S.Shrader (IND, 22-24) is +10.2 points above what an average kicker makes from the same distances; the expected rate comes from a distance-and-roof model fit on 4,325 kicks from 2022-25. An average kicker would land within about 11.5 points of zero on those same kicks 95% of the time, and 3 of the 32 kickers with 8+ attempts sit outside their own band. Read this as who has made their kicks, not who is the better kicker.
 
 ## Method notes
 
@@ -38,7 +38,9 @@ Twelve quick charts on the season in progress, across positions, the kind a staf
 - Pressure proxy = sack or QB hit. Play-by-play has no hurries, so this undercounts pressure; treat it as a rate comparison between teams, not a pressure rate.
 - Early-down PROE: 1st and 2nd down, win probability 20-80%, outside the last two minutes of each half.
 - Receiver shares are computed over the games each player appeared in (so injuries don't shrink them).
-- Small samples: part of a season is early. These are snapshots, not projections.
+- Small samples: part of a season is early. These are snapshots, not projections. Rankings use minimum samples (150 dropbacks, 60 carries, 25 catches, 8 field-goal attempts) and most gaps inside a list are within noise.
+- Correlation intervals are 95%, from resampling the players or teams on the chart 2,000 times. With 32 teams they are wide.
+- Nothing here is adjusted for opponent or game script.
 
 ## Reproduce
 
