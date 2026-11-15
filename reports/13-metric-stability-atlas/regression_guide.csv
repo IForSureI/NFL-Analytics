@@ -1,0 +1,56 @@
+metric,label,unit,k_trials,per_game,regress_after_4_games,regress_after_8_games,regress_after_17_games
+off_epa,Offense EPA/play,plays,327.9,62.41,0.568,0.396,0.236
+off_sr,Offense success rate,plays,332.2,62.41,0.571,0.4,0.238
+off_pass_epa,Offense EPA/dropback,dropbacks,253.2,37.62,0.627,0.457,0.284
+off_rush_epa,Offense EPA/designed run,runs,465.9,24.5,0.826,0.704,0.528
+off_early_epa,Offense early-down EPA/play,early-down plays,360.1,48.19,0.651,0.483,0.305
+off_explosive,Offense explosive play rate,plays,705.7,62.41,0.739,0.586,0.399
+off_sack_rate,Sack rate allowed,dropbacks,314.8,37.62,0.677,0.511,0.33
+off_hit_rate,Sack-or-hit rate allowed,dropbacks,225.8,37.62,0.6,0.429,0.261
+off_pressure_rate,Pressure rate allowed (FTN),dropbacks,398.3,37.24,0.728,0.572,0.386
+off_int_rate,Interception rate thrown,dropbacks,1503.7,37.62,0.909,0.833,0.702
+off_fumble_lost_rate,Fumbles lost per play,plays,8288.9,62.41,0.971,0.943,0.887
+off_rz_td,Red-zone TD rate,red-zone trips,140.3,3.19,0.917,0.846,0.721
+off_third_down,Third-down conversion rate,third downs,157.8,13.0,0.752,0.603,0.417
+off_proe,Pass rate over expected (neutral),neutral plays,117.5,26.5,0.526,0.357,0.207
+off_penalty_rate,Offensive penalties per 100 snaps,snaps,1943.9,66.94,0.879,0.784,0.631
+def_epa,Defense EPA/play allowed,plays,880.7,62.24,0.78,0.639,0.454
+def_sr,Defense success rate allowed,plays,769.0,62.24,0.755,0.607,0.421
+def_pass_epa,Defense EPA/dropback allowed,dropbacks,763.7,37.62,0.835,0.717,0.544
+def_rush_epa,Defense EPA/designed run allowed,runs,601.4,24.61,0.859,0.753,0.59
+def_early_epa,Defense early-down EPA allowed,early-down plays,778.3,48.19,0.801,0.669,0.487
+def_explosive,Explosive plays allowed,plays,1052.5,62.24,0.809,0.679,0.499
+def_sack_rate,Defense sack rate,dropbacks,1747.2,37.62,0.921,0.853,0.732
+def_hit_rate,Defense sack-or-hit rate,dropbacks,640.5,37.62,0.81,0.68,0.5
+def_pressure_rate,Defense pressure rate (FTN),dropbacks,518.3,37.29,0.777,0.635,0.45
+def_int_rate,Interceptions per dropback,dropbacks,1881.3,37.62,0.926,0.862,0.746
+def_fumble_lost_rate,Fumbles recovered per play,plays,15093.2,62.24,0.984,0.968,0.934
+def_rz_td,Red-zone TD rate allowed,red-zone trips,396.4,3.24,0.968,0.939,0.878
+def_third_down,Third-down rate allowed,third downs,490.4,13.0,0.904,0.825,0.689
+def_penalty_rate,Defensive penalties per 100 snaps,snaps,1267.9,66.78,0.826,0.704,0.528
+st_epa,Special teams net EPA/kick play,kick plays,582.7,27.5,0.841,0.726,0.555
+st_fg_pct,Field goal rate,attempts,262.5,2.17,0.968,0.938,0.877
+st_net_punt,Net punt yards,punts,82.7,4.47,0.822,0.698,0.521
+net_epa,Net EPA/play (offense minus defense),plays,398.5,62.41,0.615,0.444,0.273
+net_sr,Net success rate,plays,439.8,62.41,0.638,0.468,0.293
+res_point_diff,Point differential per game,games,6.7,1.0,0.626,0.455,0.282
+res_win_pct,Win %,games,9.3,1.0,0.7,0.539,0.355
+qb_epa,QB EPA/dropback,dropbacks,253.8,35.56,0.641,0.471,0.296
+qb_sr,QB success rate,dropbacks,228.3,35.56,0.616,0.445,0.274
+qb_cpoe,QB CPOE,attempts,283.6,31.2,0.694,0.532,0.348
+qb_sack_rate,QB sack rate,dropbacks,292.0,35.56,0.672,0.507,0.326
+qb_int_rate,QB interception rate,attempts,1299.0,31.97,0.91,0.836,0.705
+qb_adot,QB aDOT,attempts,230.6,31.92,0.644,0.474,0.298
+wr_tgt_share,Receiver target share,team targets,84.4,33.5,0.387,0.24,0.129
+wr_epa_tgt,Receiver EPA/target,targets,165.1,5.89,0.875,0.778,0.622
+wr_ypt,Receiver yards/target,targets,111.2,5.89,0.825,0.702,0.526
+wr_adot,Receiver aDOT,targets,16.5,5.89,0.412,0.26,0.142
+wr_croe,Receiver catch rate over expected,targets,156.5,5.88,0.869,0.769,0.61
+wr_yacoe,Receiver YAC over expected/catch,catches,83.5,3.93,0.842,0.727,0.556
+rb_sr,Rusher success rate,carries,318.8,13.09,0.859,0.753,0.589
+rb_epa,Rusher EPA/carry,carries,387.3,13.09,0.881,0.787,0.635
+rb_ypc,Rusher yards/carry,carries,293.9,13.09,0.849,0.737,0.569
+rb_explosive,Rusher 10+ yard run rate,carries,287.0,13.09,0.846,0.733,0.563
+rb_ryoe,Rusher RYOE/carry (NGS),carries,474.1,15.83,0.882,0.789,0.638
+pr_pressure_rate,Pass rusher pressures per 100 snaps (PFR),defensive snaps,177.9,37.82,0.54,0.37,0.217
+pr_sack_rate,Pass rusher sacks per 100 snaps (PFR),defensive snaps,490.5,37.82,0.764,0.618,0.433
