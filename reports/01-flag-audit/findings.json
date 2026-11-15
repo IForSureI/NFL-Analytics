@@ -1,16 +1,16 @@
 {
-  "games":2897,
-  "flags":35317,
+  "games":2898,
+  "flags":35327,
   "seasons":"2016-2026",
-  "away_share_objective":0.5176756834,
-  "away_share_subjective":0.5124485301,
+  "away_share_objective":0.5176310707,
+  "away_share_subjective":0.5124228063,
   "home_edge_by_era":{
     "('2016-22', 'objective')":0.168,
     "('2016-22', 'other')":0.005,
     "('2016-22', 'subjective')":0.273,
-    "('2023-26', 'objective')":0.176,
+    "('2023-26', 'objective')":0.174,
     "('2023-26', 'other')":0.009,
-    "('2023-26', 'subjective')":-0.001
+    "('2023-26', 'subjective')":-0.002
   },
   "objective_road_skew_top":{
     "Neutral Zone Infraction":0.597,
@@ -18,9 +18,92 @@
     "Encroachment":0.569,
     "Illegal Formation":0.535
   },
-  "false_start_road_share":0.4959476309,
+  "false_start_road_share":0.4960274186,
+  "close_score_points":8,
+  "road_subj_per_game_ci|2016-22":[
+    0.238,
+    0.126,
+    0.355
+  ],
+  "road_subj_per_100_snaps_ci|2016-22":[
+    0.177,
+    0.094,
+    0.263
+  ],
+  "road_subj_per_100_close_snaps_ci|2016-22":[
+    0.207,
+    0.105,
+    0.307
+  ],
+  "road_subj_per_game_ci|2023-26":[
+    0.026,
+    -0.119,
+    0.171
+  ],
+  "road_subj_per_100_snaps_ci|2023-26":[
+    0.02,
+    -0.09,
+    0.13
+  ],
+  "road_subj_per_100_close_snaps_ci|2023-26":[
+    0.086,
+    -0.049,
+    0.224
+  ],
+  "road_subj_per_game_ci|2016-22 without 2020":[
+    0.243,
+    0.124,
+    0.36
+  ],
+  "road_subj_per_100_snaps_ci|2016-22 without 2020":[
+    0.181,
+    0.093,
+    0.268
+  ],
+  "road_subj_per_100_close_snaps_ci|2016-22 without 2020":[
+    0.22,
+    0.112,
+    0.324
+  ],
+  "road_subj_drop_per_100_snaps_ci":[
+    0.157,
+    0.016,
+    0.288
+  ],
+  "road_subj_drop_per_100_close_snaps_ci":[
+    0.12,
+    -0.055,
+    0.29
+  ],
+  "road_subj_per_100_snaps_by_season":{
+    "2016":0.231,
+    "2017":0.17,
+    "2018":0.017,
+    "2019":0.266,
+    "2020":0.151,
+    "2021":0.155,
+    "2022":0.244,
+    "2023":0.018,
+    "2024":0.053,
+    "2025":-0.04,
+    "2026":0.077
+  },
+  "drop_by_break_year":{
+    "2018":0.095,
+    "2019":0.022,
+    "2020":0.076,
+    "2021":0.082,
+    "2022":0.095,
+    "2023":0.157,
+    "2024":0.136,
+    "2025":0.146
+  },
   "crew_yoy_r":0.2382110704,
   "crew_pairs":141,
+  "crew_yoy_r_ci":[
+    0.034,
+    0.411
+  ],
   "crew_latest_season":2025,
   "crew_spread_latest":[
     16.0,
@@ -28,9 +111,9 @@
     9.9333333333,
     "Brad Allen"
   ],
-  "split_r_net":0.0822159156,
-  "split_r_committed":0.2861470304,
-  "split_r_drawn":0.1802233457,
+  "split_r_net":0.0808794515,
+  "split_r_committed":0.2867874421,
+  "split_r_drawn":0.1774872424,
   "rtp_league_per100":0.2255904124,
   "rtp_top":[
     [
@@ -78,20 +161,25 @@
     "J.Goff",
     "A.Dalton"
   ],
+  "rtp_qbs":42,
+  "rtp_expected_above_by_chance":1.1,
+  "rtp_above_league_after_correction":[
+
+  ],
   "rtp_mahomes":[
     0.2188920694,
     20,
     42
   ],
-  "big_calls":926,
-  "big_calls_reg":891,
+  "big_calls":928,
+  "big_calls_reg":893,
   "big_calls_per_full_season_reg":84.5,
   "big_call_top_types":{
-    "Defensive Pass Interference":243,
+    "Defensive Pass Interference":244,
     "Unnecessary Roughness":125,
     "Roughing the Passer":97,
     "Unsportsmanlike Conduct":71,
     "Offensive Holding":61
   },
-  "big_call_net_yoy_r":0.0397167216
+  "big_call_net_yoy_r":0.0405980708
 }
