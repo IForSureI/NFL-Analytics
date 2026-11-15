@@ -31,74 +31,98 @@
     ]
   },
   "yoy_r_yacoe_yards":0.428,
-  "market_contracts":397,
+  "contracts_before_dedupe":2046,
+  "market_contracts":371,
   "market_players":216,
   "musd_per_100_yards":{
-    "air_yds":2.428,
-    "xyac_yds":1.87,
-    "yacoe_yds":3.238
+    "air_yds":2.489,
+    "xyac_yds":1.937,
+    "yacoe_yds":3.121
   },
   "musd_per_100_yards_ci":{
     "air_yds":[
-      1.845,
-      3.012
+      1.897,
+      3.081
     ],
     "xyac_yds":[
-      0.78,
-      2.96
+      0.845,
+      3.028
     ],
     "yacoe_yds":[
-      2.067,
-      4.409
+      1.966,
+      4.277
     ]
   },
   "musd_per_100_future_yards":{
-    "air_yds":4.44,
-    "xyac_yds":5.62,
-    "yacoe_yds":4.89
+    "air_yds":4.55,
+    "xyac_yds":5.82,
+    "yacoe_yds":4.71
   },
+  "tax_ratio":1.04,
+  "tax_ratio_ci90":[
+    0.54,
+    2.06
+  ],
+  "tax_ratio_ci95":[
+    0.47,
+    2.41
+  ],
+  "tax_ratio_share_above_1":0.517,
+  "tax_ratio_boot_n":2000,
+  "musd_per_100_future_yards_ci90":{
+    "yacoe_yds":[
+      2.79,
+      8.71
+    ],
+    "air_yds":[
+      3.29,
+      6.78
+    ]
+  },
+  "qualified_seasons":1251,
+  "pairs_share_of_seasons":0.61,
   "robustness":[
     {
       "sample":"all",
-      "contracts":397,
-      "air_yds_musd_per_100":2.43,
-      "xyac_yds_musd_per_100":1.87,
-      "yacoe_yds_musd_per_100":3.24
+      "contracts":371,
+      "air_yds_musd_per_100":2.49,
+      "xyac_yds_musd_per_100":1.94,
+      "yacoe_yds_musd_per_100":3.12
     },
     {
       "sample":"WR only",
-      "contracts":301,
-      "air_yds_musd_per_100":2.87,
-      "xyac_yds_musd_per_100":1.61,
-      "yacoe_yds_musd_per_100":3.11
+      "contracts":280,
+      "air_yds_musd_per_100":2.92,
+      "xyac_yds_musd_per_100":1.76,
+      "yacoe_yds_musd_per_100":3.04
     },
     {
       "sample":"TE only",
-      "contracts":96,
-      "air_yds_musd_per_100":1.37,
-      "xyac_yds_musd_per_100":0.87,
-      "yacoe_yds_musd_per_100":3.01
+      "contracts":91,
+      "air_yds_musd_per_100":1.44,
+      "xyac_yds_musd_per_100":0.74,
+      "yacoe_yds_musd_per_100":2.8
     },
     {
       "sample":"deals >= 1% of cap",
-      "contracts":312,
-      "air_yds_musd_per_100":2.26,
-      "xyac_yds_musd_per_100":1.52,
-      "yacoe_yds_musd_per_100":3.01
+      "contracts":302,
+      "air_yds_musd_per_100":2.3,
+      "xyac_yds_musd_per_100":1.65,
+      "yacoe_yds_musd_per_100":2.9
     },
     {
       "sample":"multi-year deals",
-      "contracts":194,
-      "air_yds_musd_per_100":2.12,
-      "xyac_yds_musd_per_100":0.89,
-      "yacoe_yds_musd_per_100":2.27
+      "contracts":192,
+      "air_yds_musd_per_100":2.07,
+      "xyac_yds_musd_per_100":0.81,
+      "yacoe_yds_musd_per_100":2.32
     },
     {
       "sample":"signed 2023-2026",
-      "contracts":199,
-      "air_yds_musd_per_100":3.03,
-      "xyac_yds_musd_per_100":2.14,
-      "yacoe_yds_musd_per_100":3.25
+      "contracts":186,
+      "air_yds_musd_per_100":3.16,
+      "xyac_yds_musd_per_100":2.36,
+      "yacoe_yds_musd_per_100":3.01
     }
   ],
   "most_yacoe_last_full":[

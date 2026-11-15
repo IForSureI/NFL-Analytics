@@ -4,8 +4,8 @@
 Dep. Variable:             yards_next   R-squared:                       0.287
 Model:                            OLS   Adj. R-squared:                  0.284
 Method:                 Least Squares   F-statistic:                     71.82
-Date:                Tue, 10 Nov 2026   Prob (F-statistic):           2.81e-40
-Time:                        05:43:03   Log-Likelihood:                -5342.4
+Date:                Sat, 14 Nov 2026   Prob (F-statistic):           2.81e-40
+Time:                        22:11:53   Log-Likelihood:                -5342.4
 No. Observations:                 760   AIC:                         1.069e+04
 Df Residuals:                     755   BIC:                         1.072e+04
 Df Model:                           4                                         
@@ -33,31 +33,31 @@ strong multicollinearity or other numerical problems.
 === APY % of cap ~ components (+targets), clustered by player
                             OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                apy_pct   R-squared:                       0.705
-Model:                            OLS   Adj. R-squared:                  0.702
-Method:                 Least Squares   F-statistic:                     269.3
-Date:                Tue, 10 Nov 2026   Prob (F-statistic):           1.66e-82
-Time:                        05:43:03   Log-Likelihood:                -812.94
-No. Observations:                 397   AIC:                             1636.
-Df Residuals:                     392   BIC:                             1656.
+Dep. Variable:                apy_pct   R-squared:                       0.702
+Model:                            OLS   Adj. R-squared:                  0.699
+Method:                 Least Squares   F-statistic:                     249.0
+Date:                Sat, 14 Nov 2026   Prob (F-statistic):           1.77e-79
+Time:                        22:11:53   Log-Likelihood:                -761.70
+No. Observations:                 371   AIC:                             1533.
+Df Residuals:                     366   BIC:                             1553.
 Df Model:                           4                                         
 Covariance Type:              cluster                                         
 ==============================================================================
                  coef    std err          z      P>|z|      [0.025      0.975]
 ------------------------------------------------------------------------------
-const         -2.1895      0.267     -8.214      0.000      -2.712      -1.667
-air_yds        0.0081      0.001      8.157      0.000       0.006       0.010
-xyac_yds       0.0062      0.002      3.362      0.001       0.003       0.010
-yacoe_yds      0.0107      0.002      5.419      0.000       0.007       0.015
-targets        0.0142      0.010      1.424      0.154      -0.005       0.034
+const         -2.1372      0.271     -7.892      0.000      -2.668      -1.606
+air_yds        0.0083      0.001      8.245      0.000       0.006       0.010
+xyac_yds       0.0064      0.002      3.477      0.001       0.003       0.010
+yacoe_yds      0.0104      0.002      5.295      0.000       0.007       0.014
+targets        0.0128      0.010      1.271      0.204      -0.007       0.033
 ==============================================================================
-Omnibus:                       34.698   Durbin-Watson:                   1.313
-Prob(Omnibus):                  0.000   Jarque-Bera (JB):               42.300
-Skew:                           0.712   Prob(JB):                     6.53e-10
-Kurtosis:                       3.727   Cond. No.                     1.43e+03
+Omnibus:                       30.746   Durbin-Watson:                   1.286
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               36.898
+Skew:                           0.685   Prob(JB):                     9.72e-09
+Kurtosis:                       3.712   Cond. No.                     1.47e+03
 ==============================================================================
 
 Notes:
 [1] Standard Errors are robust to cluster correlation (CRV1)
-[2] The condition number is large, 1.43e+03. This might indicate that there are
+[2] The condition number is large, 1.47e+03. This might indicate that there are
 strong multicollinearity or other numerical problems.

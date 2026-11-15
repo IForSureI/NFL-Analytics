@@ -3,13 +3,13 @@
 # 08 The YAC Tax
 ### Do teams pay receivers for yards after the catch that won't come back?
 
-![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![seasons: 2016-2025](https://img.shields.io/badge/seasons-2016--2025-1d2433) ![method: Next Gen Stats](https://img.shields.io/badge/method-Next%20Gen%20Stats-c2410c) ![method: clustered OLS](https://img.shields.io/badge/method-clustered%20OLS-c2410c) ![method: contract valuation](https://img.shields.io/badge/method-contract%20valuation-c2410c) ![method: null result](https://img.shields.io/badge/method-null%20result-c2410c)
+![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![seasons: 2016-2025](https://img.shields.io/badge/seasons-2016--2025-1d2433) ![method: Next Gen Stats](https://img.shields.io/badge/method-Next%20Gen%20Stats-c2410c) ![method: clustered OLS](https://img.shields.io/badge/method-clustered%20OLS-c2410c) ![method: player bootstrap](https://img.shields.io/badge/method-player%20bootstrap-c2410c) ![method: null result](https://img.shields.io/badge/method-null%20result-c2410c)
 
 **TL;DR**
 
 - YAC over expected is noisy per catch (r = 0.36), but a season of it predicts next year like air yards (0.66 vs 0.55 yards per yard).
-- Contracts price each part of receiving production about the same per future yard (\$4.89M per 100 YAC-over-expected yards vs \$4.44M per 100 air yards): no YAC tax.
-- The receiver market looks efficient where the pass-rush market (study 07) does not; 397 veteran WR/TE contracts.
+- No YAC tax detected: \$4.71M per 100 future yards bought through YAC over expected vs \$4.55M through air yards (371 veteran WR/TE contracts).
+- The test has low power: the price-to-prediction ratio is 1.04 with a 90% interval of 0.54 to 2.06, so it cannot rule out a tax or a discount of about 2x.
 
 <p align="center"><img src="yac_tax.png" width="720" alt="Price per 100 future yards for each part of a receiver's production."></p>
 <p align="center"><sub>Price per 100 future yards for each part of a receiver's production.</sub></p>
@@ -21,25 +21,26 @@
 | YAC over expected per catch, year-to-year r | **0.36** |
 | Next-year yards per yard: YAC over expected | **0.66** |
 | Next-year yards per yard: air yards | **0.55** |
-| Price per 100 future yards: YACOE / air / expected YAC | **\$4.89M / \$4.44M / \$5.62M** |
-| Contracts / players | **397 / 216** |
+| Price per 100 future yards: YACOE / air / expected YAC | **\$4.71M / \$4.55M / \$5.82M** |
+| Test ratio: relative price / relative prediction (1 = fair) | **1.04 (90% 0.54-2.06)** |
+| Contracts / players | **371 / 216** |
 
 ## Why it matters for a club
 
 - **Receiver evaluation:** don't discount a receiver's YAC as luck by default; a season of it predicts next year like air yards do.
-- **Where to look for edges:** the receiver market prices production about right, unlike the pass-rush market in study 07.
+- **Where to look for edges:** no mispricing shows up here, but the sample is too small to call the receiver market efficient.
 - **Free agency:** the free-agent receiver list shows who leaned on YAC, as a reason to check the film, not to pass.
 
 ## The question
 
 **Do teams pay receivers for yards after the catch that won't come back?**
 
-Study 07 found teams pay for sacks beyond what pressures predict. Receivers have the same shape of problem. A receiver's yards split three ways, using NFL Next Gen Stats tracking: air yards on his catches, the yards after the catch a typical receiver would get on those same catches (expected YAC), and **YAC above expected**, where broken tackles, missed angles and luck live. If YAC above expected repeats less than the rest but is paid like the rest, it is a tax.
+Study 07 tested whether teams pay for sacks beyond what pressures predict. Receivers have the same shape of problem. A receiver's yards split three ways, using NFL Next Gen Stats tracking: air yards on his catches, the yards after the catch a typical receiver would get on those same catches (expected YAC), and **YAC above expected**, where broken tackles, missed angles and luck live. If YAC above expected repeats less than the rest but is paid like the rest, it is a tax.
 
 
 ## Data
 
-NFL Next Gen Stats receiving (2016-2025, qualified receivers, 1,251 player-seasons) and 397 veteran WR/TE contracts from Over The Cap (216 players, signed 2019-2026), via [nflverse](https://github.com/nflverse/nflverse-data). Dollars in 2026 cap terms (\$301.2M).
+NFL Next Gen Stats receiving (2016-2025, qualified receivers, 1,251 player-seasons) and 371 veteran WR/TE contracts from Over The Cap (216 players, signed 2019-2026), via [nflverse](https://github.com/nflverse/nflverse-data). Dollars in 2026 cap terms (\$301.2M).
 
 ## Results
 
@@ -50,17 +51,17 @@ Year to year: depth of target r = 0.77, separation r = 0.59, catch rate r = 0.48
 <p align="center"><img src="receiver_stability.png" width="720" alt="Year-to-year stability of receiving traits."></p>
 <p align="center"><sub>Year-to-year stability of receiving traits.</sub></p>
 
-### 2. But the YAC tax mostly isn't there.
+### 2. A season of YAC above expected is not just luck.
 
-Per catch, YAC above expected is noisy. Over a season of catches it adds up to something real: each yard of it predicts 0.66 yards the next season (95% interval 0.35-0.97), about the same as an air yard (0.55). Season-long YAC over expected carries over much more than the per-catch number suggests.
+Per catch it is noisy. Over a season each yard of it predicts 0.66 yards the next season (95% interval 0.35-0.97), about the same as an air yard (0.55).
 
-### 3. The market prices it about right.
+### 3. No YAC tax detected, and the test could not have seen a moderate one.
 
-Contracts pay \$3.24M a year per 100 yards of YAC above expected, \$2.43M per 100 air yards and \$1.87M per 100 expected-YAC yards. Per future yard, that works out to \$4.89M (YAC above expected), \$4.44M (air yards) and \$5.62M (expected YAC) per 100. Those are close, and the intervals overlap. Unlike sacks in study 07, I can't find a premium for the lucky part of receiving production. The robustness table (WR only, TE only, multi-year deals, deals over 1% of the cap, 2023-2026 deals) tells the same story.
+Contracts pay \$3.12M a year per 100 yards of YAC above expected, \$2.49M per 100 air yards and \$1.94M per 100 expected-YAC yards. Per future yard that is \$4.71M (YAC above expected, 90% interval \$2.79M to \$8.71M) against \$4.55M (air yards, \$3.29M to \$6.78M) per 100. The test ratio (relative price over relative prediction, 1.00 = fairly priced) is 1.04, with a 90% interval of 0.54 to 2.06 from 2,000 samples that resample players. That range runs from a discount of about half to a tax of about double, so this is a null result with low power, not proof the market is efficient.
 
 ### 4. What that means for a front office.
 
-The data says not to discount a receiver's YAC as luck by default. The most stable traits are target depth and separation, and the market already pays for production built on them. The receiver market looks efficient where the pass-rush market (study 07) does not.
+The data gives no reason to discount a receiver's YAC as luck by default. The most stable traits are target depth and separation.
 
 ### 5. The 2027 free-agent receivers.
 
@@ -70,7 +71,8 @@ Contracts ending after 2026 (Over The Cap, extensions counted), still active: mo
 
 - **Yards split:** air yards on catches = yards - catches x YAC per catch; expected YAC = catches x NGS expected YAC per catch; YAC above expected = catches x NGS YAC above expectation per catch. The three add up to total receiving yards.
 - **Prediction:** next season's yards on this season's three parts plus targets; **price:** APY as % of the cap on the platform season's three parts plus targets. Both cluster standard errors by player. Output in `models.txt`.
-- **Contracts:** veteran WR/TE deals (rookie deals and duplicates dropped), at least 0.4% of the cap, platform season = the season before signing.
+- **Contracts:** veteran WR/TE deals (rookie deals dropped; one deal per player-year, keeping the longer, then richer, deal when a tag and an extension share a year), at least 0.4% of the cap, platform season = the season before signing.
+- **Test:** the same statistic as study 07: (price per YAC-over-expected yard / price per air yard) divided by (next-year yards per YAC-over-expected yard / per air yard), players resampled in both samples.
 - **Free agents:** end year from each player's Over The Cap contract history, with extensions added after the deal they extend; first-round rookie deals (fifth-year option) left out; must have played offense this season.
 
 **In equations**
@@ -80,14 +82,15 @@ Contracts ending after 2026 (Over The Cap, extensions counted), still active: mo
 
 ## Validation
 
-- 5 robustness versions (WR only, TE only, multi-year deals, deals over 1% of the cap, 2023-2026 deals) recompute the price per 100 yards (not per future yard). YAC over expected is priced at or above air yards in 5 of them.
+- 5 robustness versions (WR only, TE only, multi-year deals, deals over 1% of the cap, 2023-2026 deals) recompute the price per 100 yards (not per future yard). YAC over expected is priced at or above air yards in 4 of them.
 - 95% interval for next-year yards per YACOE yard: 0.35-0.97, overlapping air yards.
-- A null result is reported as one: the hypothesis was a tax, and the data does not show it.
+- A null result is reported as one, with its power: the ratio is above 1 in 52% of 2,000 bootstrap samples.
 
 ## Limitations
 
 - NGS season tables only include qualified receivers, so part-time players and many tight ends are missing.
 - Expected YAC is the NFL's model; the split is only as good as it is.
+- The prediction sample needs a qualified season in back-to-back years (760 pairs from 1,251 qualified seasons), so receivers who were hurt or lost their role drop out.
 - Contract status can lag a new extension. Puka Nacua and George Pickens (franchise tag) were both in the final year of their deals as of this writing; check before acting.
 
 ## Next steps
