@@ -4,6 +4,7 @@ numpy>=1.26
 matplotlib>=3.8
 scikit-learn>=1.4
 statsmodels>=0.14
+scipy>=1.11
 duckdb>=1.0
 pytest>=8
 adjustText>=1.0

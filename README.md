@@ -1,12 +1,12 @@
 <p align="center"><img src="assets/banner.png" alt="NFL Analytics by Dylan Fanelli" width="100%"></p>
 
-<p align="center"><a href="https://github.com/IForSureI/NFL-Analytics/actions/workflows/tests.yml"><img src="https://github.com/IForSureI/NFL-Analytics/actions/workflows/tests.yml/badge.svg" alt="tests"></a> <img src="https://img.shields.io/badge/python-3.10%2B-1d2433" alt="python: 3.10+"> <img src="https://img.shields.io/badge/data-nflverse%202006--2026-1d2433" alt="data: nflverse 2006-2026"> <img src="https://img.shields.io/badge/studies-9-c2410c" alt="studies: 9"> <img src="https://img.shields.io/badge/refreshed-Nov%2012%202026-6b7280" alt="refreshed: Nov 12 2026"> <img src="https://img.shields.io/badge/license-all%20rights%20reserved-6b7280" alt="license: all rights reserved"></p>
+<p align="center"><a href="https://github.com/IForSureI/NFL-Analytics/actions/workflows/tests.yml"><img src="https://github.com/IForSureI/NFL-Analytics/actions/workflows/tests.yml/badge.svg" alt="tests"></a> <img src="https://img.shields.io/badge/python-3.10%2B-1d2433" alt="python: 3.10+"> <img src="https://img.shields.io/badge/data-nflverse%202006--2026-1d2433" alt="data: nflverse 2006-2026"> <img src="https://img.shields.io/badge/studies-9-c2410c" alt="studies: 9"> <img src="https://img.shields.io/badge/refreshed-Nov%2010%202026-6b7280" alt="refreshed: Nov 10 2026"> <img src="https://img.shields.io/badge/license-all%20rights%20reserved-6b7280" alt="license: all rights reserved"></p>
 
 <p align="center"><b><a href="#the-studies">Studies</a> &nbsp;|&nbsp; <a href="#what-a-club-gets">What a club gets</a> &nbsp;|&nbsp; <a href="#how-i-work">How I work</a> &nbsp;|&nbsp; <a href="#under-the-hood">Under the hood</a> &nbsp;|&nbsp; <a href="docs/glossary.md">Glossary</a> &nbsp;|&nbsp; <a href="#about">About</a></b></p>
 
-I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward a job in a club front office. Each study starts from a question a coach, scout or general manager actually argues about, answers it with public data and a model I built, and ends with what a club would do with the answer. I validate every model before I trust it, I say what the data can't show, and every number on these pages is regenerated from code on each weekly refresh.
+I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward a job in a club front office. Each study starts from a question a coach, scout or general manager actually argues about, answers it with public data and a model I built, and ends with what a club would do with the answer. I test each model out of sample or with a bootstrap where the data allows and say so where it does not, I say what the data can't show, and the numbers on the study pages are written by code from each study's `findings.json`, not typed by hand.
 
-**Headline work:** a [fourth-down decision bot](reports/02-fourth-down-bot/) on my own win-probability model, which matches nflfastR out of sample (Brier 0.1495 vs 0.1488 on 80,613 plays), and [evidence of a market inefficiency in pass-rusher contracts](reports/07-box-score-tax/): teams pay about \$0.62M a year for sacks that pressures say won't repeat.
+**Headline work:** a [fourth-down decision bot](reports/02-fourth-down-bot/) on my own win-probability model, which comes close to nflfastR out of sample without beating it (Brier 0.1495 vs 0.1488 on 80,613 plays), and a [test of whether teams overpay for sacks](reports/07-box-score-tax/): a sack beyond what pressures predict adds about \$0.57M a year to a contract, and against a pressure it is priced 2.1 times what it predicts (90% interval 1.0 to 8.8).
 
 <p align="center"><img src="assets/at-a-glance.png" alt="Selected studies at a glance" width="100%"></p>
 
@@ -16,15 +16,15 @@ I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward 
 
 | # | Study | The question | Headline | Methods |
 |---|---|---|---|---|
-| 01 | [**Flag Audit**](reports/01-flag-audit/) | Do NFL flags really even out, or do some teams, quarterbacks and crews get a different game? | Road teams drew 0.27 more judgment-call flags a game than home teams in 2016-22; since 2023 the gap has averaged -0.00. What remains is a small pre-snap gap (neutral zone infractions, delay of game), not judgment calls. | empirical Bayes, Wilson intervals, split-half reliability |
-| 02 | [**Fourth-Down Bot**](reports/02-fourth-down-bot/) | When the math says go for it on fourth down, how often do coaches go, and which teams leave the most win probability on the table? | I built a win-probability model that matches nflfastR out of sample (Brier 0.1495 vs 0.1488 on 80,613 plays) and a fourth-down bot on top of it. | gradient boosting, win probability, decision analysis, calibration |
-| 03 | [**Sack Leverage**](reports/03-sack-leverage/) | Are all sacks equal, or does the down and distance decide how much a sack is worth? | Down and distance decide a sack's worth: short 3rd-down sacks take the most (3rd-and-1-2: 2.46 expected points), and an average 2nd-down sack (1.70) beats a 3rd-and-11+ sack (1.53). | expected points, replication, player valuation |
-| 04 | [**Luck Index**](reports/04-luck-index/) | How many wins does chance hand out, and do the lucky teams fall back the next year? | Fumble, field-goal and close-game luck do not repeat (year-to-year r = 0.04, 0.07, 0.06). | Pythagorean expectation, regression to the mean, year-to-year stability |
-| 05 | [**Kickoff Value**](reports/05-kickoff-value/) | What did the new kickoff rule do to field position, and who creates value under it? | The new kickoff brought returns back: 21% of kickoffs returned in 2023, 75% in 2025. | rule-change analysis, special teams, player valuation |
-| 06 | [**Pass vs Run**](reports/06-pass-run/) | Passing has been more efficient for years. So why do teams still run, and does passing more make a team better? | Passing beat running on neutral early downs in 21 of 21 seasons. | EPA, pass rate over expected, team-level correlation |
-| 07 | [**The Box-Score Tax**](reports/07-box-score-tax/) | Do NFL teams pay pass rushers for sacks that won't repeat, when pressures predict future sacks better? | Teams still pay about \$0.62M a year for each sack beyond what pressures predict (850 contracts, 95% CI \$0.29-0.94M). | clustered OLS, bootstrap, contract valuation, market pricing |
-| 08 | [**The YAC Tax**](reports/08-yac-tax/) | Do teams pay receivers for yards after the catch that won't come back? | Contracts price each part of receiving production about the same per future yard (\$4.89M per 100 YAC-over-expected yards vs \$4.44M per 100 air yards): no YAC tax. | Next Gen Stats, clustered OLS, contract valuation, null result |
-| 09 | [**Run Game Value**](reports/09-run-game-value/) | How much of a running back's production is his, and do contracts pay for that part? | Hypothesis failed: teams don't pay blocked yards like the back's own. Holding carries fixed, +1 yard over expected per carry adds \$3.06M a year vs \$2.21M for +1 expected yard per carry (160 contracts); per yard the gap is 2.54x but fades to 1.23x with workload controlled. | Next Gen Stats, clustered OLS, bootstrap, contract valuation, null result |
+| 01 | [**Flag Audit**](reports/01-flag-audit/) | Do NFL flags really even out, or do some teams, quarterbacks and crews get a different game? | Road teams drew 0.27 more judgment-call flags a game than home teams in 2016-22; since 2023 the gap has averaged 0.00. The drop is real per snap (95% interval 0.02 to 0.29 per 100 snaps) but not yet in close games only, and I picked 2023 from the chart. | empirical Bayes, Wilson intervals, split-half reliability |
+| 02 | [**Fourth-Down Bot**](reports/02-fourth-down-bot/) | When the math says go for it on fourth down, how often do coaches go, and can the cost be pinned on a team? | I built a win-probability model that comes close to nflfastR out of sample (Brier 0.1495 vs 0.1488 on 80,613 plays) and a fourth-down bot on top of it. | gradient boosting, win probability, decision analysis, game bootstrap |
+| 03 | [**Sack Leverage**](reports/03-sack-leverage/) | Are all sacks equal, or does the down and distance decide how much a sack is worth? | Distance decides a sack's worth: 3rd-and-1-2 takes 2.46 expected points, 3rd-and-11+ only 1.53. At the same distance a third-down sack costs more than a second-down sack except at 11+ yards (-0.04, interval -0.15 to +0.07). | expected points, replication, game bootstrap, stability test |
+| 04 | [**Luck Index**](reports/04-luck-index/) | How many wins does chance hand out, and do lucky wins carry over to the next year? | Fumble, field-goal and close-game luck do not repeat (year-to-year r = 0.04, 0.07, 0.06). | Pythagorean expectation, regression to the mean, year-to-year stability |
+| 05 | [**Kickoff Value**](reports/05-kickoff-value/) | What did the new kickoff rule do to field position, and can kickers and returners be told apart under it? | The new kickoff brought returns back: 21% of kickoffs returned in 2023, 75% in 2025, and drives start 5.2 yards further up. | rule-change analysis, special teams, empirical Bayes, split-half reliability |
+| 06 | [**Pass vs Run**](reports/06-pass-run/) | Passing has been more efficient for years. So why do teams still run, and does passing more make a team better? | Passing beat running on neutral early downs in 21 of 21 seasons. | EPA, pass rate over expected, team bootstrap |
+| 07 | [**The Box-Score Tax**](reports/07-box-score-tax/) | Do NFL teams pay pass rushers more for sacks than sacks predict, when pressures predict future sacks better? | A sack beyond what pressures predict adds about \$0.57M a year to a veteran contract (775 contracts, 95% CI \$0.30-0.84M) and predicts 0.13 extra sacks the next year. | clustered OLS, player bootstrap, contract valuation, market pricing |
+| 08 | [**The YAC Tax**](reports/08-yac-tax/) | Do teams pay receivers for yards after the catch that won't come back? | No YAC tax detected: \$4.71M per 100 future yards bought through YAC over expected vs \$4.55M through air yards (371 veteran WR/TE contracts). | Next Gen Stats, clustered OLS, player bootstrap, null result |
+| 09 | [**Run Game Value**](reports/09-run-game-value/) | How much of a running back's production is his, and do contracts pay for that part? | Inconclusive on 160 contracts: I expected teams to pay blocked yards like the back's own, and the data neither shows that nor rules it out. Holding carries fixed, +1 yard over expected per carry adds \$3.06M a year vs \$2.21M for +1 expected yard per carry (160 contracts); per yard the gap is 2.54x but fades to 1.23x with workload controlled. | Next Gen Stats, clustered OLS, bootstrap, contract valuation, null result |
 
 <table>
 <tr><td width="25%" valign="top"><a href="reports/01-flag-audit/"><img src="reports/01-flag-audit/home_edge.png" width="100%"></a><br><sub><b>01 Flag Audit</b></sub></td><td width="25%" valign="top"><a href="reports/02-fourth-down-bot/"><img src="reports/02-fourth-down-bot/go_rate_trend.png" width="100%"></a><br><sub><b>02 Fourth-Down Bot</b></sub></td><td width="25%" valign="top"><a href="reports/03-sack-leverage/"><img src="reports/03-sack-leverage/epa_per_sack.png" width="100%"></a><br><sub><b>03 Sack Leverage</b></sub></td><td width="25%" valign="top"><a href="reports/04-luck-index/"><img src="reports/04-luck-index/luck_regression.png" width="100%"></a><br><sub><b>04 Luck Index</b></sub></td></tr>
@@ -40,9 +40,9 @@ Twelve quick charts on the season in progress, through Weeks 1-9: QB, running ba
 
 ## Draft board: 2027 quarterbacks
 
-[**Drew Mestemaker, QB, Oklahoma State: the case for QB1**](reports/draft-2027-drew-mestemaker/). Through 9 games: 2,962 yards, 29 touchdowns, 9.6 yards per attempt, and a 25+ yard completion on 11.7% of attempts (#2 of 100 FBS passers, ahead of 16 of the 18 first-round quarterbacks since 2021 in their final college season). The report compares him with every first-round quarterback since 2021, tests which of his numbers repeat, and says where Mensah and Sayin beat him.
+[**Drew Mestemaker, QB, Oklahoma State: is he QB1?**](reports/draft-2027-drew-mestemaker/) NFL scouts have him first. Through 9 games he has 2,962 yards and 29 touchdowns, but against what his opponents allow he is +28.3 rating points over expected, #4 of 7 in the class and below the first-round median (+42.4). The evaluation uses nine-game comparisons with every first-round quarterback since 2021, an opponent adjustment, base rates (6 of 17 quarterbacks with a rating like his went in round 1) and a test of which numbers repeat.
 
-<p align="center"><a href="reports/draft-2027-drew-mestemaker/"><img src="reports/draft-2027-drew-mestemaker/explosive_vs_first_round.png" width="720"></a></p>
+<p align="center"><a href="reports/draft-2027-drew-mestemaker/"><img src="reports/draft-2027-drew-mestemaker/opponent_adjusted.png" width="720"></a></p>
 
 ## Coming next
 
@@ -61,11 +61,11 @@ New studies are on the way; each follows the same [report standard](docs/report-
 |---|---|---|
 | Head coach and game management | Go, kick or punt on this fourth down? | [02 Fourth-Down Bot](reports/02-fourth-down-bot/) |
 | Pro personnel and free agency | Are pass rushers, receivers and running backs priced for what repeats? Who to target in free agency? | [07 Box-Score Tax](reports/07-box-score-tax/), [08 YAC Tax](reports/08-yac-tax/), [09 Run Game Value](reports/09-run-game-value/) |
-| Defensive staff | When is a sack worth the most, and who produces those? | [03 Sack Leverage](reports/03-sack-leverage/) |
+| Defensive staff | When is a sack worth the most? | [03 Sack Leverage](reports/03-sack-leverage/) |
 | Offensive staff | Should we pass more on early downs? | [06 Pass vs Run](reports/06-pass-run/) |
-| Special teams | Who creates field position under the new kickoff? | [05 Kickoff Value](reports/05-kickoff-value/) |
-| Front office and ownership | How much of our record was luck? | [04 Luck Index](reports/04-luck-index/) |
-| Game prep | What does this crew call, and what flags are coachable on the road? | [01 Flag Audit](reports/01-flag-audit/) |
+| Special teams | What is a kickoff worth under the new rule, and can returners or kickers be told apart yet? | [05 Kickoff Value](reports/05-kickoff-value/) |
+| Front office and ownership | How much of our record will carry over, and how much was the bounces? | [04 Luck Index](reports/04-luck-index/) |
+| Game prep | What does this crew call, and where does the road flag gap sit? | [01 Flag Audit](reports/01-flag-audit/) |
 
 <a id="how-i-work"></a>
 ## How I work
@@ -77,7 +77,7 @@ Every study follows the same [report standard](docs/report-standard.md), modeled
 3. **Validation in the open:** out-of-sample tests, calibration, bootstraps, clustered standard errors and robustness tables.
 4. **Results under headings that state the finding,** each with its figure.
 5. **What a club does with it,** limitations and next steps on every page.
-6. **Reproducible:** one command rebuilds every number, chart and page; `pytest` (run by GitHub Actions on every change, Python 3.10 and 3.12) checks that published numbers stay football-sane and every page meets the standard.
+6. **Reproducible:** one command re-downloads the data and rebuilds the studies, charts and pages; `pytest` (run by GitHub Actions on every change, Python 3.10 and 3.12) tests the model and study logic on small made-up tables, checks that saved results are internally consistent, and checks that every page meets the standard. The tests do not prove a finding is right.
 
 **Techniques used here:** gradient-boosted win probability with monotone constraints; decision analysis; expected points (EPA); empirical-Bayes shrinkage and Wilson intervals; split-half and year-to-year reliability; OLS with player-clustered standard errors; bootstrap resampling; Pythagorean expectation; contract valuation in cap-share terms; DuckDB SQL.
 
@@ -91,16 +91,17 @@ flowchart LR
     C --> D[reports/<br>findings.json, CSVs, charts]
     D --> E[scripts/build_readmes.py<br>scripts/build_figures.py]
     E --> F[README pages]
-    D --> G[pytest<br>sanity checks on<br>every published number]
+    B --> G[pytest<br>logic tests on made-up data,<br>consistency and page checks]
+    D --> G
 ```
 
 ```
-nflan/          tested library: data loading, win-probability model, 4th-down bot, penalty and stats helpers
+nflan/          library: data loading, win-probability model, 4th-down bot, penalty and stats helpers (unit-tested in tests/)
 projects/       one script per study (python -m projects.<name>)
 reports/        each study's write-up, figures, CSV outputs and findings.json
 sql/            DuckDB queries answering the same questions straight from the parquet files
 scripts/        update.py (weekly refresh), build_readmes.py, build_figures.py, report_meta.py
-tests/          unit tests and sanity checks on published numbers
+tests/          logic tests on made-up data, consistency checks on saved results, page-standard checks
 docs/           report standard, glossary, data dictionary, inspiration notes
 assets/         banner and at-a-glance figure
 ```
@@ -109,7 +110,7 @@ assets/         banner and at-a-glance figure
 
 ```bash
 pip install -r requirements.txt
-python scripts/update.py          # downloads nflverse data (about 400 MB), runs every study, figures, tests and READMEs
+python scripts/update.py          # downloads nflverse data (about 400 MB), runs every study, figures, tests and READMEs (the fourth-down bootstrap takes a while)
 pytest -q
 ```
 
@@ -125,11 +126,11 @@ Each study also runs alone, for example `python -m projects.fourth_down_bot`.
 
 ## Changelog
 
-- 2026-11-10: Weekly refresh through Week 9 (23,822 regular-season plays in the snippets; nflverse play-by-play pulled 2026-11-10). Every study, the snippets, the interactive page, the figures and the READMEs rebuilt; tests pass.
-- 2026-11-12: Study 09 Run Game Value: teams pay a little more for the back's part, and neither part looks mispriced (the hypothesis that teams pay blocked yards like the back's own failed). Per carry the expected (blocking and box) part of yards per carry repeats more than the back's part (r = 0.46 vs 0.20 for RYOE); contracts pay \$3.06M a year per +1 yard over expected per carry vs \$2.21M per +1 expected yard per carry (per yard \$1.68M vs \$0.66M per 100, a gap that fades once workload is controlled); per carry both parts predict next season about equally, so no mispricing either way, and no rushing stat predicts next season's rushing EPA well. 2027 free-agent backs ranked by RYOE, every name news-checked (McCaffrey removed: signed through 2027). Independent review corrections applied. Built from the raw nflverse files on the My Passport drive (Next Gen Stats rushing added there; 2026 play-by-play, snap counts, contracts and players refreshed there). The README refresh badge now reads the last weekly refresh from this log.
-- 2026-11-14: Draft report: Drew Mestemaker, QB, Oklahoma State, the case for QB1 (reports/draft-2027-drew-mestemaker). Through 9 games: 2,962 yards, 29 TD, 9.6 yards per attempt; a 25+ yard completion on 11.7% of attempts, more often than 16 of the 18 first-round quarterbacks since 2021 in their final college season. His rating rose +4.3 moving from the American to the Big 12; the other 19 Group of Five to Power Four transfers averaged -5.6. Interception rate (2.6%) and third-down rating (122) are below average; year to year they repeat at r = 0.14 and 0.24. Mensah and Sayin have the better 2026 efficiency, and the page says so. Data: cfbstats.com season, situational and game-log tables (pulled 2026-11-14, before Texas Tech) and nflverse draft picks. Independent review corrections applied. New code: projects/draft_mestemaker.py; tests added.
+- 2026-11-14: 04: lucky teams compared with same-record teams, so regression to the mean is not counted as luck (a win above Pythagorean is worth -0.02 wins next year, 95% interval -0.18 to 0.15; a Pythagorean win 0.49). 06: the team-level link is tested on 640 team-seasons, not one season of 32 (r = 0.28, 95% interval 0.19 to 0.38), and within teams. 01: the road-flag drop is reported per snap, in close games and for every break year; it is 0.16 per 100 snaps (0.02 to 0.29) on all snaps and not clear of zero in close games, and 2023 was picked from the chart. No quarterback stays above the league roughing rate after correcting for 42 tests. 09: verdict changed from "hypothesis failed" to inconclusive, with the smallest detectable price gap (\$2.9M per yard per carry) stated; rerun on Next Gen Stats through Week 10.
+- 2026-11-14: Snippets: 95% intervals on every correlation, sample warnings on the ranked lists, and the pressure chart no longer claims a link the interval does not support (r = -0.24, -0.58 to 0.23). Tests: checks that asserted a study's conclusion are replaced by logic tests on made-up data (win-probability model, fourth-down arithmetic, field-goal range, contract dedupe, sack luck, kickoff helpers, the matched luck comparison, bootstraps) plus consistency checks on saved results; 59 tests. `scripts/update.py` now refreshes contracts, PFR charting, players, snap counts, draft picks and Next Gen Stats, not only play-by-play and officials. README claims about validation and tests reworded to what the code does.
+- 2026-11-15: Draft report rebuilt as an evaluation after an independent review found the first version read as advocacy (reports/draft-2027-drew-mestemaker). The title is now a question, and the grade is first-round candidate, not QB1 on the numbers. Added: an opponent adjustment (FBS games only, rating over what each defense allows everyone else: he is +28.3, #4 of 7 in the class, first-round median +42.4); nine-game comparisons with each first-round quarterback's first nine games; comps from all 600 prior qualifying seasons with draft outcomes; base rates (6 of 17 quarterbacks with a last-season rating like his went in round 1); Wilson intervals on the 25+ rate and interception rate; the North Texas baseline before and after him. Corrected: the Group of Five to Power Four comparison is now FBS games only (his rating went 166.9 to 164.0, -2.9; the earlier +4.3 came from the FCS game), with the other 19 movers' spread (SD 20.1) and his rank on change (#9 of 20). Still through nine games: cfbstats had not posted the Nov. 14 Texas Tech game when this was built. Tests added for the interval, the opponent adjustment and the draft-outcome match.
 
-Full history: [LOG.md](LOG.md). Data refreshes weekly in season (last: November 12, 2026, through the latest completed week of 2026).
+Full history: [LOG.md](LOG.md). Data refreshes weekly in season (last: November 10, 2026, through the latest completed week of 2026).
 
 ## License and citation
 
