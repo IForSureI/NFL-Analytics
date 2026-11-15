@@ -51,6 +51,35 @@ def atlas_table(f, team=True):
                    f"{r['yoy_r']:.2f} ({r['yoy_ci'][0]:.2f} to {r['yoy_ci'][1]:.2f}) |")
     return "\n".join(out)
 
+def _holdout_tldr(f):
+    """One sentence on the held-out component test, written from the result whichever way it falls."""
+    h = f["holdout"]; fl = h["flips"]
+    comps = [h["convert_4th"]["brier"], h["fg"]["brier"], h["punt"]["rmse"]]
+    n = sum(c["model_minus_league_avg"][2] < 0 for c in comps)
+    beat = "all beat" if n == 3 else f"beat in {n} of 3 cases"
+    moves = "moves the go rate or the team card past its interval" if h["headline"]["moves"] else "leaves the go rate and every team on the card inside their intervals"
+    return (f"Its conversion, field-goal and punt models, fit on {h['train']}, {beat} the league average on {h['test']}, and a bot fit on "
+            f"those seasons alone changes {_pct(fl['components'][0], 1)} of the recommendations and {moves}.")
+
+
+def _holdout_table(f):
+    """Held-out scores, model against each baseline, with the paired difference and its 95% interval."""
+    h = f["holdout"]
+    rows = ["| Component (test plays) | Score | Model | League average | Simple table | Model minus league average | Model minus table |", "|---|---|---|---|---|---|---|"]
+    d = lambda v, k: f"{v[0]:+.{k}f} ({v[1]:+.{k}f} to {v[2]:+.{k}f})"
+    for key, name in (("convert_4th", "Conversion, 4th downs"), ("convert", "Conversion, 3rd and 4th downs"), ("fg", "Field goal, all attempts"),
+                      ("fg_in_range", f"Field goal, {h['fg_max_dist_train']} yards and in")):
+        for metric, lab in (("brier", "Brier"), ("log_loss", "Log loss")):
+            s = h[key][metric]
+            rows.append(f"| {name} ({h[key]['n']:,}) | {lab} | {s['model'][0]:.4f} | {s['league_avg'][0]:.4f} | {s['distance_table'][0]:.4f} | "
+                        f"{d(s['model_minus_league_avg'], 4)} | {d(s['model_minus_distance_table'], 4)} |")
+    s = h["punt"]["rmse"]
+    rows.append(f"| Punt, opponent's start ({h['punt']['n']:,}) | RMSE, yards | {s['model'][0]:.2f} | {s['league_avg'][0]:.2f} | {s['avg_net'][0]:.2f} | "
+                f"{d(s['model_minus_league_avg'], 2)} | {d(s['model_minus_avg_net'], 2)} |")
+    return (f"**Held-out scores, fit on {h['train']} and scored on {h['test']}.** Lower is better. The simple table is the training-season rate by distance "
+            "(conversion and field goals) or the training-season average net punt from the spot. A difference whose interval stays below zero is a win for the model.\n\n"
+            + "\n".join(rows))
+
 
 META = {
     "01-flag-audit": dict(
@@ -103,8 +132,8 @@ META = {
     "02-fourth-down-bot": dict(
         short="Fourth-Down Bot",
         tldr=lambda f: [
-            f"I built a win-probability model that comes close to nflfastR out of sample (Brier {f['brier_ours']:.4f} vs {f['brier_nflfastR_vegas_wp']:.4f} on {f['wp_test_plays']:,} plays) and a fourth-down bot on top of it.",
-            f"Coaches now go for it in {_pct(f['go_rate_clear_spots'][sorted(f['go_rate_clear_spots'])[-2]])} of clear go spots, up from {_pct(f['go_rate_clear_spots'][sorted(f['go_rate_clear_spots'])[0]])} in {sorted(f['go_rate_clear_spots'])[0]}. Only spots that stay go spots when the models are refit are counted.",
+            f"I built a win-probability model that comes close to nflfastR out of sample (Brier {f['brier_ours']:.4f} vs {f['brier_nflfastR_vegas_wp']:.4f} on {f['wp_test_plays']:,} plays) and a fourth-down bot on top of it. " + _holdout_tldr(f),
+            f"Coaches now go for it in {_pct(f['go_rate_clear_spots'][sorted(f['go_rate_clear_spots'])[-2]])} of clear go spots, up from {_pct(f['go_rate_clear_spots'][sorted(f['go_rate_clear_spots'])[0]])} in {sorted(f['go_rate_clear_spots'])[0]}. Only spots that stay go spots when the models are refit are counted. The held-out test caught an error in the punt model; before the fix these read {_pct(f['punt_fix']['go_rate_before'][sorted(f['go_rate_clear_spots'])[-2]][0])} and {_pct(f['punt_fix']['go_rate_before'][sorted(f['go_rate_clear_spots'])[0]][0])}.",
             f"The team card is a description, not a ranking: a team's lost win probability in odd weeks predicts its even weeks at r = {f['scorecard_split_half_r']:.2f}, and {f['scorecard_teams_clear_of_median']} of 32 teams clear the league median this season.",
         ],
         question="When the math says go for it on fourth down, how often do coaches go, and can the cost be pinned on a team?",
@@ -112,7 +141,8 @@ META = {
         tags=["gradient boosting", "win probability", "decision analysis", "game bootstrap"],
         hero=("go_rate_trend.png", "Go rate when going adds 2+ win-probability points."),
         figs={1: [("wp_calibration.png", "Out-of-sample calibration of my win-probability model, 2024-25.")],
-              4: [("team_scorecard.png", "Win-probability points lost per game on charged fourth-down calls, this season, with 90% intervals.")]},
+              4: [("holdout_components.png", "The conversion, field-goal and punt models on seasons they were not fit on: predicted against actual, with the number of plays in each bin.")],
+              7: [("team_scorecard.png", "Win-probability points lost per game on charged fourth-down calls, this season, with 90% intervals.")]},
         key=lambda f: [
             ("Brier score, my WP model (out of sample)", f"{f['brier_ours']:.4f}"),
             ("Brier score, nflfastR (same plays)", f"{f['brier_nflfastR_vegas_wp']:.4f}"),
@@ -121,6 +151,10 @@ META = {
             ("Go rate in clear go spots, " + sorted(f["go_rate_clear_spots"])[0], _pct(f["go_rate_clear_spots"][sorted(f["go_rate_clear_spots"])[0]])),
             ("Go rate in clear go spots, " + sorted(f["go_rate_clear_spots"])[-2], _pct(f["go_rate_clear_spots"][sorted(f["go_rate_clear_spots"])[-2]])),
             ("Median standard error of the go-vs-kick margin (WP points)", f"{f['median_go_boost_se']:.2f}"),
+            (f"4th-down conversion Brier, held out {f['holdout']['test']} (league average)", f"{f['holdout']['convert_4th']['brier']['model'][0]:.4f} ({f['holdout']['convert_4th']['brier']['league_avg'][0]:.4f})"),
+            ("Field-goal Brier, held out (league average)", f"{f['holdout']['fg']['brier']['model'][0]:.4f} ({f['holdout']['fg']['brier']['league_avg'][0]:.4f})"),
+            ("Punt start RMSE in yards, held out (league average)", f"{f['holdout']['punt']['rmse']['model'][0]:.1f} ({f['holdout']['punt']['rmse']['league_avg'][0]:.1f})"),
+            (f"Recommendations that change with components fit on {f['holdout']['train']} only", f"{100 * f['holdout']['flips']['components'][0]:.1f}% ({100 * f['holdout']['flips']['components'][1]:.1f}% to {100 * f['holdout']['flips']['components'][2]:.1f}%)"),
             ("Team card, odd vs even weeks r", f"{f['scorecard_split_half_r']:.2f}"),
             ("Team card, year-to-year r", f"{f['scorecard_yoy_r']:.2f}"),
             ("Longest field goal the bot offers", f"{f['fg_max_dist']:.0f} yards"),
@@ -138,7 +172,9 @@ META = {
         validation=lambda f: [
             f"Trained on 2006-2023, tested on {f['wp_test_plays']:,} plays from 2024-25: Brier {f['brier_ours']:.4f} vs nflfastR {f['brier_nflfastR_vegas_wp']:.4f} on the same rows; r = {f['corr_with_nflfastR']:.3f}.",
             "Calibration plot under result 1: predicted vs actual win rate by bin, close to the 45-degree line.",
-            f"The conversion, field-goal and punt models are refit on {f['n_boot']} resamples of games, so every recommendation carries a standard error. They are not tested out of sample.",
+            f"The conversion, field-goal and punt models are fit on {f['holdout']['train']} and scored on {f['holdout']['test']} (result 4): Brier score and log loss against the league-average rate and a distance-only table for the two probability models, RMSE against two baselines for punts, each with a 95% interval from resampling games. Calibration by bin with counts is in `holdout_calibration.csv` and the figure under result 4.",
+            f"A second bot built only from the {f['holdout']['train']} fits rescored every {f['holdout']['test']} fourth down (result 5): {100 * f['holdout']['flips']['components'][0]:.1f}% of recommendations change, and the rule for whether the headline numbers move was written before the run.",
+            f"The win-probability, conversion, field-goal and punt models are refit on {f['n_boot']} resamples of games, so every recommendation carries a standard error.",
             f"The team card is tested for repeatability before it is read: split-half r = {f['scorecard_split_half_r']:.2f}, year-to-year r = {f['scorecard_yoy_r']:.2f}.",
             f"Football sanity checks: 4th-and-1 at midfield favors going ({f['sanity_4th1_midfield_go_boost']:+.1f} WP), 4th-and-10 at your own 20 favors kicking ({f['sanity_4th10_own20_go_boost']:+.1f}). The bot's arithmetic is unit-tested on a made-up model (`tests/test_logic.py`).",
             "Monotone constraints keep the model football-logical (a bigger lead never lowers WP).",
@@ -146,7 +182,12 @@ META = {
         next=["Team-specific inputs: the offense's short-yardage success and the kicker's range.",
               "Two-point decisions and end-of-half clock management.",
               "A one-page in-game chart per opponent."],
+        tables=lambda f: {4: [_holdout_table(f)]},
         files={"fourth_downs_scored.parquet": "Every fourth down with WP for go, field goal and punt, and the refit standard errors",
+               "holdout_scores.csv": "Held-out scores for the conversion, field-goal and punt models and their baselines, with 95% game-bootstrap intervals",
+               "holdout_calibration.csv": "Held-out calibration: predicted against actual by bin, with counts",
+               "holdout_fourth_downs.parquet": "Every test-season fourth down with the production and the training-seasons-only recommendation",
+               "holdout_team_card.csv": "The team card under both versions of the bot",
                "team_scorecard.csv": "WP points lost per game by team and season, with 90% intervals",
                "go_rate_when_math_says_go.csv": "Go rate in clear go spots by season, with spots and Wilson intervals",
                "costliest_calls_current_season.csv": "The current season's most expensive calls",

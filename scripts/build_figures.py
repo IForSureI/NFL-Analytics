@@ -130,7 +130,7 @@ def at_a_glance():
     ax = axs[3]
     ax.bar([0, 1], [f4["lucky_change_wins_per17"], f4["unlucky_change_wins_per17"]], color=[ORANGE, FIELD], width=0.55)
     ax.axhline(0, color=MUTED, lw=0.8)
-    _card(ax, "04", "Luck Index", f"{f4['next_wins_per_luck_win'][0]:+.2f} wins", f"Next-year wins per win above what points predict (a Pythagorean win is worth {f4['next_wins_per_pythag_win'][0]:.2f}). Bars: raw next-year change, teams 2+ wins over (orange) and under (green)")
+    _card(ax, "04", "Luck Index", f"{f4['next_wins_per_luck_win'][0]:+.2f} wins", f"Next-year wins per win above what points predict (Pythagorean win: {f4['next_wins_per_pythag_win'][0]:.2f}). Bars: lucky (orange), unlucky (green) teams")
 
     # 05 kickoffs
     k = pd.read_csv(R / "05-kickoff-value/kickoffs_by_season.csv").sort_values("season")
@@ -156,7 +156,7 @@ def at_a_glance():
     ax.plot([0, 0], [lo7, min(hi7, 6)], color=INK, lw=1.6)
     ax.axhline(1, color=MUTED, lw=0.9, ls="--")
     ax.set_xlim(-1, 1); ax.set_ylim(0, 6.3)
-    _card(ax, "07", "Box-Score Tax", f"{f7['tax_ratio']:.1f}x", f"Price of a sack beyond what pressures predict, against what it predicts. Fair is 1.0 (dashed). 90% interval {lo7:.1f} to {hi7:.1f}; the line is cut at 6")
+    _card(ax, "07", "Box-Score Tax", f"{f7['tax_ratio']:.1f}x", f"Price of a sack beyond what pressures predict. Fair is 1.0 (dashed). 90% interval {lo7:.1f} to {hi7:.1f}, cut at 6")
 
     # 08 YAC tax
     f8 = F("08-yac-tax")

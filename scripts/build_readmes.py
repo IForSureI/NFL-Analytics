@@ -94,15 +94,73 @@ def _card_verdict(f):
     return "That is mostly noise, so the card describes what happened and does not rank coaches."
 
 
+def _beats(diff):
+    """A paired score difference [point, low, high], lower is better: better, worse, or a tie when the interval spans zero."""
+    return "better" if diff[2] < 0 else "worse" if diff[1] > 0 else "tie"
+
+
+def _holdout_lead(h):
+    """The heading for the held-out component test, written from the intervals, whichever way they fall."""
+    comps = [("fourth-down conversion", h["convert_4th"]["brier"], "distance_table"), ("field-goal", h["fg"]["brier"], "distance_table"),
+             ("punt", h["punt"]["rmse"], "avg_net")]
+    avg = [n for n, sc, _ in comps if _beats(sc["model_minus_league_avg"]) == "better"]
+    tab = [n for n, sc, b in comps if _beats(sc[f"model_minus_{b}"]) == "better"]
+    tie = [n for n, sc, b in comps if _beats(sc[f"model_minus_{b}"]) == "tie"]
+    worse = [n for n, sc, b in comps if _beats(sc[f"model_minus_{b}"]) == "worse"]
+    a = "All three component models beat the league average" if len(avg) == 3 else f"{len(avg)} of 3 component models beat the league average"
+    b = f"{len(tab)} of 3 also beat a simple table"
+    if tie:
+        b += f" (the {' and '.join(tie)} model{'s' if len(tie) > 1 else ''} only tie{'' if len(tie) > 1 else 's'} it)"
+    if worse:
+        b += f" (the {' and '.join(worse)} model{'s' if len(worse) > 1 else ''} lose{'' if len(worse) > 1 else 's'} to it)"
+    return f"{a} on seasons they never saw; {b}."
+
+
+def _holdout_test_label(h):
+    return f"{h['test']} ({h['test'][-4:]} through Week {h['test_last_week']})"
+
+
+def _flip_lead(h, top_now):
+    fl = h["flips"]; hl = h["headline"]
+    verdict = "the headline numbers move" if hl["moves"] else "the headline numbers hold"
+    if not hl["moves"] and set(hl["card_top3_held_out"]) != set(top_now):
+        verdict += ", though the top of the team card reorders"
+    return f"Fit on the training seasons only, the bot changes {pct(fl['components'][0], 1)} of its recommendations, and {verdict}."
+
+
 def fourth():
     f = F("02-fourth-down-bot")
+    h = f["holdout"]; fl = h["flips"]; hl = h["headline"]; pf = f["punt_fix"]
+    c4 = h["convert_4th"]; kf = h["fg"]; pu = h["punt"]
+    iv = lambda v, k=3: f"{v[0]:.{k}f} ({v[1]:.{k}f} to {v[2]:.{k}f})"
+    hs = sorted(hl["go_rate"])
+    go_moves = "; ".join(f"{y}: {pct(hl['go_rate'][y][0])} with the production bot, {pct(hl['go_rate'][y][1])} held out" for y in hs)
+    lost = "; ".join(f"{y}: {v[0]:.2f} and {v[1]:.2f}" for y, v in sorted(hl["wp_lost_per_team_game"].items()))
+    moved = (f"By the rule I set before running it, the headline numbers move: {', '.join(hl['reasons'])}." if hl["moves"] else
+             "By the rule I set before running it (a go rate outside its 95% interval, a team outside its 90% interval, or the two team cards correlating below 0.90), the headline numbers do not move.")
+    togo = {"(0, 1]": "1 yard", "(1, 2]": "2 yards", "(2, 4]": "3-4 yards", "(4, 7]": "5-7 yards", "(7, 10]": "8-10 yards", "(10, 99]": "11+ yards"}
+    ex = "; ".join(f"{togo.get(b, b)} to go: {a:.0f} in training, {t:.0f} in the test seasons" for b, a, t, n in h["extra_yards"] if a != t)
+    kr = h["fg_in_range"]["brier"]["model_minus_distance_table"]
+    fg_in = {"tie": f" Inside the {h['fg_max_dist_train']}-yard range the bot offers, the field-goal model only ties the distance table.",
+             "worse": f" Inside the {h['fg_max_dist_train']}-yard range the bot offers, the field-goal model loses to the distance table.",
+             "better": f" Inside the {h['fg_max_dist_train']}-yard range the bot offers, the field-goal model still beats the distance table."}[_beats(kr)]
+    title_tail = " The answer shifts when the bot is fit only on earlier seasons." if hl["moves"] else ""
     g = f["go_rate_clear_spots"]; ys = sorted(g)
     last_full = ys[-2]; cur = ys[-1]
+    gb = pf["go_rate_before"]
+    top_now = [x[0] for x in f["most_costly"]]
+    top_same = ("the same three teams lose the most" if set(hl["card_top3_held_out"]) == set(top_now) else
+                f"the three teams that lose the most change from {', '.join(top_now)} to {', '.join(hl['card_top3_held_out'])}")
+    wp_note = ("So the recommendations depend more on which seasons train the win-probability model than on which seasons train the three components. I have not rebuilt the go rate or the team card with every model held out."
+               if fl["components_and_wp"][1] > fl["components"][2] else "I have not rebuilt the go rate or the team card with every model held out.")
+    still = ("The go rate still rises and the team card is still mostly noise; the levels are what changed."
+             if g[last_full] > g[ys[0]] and gb[last_full][0] > gb[ys[0]][0] and f["scorecard_split_half_r"] < 0.25 and pf["split_half_r_before"] < 0.25
+             else "The correction changes more than the levels, so read findings 2 and 7 as new results.")
     gc = f["go_rate_ci"]; gn = f["go_rate_spots"]
     mc = f["most_costly"]; lc = f["least_costly"]
     th = f["go_rate_first_vs_last_full_by_threshold"]
     row = lambda x: f"{x[0]} ({x[1]:.1f}, 90% interval {x[2]:.1f} to {x[3]:.1f})"
-    return f"""# 02 Fourth-Down Bot: how often do coaches go when the math says go?
+    return f"""# 02 Fourth-Down Bot: how often do coaches go when the math says go?{title_tail}
 
 **Inspired by:** Brett Kollmann, [Are analytics ruining football?]({YT}FOnQFk5qy-4) (judge the decision apart from the play), and Michael MacKelvie, [Passing is better...so, why run?]({YT}pPXZlK9puqw) (coaches lag the math). Method follows the public idea of Ben Baldwin's [nfl4th](https://github.com/nflverse/nfl4th), rebuilt from scratch in Python.
 **Data:** nflverse play-by-play 2006-{cur}.
@@ -111,31 +169,40 @@ def fourth():
 ## What I found
 1. **The win-probability model comes close to nflfastR out of sample.** Trained on 2006-2023 and tested on {f['wp_test_plays']:,} plays from 2024-25: Brier score {f['brier_ours']:.4f}, against {f['brier_nflfastR_vegas_wp']:.4f} for nflfastR's spread-adjusted model on the same plays (lower is better). Mine is {_wp_vs_nflfastr(f)} theirs. The two agree at r = {f['corr_with_nflfastR']:.3f}. Calibration sits close to the 45-degree line.
 2. **Coaches go for it far more than they used to.** In clear go spots (going adds 2+ win-probability points and still adds some when the models are refit, score within 16, outside the last 5 minutes), teams went {pct(g[ys[0]])} of the time in {ys[0]} (95% interval {pct(gc[ys[0]][0])} to {pct(gc[ys[0]][1])}, {gn[ys[0]]} spots) and {pct(g[last_full])} in {last_full} ({pct(gc[last_full][0])} to {pct(gc[last_full][1])}, {gn[last_full]} spots). {cur} so far: {pct(g[cur])} on {gn[cur]} spots ({pct(gc[cur][0])} to {pct(gc[cur][1])}), which {'overlaps' if gc[cur][0] <= gc[last_full][1] and gc[last_full][0] <= gc[cur][1] else 'does not overlap'} the {last_full} interval. The rise does not depend on the 2-point line: at a 1-point line the rate went from {pct(th['1'][0])} to {pct(th['1'][1])}, at 5 points from {pct(th['5'][0])} to {pct(th['5'][1])}.
-3. **How sure is the bot?** I refit the conversion, field-goal and punt models on {f['n_boot']} resamples of games. The typical fourth down's go-versus-kick margin moves by {f['median_go_boost_se']:.2f} win-probability points (median standard error). {pct(f['share_1pt_gaps_that_hold_up'])} of calls that miss the best option by 1+ point still miss it in 95% of refits, and {pct(f['share_2pt_go_spots_that_hold_up'])} of 2+ point go spots stay go spots. Only those are charged or counted.
-4. **{f['scorecard_season']} team card (regular season): a description, not a ranking.** Most win probability lost per game on charged calls: {row(mc[0])}, {row(mc[1])}, {row(mc[2])}. Least: {row(lc[-1])}, {row(lc[-2])}, {row(lc[-3])}. Does it repeat? Odd weeks against even weeks of the same season, r = {f['scorecard_split_half_r']:.2f} ({f['scorecard_team_seasons']} team-seasons, 2018-{last_full}); one season to the next, r = {f['scorecard_yoy_r']:.2f}. {_card_verdict(f)} This season {f['scorecard_teams_clear_of_median']} of 32 teams have an interval that clears the league median.
-5. **Sanity checks.** 4th-and-1 at midfield, tied, early, even teams: going adds {f['sanity_4th1_midfield_go_boost']:.1f} WP points. 4th-and-10 at your own 20: going costs {abs(f['sanity_4th10_own20_go_boost']):.1f}.
+3. **How sure is the bot?** I refit the win-probability, conversion, field-goal and punt models on {f['n_boot']} resamples of games. The typical fourth down's go-versus-kick margin moves by {f['median_go_boost_se']:.2f} win-probability points (median standard error). {pct(f['share_1pt_gaps_that_hold_up'])} of calls that miss the best option by 1+ point still miss it in 95% of refits, and {pct(f['share_2pt_go_spots_that_hold_up'])} of 2+ point go spots stay go spots. Only those are charged or counted.
+4. **{_holdout_lead(h)}** I fit the conversion, field-goal and punt models on {h['train']} and scored them on {_holdout_test_label(h)}, seasons the fit never saw. Intervals are 95%, from resampling whole games, and the model and its baselines are scored on the same resampled games. On {c4['n']:,} fourth-down tries the conversion model predicted {pct(c4['predicted'], 1)} and {pct(c4['actual'], 1)} converted; its Brier score is {iv(c4['brier']['model'], 4)}, against {c4['brier']['league_avg'][0]:.4f} for the league-average rate and {c4['brier']['distance_table'][0]:.4f} for a distance-only table. On {kf['n']:,} field goals it predicted {pct(kf['predicted'], 1)} made and {pct(kf['actual'], 1)} were; Brier {iv(kf['brier']['model'], 4)}, against {kf['brier']['league_avg'][0]:.4f} and {kf['brier']['distance_table'][0]:.4f}. On {pu['n']:,} punts the opponent's start is off by {iv(pu['rmse']['model'], 1)} yards (RMSE), against {pu['rmse']['league_avg'][0]:.1f} for one league-average start and {pu['rmse']['avg_net'][0]:.1f} for the average net punt from the spot; the model's average miss is {pu['bias'][0]:+.1f} yards ({pu['bias'][1]:+.1f} to {pu['bias'][2]:+.1f}).{fg_in} The table has every difference with its interval, and `holdout_calibration.csv` has predicted against actual by bin with counts.
+5. **{_flip_lead(h, top_now)}** I rebuilt the bot with the three component models and the field-goal range fit on {h['train']} only, and rescored all {fl['n']:,} fourth downs of {h['test']} ({fl['games']} games). The recommendation changed on {fl['n_flips']:,} of them, {pct(fl['components'][0], 1)} (95% interval {pct(fl['components'][1], 1)} to {pct(fl['components'][2], 1)}); {fl['flips_go_vs_kick']:,} are go against kick and {fl['flips_fg_vs_punt']:,} are field goal against punt. They are the close calls: the median go-versus-kick margin on a flipped call is {fl['median_margin_flipped']:.2f} win-probability points, against {fl['median_margin_all']:.2f} for all fourth downs, and {fl['flips_margin_2plus']} of the {fl['calls_margin_2plus']:,} calls with a margin of 2+ points flipped. Of the {fl['counted_calls']:,} calls the headline numbers are built from (clear go spots and charged misses), {fl['counted_calls_flipped']} flipped. Go rate in clear go spots, {go_moves}. Win probability lost per team-game on charged calls, production and held out, {lost}. The {hl['card_season']} team card correlates r = {hl['card_r']:.3f} between the two versions; the average team moves {hl['card_mean_abs_change']:.2f} points per game and the largest move is {hl['card_biggest_change'][0]} ({hl['card_biggest_change'][1]:.2f} to {hl['card_biggest_change'][2]:.2f}); {top_same}. {moved} With the win-probability model also held to 2006-2023, {pct(fl['components_and_wp'][0], 1)} of recommendations change ({pct(fl['components_and_wp'][1], 1)} to {pct(fl['components_and_wp'][2], 1)}). {wp_note}
+6. **The held-out test caught a punt model that was one number; fixing it moved the published numbers.** Until Nov. 15, 2026 a sign error in a monotone constraint made the punt model return the same opponent start, its own {100 - pf['flat_start']:.0f}-yard line, from every punt spot. That is the league-average row in the table above: {pu['rmse']['league_avg'][0]:.1f} yards of error against {pu['rmse']['model'][0]:.1f} for the corrected model. The correction changed the recommendation on {pct(pf['share_recs_changed'], 1)} of the {pf['n']:,} fourth downs since 2018 ({pf['punt_to_go']:,} from punt to go, {pf['go_to_punt']:,} from go to punt, {pf['other']:,} other). Graded the old way, with one league-average start for every punt, the go rate in clear go spots was {pct(gb[ys[0]][0])} in {ys[0]} and {pct(gb[last_full][0])} in {last_full} ({gb[ys[0]][1]} and {gb[last_full][1]} spots); corrected it is {pct(g[ys[0]])} and {pct(g[last_full])}. The team card's odd-against-even r went from {pf['split_half_r_before']:.2f} to {f['scorecard_split_half_r']:.2f} and its year-to-year r from {pf['yoy_r_before']:.2f} to {f['scorecard_yoy_r']:.2f}; the three most costly {f['scorecard_season']} teams were {', '.join(pf['most_costly_before'])} and are now {', '.join(top_now)}. {still} Every other number on this page is from the corrected model.
+7. **{f['scorecard_season']} team card (regular season): a description, not a ranking.** Most win probability lost per game on charged calls: {row(mc[0])}, {row(mc[1])}, {row(mc[2])}. Least: {row(lc[-1])}, {row(lc[-2])}, {row(lc[-3])}. Does it repeat? Odd weeks against even weeks of the same season, r = {f['scorecard_split_half_r']:.2f} ({f['scorecard_team_seasons']} team-seasons, 2018-{last_full}); one season to the next, r = {f['scorecard_yoy_r']:.2f}. {_card_verdict(f)} This season {f['scorecard_teams_clear_of_median']} of 32 teams have an interval that clears the league median.
+8. **Sanity checks.** 4th-and-1 at midfield, tied, early, even teams: going adds {f['sanity_4th1_midfield_go_boost']:.1f} WP points. 4th-and-10 at your own 20: going costs {abs(f['sanity_4th10_own20_go_boost']):.1f}.
 
 ![Go rate](go_rate_trend.png)
 ![Scorecard](team_scorecard.png)
 ![Calibration](wp_calibration.png)
+![Held-out components](holdout_components.png)
 
 ## How the bot works
 - **Win probability:** gradient-boosted trees on score, clock, field position, down and distance, timeouts, the second-half kickoff and the point spread. Like nflfastR, the spread fades as the game goes on and a lead counts more late. Monotone constraints keep it football-logical (more points ahead never lowers WP).
 - **Go:** P(convert) from every 3rd and 4th down since 2016, by distance, field position and the offense's pregame spread (a better offense converts more), x WP after a first down (median extra yards by distance), plus (1 - P) x WP with the opponent taking over at the spot.
 - **Field goal:** make probability by distance, dome and season, then WP after +3 and a kickoff (season-average drive start) or after a miss (opponent at the spot of the kick or the 20). No kick longer than {f['fg_max_dist']:.0f} yards is offered. That is the longest distance at which coaches still kick on at least a quarter of fourth downs; {f['fg_attempts_beyond_range']} of {f['fg_attempts_total']:,} attempts since 2016 were longer, and their make rate reflects strong legs and good conditions, not an average kicker.
-- **Punt:** opponent's expected next start from the punt spot, then WP.
+- **Punt:** opponent's expected next start from the punt spot (never deeper for a punt from farther back), then WP.
+- **Held-out test:** each component is fit on {h['train']} and scored on {h['test']}. Conversion and field goals are scored by Brier score and log loss against the training seasons' league-average rate and a distance-only table of training rates; punts by root mean squared error against the training average start and the training average net punt ({pu['avg_net_train']:.1f} yards, touchback at the 20). The held-out bot uses those fits, the field-goal range from the training seasons ({h['fg_max_dist_train']} yards) and the same win-probability model, and is graded by the same refit rule.
 - **Grading:** a call is charged only when it misses the best option by 1+ WP point and the miss survives the refits (finding 3).
 
 ## Limits
 - One average team: it knows the pregame spread, not a team's QB, kicker or short-yardage offense.
-- Only the win-probability model is tested out of sample. The conversion, field-goal and punt models are fit and applied on the same 2016-{cur} plays; in that sample the conversion model predicts {pct(f['convert_in_sample'][0], 1)} and {pct(f['convert_in_sample'][1], 1)} converted.
-- The refits vary the conversion, kick and punt models. The win-probability model is held fixed, so the true uncertainty is larger than finding 3 shows.
+- The bot that grades 2018-{cur} uses conversion, field-goal and punt models fit on all of 2016-{cur}, so it has seen the plays it grades. Findings 4 and 5 test the same models on seasons they had not seen; the published numbers still come from the all-seasons fit.
+- The held-out test has three seasons, one of them partial ({fl['by_season'][cur][1]:,} fourth downs in {cur}). Fourth-down tries and field-goal attempts are the ones coaches chose, so the test covers the spots coaches try from, not every spot the bot scores.
+- In the held-out bot the drive start after a kickoff is still each test season's own average, and the win-probability model is the production one (trained through {int(cur) - 1}); the last line of finding 5 holds the win-probability model out too.
+- The before-the-fix numbers in finding 6 are a regrade in the same run, with one league-average start for every punt in the bot and in each refit. They are not read from the earlier page.
+- The extra yards gained on a conversion are a training-season median by distance, and the test seasons differ a little ({ex if ex else 'no bucket differs'}).
+- The refits vary the win-probability, conversion, field-goal and punt models. The field-goal range and the kickoff start are held fixed, so the true uncertainty is larger than finding 3 shows.
 - Third downs feed the conversion model. Defenses play fourth down differently, which a 4th-down flag only partly covers.
-- Seasons through 2023 are scored with a win-probability model trained on them (in sample); 2024 on is out of sample.
+- The production win-probability model is trained through {int(cur) - 1}, so seasons through {int(cur) - 1} are scored in sample and only {cur} is out of sample. The 2024-25 test in finding 1 uses a separate model trained through 2023.
 - No clock management beyond fixed play lengths, and fake punts count as "go".
 
 ## Files
-`fourth_downs_scored.parquet` (every 4th down with WP by option and the refit standard errors), `team_scorecard.csv`, `go_rate_when_math_says_go.csv`, `costliest_calls_current_season.csv`, `wp_calibration_2024_2025.csv`, `kickoff_start_by_season.csv`, `model_summary.txt`, `findings.json`
+`fourth_downs_scored.parquet` (every 4th down with WP by option and the refit standard errors), `holdout_scores.csv`, `holdout_calibration.csv`, `holdout_fourth_downs.parquet`, `holdout_team_card.csv`, `team_scorecard.csv`, `go_rate_when_math_says_go.csv`, `costliest_calls_current_season.csv`, `wp_calibration_2024_2025.csv`, `kickoff_start_by_season.csv`, `model_summary.txt`, `findings.json`
 """
 
 
