@@ -55,8 +55,12 @@ def load_draft_picks(refresh: bool = False) -> pd.DataFrame:
 
 
 def latest_season_available() -> int:
-    """Highest season whose pbp file is cached locally."""
+    """Highest season whose pbp file is cached locally; the current season by date when nothing is cached."""
     seasons = [int(p.stem.split("_")[1]) for p in DATA_DIR.glob("pbp_*.parquet")]
+    if not seasons:  # nothing cached yet (a fresh clone, or the test runner): the season the calendar says is on
+        import datetime as dt
+        today = dt.date.today()
+        return today.year if today.month >= 9 else today.year - 1
     return max(seasons)
 
 

@@ -38,3 +38,30 @@ def split_half_r(team_games: pd.DataFrame, col: str) -> float:
 def pythag_wins(pf, pa, games, exp: float = 2.37):
     pf = np.asarray(pf, float); pa = np.asarray(pa, float)
     return games * pf ** exp / (pf ** exp + pa ** exp)
+
+
+def boot_r(x, y, groups=None, n: int = 2000, seed: int = 7) -> tuple[float, float, float]:
+    """Pearson r with a 95% bootstrap interval. With groups, whole groups are resampled together
+    (use the team or crew, so repeat seasons from one club are not counted as independent)."""
+    x = np.asarray(x, float); y = np.asarray(y, float)
+    rng = np.random.default_rng(seed)
+    r = float(np.corrcoef(x, y)[0, 1])
+    if groups is None:
+        idx = [rng.integers(0, len(x), len(x)) for _ in range(n)]
+    else:
+        g = pd.Series(np.arange(len(x))).groupby(np.asarray(groups)).apply(lambda s: s.to_numpy())
+        members = list(g.values)
+        idx = [np.concatenate([members[i] for i in rng.integers(0, len(members), len(members))]) for _ in range(n)]
+    rs = [np.corrcoef(x[i], y[i])[0, 1] for i in idx]
+    lo, hi = np.nanpercentile(rs, [2.5, 97.5])
+    return r, float(lo), float(hi)
+
+
+def boot_ratio(num, den, n: int = 2000, seed: int = 7, scale: float = 1.0) -> tuple[float, float, float]:
+    """sum(num) / sum(den) with a 95% interval from resampling rows (one row per game)."""
+    num = np.asarray(num, float); den = np.asarray(den, float)
+    rng = np.random.default_rng(seed)
+    idx = rng.integers(0, len(num), (n, len(num)))
+    b = scale * num[idx].sum(1) / den[idx].sum(1)
+    lo, hi = np.percentile(b, [2.5, 97.5])
+    return float(scale * num.sum() / den.sum()), float(lo), float(hi)

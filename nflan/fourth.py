@@ -19,6 +19,17 @@ from sklearn.linear_model import LogisticRegression
 from .wp import WPModel, FEATURES
 
 PLAY_SECONDS = {"go": 6, "fg": 5, "punt": 8}
+CONVERT_FEATURES = ["ydstogo", "yardline_100", "is4", "posteam_spread"]
+
+
+def fg_range(fourth_downs: pd.DataFrame, min_share: float = 0.25, min_n: int = 40) -> int:
+    """Longest kick distance coaches actually try: the longest distance at which at least `min_share` of fourth downs
+    end in a field-goal attempt. Make rates beyond it come only from kicks coaches chose to take (strong legs, good
+    weather, end of a half), so the bot does not recommend or charge for kicks past this range."""
+    d = fourth_downs.assign(dist=fourth_downs["yardline_100"] + 18, fg=fourth_downs["play_type"].eq("field_goal"))
+    t = d.groupby("dist").agg(n=("fg", "size"), share=("fg", "mean"))
+    ok = t[(t.n >= min_n) & (t.share >= min_share)]
+    return int(ok.index.max())
 
 
 def _flip(state: pd.DataFrame, new_yardline_100, points_scored, seconds_used) -> pd.DataFrame:
@@ -52,17 +63,21 @@ class FourthDownBot:
     punt_net: HistGradientBoostingRegressor
     gain_given_convert: pd.DataFrame   # extra yards beyond the line to gain, by distance bucket
     kickoff_start: float               # opponent yardline_100 after our score (season-specific)
+    fg_max_dist: float = 66.0          # longest kick the bot will recommend (see fg_range)
 
     # ---------- fitting ----------
     @staticmethod
     def fit_convert(plays: pd.DataFrame):
-        """P(gain >= ydstogo) on 3rd/4th-down runs and passes (kneels and spikes excluded)."""
+        """P(gain >= ydstogo) on 3rd/4th-down runs and passes (kneels and spikes excluded).
+
+        The pregame spread for the offense is an input, so a strong offense converts more often than a weak one.
+        """
         d = plays[plays["down"].isin([3, 4]) & plays["play_type"].isin(["run", "pass"])].copy()
-        d = d.dropna(subset=["ydstogo", "yardline_100", "yards_gained"])
+        d = d.dropna(subset=["ydstogo", "yardline_100", "yards_gained", "posteam_spread"])
         d["is4"] = (d["down"] == 4).astype(int)
         y = (d["yards_gained"] >= d["ydstogo"]) | (d["touchdown"] == 1) & (d["td_team"] == d["posteam"])
-        X = d[["ydstogo", "yardline_100", "is4"]]
-        clf = HistGradientBoostingClassifier(max_iter=200, monotonic_cst=[-1, 0, 0], min_samples_leaf=300, random_state=7)
+        X = d[CONVERT_FEATURES]
+        clf = HistGradientBoostingClassifier(max_iter=200, monotonic_cst=[-1, 0, 0, 1], min_samples_leaf=300, random_state=7)
         clf.fit(X, y.astype(int))
         # extra yards beyond the sticks on successful plays (median, by distance bucket)
         succ = d[y & (d["yards_gained"] >= d["ydstogo"])]
@@ -108,7 +123,7 @@ class FourthDownBot:
     def evaluate(self, s: pd.DataFrame) -> pd.DataFrame:
         """s: 4th-down states with the WP FEATURES plus 'roof_indoor' and 'season'. Returns WP by option."""
         s = s.reset_index(drop=True)
-        X = s[["ydstogo", "yardline_100"]].assign(is4=1)
+        X = s[["ydstogo", "yardline_100"]].assign(is4=1, posteam_spread=s["posteam_spread"].values)[CONVERT_FEATURES]
         p_conv = self.convert.predict_proba(X)[:, 1]
         wp_conv = self._wp_after_convert(s)
         wp_fail = 1 - self.wp.predict(_flip(s, 100 - s["yardline_100"], 0, PLAY_SECONDS["go"]))
@@ -116,11 +131,12 @@ class FourthDownBot:
 
         dist = s["yardline_100"] + 18
         Xf = np.column_stack([dist, dist ** 2, s["roof_indoor"], s["season"] - 2015])
-        p_make = np.where(dist <= 66, self.fg.predict_proba(Xf)[:, 1], 0.0)
+        in_range = dist <= self.fg_max_dist
+        p_make = np.where(in_range, self.fg.predict_proba(Xf)[:, 1], 0.0)
         wp_make = 1 - self.wp.predict(_flip(s, self.kickoff_start, 3, PLAY_SECONDS["fg"]))
         miss_spot = 100 - np.maximum(s["yardline_100"] + 7, 20)
         wp_miss = 1 - self.wp.predict(_flip(s, miss_spot, 0, PLAY_SECONDS["fg"]))
-        wp_fg = np.where(dist <= 66, p_make * wp_make + (1 - p_make) * wp_miss, np.nan)
+        wp_fg = np.where(in_range, p_make * wp_make + (1 - p_make) * wp_miss, np.nan)
 
         opp_yl = self.punt_net.predict(s[["yardline_100"]])
         wp_punt = np.where(s["yardline_100"] >= 35, 1 - self.wp.predict(_flip(s, opp_yl, 0, PLAY_SECONDS["punt"])), np.nan)
