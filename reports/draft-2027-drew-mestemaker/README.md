@@ -1,96 +1,110 @@
 <sub>[← Portfolio](../../README.md)</sub>
 
-# Draft 2027: Drew Mestemaker, QB, Oklahoma State
-### The case for QB1: first-round production at 20, more big plays than any quarterback he is compared with, and it traveled up a level
+# Draft 2027 evaluation: Drew Mestemaker, QB, Oklahoma State
+### Is he QB1? The scouts say yes. The production says first-round candidate, and does not separate him from Mensah or Sayin
 
-![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![season: 2026 through 9 games](https://img.shields.io/badge/season-2026%20through%209%20games-1d2433) ![method: first-round comps](https://img.shields.io/badge/method-first--round%20comps-c2410c) ![method: year-to-year stability](https://img.shields.io/badge/method-year--to--year%20stability-c2410c) ![method: bootstrap](https://img.shields.io/badge/method-bootstrap-c2410c)
+![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![season: 2026 through 9 games](https://img.shields.io/badge/season-2026%20through%209%20games-1d2433) ![method: base rates](https://img.shields.io/badge/method-base%20rates-c2410c) ![method: opponent adjustment](https://img.shields.io/badge/method-opponent%20adjustment-c2410c) ![method: year-to-year stability](https://img.shields.io/badge/method-year--to--year%20stability-c2410c)
 
 **TL;DR**
 
-- **He is my QB1.** Through 9 games he has 2,962 yards (#2 of 100 FBS passers), 29 touchdown passes (#1 of 100) and 9.6 yards per attempt (#8 of 100). He completes a pass of 25+ yards on 11.7% of his attempts (#2 of 100), a higher rate than 16 of the 18 first-round quarterbacks since 2021 managed in their final college season.
-- **It came with him to the Big 12.** 19 other transfers made the top-100 list before and after a Group of Five to Power Four move; their passer rating changed by -5.6 on average. His went from 168.7 to 173.0 (+4.3).
-- **The knocks are real, and the biggest one is mostly noise year to year.** His interception rate (2.6%, #70 of 100) and third-down rating (122, #65 of 100) are below average. Year to year those two repeat at r = 0.14 and 0.24; in 2025 he was at 1.9% and 150. Darian Mensah (190.8 rating) and Julian Sayin (184.5) have been more efficient in 2026 than Mestemaker (173.0); the case for him is volume, big plays, the tools scouts grade, and age.
+- **Grade: first-round candidate. The numbers alone do not make him QB1.** Through 9 games he has 2,962 yards (#2 of 100 FBS passers), 29 touchdown passes (#1 of 100) and a 173.0 rating, close to what the 18 first-round quarterbacks since 2021 had through the same 9 games (median 175.5; he is ahead of 6 of 18 on rating and 13 of 18 on yards per game).
+- **Against schedule he is #4 of 7 in this class.** His rating against FBS opponents is +28.3 above what those defenses allowed in their other games. Darian Mensah is +62.3 and Julian Sayin +58.1; the first-round median is +42.4, and he is ahead of 5 of 18. His opponents have been the easiest pass defenses any of the seven has faced.
+- **Similar college lines have gone anywhere from pick 1 to undrafted.** Of the 17 quarterbacks since 2020 whose last college season had a rating of 160 to 175, 6 went in round 1. The case for QB1 is outside the box score: 17 of 25 NFL scouts and executives named him the first quarterback off the board (ESPN, Oct. 31), he leads the country in touchdown passes, and he will be 21 on draft day.
 
-<p align="center"><img src="explosive_vs_first_round.png" width="720" alt="Completions of 25+ yards per 100 attempts: Mestemaker in 2026 against the final college season of every FBS quarterback drafted in round 1 since 2021."></p>
-<p align="center"><sub>Completions of 25+ yards per 100 attempts: Mestemaker in 2026 against the final college season of every FBS quarterback drafted in round 1 since 2021.</sub></p>
+<p align="center"><img src="opponent_adjusted.png" width="720" alt="Passer rating against FBS opponents minus the rating those opponents allowed in their other games: first-round quarterbacks in their final college season, the 2027 class, and Mestemaker."></p>
+<p align="center"><sub>Passer rating against FBS opponents minus the rating those opponents allowed in their other games: first-round quarterbacks in their final college season, the 2027 class, and Mestemaker.</sub></p>
 
 ## Key numbers
 
 | Measure | Value |
 |---|---|
-| 2026 passing line (9 games) | **206-of-309, 2,962 yards, 29 TD, 8 INT** |
-| Yards per attempt / passer rating | **9.6 (#8 of 100) / 173.0 (#8 of 100)** |
-| 25+ yard completions per 100 attempts | **11.7 (#2 of 100); first-round median 9.6** |
-| Measures (of 14) where he beats the first-round median | **10** |
-| Rating change, Group of Five to Power Four (other movers' average) | **+4.3 (-5.6)** |
-| Last 7 games | **2,404 yards, 26 TD, 4 INT, 198.5 rating** |
-| Interception % / third-down rating | **2.6 (#70 of 100) / 122 (#65 of 100)** |
-| Year-to-year r: interception % / third-down rating / yards per game | **0.14 / 0.24 / 0.40** |
-| Age at the April 2027 draft (born January 2006) | **21**; nflverse lists a median age of 22 for the 19 first-round QBs, 2021-2026 |
-| NFL scouts and executives who named him the first QB off the board (ESPN, Oct. 31) | **17 of 25** |
+| 2026 passing line (9 games, before Texas Tech) | **206-of-309, 2,962 yards, 29 TD, 8 INT** |
+| Passer rating: all games / FBS opponents only | **173.0 (#8 of 100) / 164.0** |
+| Rating over what his FBS opponents allowed | **+28.3** (#4 of 7 in the class; first-round median +42.4) |
+| Rating through 9 games vs first-round QBs through 9 games | **173.0 vs median 175.5** (ahead of 6 of 18) |
+| Round 1 rate, last-season rating 160 to 175 | **6 of 17** |
+| Nearest 12 prior seasons in the full pool: round 1 / drafted later / not drafted / still in college | **5 / 4 / 2 / 1** |
+| 25+ yard completions per 100 attempts (95% interval) | **11.7 (8.6 to 15.8)**; first-round median 9.6 |
+| Interception % (95% interval) | **2.6 (1.3 to 5.0)**, #70 of 100 |
+| Rating change vs FBS opponents, North Texas to Oklahoma State | **-2.9** (other 19 movers: mean -6.1, SD 20.1) |
+| NFL scouts and executives naming him the first QB taken (ESPN, Oct. 31) | **17 of 25** |
+| Age at the April 2027 draft (born January 2006) | **21** |
 
 ## Why it matters for a club
 
-- **College scouting:** the public numbers agree with the tape consensus on the strengths (arm, big plays, production) and put a size on the two concerns (interceptions, third down), so the area scout's report can be checked against a baseline.
-- **General manager:** a quarterback who is 21 on draft day plays his rookie contract and fifth-year option at ages 21 through 25, a year younger than the typical first-round quarterback (nflverse lists a median age of 22 for the last 19).
-- **Offensive staff:** he is at his best on early downs (passer rating 175 on first down, 198 on second, 122 on third). What he needs is a third-and-long plan and a staff that lives with some interceptions in exchange for the big plays.
+- **College scouting:** the tape consensus has him first. This page gives the area scout the base rates and the schedule context to test that against, and names the two quarterbacks whose production is better.
+- **General manager:** production like his has been a first-round profile about a third of the time. Taking him first is a bet on traits and age, so the tape and the interviews have to carry it.
+- **Offensive staff:** he is at his best on early downs (passer rating 175 on first down, 198 on second, 122 on third) and has needed a third-and-long answer.
 
 ## The question
 
 **Is Drew Mestemaker the best quarterback in the 2027 draft?**
 
-The league is leaning that way. ESPN's midseason poll of 25 scouts and executives gave him 17 votes as the first quarterback taken, the most in the poll's three years; he had none in August. Dane Brugler's November board has him as the top quarterback and No. 2 overall. This report asks whether the public production data backs that up, where it disagrees, and how much weight the disagreements deserve.
+The league is leaning that way. ESPN's midseason poll of 25 scouts and executives gave him 17 votes as the first quarterback taken, the most in the poll's three years; he had none in August. Dane Brugler's November board has him as the top quarterback and No. 2 overall. I started this page expecting the production data to agree. It agrees that he belongs in the first-round conversation. It does not show that he is better than Mensah or Sayin, and this page says so.
 
 The background is part of the evaluation. He did not start a varsity game at quarterback at Vandegrift High in Austin, walked on at North Texas in 2024, led FBS in passing yards as a redshirt freshman in 2025, and followed Eric Morris to Oklahoma State, which went 1-11 last year and is 6-3 with him, scoring 43.9 points a game.
 
 ## Data
 
-- **Season tables:** the top 100 FBS passers by yards per game in each season, 2020-2026 (700 quarterback seasons), from [cfbstats.com](https://cfbstats.com). The 2026 season runs through Nov. 13, 2026 (nine games for Oklahoma State, before Texas Tech).
-- **Situational tables** (down, quarter, field zone, score, completions of 15+ and 25+ yards) for every quarterback in the 2024, 2025 and 2026 lists and for each first-round quarterback's final season.
-- **Game logs and splits** for Mestemaker (2024-2026) and the 2027 class.
-- **Draft results:** [nflverse](https://github.com/nflverse/nflverse-data) draft picks, 2021-2026: 19 first-round quarterbacks, 18 of them from FBS (Trey Lance played in FCS).
+- **Season tables:** the top 100 FBS passers by yards per game in each season, 2020-2026 (700 quarterback seasons), from [cfbstats.com](https://cfbstats.com). The 2026 season runs through Nov. 13, 2026: nine games for Oklahoma State. The Texas Tech game on Nov. 14 is not in these numbers.
+- **Situational tables** for every quarterback in the 2024, 2025 and 2026 lists and for each first-round quarterback's final season.
+- **Game logs and splits** for Mestemaker (2024-2026), the 2027 class, every first-round quarterback's final season, and the 20 transfers in result 5.
+- **Team pass defense,** every FBS team, 2020-2026 (cfbstats national tables), for the opponent adjustment.
+- **Draft results:** [nflverse](https://github.com/nflverse/nflverse-data) draft picks, 2021-2026: 68 drafted quarterbacks, 19 in round 1, 18 of those from FBS (Trey Lance played in FCS).
 - **Scouting consensus,** cited where used: ESPN (Pete Thamel, Oct. 31, 2026), The Athletic's Dane Brugler via Bleacher Report (Nov. 12, 2026), PFF (Oct. 6, 2026).
 
 ## Results
 
-### 1. His production is at the first-round standard, and his big-play rate is above it.
+### 1. Through nine games his raw line is near the first-round median: ahead on volume, behind on interceptions.
 
-Against the final college season of the 18 FBS quarterbacks drafted in round 1 since 2021, Mestemaker's 2026 beats the median in yards per game, yards per attempt, passer rating, touchdown rate, first downs per attempt and both explosive measures. He trails it in completion percentage, interception rate, third down and the fourth quarter.
+First-round quarterbacks are compared here through their first 9 games of their final college season, so the comparison is nine games against nine.
 
-| Measure | Mestemaker 2026 | First-round median | First-rounders he beats |
+| Measure, first 9 games | Mestemaker 2026 | First-round median | First-rounders he is ahead of |
 |---|---|---|---|
-| Passing yards per game | 329.1 | 305.2 | 14 of 18 |
-| Yards per attempt | 9.6 | 9.4 | 13 of 18 |
-| Passer rating (NCAA) | 173.0 | 171.2 | 10 of 18 |
-| Touchdown % | 9.4 | 8.4 | 11 of 18 |
+| Passing yards per game | 329.1 | 302.6 | 13 of 18 |
+| Yards per attempt | 9.6 | 9.6 | 9 of 18 |
+| Passer rating | 173.0 | 175.5 | 6 of 18 |
+| Touchdown % | 9.4 | 8.6 | 12 of 18 |
+| Interception % | 2.6 | 1.5 | 2 of 18 |
+
+Situational measures are only available for full seasons, so these compare his nine games with their whole season, bowl and playoff games included:
+
+| Measure | Mestemaker, 9 games | First-round median, full season | First-rounders he is ahead of |
+|---|---|---|---|
 | 25+ yard completions per 100 attempts | 11.7 | 9.6 | 16 of 18 |
 | 15+ yard completions per 100 attempts | 24.0 | 22.6 | 11 of 18 |
 | First downs per 100 attempts | 40.9 | 40.3 | 12 of 18 |
 | Completion % | 66.7 | 68.9 | 6 of 18 |
 | Fourth-quarter passer rating | 146.5 | 163.5 | 6 of 18 |
-| Interception % | 2.6 | 1.5 | 2 of 18 |
 | Third-down passer rating | 122.1 | 168.2 | 1 of 18 |
 
-His closest statistical matches in that group (distance on yards per attempt, completion %, touchdown %, interception %, 25+ rate and yards per game) are Justin Fields (2020, pick 11), Cam Ward (2024, pick 1), C.J. Stroud (2022, pick 2). At his nine-game pace a 12-game regular season ends near 3,949 yards and 39 touchdowns.
+These measures overlap heavily (rating is built from yards, touchdowns and interceptions per attempt), so they are one or two independent looks, not eleven. At his nine-game pace a 12-game regular season ends near 3,949 yards and 39 touchdowns.
 
-<p align="center"><img src="national_ranks.png" width="720" alt="National rank in each measure among the top 100 FBS passers by yards per game, 2026."></p>
-<p align="center"><sub>National rank in each measure among the top 100 FBS passers by yards per game, 2026.</sub></p>
+<p align="center"><img src="national_ranks.png" width="720" alt="National rank in each measure among the top 100 FBS passers by yards per game, 2026, all games."></p>
+<p align="center"><sub>National rank in each measure among the top 100 FBS passers by yards per game, 2026, all games.</sub></p>
 
-### 2. In this class, Mensah and Sayin are the more efficient passers; Mestemaker has the most volume and big plays.
+### 2. Against the defenses he has faced, he is fourth of seven in the class and below most first-rounders.
 
-| Quarterback | Team | G | Yards | TD | INT | Cmp % | Y/A | Rating | 25+ per 100 | INT % | 3rd-down rating |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| **Drew Mestemaker** | Okla St | 9 | 2,962 | 29 | 8 | 66.7 | 9.6 | 173.0 | 11.7 | 2.6 | 122 |
-| Darian Mensah | Miami (Fl) | 9 | 2,694 | 28 | 2 | 76.8 | 9.8 | 190.8 | 8.7 | 0.7 | 179 |
-| CJ Carr | Notre Dame | 9 | 2,168 | 21 | 1 | 67.6 | 8.3 | 162.8 | 9.2 | 0.4 | 123 |
-| Julian Sayin | Ohio State | 7 | 2,007 | 19 | 4 | 68.2 | 10.5 | 184.5 | 8.9 | 2.1 | 125 |
-| Arch Manning | Texas | 9 | 2,024 | 18 | 7 | 66.1 | 8.0 | 151.0 | 6.3 | 2.8 | 164 |
-| Sam Leavitt | LSU | 9 | 2,553 | 17 | 9 | 71.0 | 8.4 | 154.3 | 5.3 | 3.0 | 182 |
-| LaNorris Sellers | S Carolina | 9 | 2,100 | 17 | 7 | 62.8 | 7.7 | 142.5 | 7.3 | 2.6 | 175 |
+For each FBS game I take what that opponent allowed to every other passing offense this season, weight it by his attempts, and compare. The FCS game (Murray State: 22 attempts, 289.6 rating) is out.
 
-Mensah leads this group in rating and completion percentage, Sayin in yards per attempt, and Carr in interception rate; that has to be said plainly. Mestemaker leads it in yards, touchdowns, yards per game, 25+ yard completions and rating when trailing. These seven are the quarterbacks named in ESPN's poll plus Sayin, not every eligible passer; nationally Michael Hawkins Jr. (WVU) has the top 25+ rate (17.1 on 175 attempts). Dante Moore, the August favorite, played 4 games (926 yards, 9 TD) before a concussion that is expected to end his season; Oklahoma State beat his Oregon team 39-31 with Mestemaker throwing for 317 and running for 109.
+| Quarterback | Team | G | Yards | TD | INT | Cmp % | Y/A | Rating, all games | Rating vs FBS | What those defenses allow | Over expected | 25+ per 100 | INT % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Darian Mensah | Miami (Fl) | 9 | 2,694 | 28 | 2 | 76.8 | 9.8 | 190.8 | 184.5 | 122.2 | +62.3 | 8.7 | 0.7 |
+| Julian Sayin | Ohio State | 7 | 2,007 | 19 | 4 | 68.2 | 10.5 | 184.5 | 184.5 | 126.4 | +58.1 | 8.9 | 2.1 |
+| CJ Carr | Notre Dame | 9 | 2,168 | 21 | 1 | 67.6 | 8.3 | 162.8 | 162.8 | 132.9 | +29.8 | 9.2 | 0.4 |
+| **Drew Mestemaker** | Okla St | 9 | 2,962 | 29 | 8 | 66.7 | 9.6 | 173.0 | 164.0 | 135.7 | +28.3 | 11.7 | 2.6 |
+| Arch Manning | Texas | 9 | 2,024 | 18 | 7 | 66.1 | 8.0 | 151.0 | 151.0 | 125.0 | +26.0 | 6.3 | 2.8 |
+| Sam Leavitt | LSU | 9 | 2,553 | 17 | 9 | 71.0 | 8.4 | 154.3 | 152.4 | 126.8 | +25.6 | 5.3 | 3.0 |
+| LaNorris Sellers | S Carolina | 9 | 2,100 | 17 | 7 | 62.8 | 7.7 | 142.5 | 149.2 | 131.9 | +17.3 | 7.3 | 2.6 |
 
-Over the last two seasons Mestemaker has the most yards (7,341) and touchdowns (63) of the group on 772 attempts, with a 170.4 rating. Julian Sayin has the best two-year rating (179.8) and yards per attempt.
+- His opponents allow a 135.7 rating to everyone else, the most generous schedule of the seven (#1 easiest).
+- He is +28.3 over expected. Mensah (+62.3) and Sayin (+58.1) are about twice that. He is level with Carr (+29.8).
+- The same measure for the 18 first-round quarterbacks' final seasons has a median of +42.4. He is ahead of 5 of them. His own 2025 at North Texas was +35.4.
+- On unadjusted rating he is #3 of the seven. He leads the group in yards, touchdowns, yards per game and 25+ yard completions.
+
+These seven are the quarterbacks named in ESPN's poll plus Sayin, not every eligible passer; nationally Michael Hawkins Jr. (WVU) has the top 25+ rate (17.1 on 175 attempts). Dante Moore, the August favorite, played 4 games (926 yards, 9 TD) before a concussion that is expected to end his season; Oklahoma State beat his Oregon team 39-31 with Mestemaker throwing for 317 and running for 109.
+
+Over the last two seasons Mestemaker has the most yards (7,341) and touchdowns (63) of the group on 772 attempts, with a 170.4 rating. Julian Sayin has the best two-year rating (179.8).
 
 | Quarterback | Seasons in data | Att | Yards | TD | INT | Y/A | Rating | Yards per game |
 |---|---|---|---|---|---|---|---|---|
@@ -105,18 +119,98 @@ Over the last two seasons Mestemaker has the most yards (7,341) and touchdowns (
 <p align="center"><img src="class_map.png" width="720" alt="Yards per attempt against 25+ yard completion rate for the top FBS passers; the draft-eligible class is labeled."></p>
 <p align="center"><sub>Yards per attempt against 25+ yard completion rate for the top FBS passers; the draft-eligible class is labeled.</sub></p>
 
-### 3. More often than not, quarterbacks lose production moving up a level. He gained.
+### 3. College seasons like his have produced first-round picks, day-three picks and undrafted players.
 
-20 quarterbacks since 2021 transferred from a Group of Five school to a Power Four school and made the top-100 list in both seasons. The other 19 changed by -5.6 rating points on average (median -7.5) and -0.57 yards per attempt; 12 of 19 declined. Leaving out John Mateer, whose Washington State was a two-team Pac-12 in 2024, the average is -4.0. Mestemaker went 168.7 to 173.0 and +0.1 yards per attempt, and his first Power Four season ranks #2 of the 20. Of the 3 who left with a rating of 165 or better, he is the only one who kept it.
+The nearest 12 seasons to his 2026 among all 600 qualifying seasons from 2020 to 2025 (distance on yards per attempt, completion %, touchdown %, interception % and yards per game):
+
+| Quarterback | Team | Season | Rating | Y/A | TD % | INT % | What happened |
+|---|---|---|---|---|---|---|---|
+| Kyle Trask | Florida | 2020 | 180.0 | 9.8 | 9.8 | 1.8 | round 2, pick 64 (2021) |
+| Sam Howell | N Carolina | 2020 | 179.1 | 10.3 | 8.6 | 2.0 | round 5, pick 144 (2022) |
+| Cam Ward | Miami (Fl) | 2024 | 172.2 | 9.5 | 8.6 | 1.5 | round 1, pick 1 (2025) |
+| Spencer Rattler | Oklahoma | 2020 | 172.6 | 9.6 | 8.8 | 2.2 | round 5, pick 150 (2024) |
+| Jordan McCloud | James Mad | 2023 | 165.9 | 8.9 | 8.5 | 2.4 | not drafted |
+| Sam Hartman | Wk Forest | 2022 | 159.4 | 8.6 | 8.9 | 2.8 | not drafted |
+| Dillon Gabriel | Oklahoma | 2023 | 172.0 | 9.5 | 7.8 | 1.6 | round 3, pick 94 (2025) |
+| Justin Fields | Ohio State | 2020 | 175.6 | 9.3 | 9.8 | 2.7 | round 1, pick 11 (2021) |
+| C.J. Stroud | Ohio State | 2022 | 177.7 | 9.5 | 10.5 | 1.5 | round 1, pick 2 (2023) |
+| Kenny Pickett | Pittsburgh | 2021 | 165.3 | 8.7 | 8.5 | 1.4 | round 1, pick 20 (2022) |
+| Bryce Young | Alabama | 2021 | 167.5 | 8.9 | 8.6 | 1.3 | round 1, pick 1 (2023) |
+| Byrum Brown | S Florida | 2025 | 167.1 | 9.3 | 8.2 | 2.1 | in college in 2026 |
+
+Of the 11 whose draft outcome is known, 5 went in round 1, 4 were drafted later and 2 were not drafted. Several of these are not a quarterback's final season, so the outcome is what eventually happened to the player.
+
+Every prior season at or above both his rating (173.0) and his yards per attempt (9.6): 18 seasons by 17 quarterbacks. Of those quarterbacks, 6 went in round 1, 5 were drafted later and 6 were not drafted.
+
+| Quarterback | Team | Season | Rating | Y/A | What happened |
+|---|---|---|---|---|---|
+| Jayden Daniels | LSU | 2023 | 208.0 | 11.7 | round 1, pick 2 (2024) |
+| Grayson McCall | Coast Car | 2021 | 207.7 | 11.9 | not drafted |
+| Mac Jones | Alabama | 2020 | 203.1 | 11.2 | round 1, pick 15 (2021) |
+| Zach Wilson | BYU | 2020 | 196.4 | 11.0 | round 1, pick 2 (2021) |
+| Kaleb Eleby | W Mich | 2020 | 195.1 | 11.2 | not drafted |
+| Dustin Crum | Kent State | 2020 | 192.7 | 10.5 | not drafted |
+| Bo Nix | Oregon | 2023 | 188.3 | 9.6 | round 1, pick 12 (2024) |
+| C.J. Stroud | Ohio State | 2021 | 186.6 | 10.1 | round 1, pick 2 (2023) |
+| Grayson McCall | Coast Car | 2020 | 184.3 | 10.0 | not drafted |
+| Hendon Hooker | Tennessee | 2021 | 181.4 | 9.7 | round 3, pick 68 (2023) |
+| Jaxson Dart | Miss | 2024 | 180.7 | 10.8 | round 1, pick 25 (2025) |
+| Kyle Trask | Florida | 2020 | 180.0 | 9.8 | round 2, pick 64 (2021) |
+| Layne Hatcher | Ark St | 2020 | 179.2 | 10.6 | not drafted |
+| Sam Howell | N Carolina | 2020 | 179.1 | 10.3 | round 5, pick 144 (2022) |
+| Matt Corral | Miss | 2020 | 177.6 | 10.2 | round 3, pick 94 (2022) |
+| Stetson Bennett | Georgia | 2021 | 176.7 | 10.0 | round 4, pick 128 (2023) |
+| Kaidon Salter | Liberty | 2023 | 176.6 | 9.9 | not drafted |
+| Jason Bean | Kansas | 2023 | 175.0 | 10.7 | not drafted |
+
+The base rate by rating, for the 272 quarterbacks whose last top-100 season came in 2020-2025:
+
+| Rating in last qualifying season | Quarterbacks | Drafted | Round 1 | Round 1 rate |
+|---|---|---|---|---|
+| under 130 | 78 | 1 | 0 | 0% |
+| 130 to 145 | 85 | 9 | 1 | 1% |
+| 145 to 160 | 79 | 30 | 3 | 4% |
+| **160 to 175** | 17 | 11 | 6 | 35% |
+| 175 and up | 13 | 12 | 8 | 62% |
+
+Production gets a quarterback into the conversation. It has not been enough to make one a first-round pick, and the players who were not drafted from the top of this list were mostly from Group of Five schools, which is the question he had to answer by moving up.
+
+<p align="center"><img src="base_rate.png" width="720" alt="Share of quarterbacks drafted, and drafted in round 1, by passer rating in their last qualifying college season, 2020-2025."></p>
+<p align="center"><sub>Share of quarterbacks drafted, and drafted in round 1, by passer rating in their last qualifying college season, 2020-2025.</sub></p>
+
+### 4. He held his level moving from the American to the Big 12, which is better than the typical mover and inside the normal spread.
+
+20 quarterbacks since 2021 transferred from a Group of Five school to a Power Four school and made the top-100 list in both seasons. Against FBS opponents only:
+
+- His rating went from 166.9 to 164.0 (-2.9).
+- The other 19 changed by -6.1 on average (median -10.9); 12 of 19 declined. The standard deviation is 20.1 points, so his change is +0.2 SD from the average: not distinguishable from a typical move.
+- His change ranks #9 of 20. His level after the move ranks #2 of 20; Kurtis Rourke is first.
+- Counting all games, his rating rose +4.3 (168.7 to 173.0). That gain comes from the Murray State game.
+- He moved with his head coach and offense. This is a test of better opponents, not of a new system.
 
 Against Power conference opponents this year: 238 attempts, 10.1 yards per attempt, 23 touchdowns, 6 interceptions, 177.4 rating.
 
-<p align="center"><img src="g5_to_p4.png" width="720" alt="Passer rating in the last Group of Five season and the first Power Four season for every quarterback who qualified in both."></p>
-<p align="center"><sub>Passer rating in the last Group of Five season and the first Power Four season for every quarterback who qualified in both.</sub></p>
+<p align="center"><img src="g5_to_p4.png" width="720" alt="Passer rating against FBS opponents in the last Group of Five season and the first Power Four season, for every transfer who qualified in both."></p>
+<p align="center"><sub>Passer rating against FBS opponents in the last Group of Five season and the first Power Four season, for every transfer who qualified in both.</sub></p>
 
-### 4. His biggest knock, interception rate, is one of the least repeatable numbers a quarterback has.
+### 5. The setting he came from is friendly to quarterbacks, and the coach is only part of it.
 
-He ranks #70 of 100 in interception rate and #65 of 100 in third-down rating (57 attempts), and his fourth-quarter rating (146) is #34 of 100. Before pricing those, check how much of each is the quarterback. For the same quarterback in back-to-back seasons:
+North Texas starters in this data:
+
+| Season | Quarterback | Head coach | Att | Y/A | Rating |
+|---|---|---|---|---|---|
+| 2023 | Chandler Rogers | Eric Morris | 421 | 8.0 | 150.1 |
+| 2024 | Chandler Morris | Eric Morris | 512 | 7.4 | 140.1 |
+| 2025 | Drew Mestemaker | Eric Morris | 463 | 9.5 | 168.7 |
+| 2026 | Tayven Jackson | Neal Brown | 298 | 9.7 | 174.1 |
+
+- Under Morris, the two North Texas starters before him averaged a 145.1 rating. He was 24 points better in the same offense (168.7), which is evidence for the player.
+- After he and Morris left, Tayven Jackson has a 174.1 rating there under a new staff, up from 126.2 at UCF in 2025. That is evidence that the schedule and setting at North Texas lift a passer's numbers, whoever coaches.
+- Both readings are true at once, and this data cannot split them. No adjustment for receivers or line is made here.
+
+### 6. His weakest numbers are noisy ones, and so is his best one.
+
+He ranks #70 of 100 in interception rate and #65 of 100 in third-down rating (57 attempts), and his fourth-quarter rating (146) is #34 of 100. For the same quarterback in back-to-back seasons:
 
 | Measure | Year-to-year r | 95% interval | Pairs |
 |---|---|---|---|
@@ -134,66 +228,89 @@ He ranks #70 of 100 in interception rate and #65 of 100 in third-down rating (57
 | Interception % | 0.14 | 0.03 to 0.25 | 290 |
 | 25+ yard completions per 100 attempts | 0.09 | -0.13 to 0.32 | 92 |
 
-Interception rate barely carries over (r = 0.14), and third-down rating is weak (r = 0.24, on a small sample: 57 third-down attempts for him this year). His own history says the same: in 2025 he threw interceptions on 1.9% of attempts with a 150 third-down rating. Fourth-quarter rating is different: on a smaller sample it repeats about as well as overall rating (r = 0.36), so his drop from 186 in 2025 to 146 this year is the split I would watch. Volume and accuracy repeat best (yards per game r = 0.40, completion % r = 0.47), and he has been top two in yards per game in both seasons.
-
-The same test cuts against his headline strength. The 25+ yard completion rate repeats at only r = 0.09 across quarterbacks, so one season of it is weak evidence. He was #19 of 100 in 2025 and is #2 of 100 now, so there are two seasons behind it, but yards per attempt (r = 0.33) is the safer number to project, and he led FBS in it in 2025 (#1 of 100).
+- **Interceptions.** 8 in 309 attempts is 2.6%, with a 95% interval of 1.3 to 5.0 that contains the first-round median (1.5). Interception rate barely carries over year to year (r = 0.14); in 2025 he was at 1.9%.
+- **Third down.** r = 0.24, on a small sample (57 attempts for him this year). In 2025 his third-down rating was 150.
+- **Fourth quarter.** On a smaller sample it repeats about as well as overall rating (r = 0.36), so his drop from 186 in 2025 to 146 is the split I would watch.
+- **Big plays.** 36 completions of 25+ yards in 308 attempts is 11.7%, #2 of 100 nationally and above 16 of 18 first-rounders' full seasons. The 95% interval is 8.6 to 15.8, which contains the first-round median (9.6), and the rate repeats at only r = 0.09 across quarterbacks. He was #19 of 100 in 2025. Yards per attempt (r = 0.33) is the safer number, and he led FBS in it in 2025.
 
 <p align="center"><img src="stability.png" width="720" alt="Year-to-year correlation of each passing measure, with 95% bootstrap intervals."></p>
 <p align="center"><sub>Year-to-year correlation of each passing measure, with 95% bootstrap intervals.</sub></p>
 
-### 5. After two rough games to open 2026, he has been the best version of himself.
+<p align="center"><img src="explosive_vs_first_round.png" width="720" alt="Completions of 25+ yards per 100 attempts, with the 95% interval on his nine-game rate."></p>
+<p align="center"><sub>Completions of 25+ yards per 100 attempts, with the 95% interval on his nine-game rate.</sub></p>
 
-Weeks 1 and 2 (Tulsa, Oregon): a 112.8 rating with 4 interceptions on 92 attempts. The 7 games since: 151-of-217, 2,404 yards, 11.1 per attempt, 26 touchdowns, 4 interceptions, a 198.5 rating, and no game below 163. He has thrown for 300 yards in 8 of 9 games. On the ground: 36 carries, 177 yards, 3 touchdowns.
+### 7. Recent form is strong, and the hardest games have been his worst.
+
+- Weeks 1 and 2 (Tulsa, Oregon): a 112.8 rating with 4 interceptions on 92 attempts. The 7 games since: 151-of-217, 2,404 yards, 26 touchdowns, 4 interceptions, a 198.5 rating (one of the seven is the FCS game).
+- 300 yards in 8 of 9 games. On the ground: 36 carries, 177 yards, 3 touchdowns.
+- Against AP-ranked teams: 77 attempts, 150.4 rating, 5 touchdowns, 3 interceptions. Against FBS teams with winning records: 152.5. In losses: 142.2.
+- On third and 10 or more he is 6-of-16 for 40 yards.
 
 <p align="center"><img src="game_log.png" width="720" alt="Game-by-game passer rating, North Texas 2025 and Oklahoma State 2026."></p>
 <p align="center"><sub>Game-by-game passer rating, North Texas 2025 and Oklahoma State 2026.</sub></p>
 
-### 6. Where the numbers say to be careful.
+### 8. What the scouts add, which this data cannot measure.
 
-- **Better opponents have slowed him.** Against AP-ranked teams: 77 attempts, 150.4 rating, 5 touchdowns, 3 interceptions. Against FBS teams with winning records: 152.5. In losses: 142.2.
-- **Third and long.** On third and 10 or more he is 6-of-16 for 40 yards (46 rating). His third-down rating is the lowest of the seven quarterbacks in the class table and would rank ahead of only 1 of the 18 first-rounders.
-- **Pressure.** PFF had him at a 48.8 passing grade under pressure against 90.3 from a clean pocket through Week 5 (PFF, Oct. 6, 2026), when its board had him behind Manning, Moore and Carr among quarterbacks. That is PFF's charting, not mine, and it covers his first four games.
-- **Experience.** ESPN projects 27 career starts by the end of 2026. Scouts told ESPN and Brugler the same thing: the tools are there and the sample is short.
-- **He may not come out.** He is a redshirt sophomore; Brugler reports scouts believe there is a good chance he declares, which is not the same as declaring.
+- **Consensus.** 17 of 25 in ESPN's poll; top quarterback and No. 2 overall on Brugler's board.
+- **Tools, as cited.** ESPN's scouts point to size and arm ("arm talent, power and accuracy," one said). Brugler cites tools, passing instincts and toughness.
+- **Pressure.** PFF had him at a 48.8 passing grade under pressure against 90.3 from a clean pocket through Week 5 (Oct. 6, 2026), when its board had him behind Manning, Moore and Carr among quarterbacks. That is PFF's charting over his first four games.
+- **Experience.** ESPN projects 27 career starts by the end of 2026.
+- **He may not come out.** He is a redshirt sophomore; Brugler reports scouts believe there is a good chance he declares.
+- **Age.** Born January 2006, he will be 21 at the draft.
 
 ## Verdict
 
-**QB1, with a first-round grade.** The production is at or above the first-round median on 10 of 14 measures, he leads the quarterbacks compared here in yards, touchdowns and big plays, his overall efficiency held up after the step to the Big 12, he will be 21 on draft day, and ESPN's scout poll and Brugler's board both have him first. The interception and third-down numbers are worth a hard look on tape, and the data says not to overweight one season of either.
+**What the evidence on this page supports**
 
-**What would change my mind:** an interception rate that stays above 2.5% over the last three regular-season games and the postseason, or Mensah holding a rating near 190 through the postseason. Mensah and Sayin are the alternatives, and on 2026 efficiency alone both are ahead of him.
+| For QB1 | Against QB1 |
+|---|---|
+| 17 of 25 scouts and executives, and Brugler's board | Mensah (+62.3) and Sayin (+58.1) are far ahead of his +28.3 against schedule |
+| #1 in touchdown passes and #2 in yards in FBS | The easiest set of pass defenses of the seven quarterbacks compared |
+| Raw line near the first-round median through nine games, ahead of 13 of 18 in yards per game | Ahead of only 5 of 18 first-rounders once opponents are counted |
+| Held his level moving up a conference | 6 of 17 quarterbacks with a last-season rating like his went in round 1 |
+| 21 on draft day; two seasons as a starter | #70 of 100 in interception rate; 150.4 rating against ranked teams |
+
+**Grade:** first-round candidate. On production he is in the top four of this class, behind Mensah and Sayin and level with Carr.
+
+**My call, and it is an opinion:** I would still have him first, because the people who grade arms for a living do, because of his age, and because he was 24 points better than the two quarterbacks who ran the same offense before him. The numbers on this page do not prove that. If the draft were decided on college production against schedule, Mensah would be first.
+
+**What would move it:** up, if he plays to his season line against Texas Tech and the better defenses left; down, if the interception rate stays above 2.5% or Mensah and Sayin hold their margins through the postseason.
 
 ## Method
 
-- **Rates.** Touchdown % and interception % are per attempt. Adjusted yards per attempt is (yards + 20 x TD - 45 x INT) / attempts. Passer rating is the NCAA formula: (8.4 x yards + 330 x TD + 100 x completions - 200 x INT) / attempts.
-- **Explosive rates** are completions of 15+ and 25+ yards per 100 attempts, from the cfbstats situational tables. Rating when trailing pools the three "losing by" score states.
-- **National ranks** are among the top 100 FBS passers by yards per game, so a rank of #8 means eighth among high-volume starters, not among every quarterback who threw a pass.
-- **First-round comparison.** Each first-round quarterback's final college season against Mestemaker's season in progress. Similarity is Euclidean distance on six z-scored measures.
-- **Stability.** Pearson r between season t and t+1 for the same quarterback when he made the top-100 list in both, 2020-2026 for the season-table measures and 2024-2026 for the situational ones; intervals from 2,000 bootstrap samples that resample quarterbacks.
-- **Moving up.** Transfers only (a quarterback whose school changed conferences is not counted). Power conferences are the ACC, Big Ten, Big 12, SEC, Notre Dame and the Pac-12 through 2023. The list of moves is in `data/g5_to_p4_moves.csv`.
+- **Rates.** Touchdown % and interception % are per attempt. Passer rating is the NCAA formula: (8.4 x yards + 330 x TD + 100 x completions - 200 x INT) / attempts.
+- **Opponent adjustment.** FBS games only. For each game, the opponent's season passing line allowed, minus this quarterback's own game, gives what that defense allows per attempt to everyone else. Those rates times his attempts, summed over games, give an expected line and an expected rating. "Over expected" is his FBS rating minus that. It adjusts for pass defense only, and an opponent's other games are against different offenses.
+- **Same-games comparison.** Each first-round quarterback's first 9 games of his final college season from the game logs (Justin Fields played eight in 2020).
+- **Full-pool comps.** Euclidean distance on five z-scored measures across all prior qualifying seasons. Draft outcomes are matched by name to nflverse picks, 2021-2026; "not drafted" means not drafted through 2026 and not in the 2026 college data.
+- **Base rate.** One row per quarterback: his last top-100 season, 2020-2025, excluding anyone still playing college football in 2026.
+- **Intervals.** Wilson 95% intervals on the per-attempt rates. Year-to-year r from quarterbacks on the top-100 list in back-to-back seasons, with 2,000 bootstrap samples that resample quarterbacks.
+- **Moving up.** Transfers only. Power conferences are the ACC, Big Ten, Big 12, SEC, Notre Dame and the Pac-12 through 2023. Ratings are from the "vs. FBS" split. The list is in `data/g5_to_p4_moves.csv`.
+- **National ranks** are among the top 100 FBS passers by yards per game, all games.
 
 ## Validation
 
-- Season totals reproduce from the game logs (the sum of nine games equals the season line), and my computed passer rating matches the cfbstats rating for the season.
+- Season totals reproduce from the game logs, and my computed passer rating matches the cfbstats rating.
 - The cfbstats line (206-of-309, 2,962 yards, 29 TD, 8 INT) matches the line reported by USA Today on Nov. 14, 2026 and by Bleacher Report on Nov. 12.
-- The cfbstats situational table counts 308 attempts against 309 in the season table; the per-attempt situational rates use the situational count, and the difference does not move any figure at one decimal.
-- First-round names, picks and ages come from nflverse and were checked against the 2025 and 2026 first rounds reported by ESPN.
-- Stability is reported for every measure, including the one that hurts the argument (25+ rate, r = 0.09).
+- All 18 FBS first-round quarterbacks, all 20 movers and all seven class quarterbacks have complete game logs or splits; tests fail if one is missing.
+- The cfbstats situational table counts 308 attempts against 309 in the season table; the per-attempt situational rates use the situational count.
+- Results that cut against the scouting consensus are reported at the same weight as the ones that support it.
 
 ## Limitations
 
-- **Nine games.** Every 2026 number is a partial season, and several 2026 quarterbacks in the stability and transfer samples are also mid-season.
-- **Box-score data.** No air yards, pressure, drops or time to throw. The explosive measures count completions by total gain, so they include yards after the catch and credit the receivers and scheme as well as the passer.
-- **System and supporting cast.** He has played both seasons in Eric Morris's offense. North Texas's 2026 quarterback, Tayven Jackson, has a 174.1 rating in the offense Mestemaker left, which says the environment is quarterback-friendly. No adjustment for receivers, line or schedule strength is made here.
-- **Survivor samples.** The stability and transfer samples only include quarterbacks who kept a starting job and stayed in the top 100; players who lost their jobs after moving up are missing, which makes the average mover look better than the true average.
-- **Small comparison group.** Eighteen first-round quarterbacks is enough for a ranking, not for a model of NFL success.
+- **Nine games.** Every 2026 number is a partial season, and the opponent ratings behind the adjustment are nine-game samples too.
+- **Box-score data.** No air yards, pressure, drops or time to throw. The explosive measures count completions by total gain, so they credit receivers and scheme as well as the passer.
+- **The opponent adjustment is simple.** One number per defense, no adjustment for the offenses that defense faced, none for receivers or line.
+- **Survivor samples.** The stability, transfer and base-rate samples only include quarterbacks who made a top-100 list. "Not drafted" includes players who lost jobs or were hurt.
+- **Name matching** to draft picks can miss a player whose name is listed differently; the 68 drafted quarterbacks were checked by hand, and the five from FCS schools are not in the college data.
+- **Small groups.** Eighteen first-round quarterbacks and 17 quarterbacks in his rating band are enough for a base rate, not for a model.
 - **No tape grades of my own** are in this report. Tools and traits are cited from published evaluations.
 
 ## Next steps
 
-- Refresh after Texas Tech (Nov. 14) and the rest of the Big 12 schedule; the verdict section says what would move it.
-- Add play-by-play: expected points per dropback, air yards, and performance under pressure and against the blitz.
-- Opponent adjustment by defensive pass efficiency allowed.
-- The same page for Mensah and Carr, so the class is ranked on one method.
+- Refresh after Texas Tech (Nov. 14) and each game left.
+- Play-by-play: expected points per dropback, air yards, pressure and blitz splits.
+- A fuller opponent model (offense and defense together) and the same page for Mensah, Sayin and Carr.
+- NFL outcomes for the comparison seasons, once the 2024-2026 classes have played enough.
 
 ## Reproduce
 
@@ -209,13 +326,14 @@ Code: [`projects/draft_mestemaker.py`](../../projects/draft_mestemaker.py). Numb
 | File | What it holds |
 |---|---|
 | `findings.json` | Every number on this page |
-| `explosive_vs_first_round.png`, `national_ranks.png`, `class_map.png`, `g5_to_p4.png`, `stability.png`, `game_log.png` | The six figures |
-| `class_table.csv`, `first_round_final_seasons.csv`, `g5_to_p4_table.csv`, `stability_table.csv` | The tables behind the figures |
+| `opponent_adjusted.png`, `national_ranks.png`, `class_map.png`, `base_rate.png`, `g5_to_p4.png`, `stability.png`, `explosive_vs_first_round.png`, `game_log.png` | The eight figures |
+| `class_table.csv`, `first_round_final_seasons.csv`, `g5_to_p4_table.csv`, `stability_table.csv`, `opponent_adjusted.csv`, `pool_comps.csv` | The tables behind the figures |
 | `data/qb_seasons_2020_2026.csv` | Top-100 passer tables, 2020-2026 |
 | `data/situational_2024_2026_and_first_rounders.csv` | Situational passing tables |
-| `data/gamelogs.csv`, `data/splits.csv` | Game logs and splits for Mestemaker and the class |
-| `data/first_round_qbs_2021_2026.csv`, `data/g5_to_p4_moves.csv` | Draft picks and the list of moves |
+| `data/gamelogs.csv`, `data/splits.csv` | Game logs and splits |
+| `data/team_pass_defense_2020_2026.csv` | Passing allowed by every FBS defense |
+| `data/first_round_qbs_2021_2026.csv`, `data/qb_draft_picks_2021_2026.csv`, `data/g5_to_p4_moves.csv` | Draft picks and the list of moves |
 
-**Sources:** [cfbstats.com](https://cfbstats.com/2026/player/521/50259623/index.html); [nflverse draft picks](https://github.com/nflverse/nflverse-data); [ESPN, "NFL scouts favor Drew Mestemaker as first QB taken in draft"](https://www.espn.com/college-football/story/_/id/50335830/nfl-scouts-favor-drew-mestemaker-first-qb-taken-draft); [Bleacher Report on Brugler's board](https://bleacherreport.com/articles/25532576-drew-mestemakers-nfl-draft-2027-status-addressed-nfl-scouts-brugler-ranks-qb-new-big-board); [PFF, top 10 quarterback prospects after Week 5](https://www.pff.com/news/draft-top-10-quarterback-prospects-after-week-5); [Oklahoma State roster bio](https://okstate.com/sports/football/roster/drew-mestemaker/14374); [USA Today via Yahoo Sports, Nov. 14, 2026](https://sports.yahoo.com/articles/drew-mestemaker-one-win-away-100703900.html); birth month from [Wikipedia](https://en.wikipedia.org/wiki/Drew_Mestemaker).
+**Sources:** [cfbstats.com](https://cfbstats.com/2026/player/521/50259623/index.html); [nflverse draft picks](https://github.com/nflverse/nflverse-data); [ESPN, "NFL scouts favor Drew Mestemaker as first QB taken in draft"](https://www.espn.com/college-football/story/_/id/50335830/nfl-scouts-favor-drew-mestemaker-first-qb-taken-draft); [Bleacher Report on Brugler's board](https://bleacherreport.com/articles/25532576-drew-mestemakers-nfl-draft-2027-status-addressed-nfl-scouts-brugler-ranks-qb-new-big-board); [PFF, top 10 quarterback prospects after Week 5](https://www.pff.com/news/draft-top-10-quarterback-prospects-after-week-5); [Oklahoma State roster bio](https://okstate.com/sports/football/roster/drew-mestemaker/14374) and [Eric Morris staff bio](https://www.okstate.com/staff-directory/eric-morris/3991); [Fox Sports on Neal Brown replacing Morris at North Texas](https://www.foxsports.com/articles/cfb/no-20-north-texas-names-neal-brown-to-replace-oklahoma-stbound-eric-morris-after-season); [USA Today via Yahoo Sports, Nov. 14, 2026](https://sports.yahoo.com/articles/drew-mestemaker-one-win-away-100703900.html); birth month from [Wikipedia](https://en.wikipedia.org/wiki/Drew_Mestemaker).
 
 <sub>[← Portfolio](../../README.md)</sub>

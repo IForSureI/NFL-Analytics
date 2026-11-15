@@ -773,7 +773,9 @@
   "started_165": 3,
   "me_rank_after": 2,
   "mean_d_rating_ex_mateer": -3.9655555555555537,
-  "declined": 12
+  "declined": 12,
+  "sd": 21.541884620024685,
+  "me_rank_change": 6
  },
  "x25_leader": {
   "name": "Michael Hawkins Jr.",
@@ -784,5 +786,949 @@
  "context": {
   "unt_2026_qb": "Tayven Jackson",
   "unt_2026_rating": 174.1
+ },
+ "intervals": {
+  "x25_n": 36,
+  "x25_att": 308,
+  "x25_lo": 8.563238758236057,
+  "x25_hi": 15.757313727384847,
+  "x25_contains_fr_median": true,
+  "int_lo": 1.3175853732647154,
+  "int_hi": 5.024793645382422,
+  "int_contains_fr_median": true
+ },
+ "pool_comps": [
+  {
+   "name": "Kyle Trask",
+   "team": "Florida",
+   "season": 2020,
+   "rating": 180.02,
+   "ypa": 9.8,
+   "tdp": 9.839816933638444,
+   "intp": 1.8306636155606408,
+   "ypg": 356.9,
+   "dist": 1.1683326606926405,
+   "outcome": "round 2, pick 64 (2021)"
+  },
+  {
+   "name": "Sam Howell",
+   "team": "N Carolina",
+   "season": 2020,
+   "rating": 179.09,
+   "ypa": 10.3,
+   "tdp": 8.620689655172415,
+   "intp": 2.0114942528735633,
+   "ypg": 298.8,
+   "dist": 1.246351326605401,
+   "outcome": "round 5, pick 144 (2022)"
+  },
+  {
+   "name": "Cam Ward",
+   "team": "Miami (Fl)",
+   "season": 2024,
+   "rating": 172.25,
+   "ypa": 9.5,
+   "tdp": 8.590308370044053,
+   "intp": 1.5418502202643172,
+   "ypg": 331.8,
+   "dist": 1.2509234161521543,
+   "outcome": "round 1, pick 1 (2025)"
+  },
+  {
+   "name": "Spencer Rattler",
+   "team": "Oklahoma",
+   "season": 2020,
+   "rating": 172.56,
+   "ypa": 9.6,
+   "tdp": 8.832807570977918,
+   "intp": 2.2082018927444795,
+   "ypg": 275.5,
+   "dist": 1.2518227849084091,
+   "outcome": "round 5, pick 150 (2024)"
+  },
+  {
+   "name": "Jordan McCloud",
+   "team": "James Mad",
+   "season": 2023,
+   "rating": 165.94,
+   "ypa": 8.9,
+   "tdp": 8.495145631067961,
+   "intp": 2.4271844660194173,
+   "ypg": 281.3,
+   "dist": 1.3623860981336895,
+   "outcome": "not drafted"
+  },
+  {
+   "name": "Sam Hartman",
+   "team": "Wk Forest",
+   "season": 2022,
+   "rating": 159.4,
+   "ypa": 8.6,
+   "tdp": 8.878504672897197,
+   "intp": 2.803738317757009,
+   "ypg": 308.4,
+   "dist": 1.3659413385834986,
+   "outcome": "not drafted"
+  },
+  {
+   "name": "Dillon Gabriel",
+   "team": "Oklahoma",
+   "season": 2023,
+   "rating": 171.98,
+   "ypa": 9.5,
+   "tdp": 7.8125,
+   "intp": 1.5625,
+   "ypg": 305.0,
+   "dist": 1.6209018182728605,
+   "outcome": "round 3, pick 94 (2025)"
+  },
+  {
+   "name": "Justin Fields",
+   "team": "Ohio State",
+   "season": 2020,
+   "rating": 175.56,
+   "ypa": 9.3,
+   "tdp": 9.777777777777779,
+   "intp": 2.6666666666666665,
+   "ypg": 262.5,
+   "dist": 1.6261439843720058,
+   "outcome": "round 1, pick 11 (2021)"
+  },
+  {
+   "name": "C.J. Stroud",
+   "team": "Ohio State",
+   "season": 2022,
+   "rating": 177.66,
+   "ypa": 9.5,
+   "tdp": 10.539845758354756,
+   "intp": 1.5424164524421593,
+   "ypg": 283.7,
+   "dist": 1.6376727241210447,
+   "outcome": "round 1, pick 2 (2023)"
+  },
+  {
+   "name": "Kenny Pickett",
+   "team": "Pittsburgh",
+   "season": 2021,
+   "rating": 165.27,
+   "ypa": 8.7,
+   "tdp": 8.450704225352112,
+   "intp": 1.408450704225352,
+   "ypg": 332.2,
+   "dist": 1.6655181180546692,
+   "outcome": "round 1, pick 20 (2022)"
+  },
+  {
+   "name": "Bryce Young",
+   "team": "Alabama",
+   "season": 2021,
+   "rating": 167.52,
+   "ypa": 8.9,
+   "tdp": 8.592321755027422,
+   "intp": 1.2797074954296161,
+   "ypg": 324.8,
+   "dist": 1.6668139241857558,
+   "outcome": "round 1, pick 1 (2023)"
+  },
+  {
+   "name": "Byrum Brown",
+   "team": "S Florida",
+   "season": 2025,
+   "rating": 167.06,
+   "ypa": 9.3,
+   "tdp": 8.211143695014663,
+   "intp": 2.0527859237536656,
+   "ypg": 263.2,
+   "dist": 1.6695389646910495,
+   "outcome": "in college in 2026"
+  }
+ ],
+ "pool_comps_summary": {
+  "n": 12,
+  "decided": 11,
+  "round1": 5,
+  "drafted": 9,
+  "not_drafted": 2,
+  "prior_seasons": 600
+ },
+ "at_or_above": {
+  "seasons": 18,
+  "qbs": 17,
+  "decided": 17,
+  "round1": 6,
+  "drafted_later": 5,
+  "not_drafted": 6,
+  "rows": [
+   {
+    "name": "Jayden Daniels",
+    "team": "LSU",
+    "season": 2023,
+    "rating": 208.01,
+    "ypa": 11.7,
+    "outcome": "round 1, pick 2 (2024)"
+   },
+   {
+    "name": "Grayson McCall",
+    "team": "Coast Car",
+    "season": 2021,
+    "rating": 207.65,
+    "ypa": 11.9,
+    "outcome": "not drafted"
+   },
+   {
+    "name": "Mac Jones",
+    "team": "Alabama",
+    "season": 2020,
+    "rating": 203.06,
+    "ypa": 11.2,
+    "outcome": "round 1, pick 15 (2021)"
+   },
+   {
+    "name": "Zach Wilson",
+    "team": "BYU",
+    "season": 2020,
+    "rating": 196.43,
+    "ypa": 11.0,
+    "outcome": "round 1, pick 2 (2021)"
+   },
+   {
+    "name": "Kaleb Eleby",
+    "team": "W Mich",
+    "season": 2020,
+    "rating": 195.08,
+    "ypa": 11.2,
+    "outcome": "not drafted"
+   },
+   {
+    "name": "Dustin Crum",
+    "team": "Kent State",
+    "season": 2020,
+    "rating": 192.74,
+    "ypa": 10.5,
+    "outcome": "not drafted"
+   },
+   {
+    "name": "Bo Nix",
+    "team": "Oregon",
+    "season": 2023,
+    "rating": 188.32,
+    "ypa": 9.6,
+    "outcome": "round 1, pick 12 (2024)"
+   },
+   {
+    "name": "C.J. Stroud",
+    "team": "Ohio State",
+    "season": 2021,
+    "rating": 186.56,
+    "ypa": 10.1,
+    "outcome": "round 1, pick 2 (2023)"
+   },
+   {
+    "name": "Grayson McCall",
+    "team": "Coast Car",
+    "season": 2020,
+    "rating": 184.32,
+    "ypa": 10.0,
+    "outcome": "not drafted"
+   },
+   {
+    "name": "Hendon Hooker",
+    "team": "Tennessee",
+    "season": 2021,
+    "rating": 181.41,
+    "ypa": 9.7,
+    "outcome": "round 3, pick 68 (2023)"
+   },
+   {
+    "name": "Jaxson Dart",
+    "team": "Miss",
+    "season": 2024,
+    "rating": 180.68,
+    "ypa": 10.8,
+    "outcome": "round 1, pick 25 (2025)"
+   },
+   {
+    "name": "Kyle Trask",
+    "team": "Florida",
+    "season": 2020,
+    "rating": 180.02,
+    "ypa": 9.8,
+    "outcome": "round 2, pick 64 (2021)"
+   },
+   {
+    "name": "Layne Hatcher",
+    "team": "Ark St",
+    "season": 2020,
+    "rating": 179.16,
+    "ypa": 10.6,
+    "outcome": "not drafted"
+   },
+   {
+    "name": "Sam Howell",
+    "team": "N Carolina",
+    "season": 2020,
+    "rating": 179.09,
+    "ypa": 10.3,
+    "outcome": "round 5, pick 144 (2022)"
+   },
+   {
+    "name": "Matt Corral",
+    "team": "Miss",
+    "season": 2020,
+    "rating": 177.61,
+    "ypa": 10.2,
+    "outcome": "round 3, pick 94 (2022)"
+   },
+   {
+    "name": "Stetson Bennett",
+    "team": "Georgia",
+    "season": 2021,
+    "rating": 176.69,
+    "ypa": 10.0,
+    "outcome": "round 4, pick 128 (2023)"
+   },
+   {
+    "name": "Kaidon Salter",
+    "team": "Liberty",
+    "season": 2023,
+    "rating": 176.6,
+    "ypa": 9.9,
+    "outcome": "not drafted"
+   },
+   {
+    "name": "Jason Bean",
+    "team": "Kansas",
+    "season": 2023,
+    "rating": 175.03,
+    "ypa": 10.7,
+    "outcome": "not drafted"
+   }
+  ]
+ },
+ "base_rate": [
+  {
+   "band": "under 130",
+   "n": 78,
+   "round1": 0,
+   "drafted": 1,
+   "his_band": false
+  },
+  {
+   "band": "130 to 145",
+   "n": 85,
+   "round1": 1,
+   "drafted": 9,
+   "his_band": false
+  },
+  {
+   "band": "145 to 160",
+   "n": 79,
+   "round1": 3,
+   "drafted": 30,
+   "his_band": false
+  },
+  {
+   "band": "160 to 175",
+   "n": 17,
+   "round1": 6,
+   "drafted": 11,
+   "his_band": true
+  },
+  {
+   "band": "175 and up",
+   "n": 13,
+   "round1": 8,
+   "drafted": 12,
+   "his_band": false
+  }
+ ],
+ "base_rate_n": 272,
+ "opp": {
+  "cls": [
+   {
+    "name": "Drew Mestemaker",
+    "season": 2026,
+    "games": 8,
+    "att": 287,
+    "fbs_rating": 164.0390243902439,
+    "opp_allowed": 135.72397634430996,
+    "over": 28.315048045933935
+   },
+   {
+    "name": "Darian Mensah",
+    "season": 2026,
+    "games": 8,
+    "att": 261,
+    "fbs_rating": 184.53180076628354,
+    "opp_allowed": 122.23194194669473,
+    "over": 62.299858819588806
+   },
+   {
+    "name": "CJ Carr",
+    "season": 2026,
+    "games": 9,
+    "att": 262,
+    "fbs_rating": 162.75267175572517,
+    "opp_allowed": 132.93615759814216,
+    "over": 29.816514157583015
+   },
+   {
+    "name": "Julian Sayin",
+    "season": 2026,
+    "games": 7,
+    "att": 192,
+    "fbs_rating": 184.525,
+    "opp_allowed": 126.44927060508489,
+    "over": 58.075729394915115
+   },
+   {
+    "name": "Arch Manning",
+    "season": 2026,
+    "games": 9,
+    "att": 254,
+    "fbs_rating": 150.95118110236223,
+    "opp_allowed": 124.96863724641433,
+    "over": 25.982543855947895
+   },
+   {
+    "name": "Sam Leavitt",
+    "season": 2026,
+    "games": 8,
+    "att": 280,
+    "fbs_rating": 152.42285714285714,
+    "opp_allowed": 126.83527882530018,
+    "over": 25.58757831755696
+   },
+   {
+    "name": "LaNorris Sellers",
+    "season": 2026,
+    "games": 8,
+    "att": 251,
+    "fbs_rating": 149.1776892430279,
+    "opp_allowed": 131.85406151049602,
+    "over": 17.32362773253189
+   }
+  ],
+  "first_round": [
+   {
+    "name": "Trevor Lawrence",
+    "season": 2020,
+    "games": 9,
+    "att": 325,
+    "fbs_rating": 164.0123076923077,
+    "opp_allowed": 134.92780692499207,
+    "over": 29.08450076731563
+   },
+   {
+    "name": "Zach Wilson",
+    "season": 2020,
+    "games": 11,
+    "att": 320,
+    "fbs_rating": 193.44375,
+    "opp_allowed": 127.05750982091163,
+    "over": 66.38624017908836
+   },
+   {
+    "name": "Justin Fields",
+    "season": 2020,
+    "games": 8,
+    "att": 225,
+    "fbs_rating": 175.55555555555554,
+    "opp_allowed": 119.71622512065031,
+    "over": 55.839330434905236
+   },
+   {
+    "name": "Mac Jones",
+    "season": 2020,
+    "games": 13,
+    "att": 402,
+    "fbs_rating": 203.0597014925373,
+    "opp_allowed": 135.127438603434,
+    "over": 67.9322628891033
+   },
+   {
+    "name": "Kenny Pickett",
+    "season": 2021,
+    "games": 12,
+    "att": 469,
+    "fbs_rating": 159.28443496801705,
+    "opp_allowed": 141.01317001088722,
+    "over": 18.27126495712983
+   },
+   {
+    "name": "Bryce Young",
+    "season": 2022,
+    "games": 11,
+    "att": 356,
+    "fbs_rating": 162.0752808988764,
+    "opp_allowed": 128.8578583415883,
+    "over": 33.2174225572881
+   },
+   {
+    "name": "C.J. Stroud",
+    "season": 2022,
+    "games": 13,
+    "att": 389,
+    "fbs_rating": 177.6586118251928,
+    "opp_allowed": 119.21709209219878,
+    "over": 58.44151973299401
+   },
+   {
+    "name": "Anthony Richardson",
+    "season": 2022,
+    "games": 11,
+    "att": 317,
+    "fbs_rating": 124.74952681388014,
+    "opp_allowed": 130.6564719411198,
+    "over": -5.906945127239666
+   },
+   {
+    "name": "Caleb Williams",
+    "season": 2023,
+    "games": 12,
+    "att": 388,
+    "fbs_rating": 170.14742268041238,
+    "opp_allowed": 127.92567525478528,
+    "over": 42.2217474256271
+   },
+   {
+    "name": "Jayden Daniels",
+    "season": 2023,
+    "games": 11,
+    "att": 303,
+    "fbs_rating": 205.64752475247525,
+    "opp_allowed": 127.25784781660298,
+    "over": 78.38967693587227
+   },
+   {
+    "name": "Drake Maye",
+    "season": 2023,
+    "games": 11,
+    "att": 402,
+    "fbs_rating": 145.1681592039801,
+    "opp_allowed": 125.61498421059488,
+    "over": 19.553174993385227
+   },
+   {
+    "name": "Michael Penix Jr.",
+    "season": 2023,
+    "games": 15,
+    "att": 555,
+    "fbs_rating": 157.05441441441442,
+    "opp_allowed": 130.69028415552108,
+    "over": 26.36413025889334
+   },
+   {
+    "name": "J.J. McCarthy",
+    "season": 2023,
+    "games": 15,
+    "att": 332,
+    "fbs_rating": 167.42289156626506,
+    "opp_allowed": 124.38085377363024,
+    "over": 43.04203779263483
+   },
+   {
+    "name": "Bo Nix",
+    "season": 2023,
+    "games": 13,
+    "att": 443,
+    "fbs_rating": 186.94446952595936,
+    "opp_allowed": 132.2292530992429,
+    "over": 54.71521642671647
+   },
+   {
+    "name": "Cam Ward",
+    "season": 2024,
+    "games": 12,
+    "att": 428,
+    "fbs_rating": 169.75607476635514,
+    "opp_allowed": 129.3650856553916,
+    "over": 40.390989110963545
+   },
+   {
+    "name": "Jaxson Dart",
+    "season": 2024,
+    "games": 12,
+    "att": 371,
+    "fbs_rating": 173.99568733153637,
+    "opp_allowed": 131.44888624493035,
+    "over": 42.546801086606024
+   },
+   {
+    "name": "Fernando Mendoza",
+    "season": 2025,
+    "games": 15,
+    "att": 359,
+    "fbs_rating": 176.89693593314763,
+    "opp_allowed": 123.76934741170663,
+    "over": 53.127588521441
+   },
+   {
+    "name": "Ty Simpson",
+    "season": 2025,
+    "games": 14,
+    "att": 457,
+    "fbs_rating": 146.10065645514223,
+    "opp_allowed": 125.1764476934295,
+    "over": 20.924208761712734
+   }
+  ],
+  "me_2025": {
+   "name": "Drew Mestemaker",
+   "season": 2025,
+   "games": 13,
+   "att": 431,
+   "fbs_rating": 166.93735498839908,
+   "opp_allowed": 131.57874497648086,
+   "over": 35.358610011918216
+  },
+  "class_rank": 4,
+  "class_n": 7,
+  "fr_median": 42.38427425611656,
+  "fr_beats": 5,
+  "sched_rank_easiest": 1
+ },
+ "fcs_game": {
+  "att": 22,
+  "rating": 289.62
+ },
+ "same_games": {
+  "games": 9,
+  "rows": [
+   {
+    "name": "Trevor Lawrence",
+    "season": 2020,
+    "games": 9,
+    "att": 286,
+    "yards": 2753,
+    "td": 22,
+    "int": 4,
+    "rating": 172.67552447552447,
+    "ypa": 9.625874125874127,
+    "ypg": 305.8888888888889,
+    "tdp": 7.6923076923076925,
+    "intp": 1.3986013986013985
+   },
+   {
+    "name": "Zach Wilson",
+    "season": 2020,
+    "games": 9,
+    "att": 237,
+    "yards": 2724,
+    "td": 26,
+    "int": 2,
+    "rating": 205.32320675105487,
+    "ypa": 11.49367088607595,
+    "ypg": 302.6666666666667,
+    "tdp": 10.970464135021096,
+    "intp": 0.8438818565400844
+   },
+   {
+    "name": "Justin Fields",
+    "season": 2020,
+    "games": 8,
+    "att": 225,
+    "yards": 2100,
+    "td": 22,
+    "int": 6,
+    "rating": 175.55555555555554,
+    "ypa": 9.333333333333334,
+    "ypg": 262.5,
+    "tdp": 9.777777777777779,
+    "intp": 2.6666666666666665
+   },
+   {
+    "name": "Mac Jones",
+    "season": 2020,
+    "games": 9,
+    "att": 255,
+    "yards": 3113,
+    "td": 27,
+    "int": 3,
+    "rating": 210.82039215686274,
+    "ypa": 12.207843137254901,
+    "ypg": 345.8888888888889,
+    "tdp": 10.588235294117647,
+    "intp": 1.1764705882352942
+   },
+   {
+    "name": "Kenny Pickett",
+    "season": 2021,
+    "games": 9,
+    "att": 342,
+    "yards": 3171,
+    "td": 29,
+    "int": 3,
+    "rating": 172.82573099415205,
+    "ypa": 9.271929824561404,
+    "ypg": 352.3333333333333,
+    "tdp": 8.47953216374269,
+    "intp": 0.8771929824561403
+   },
+   {
+    "name": "Bryce Young",
+    "season": 2022,
+    "games": 9,
+    "att": 305,
+    "yards": 2443,
+    "td": 22,
+    "int": 4,
+    "rating": 151.41377049180326,
+    "ypa": 8.00983606557377,
+    "ypg": 271.44444444444446,
+    "tdp": 7.213114754098361,
+    "intp": 1.3114754098360655
+   },
+   {
+    "name": "C.J. Stroud",
+    "season": 2022,
+    "games": 9,
+    "att": 249,
+    "yards": 2453,
+    "td": 29,
+    "int": 4,
+    "rating": 185.84417670682728,
+    "ypa": 9.85140562248996,
+    "ypg": 272.55555555555554,
+    "tdp": 11.646586345381525,
+    "intp": 1.606425702811245
+   },
+   {
+    "name": "Anthony Richardson",
+    "season": 2022,
+    "games": 9,
+    "att": 235,
+    "yards": 1839,
+    "td": 9,
+    "int": 7,
+    "rating": 128.16,
+    "ypa": 7.825531914893617,
+    "ypg": 204.33333333333334,
+    "tdp": 3.8297872340425534,
+    "intp": 2.978723404255319
+   },
+   {
+    "name": "Caleb Williams",
+    "season": 2023,
+    "games": 9,
+    "att": 277,
+    "yards": 2646,
+    "td": 25,
+    "int": 4,
+    "rating": 175.36606498194948,
+    "ypa": 9.552346570397113,
+    "ypg": 294.0,
+    "tdp": 9.025270758122744,
+    "intp": 1.444043321299639
+   },
+   {
+    "name": "Jayden Daniels",
+    "season": 2023,
+    "games": 9,
+    "att": 247,
+    "yards": 2792,
+    "td": 27,
+    "int": 4,
+    "rating": 199.8493927125506,
+    "ypa": 11.303643724696355,
+    "ypg": 310.22222222222223,
+    "tdp": 10.931174089068826,
+    "intp": 1.6194331983805668
+   },
+   {
+    "name": "Drake Maye",
+    "season": 2023,
+    "games": 9,
+    "att": 308,
+    "yards": 2803,
+    "td": 20,
+    "int": 5,
+    "rating": 160.53636363636363,
+    "ypa": 9.10064935064935,
+    "ypg": 311.44444444444446,
+    "tdp": 6.4935064935064934,
+    "intp": 1.6233766233766234
+   },
+   {
+    "name": "Michael Penix Jr.",
+    "season": 2023,
+    "games": 9,
+    "att": 324,
+    "yards": 3201,
+    "td": 26,
+    "int": 7,
+    "rating": 174.59382716049384,
+    "ypa": 9.87962962962963,
+    "ypg": 355.6666666666667,
+    "tdp": 8.024691358024691,
+    "intp": 2.1604938271604937
+   },
+   {
+    "name": "J.J. McCarthy",
+    "season": 2023,
+    "games": 9,
+    "att": 206,
+    "yards": 2134,
+    "td": 18,
+    "int": 3,
+    "rating": 188.66796116504858,
+    "ypa": 10.359223300970873,
+    "ypg": 237.11111111111111,
+    "tdp": 8.737864077669903,
+    "intp": 1.4563106796116505
+   },
+   {
+    "name": "Bo Nix",
+    "season": 2023,
+    "games": 9,
+    "att": 301,
+    "yards": 2723,
+    "td": 25,
+    "int": 2,
+    "rating": 180.1435215946844,
+    "ypa": 9.046511627906977,
+    "ypg": 302.55555555555554,
+    "tdp": 8.305647840531561,
+    "intp": 0.6644518272425249
+   },
+   {
+    "name": "Cam Ward",
+    "season": 2024,
+    "games": 9,
+    "att": 322,
+    "yards": 3146,
+    "td": 29,
+    "int": 6,
+    "rating": 175.144099378882,
+    "ypa": 9.770186335403727,
+    "ypg": 349.55555555555554,
+    "tdp": 9.006211180124224,
+    "intp": 1.8633540372670807
+   },
+   {
+    "name": "Jaxson Dart",
+    "season": 2024,
+    "games": 9,
+    "att": 276,
+    "yards": 3210,
+    "td": 21,
+    "int": 3,
+    "rating": 192.3695652173913,
+    "ypa": 11.630434782608695,
+    "ypg": 356.6666666666667,
+    "tdp": 7.608695652173913,
+    "intp": 1.0869565217391304
+   },
+   {
+    "name": "Fernando Mendoza",
+    "season": 2025,
+    "games": 9,
+    "att": 224,
+    "yards": 2124,
+    "td": 25,
+    "int": 4,
+    "rating": 185.23035714285717,
+    "ypa": 9.482142857142858,
+    "ypg": 236.0,
+    "tdp": 11.160714285714286,
+    "intp": 1.7857142857142858
+   },
+   {
+    "name": "Ty Simpson",
+    "season": 2025,
+    "games": 9,
+    "att": 296,
+    "yards": 2461,
+    "td": 21,
+    "int": 1,
+    "rating": 159.46756756756758,
+    "ypa": 8.31418918918919,
+    "ypg": 273.44444444444446,
+    "tdp": 7.094594594594595,
+    "intp": 0.33783783783783783
+   }
+  ],
+  "rating": {
+   "me": 172.98,
+   "median": 175.4608102687525,
+   "beats": 6
+  },
+  "ypa": {
+   "me": 9.6,
+   "median": 9.58911034813562,
+   "beats": 9
+  },
+  "ypg": {
+   "me": 329.1,
+   "median": 302.6111111111111,
+   "beats": 13
+  },
+  "tdp": {
+   "me": 9.385113268608414,
+   "median": 8.608698120706297,
+   "beats": 12
+  },
+  "intp": {
+   "me": 2.588996763754045,
+   "median": 1.450177000455645,
+   "beats": 2
+  }
+ },
+ "move_fbs": {
+  "n": 20,
+  "me_before": 166.94,
+  "me_after": 164.04,
+  "me_d": -2.9000000000000057,
+  "mean": -6.098421052631575,
+  "median": -10.909999999999997,
+  "sd": 20.123982172510793,
+  "declined": 12,
+  "others": 19,
+  "me_rank": 9,
+  "me_rank_after": 2,
+  "top_after": "Kurtis Rourke",
+  "z": 0.15893579239006622
+ },
+ "system": {
+  "unt": [
+   {
+    "name": "Chandler Rogers",
+    "season": 2023,
+    "rating": 150.06,
+    "ypa": 8.0,
+    "att": 421,
+    "coach": "Eric Morris"
+   },
+   {
+    "name": "Chandler Morris",
+    "season": 2024,
+    "rating": 140.1,
+    "ypa": 7.4,
+    "att": 512,
+    "coach": "Eric Morris"
+   },
+   {
+    "name": "Drew Mestemaker",
+    "season": 2025,
+    "rating": 168.69,
+    "ypa": 9.5,
+    "att": 463,
+    "coach": "Eric Morris"
+   },
+   {
+    "name": "Tayven Jackson",
+    "season": 2026,
+    "rating": 174.1,
+    "ypa": 9.7,
+    "att": 298,
+    "coach": "Neal Brown"
+   }
+  ],
+  "successor_prior": {
+   "team": "UCF",
+   "season": 2025,
+   "rating": 126.25
+  },
+  "morris_other_mean": 145.07999999999998
  }
 }
