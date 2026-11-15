@@ -1,4 +1,4 @@
-<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 08 The YAC Tax](../08-yac-tax/)</sub>
+<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 08 The YAC Tax](../08-yac-tax/) &nbsp;|&nbsp; [13 Metric Stability Atlas →](../13-metric-stability-atlas/)</sub>
 
 # 09 Run Game Value
 ### No mispricing found between the back's part and the blocked part, on a sample too small to rule one out
@@ -140,6 +140,6 @@ Code: [`projects/run_game_value.py`](../../projects/run_game_value.py)
 | [`findings.json`](findings.json) | Every number quoted on this page, machine-readable |
 
 ---
-<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 08 The YAC Tax](../08-yac-tax/)</sub>
+<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 08 The YAC Tax](../08-yac-tax/) &nbsp;|&nbsp; [13 Metric Stability Atlas →](../13-metric-stability-atlas/)</sub>
 
 <sub>© 2026 Dylan Fanelli. All rights reserved. To cite: Fanelli, D. (2026). *Run Game Value*. NFL Analytics. https://github.com/IForSureI/NFL-Analytics/tree/main/reports/09-run-game-value</sub>
