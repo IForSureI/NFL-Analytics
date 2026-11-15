@@ -39,6 +39,7 @@ import pandas as pd  # noqa: E402
 from matplotlib.patches import Rectangle  # noqa: E402
 
 from nflan import data  # noqa: E402
+from nflan.stats import boot_r, wilson  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "reports" / "2026-in-season-snippets"
@@ -64,6 +65,11 @@ def team_colors(refresh: bool = False) -> pd.DataFrame:
     t = data._release("teams", "teams_colors_logos.parquet", refresh)
     t = t[["team_abbr", "team_name", "team_color", "team_color2"]].drop_duplicates("team_abbr")
     return t.set_index("team_abbr")
+
+
+def r_ci(x, y):
+    """95% bootstrap interval for a correlation across this season's players or teams."""
+    return [round(v, 2) for v in boot_r(x, y)[1:]]
 
 
 def completed_weeks(pbp: pd.DataFrame) -> list[int]:
@@ -276,7 +282,7 @@ def chart_qb_epa_cpoe(p, weeks, tc, f):
     top = q.sort_values("epa", ascending=False)
     f["qb_epa_cpoe"] = {"n_qbs": int(len(q)), "top3_epa": top.head(3)[["name", "team", "epa", "cpoe"]].round(3).to_dict("records"),
                         "bottom3_epa": top.tail(3)[["name", "team", "epa", "cpoe"]].round(3).to_dict("records"),
-                        "corr_epa_cpoe": round(float(q.epa.corr(q.cpoe)), 2)}
+                        "corr_epa_cpoe": round(float(q.epa.corr(q.cpoe)), 2), "corr_ci": r_ci(q.epa, q.cpoe)}
 
 
 def chart_rb_success(p, weeks, tc, f):
@@ -323,7 +329,9 @@ def chart_rb_success(p, weeks, tc, f):
     save(fig, "rb_success.png")
     f["rb_success"] = {"rb_average_success": round(league, 3), "n_qualified": n_q,
                        "top5": q.head(5)[["rusher_player_name", "team", "carries", "success", "epa", "explosive"]].round(3).to_dict("records"),
-                       "corr_success_epa": round(float(q.success.corr(q.epa)), 2)}
+                       "corr_success_epa": round(float(q.success.corr(q.epa)), 2),
+                       "leader_success_ci": [round(v, 3) for v in wilson(q.success.iat[0] * q.carries.iat[0], q.carries.iat[0])],
+                       "top30_clear_of_average": int(sum(wilson(sr * n_, n_)[0] > league for sr, n_ in zip(q.success, q.carries)))}
 
 
 def chart_team_tiers(p, weeks, tc, f):
@@ -393,7 +401,7 @@ def chart_proe(p, weeks, tc, f):
     save(fig, "early_down_proe.png")
     r = float(np.corrcoef(t.proe, t.epa)[0, 1])
     f["early_down_proe"] = {"most_pass_happy": t.head(3).proe.round(3).to_dict(), "most_run_heavy": t.tail(3).proe.round(3).to_dict(),
-                            "corr_proe_off_epa": round(r, 2), "min_plays": int(t.plays.min())}
+                            "corr_proe_off_epa": round(r, 2), "corr_ci": r_ci(t.proe, t.epa), "min_plays": int(t.plays.min())}
 
 
 def chart_receivers(p, weeks, tc, f):
@@ -449,7 +457,7 @@ def chart_defense(p, weeks, tc, f):
     save(fig, "defense_pressure.png")
     r = float(np.corrcoef(t.press, t.epa)[0, 1])
     resid = (t.epa - np.polyval(b, t.press)).sort_values()
-    f["defense_pressure"] = {"corr_press_epa": round(r, 2), "best_vs_fit": resid.head(3).round(3).to_dict(),
+    f["defense_pressure"] = {"corr_press_epa": round(r, 2), "corr_ci": r_ci(t.press, t.epa), "best_vs_fit": resid.head(3).round(3).to_dict(),
                              "worst_vs_fit": resid.tail(3).round(3).to_dict()}
 
 
@@ -470,7 +478,7 @@ def chart_qb_adot_yac(p, weeks, tc, f):
                   sub_line(weeks, "Min. attempts: 150 | YAC share = YAC / passing yards on completions"))
     save(fig, "qb_adot_yac.png")
     s = q.sort_values("yac_share", ascending=False)
-    f["qb_adot_yac"] = {"n_qbs": int(len(q)), "corr_adot_yac_share": round(float(q.adot.corr(q.yac_share)), 2),
+    f["qb_adot_yac"] = {"n_qbs": int(len(q)), "corr_adot_yac_share": round(float(q.adot.corr(q.yac_share)), 2), "corr_ci": r_ci(q.adot, q.yac_share),
                         "most_yac": s.head(3)[["name", "team", "adot", "yac_share"]].round(3).to_dict("records"),
                         "least_yac": s.tail(3)[["name", "team", "adot", "yac_share"]].round(3).to_dict("records")}
 
@@ -561,7 +569,7 @@ def chart_receiver_epa_adot(p, weeks, tc, f):
     save(fig, "receiver_epa_adot.png")
     s = q.sort_values("epa", ascending=False)
     f["receiver_epa_adot"] = {"n": int(len(q)), "top5_epa_per_target": s.head(5)[["receiver_player_name", "team", "tgt", "adot", "epa"]].round(3).to_dict("records"),
-                              "corr_adot_epa": round(float(q.adot.corr(q.epa)), 2)}
+                              "corr_adot_epa": round(float(q.adot.corr(q.epa)), 2), "corr_ci": r_ci(q.adot, q.epa)}
 
 
 def chart_yac_oe(p, weeks, tc, f):
@@ -569,7 +577,7 @@ def chart_yac_oe(p, weeks, tc, f):
           & (p.two_point_attempt != 1)].copy()
     c["yacoe"] = c.yards_after_catch - c.xyac_mean_yardage
     r = c.groupby(["receiver_player_id", "receiver_player_name"]).agg(
-        team=("posteam", lambda s: s.mode().iat[0]), rec=("yacoe", "size"), yacoe=("yacoe", "mean"),
+        team=("posteam", lambda s: s.mode().iat[0]), rec=("yacoe", "size"), yacoe=("yacoe", "mean"), se=("yacoe", "sem"),
         yac=("yards_after_catch", "mean")).reset_index()
     league = float(c.yacoe.mean())
     n_q = int((r.rec >= 25).sum())
@@ -579,7 +587,10 @@ def chart_yac_oe(p, weeks, tc, f):
                 "YAC Over Expected per Catch",
                 sub_line(weeks, f"Top 30 of {n_q} players with 25+ catches | Expected = nflverse xYAC model | (team, catches)"),
                 "yac_over_expected.png", ref=None, right=lambda r: f"{r.yac:.1f}", right_head="YAC/\nrec", names_left=True)
-    f["yac_over_expected"] = {"league_mean": round(league, 3), "n_qualified": n_q,
+    q["lo"] = q.yacoe - 1.96 * q.se; q["hi"] = q.yacoe + 1.96 * q.se
+    f["yac_over_expected"] = {"league_mean": round(league, 3), "n_qualified": n_q, "min_catches": 25,
+                              "leader_ci": [round(float(q.lo.iat[0]), 2), round(float(q.hi.iat[0]), 2)],
+                              "top30_clear_of_league": int((q.lo > league).sum()),
                               "top5": q.head(5)[["receiver_player_name", "team", "rec", "yacoe", "yac"]].round(2).to_dict("records")}
 
 
@@ -604,7 +615,7 @@ def chart_defense_run_pass(p, weeks, tc, f):
     save(fig, "defense_run_pass.png")
     t["both"] = t["run"] + t["pass"]
     f["defense_run_pass"] = {"best_run_d": t["run"].nsmallest(3).round(3).to_dict(), "best_pass_d": t["pass"].nsmallest(3).round(3).to_dict(),
-                             "corr_run_pass": round(float(t["run"].corr(t["pass"])), 2)}
+                             "corr_run_pass": round(float(t["run"].corr(t["pass"])), 2), "corr_ci": r_ci(t["run"], t["pass"])}
 
 
 def chart_pass_rush(p, weeks, tc, f):
@@ -654,15 +665,19 @@ def chart_kickers(p, weeks, tc, f):
     k["made"] = (k.field_goal_result == "made").astype(int)
     g = k.groupby(["kicker_player_id", "kicker_player_name"]).agg(
         team=("posteam", lambda s: s.mode().iat[0]), att=("made", "size"), made=("made", "sum"), exp=("p", "sum"),
+        var=("p", lambda s: float((s * (1 - s)).sum())),
         long=("kick_distance", lambda s: s[k.loc[s.index, "made"] == 1].max())).reset_index()
     g["fgoe_pts"] = 3 * (g.made - g.exp)
+    g["half95"] = 1.96 * 3 * np.sqrt(g["var"])  # spread an average kicker would show on the same kicks
     q = g[g.att >= 8].sort_values("fgoe_pts", ascending=False).reset_index(drop=True)
     q["lab"] = q.kicker_player_name + " (" + q.team + ")"
     ranked_bars(q, "fgoe_pts", "lab", "team", tc, lambda v: f"{v:+.1f}", "Field-goal points over expected",
                 "Kickers: FG Points Over Expected",
                 sub_line(weeks, f"Min. 8 attempts | Expected make rate by distance and roof, fit on {n_hist:,} 2022-25 kicks | made-att at right"),
                 "kicker_fgoe.png", right=lambda r: f"{int(r.made)}-{int(r.att)}", right_head="FG", diverging=True)
-    f["kicker_fgoe"] = {"n": int(len(q)), "model_kicks": int(n_hist),
+    f["kicker_fgoe"] = {"n": int(len(q)), "model_kicks": int(n_hist), "min_attempts": 8,
+                        "leader_chance_band_pts": round(float(q.half95.iat[0]), 1),
+                        "outside_chance_band": int((q.fgoe_pts.abs() > q.half95).sum()),
                         "top3": q.head(3)[["kicker_player_name", "team", "made", "att", "fgoe_pts"]].round(2).to_dict("records"),
                         "bottom3": q.tail(3)[["kicker_player_name", "team", "made", "att", "fgoe_pts"]].round(2).to_dict("records")}
 

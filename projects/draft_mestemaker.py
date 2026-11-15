@@ -1,4 +1,4 @@
-"""Draft 2027 prospect report: Drew Mestemaker, QB, Oklahoma State. Is he QB1?
+"""Draft 2027 evaluation: Drew Mestemaker, QB, Oklahoma State. Is he QB1?
 
 Builds reports/draft-2027-drew-mestemaker/ (findings.json, figures, tables, README) from the CSVs in its data/ folder.
 The CSVs were pulled from cfbstats.com (season tables, situational tables, game logs, splits) and nflverse draft picks;
@@ -12,6 +12,7 @@ from __future__ import annotations
 import html
 import io
 import json
+import math
 import re
 import sys
 import time
@@ -183,30 +184,210 @@ def analyze():
                      me_d_rating=float(mine.d_rating), me_d_ypa=float(mine.d_ypa), me_before=float(mine.Rating_b), me_after=float(mine.Rating_a),
                      held_165=int(((mv.Rating_b >= 165) & (mv.Rating_a >= 165)).sum()), started_165=int((mv.Rating_b >= 165).sum()),
                      me_rank_after=int(mv.Rating_a.rank(ascending=False).loc[mv.name == ME].iloc[0]),
-                     mean_d_rating_ex_mateer=float(oth[oth.name != "John Mateer"].d_rating.mean()), declined=int((oth.d_rating < 0).sum()))
+                     mean_d_rating_ex_mateer=float(oth[oth.name != "John Mateer"].d_rating.mean()), declined=int((oth.d_rating < 0).sum()),
+                     sd=float(oth.d_rating.std()), me_rank_change=int(mv.d_rating.rank(ascending=False).loc[mv.name == ME].iloc[0]))
     x25 = cur.sort_values("x25", ascending=False).iloc[0]
     f["x25_leader"] = dict(name=x25.Name, team=x25.Team, x25=float(x25.x25), att=int(x25.Att))
     assert f["move"]["held_165"] == 1
     return f, D, G, fr, mv, cls
 
 
+# ---------------------------------------------------------------- evaluation: base rates, opponents, system
+def _key(name: str) -> str:
+    return re.sub(r"[^a-z]", "", re.sub(r"\b(jr|sr|ii|iii|iv)\b\.?", "", name.lower()))
+
+
+def wilson(k, n, z=1.96):
+    p = k / n
+    d = 1 + z * z / n
+    c = (p + z * z / (2 * n)) / d
+    h = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
+    return max(0.0, 100 * (c - h)), min(100.0, 100 * (c + h))
+
+
+def with_outcomes(D):
+    """Attach each quarterback's NFL draft result (2021-2026 drafts) by name."""
+    dp = pd.read_csv(DATA / "qb_draft_picks_2021_2026.csv")
+    dp["k"] = dp.name.map(_key)
+    D = D.assign(k=D.Name.map(_key)).merge(dp[["k", "draft", "round", "pick"]], on="k", how="left")
+    now = set(D[D.season == SEASON].player_id)
+
+    def outcome(r):
+        if pd.notna(r["round"]):
+            return f"round {int(r['round'])}, pick {int(r['pick'])} ({int(r['draft'])})"
+        return f"in college in {SEASON}" if r.player_id in now else "not drafted"
+
+    D["outcome"] = D.apply(outcome, axis=1)
+    D["still_in_college"] = D.player_id.isin(now) & D["round"].isna()
+    return D
+
+
+def opp_adjusted(G, T, player, season, first_n=None):
+    """FBS games only. Expected line = what each opponent allowed in its other games, weighted by his attempts."""
+    g = G[(G.player == player) & (G.season == season) & G.Att.notna()].copy()
+    g["d"] = pd.to_datetime(g.Date, format="%m/%d/%y")
+    g = g.sort_values("d")
+    if first_n:
+        g = g.head(first_n)
+    g["opp"] = g.Opponent.str.replace(r"^[@+] ", "", regex=True).str.replace(r"^\d+ ", "", regex=True)
+    t = T[T.season == season].set_index("Name")
+    g = g[g.opp.isin(t.index)]
+    e = np.zeros(4)
+    for r in g.itertuples():
+        o = t.loc[r.opp]
+        rest = o.Att - r.Att
+        e += r.Att * np.array([o.Comp - r.Comp, o.Yards - r.Yards, o.TD - r.TD, o.Int - r.Int]) / rest
+    att = g.Att.sum()
+    act = ncaa_rating(g.Comp.sum(), att, g.Yards.sum(), g.TD.sum(), g.Int.sum())
+    exp = ncaa_rating(e[0], att, e[1], e[2], e[3])
+    return dict(name=player, season=int(season), games=int(len(g)), att=int(att), fbs_rating=float(act), opp_allowed=float(exp), over=float(act - exp))
+
+
+def evaluate(f, D, G, SP, FR, MV):
+    D = with_outcomes(D)
+    me = D[(D.Name == ME) & (D.season == SEASON)].iloc[0]
+    L = f["line"]
+
+    # intervals on the two rates that carry the argument
+    x25_n = int(round(L["x25"] * f["sit_att_all_plays"] / 100))
+    lo, hi = wilson(x25_n, f["sit_att_all_plays"])
+    ilo, ihi = wilson(L["Int"], L["Att"])
+    v = f["vs_first_round"]
+    f["intervals"] = dict(x25_n=x25_n, x25_att=f["sit_att_all_plays"], x25_lo=lo, x25_hi=hi, x25_contains_fr_median=bool(lo <= v["x25"]["median"] <= hi),
+                          int_lo=ilo, int_hi=ihi, int_contains_fr_median=bool(ilo <= v["INTp"]["median"] <= ihi))
+
+    # nearest seasons in the full pool, with what happened next
+    prior = D[D.season < SEASON].copy()
+    cols = ["YPA", "Pct", "TDp", "INTp", "YPG"]
+    mu, sd = prior[cols].mean(), prior[cols].std()
+    prior["dist"] = np.sqrt(((((prior[cols] - mu) / sd) - ((me[cols].astype(float) - mu) / sd)) ** 2).sum(axis=1))
+    near = prior[prior.Name != ME].nsmallest(12, "dist")
+    f["pool_comps"] = [dict(name=r.Name, team=r.Team, season=int(r.season), rating=float(r.Rating), ypa=float(r.YPA), tdp=float(r.TDp), intp=float(r.INTp),
+                            ypg=float(r.YPG), dist=float(r.dist), outcome=r.outcome) for r in near.itertuples()]
+    done = near[~near.still_in_college]
+    f["pool_comps_summary"] = dict(n=int(len(near)), decided=int(len(done)), round1=int((done["round"] == 1).sum()),
+                                   drafted=int(done["round"].notna().sum()), not_drafted=int(done["round"].isna().sum()), prior_seasons=int(len(prior)))
+
+    # prior seasons at or above his rating and yards per attempt
+    hi_ = prior[(prior.Rating >= me.Rating) & (prior.YPA >= me.YPA)].sort_values("Rating", ascending=False)
+    qb = hi_.drop_duplicates("player_id")
+    dec = qb[~qb.still_in_college]
+    f["at_or_above"] = dict(seasons=int(len(hi_)), qbs=int(len(qb)), decided=int(len(dec)), round1=int((dec["round"] == 1).sum()),
+                            drafted_later=int(((dec["round"] > 1)).sum()), not_drafted=int(dec["round"].isna().sum()),
+                            rows=[dict(name=r.Name, team=r.Team, season=int(r.season), rating=float(r.Rating), ypa=float(r.YPA), outcome=r.outcome) for r in hi_.itertuples()])
+
+    # P(first round) by passer rating in a quarterback's last qualifying college season
+    last = prior.sort_values("season").groupby("player_id").tail(1)
+    fin = last[~last.still_in_college].copy()
+    bands = [(0, 130, "under 130"), (130, 145, "130 to 145"), (145, 160, "145 to 160"), (160, 175, "160 to 175"), (175, 400, "175 and up")]
+    f["base_rate"] = []
+    for a, b, lab in bands:
+        x = fin[(fin.Rating >= a) & (fin.Rating < b)]
+        f["base_rate"].append(dict(band=lab, n=int(len(x)), round1=int((x["round"] == 1).sum()), drafted=int(x["round"].notna().sum()),
+                                   his_band=bool(a <= me.Rating < b)))
+    f["base_rate_n"] = int(len(fin))
+
+    # opponent adjustment
+    T = pd.read_csv(DATA / "team_pass_defense_2020_2026.csv")
+    cls = [opp_adjusted(G, T, n, SEASON) for n in CLASS]
+    frs = [opp_adjusted(G, T, r.cfbstats_name, r.final_season) for r in FR[FR.in_fbs_data].itertuples()]
+    mine = cls[0]
+    f["opp"] = dict(cls=cls, first_round=frs, me_2025=opp_adjusted(G, T, ME, 2025),
+                    class_rank=int(1 + sum(c["over"] > mine["over"] for c in cls)), class_n=len(cls),
+                    fr_median=float(np.median([x["over"] for x in frs])), fr_beats=int(sum(x["over"] < mine["over"] for x in frs)),
+                    sched_rank_easiest=int(1 + sum(c["opp_allowed"] > mine["opp_allowed"] for c in cls)))
+    sp = SP[(SP.player == ME) & (SP.season == SEASON)].set_index("Split")
+    f["fcs_game"] = dict(att=int(sp.loc["vs. FCS (I-AA)", "Att"]), rating=float(sp.loc["vs. FCS (I-AA)", "Rating"]))
+
+    # first-rounders through the same number of games
+    n = int(L["G"])
+    rows = []
+    for r in FR[FR.in_fbs_data].itertuples():
+        g = G[(G.player == r.cfbstats_name) & (G.season == r.final_season) & G.Att.notna()].copy()
+        g["d"] = pd.to_datetime(g.Date, format="%m/%d/%y")
+        g = g.sort_values("d").head(n)
+        rows.append(dict(name=r.cfbstats_name, season=int(r.final_season), games=int(len(g)), att=int(g.Att.sum()), yards=int(g.Yards.sum()), td=int(g.TD.sum()), int=int(g.Int.sum()),
+                         rating=float(ncaa_rating(g.Comp.sum(), g.Att.sum(), g.Yards.sum(), g.TD.sum(), g.Int.sum())), ypa=float(g.Yards.sum() / g.Att.sum()),
+                         ypg=float(g.Yards.sum() / len(g)), tdp=float(100 * g.TD.sum() / g.Att.sum()), intp=float(100 * g.Int.sum() / g.Att.sum())))
+    t = pd.DataFrame(rows)
+    f["same_games"] = dict(games=n, rows=rows, **{k: dict(me=float(L[m]), median=float(t[k].median()), beats=int((t[k] > L[m]).sum() if k == "intp" else (t[k] < L[m]).sum()))
+                                                    for k, m in [("rating", "Rating"), ("ypa", "YPA"), ("ypg", "YPG"), ("tdp", "TDp"), ("intp", "INTp")]})
+
+    # moving up, FBS opponents only
+    fb = SP[SP.Split == "vs. FBS (I-A)"][["player", "season", "Rating"]].copy()
+    fb["Rating"] = pd.to_numeric(fb.Rating)
+    m = MV.merge(fb, left_on=["name", "season_before"], right_on=["player", "season"]).merge(fb, left_on=["name", "season_after"], right_on=["player", "season"], suffixes=("_b", "_a"))
+    assert len(m) == len(MV)
+    m["d"] = m.Rating_a - m.Rating_b
+    oth, mi = m[m.name != ME], m[m.name == ME].iloc[0]
+    f["move_fbs"] = dict(n=int(len(m)), me_before=float(mi.Rating_b), me_after=float(mi.Rating_a), me_d=float(mi.d), mean=float(oth.d.mean()), median=float(oth.d.median()),
+                         sd=float(oth.d.std()), declined=int((oth.d < 0).sum()), others=int(len(oth)), me_rank=int(m.d.rank(ascending=False)[m.name == ME].iloc[0]),
+                         me_rank_after=int(m.Rating_a.rank(ascending=False)[m.name == ME].iloc[0]), top_after=m.sort_values('Rating_a').iloc[-1]['name'],
+                         z=float((mi.d - oth.d.mean()) / oth.d.std()))
+
+    # the North Texas and Eric Morris baseline
+    unt = D[(D.Team == "N Texas") & (D.season >= 2023)].sort_values("season")
+    f["system"] = dict(unt=[dict(name=r.Name, season=int(r.season), rating=float(r.Rating), ypa=float(r.YPA), att=int(r.Att),
+                                 coach="Eric Morris" if r.season <= 2025 else "Neal Brown") for r in unt.itertuples()])
+    tj = D[(D.Name == "Tayven Jackson")].sort_values("season")
+    f["system"]["successor_prior"] = dict(team=tj.iloc[-2].Team, season=int(tj.iloc[-2].season), rating=float(tj.iloc[-2].Rating)) if len(tj) > 1 else None
+    f["system"]["morris_other_mean"] = float(unt[(unt.season <= 2025) & (unt.Name != ME)].Rating.mean())
+    return m
+
+
 # ---------------------------------------------------------------- figures
-def figures(f, D, G, fr, mv, cls):
+def figures(f, D, G, fr, mv, cls, mvf):
     P.style()
     cur = D[D.season == SEASON]
     me = cur[cur.Name == ME].iloc[0]
 
-    # 1 hero: explosive passing against first-round quarterbacks
-    d = pd.concat([fr[["Name", "season", "x25"]], pd.DataFrame([dict(Name=ME, season=SEASON, x25=me.x25)])]).sort_values("x25")
+    # 1 hero: rating against what the same opponents allowed
+    o = f["opp"]
+    rows = [dict(lab=f"{x['name']} ({x['season']})", over=x["over"], kind="fr") for x in o["first_round"]] + \
+           [dict(lab=f"{x['name']} ({x['season']})", over=x["over"], kind="me" if x["name"] == ME else "cls") for x in o["cls"]]
+    d = pd.DataFrame(rows).sort_values("over")
+    fig, ax = plt.subplots(figsize=(9, 8))
+    col = {"fr": P.ACCENT, "cls": P.SOFT, "me": P.ACCENT2}
+    ax.barh(d.lab, d.over, color=[col[k] for k in d.kind], height=0.68)
+    for y, val in enumerate(d.over):
+        ax.text(val + (0.8 if val >= 0 else -0.8), y, f"{val:+.0f}", va="center", ha="left" if val >= 0 else "right", fontsize=8.5)
+    ax.axvline(o["fr_median"], color=P.INK, lw=1, ls="--")
+    ax.set_xlabel("Passer rating minus the rating his FBS opponents allowed in their other games")
+    ax.grid(axis="y", visible=False)
+    P.finish(fig, ax, "Against schedule, he is mid-class and below the first-round median",
+             f"Green: final season of first-round QBs, 2021-2026. Grey: 2027 class. Orange: Mestemaker. Dashed: first-round median ({o['fr_median']:+.0f})",
+             OUT / "opponent_adjusted.png", SRC)
+
+    # 1b explosive rate with its interval
+    iv = f["intervals"]
+    d = pd.concat([fr[["Name", "season", "x25"]], pd.DataFrame([dict(Name=ME, season=SEASON, x25=me.x25)])]).sort_values("x25").reset_index(drop=True)
     fig, ax = plt.subplots(figsize=(9, 6.6))
     cols = [P.ACCENT2 if n == ME else P.ACCENT for n in d.Name]
     ax.barh([f"{n} ({s})" for n, s in zip(d.Name, d.season)], d.x25, color=cols, height=0.68)
-    for y, v in enumerate(d.x25):
-        ax.text(v + 0.12, y, f"{v:.1f}", va="center", fontsize=9, color=P.INK)
+    yme = int(d.index[d.Name == ME][0])
+    ax.errorbar([me.x25], [yme], xerr=[[me.x25 - iv["x25_lo"]], [iv["x25_hi"] - me.x25]], fmt="none", ecolor=P.INK, lw=1.2, capsize=3)
+    ax.axvline(f["vs_first_round"]["x25"]["median"], color=P.INK, lw=1, ls="--")
     ax.set_xlabel("Completions of 25+ yards per 100 attempts")
     ax.grid(axis="y", visible=False)
-    P.finish(fig, ax, "Mestemaker hits the big play more often than first-round QBs did",
-             f"Final college season of the {len(fr)} FBS quarterbacks drafted in round 1, 2021-2026, and Mestemaker through {THROUGH}", OUT / "explosive_vs_first_round.png", SRC)
+    P.finish(fig, ax, "His big-play rate is high, on a sample that still reaches the median",
+             f"Final college season of the {len(fr)} first-round QBs, 2021-2026 (dashed: their median). His bar: {iv['x25_n']} of {iv['x25_att']} attempts, 95% interval shown",
+             OUT / "explosive_vs_first_round.png", SRC)
+
+    # 1c base rate
+    b = pd.DataFrame(f["base_rate"])
+    fig, ax = plt.subplots(figsize=(9, 4.8))
+    x = np.arange(len(b))
+    ax.bar(x - 0.2, 100 * b.drafted / b.n, width=0.4, color=P.SOFT, label="drafted, any round")
+    ax.bar(x + 0.2, 100 * b.round1 / b.n, width=0.4, color=[P.ACCENT2 if h else P.ACCENT for h in b.his_band], label="drafted in round 1")
+    for i, r in b.iterrows():
+        ax.text(i + 0.2, 100 * r.round1 / r.n + 1.5, f"{r.round1} of {r.n}", ha="center", fontsize=9)
+    ax.set_xticks(x, b.band)
+    ax.set_ylabel("% of quarterbacks")
+    ax.set_xlabel("Passer rating in the last qualifying college season, 2020-2025")
+    ax.legend(loc="upper left")
+    ax.grid(axis="x", visible=False)
+    P.finish(fig, ax, "A rating like his has meant round 1 about a third of the time",
+             f"{f['base_rate_n']} quarterbacks whose last top-100 season was 2020-2025. Orange: the band his {me.Rating:.0f} falls in", OUT / "base_rate.png", SRC)
 
     # 2 where he ranks among FBS passers
     order = ["YPG", "x25", "TDp", "fd", "x15", "YPA", "Rating", "trail", "AYA", "rz_td", "Pct", "q4", "r3", "INTp"]
@@ -222,7 +403,7 @@ def figures(f, D, G, fr, mv, cls):
     ax.axvline(50, color=P.SOFT, lw=1, ls="--")
     ax.set_xlabel(f"Percentile among the top {f['pool']} FBS passers by yards per game (100 = best)")
     ax.grid(axis="y", visible=False)
-    P.finish(fig, ax, "Top 10 in the volume and big-play numbers, below average in two", f"Mestemaker's national rank in each measure, {SEASON} through {THROUGH}", OUT / "national_ranks.png", SRC)
+    P.finish(fig, ax, "Top 10 in volume and big plays, below average in two (all games)", f"Mestemaker's national rank in each measure, {SEASON} through {THROUGH}", OUT / "national_ranks.png", SRC)
 
     # 3 stability
     st = pd.DataFrame(f["stability"]).T.sort_values("r")
@@ -238,19 +419,19 @@ def figures(f, D, G, fr, mv, cls):
     P.finish(fig, ax, "Interception rate, his biggest knock, barely repeats", "Orange: his three weakest measures. FBS quarterbacks who qualified in back-to-back seasons",
              OUT / "stability.png", SRC)
 
-    # 4 moving up a level
-    m2 = mv.sort_values("d_rating")
-    fig, ax = plt.subplots(figsize=(9, 6.2))
+    # 4 moving up a level, FBS opponents only
+    m2 = mvf.sort_values("d").reset_index(drop=True)
+    fig, ax = plt.subplots(figsize=(9, 6.4))
     for y, r in enumerate(m2.itertuples()):
         c = P.ACCENT2 if r.name == ME else P.ACCENT
         ax.plot([r.Rating_b, r.Rating_a], [y, y], color=c, lw=2.4 if r.name == ME else 1.6, alpha=1 if r.name == ME else 0.75)
         ax.scatter([r.Rating_b], [y], s=34, facecolor=P.PLATE, edgecolor=c, zorder=3)
         ax.scatter([r.Rating_a], [y], s=46, color=c, zorder=3)
     ax.set_yticks(range(len(m2)), [f"{r.name} ({r.to_team}, {r.season_after})" for r in m2.itertuples()], fontsize=8.5)
-    ax.axvline(165, color=P.SOFT, lw=1, ls="--")
-    ax.set_xlabel("Passer rating: open dot = last Group of Five season, filled dot = first Power Four season")
+    ax.set_xlabel("Passer rating vs FBS opponents: open dot = last Group of Five season, filled dot = first Power Four season")
     ax.grid(axis="y", visible=False)
-    P.finish(fig, ax, "His production came with him to the Big 12", f"All {len(mv)} transfers who made the top-100 list before and after a Group of Five to Power Four move, 2021-2026",
+    P.finish(fig, ax, "He held his level moving up, inside the usual spread",
+             f"All {len(m2)} transfers who made the top-100 list before and after a Group of Five to Power Four move, 2021-2026, sorted by change",
              OUT / "g5_to_p4.png", SRC)
 
     # 5 game log
@@ -282,109 +463,137 @@ def figures(f, D, G, fr, mv, cls):
 # ---------------------------------------------------------------- README
 def readme(f):
     L, r, s, v, mv = f["line"], f["ranks"], f["stability"], f["vs_first_round"], f["move"]
+    o, iv, sg, mf, ao, pc, sy = f["opp"], f["intervals"], f["same_games"], f["move_fbs"], f["at_or_above"], f["pool_comps_summary"], f["system"]
+    N = f["first_round_n"]
 
     def rk(m):
         return f"#{r[m][0]} of {r[m][1]}"
 
+    def b(name):
+        return f"**{name}**" if name == ME else name
+
+    opp = {c["name"]: c for c in o["cls"]}
+    me_o = opp[ME]
     cls_rows = "\n".join(
-        f"| {'**' + c['name'] + '**' if c['name'] == ME else c['name']} | {c['team']} | {c['g']} | {c['yards']:,} | {c['td']} | {c['int']} | {c['Pct']:.1f} | {c['YPA']:.1f} | {c['Rating']:.1f} | {c['x25']:.1f} | {c['INTp']:.1f} | {c['r3']:.0f} |"
-        for c in f["class"])
+        f"| {b(c['name'])} | {c['team']} | {c['g']} | {c['yards']:,} | {c['td']} | {c['int']} | {c['Pct']:.1f} | {c['YPA']:.1f} | {c['Rating']:.1f} | {opp[c['name']]['fbs_rating']:.1f} | {opp[c['name']]['opp_allowed']:.1f} | {opp[c['name']]['over']:+.1f} | {c['x25']:.1f} | {c['INTp']:.1f} |"
+        for c in sorted(f["class"], key=lambda c: -opp[c["name"]]["over"]))
     two_rows = "\n".join(
-        f"| {'**' + t['name'] + '**' if t['name'] == ME else t['name']} | {t['seasons']} | {t['Att']:,} | {t['Yards']:,} | {t['TD']} | {t['Int']} | {t['YPA']:.1f} | {t['Rating']:.1f} | {t['YPG']:.0f} |"
+        f"| {b(t['name'])} | {t['seasons']} | {t['Att']:,} | {t['Yards']:,} | {t['TD']} | {t['Int']} | {t['YPA']:.1f} | {t['Rating']:.1f} | {t['YPG']:.0f} |"
         for t in f["two_year"])
-    fr_rows = "\n".join(
-        f"| {LABEL[m]} | {v[m]['me']:.1f} | {v[m]['median']:.1f} | {v[m]['beats']} of {f['first_round_n']} |"
-        for m in ["YPG", "YPA", "Rating", "TDp", "x25", "x15", "fd", "Pct", "q4", "INTp", "r3"])
-    st_rows = "\n".join(
-        f"| {LABEL[m]} | {x['r']:.2f} | {x['lo']:.2f} to {x['hi']:.2f} | {x['n']} |"
-        for m, x in sorted(s.items(), key=lambda kv: -kv[1]["r"]))
-    comps = ", ".join(f"{c['name']} ({c['season']}, pick {c['pick']})" for c in f["comps"])
+    sg_lab = [("ypg", "Passing yards per game"), ("ypa", "Yards per attempt"), ("rating", "Passer rating"), ("tdp", "Touchdown %"), ("intp", "Interception %")]
+    sg_rows = "\n".join(f"| {lab} | {sg[k]['me']:.1f} | {sg[k]['median']:.1f} | {sg[k]['beats']} of {N} |" for k, lab in sg_lab)
+    full_rows = "\n".join(f"| {LABEL[m]} | {v[m]['me']:.1f} | {v[m]['median']:.1f} | {v[m]['beats']} of {N} |" for m in ["x25", "x15", "fd", "Pct", "q4", "r3"])
+    comp_rows = "\n".join(f"| {c['name']} | {c['team']} | {c['season']} | {c['rating']:.1f} | {c['ypa']:.1f} | {c['tdp']:.1f} | {c['intp']:.1f} | {c['outcome']} |" for c in f["pool_comps"])
+    ao_rows = "\n".join(f"| {c['name']} | {c['team']} | {c['season']} | {c['rating']:.1f} | {c['ypa']:.1f} | {c['outcome']} |" for c in ao["rows"])
+    br_rows = "\n".join(f"| {'**' + x['band'] + '**' if x['his_band'] else x['band']} | {x['n']} | {x['drafted']} | {x['round1']} | {100 * x['round1'] / x['n']:.0f}% |" for x in f["base_rate"])
+    his_band = next(x for x in f["base_rate"] if x["his_band"])
+    st_rows = "\n".join(f"| {LABEL[m]} | {x['r']:.2f} | {x['lo']:.2f} to {x['hi']:.2f} | {x['n']} |" for m, x in sorted(s.items(), key=lambda kv: -kv[1]["r"]))
+    unt_rows = "\n".join(f"| {u['season']} | {u['name']} | {u['coach']} | {u['att']} | {u['ypa']:.1f} | {u['rating']:.1f} |" for u in sy["unt"])
     sp = f["splits"]
-    n_above = sum(1 for m in v if (v[m]['me'] < v[m]['median'] if m in LOW_GOOD else v[m]['me'] > v[m]['median']))
-    mens = next(c for c in f["class"] if c["name"] == "Darian Mensah")
-    sayin = next(c for c in f["class"] if c["name"] == "Julian Sayin")
-    two_best_rate = max(f["two_year"], key=lambda t: t["Rating"])
+    mens, sayin, carr = (next(c for c in f["class"] if c["name"] == n) for n in ["Darian Mensah", "Julian Sayin", "CJ Carr"])
+    two_best = max(f["two_year"], key=lambda t: t["Rating"])
     two_me = next(t for t in f["two_year"] if t["name"] == ME)
-    assert max(f["two_year"], key=lambda t: t["YPA"])["name"] == two_best_rate["name"] and max(f["two_year"], key=lambda t: t["TD"])["name"] == ME == max(f["two_year"], key=lambda t: t["Yards"])["name"]
+    assert max(f["two_year"], key=lambda t: t["TD"])["name"] == ME == max(f["two_year"], key=lambda t: t["Yards"])["name"]
+    raw_rank = 1 + sum(c["Rating"] > L["Rating"] for c in f["class"])
+    succ = sy["successor_prior"]
+    unt26 = sy["unt"][-1]
+    succ_txt = (", up from " + format(succ["rating"], ".1f") + " at " + succ["team"] + " in " + str(succ["season"])) if succ else ""
+    contains = "contains" if iv["x25_contains_fr_median"] else "sits above"
+    int_contains = "contains" if iv["int_contains_fr_median"] else "sits above"
 
     def img(file, cap):
         return f'<p align="center"><img src="{file}" width="720" alt="{cap}"></p>\n<p align="center"><sub>{cap}</sub></p>'
 
     return f"""<sub>[← Portfolio](../../README.md)</sub>
 
-# Draft 2027: Drew Mestemaker, QB, Oklahoma State
-### The case for QB1: first-round production at 20, more big plays than any quarterback he is compared with, and it traveled up a level
+# Draft 2027 evaluation: Drew Mestemaker, QB, Oklahoma State
+### Is he QB1? The scouts say yes. The production says first-round candidate, and does not separate him from Mensah or Sayin
 
-![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![season: 2026 through 9 games](https://img.shields.io/badge/season-2026%20through%209%20games-1d2433) ![method: first-round comps](https://img.shields.io/badge/method-first--round%20comps-c2410c) ![method: year-to-year stability](https://img.shields.io/badge/method-year--to--year%20stability-c2410c) ![method: bootstrap](https://img.shields.io/badge/method-bootstrap-c2410c)
+![status: published](https://img.shields.io/badge/status-published-0b6e4f) ![season: 2026 through {L['G']} games](https://img.shields.io/badge/season-2026%20through%20{L['G']}%20games-1d2433) ![method: base rates](https://img.shields.io/badge/method-base%20rates-c2410c) ![method: opponent adjustment](https://img.shields.io/badge/method-opponent%20adjustment-c2410c) ![method: year-to-year stability](https://img.shields.io/badge/method-year--to--year%20stability-c2410c)
 
 **TL;DR**
 
-- **He is my QB1.** Through {L['G']} games he has {L['Yards']:,} yards ({rk('Yards')} FBS passers), {L['TD']} touchdown passes ({rk('TD')}) and {L['YPA']:.1f} yards per attempt ({rk('YPA')}). He completes a pass of 25+ yards on {L['x25']:.1f}% of his attempts ({rk('x25')}), a higher rate than {v['x25']['beats']} of the {f['first_round_n']} first-round quarterbacks since 2021 managed in their final college season.
-- **It came with him to the Big 12.** {mv['others']} other transfers made the top-100 list before and after a Group of Five to Power Four move; their passer rating changed by {mv['mean_d_rating']:+.1f} on average. His went from {mv['me_before']:.1f} to {mv['me_after']:.1f} ({mv['me_d_rating']:+.1f}).
-- **The knocks are real, and the biggest one is mostly noise year to year.** His interception rate ({L['INTp']:.1f}%, {rk('INTp')}) and third-down rating ({L['r3']:.0f}, {rk('r3')}) are below average. Year to year those two repeat at r = {s['INTp']['r']:.2f} and {s['r3']['r']:.2f}; in 2025 he was at {f['line_2025']['INTp']:.1f}% and {f['line_2025']['r3']:.0f}. Darian Mensah ({mens['Rating']:.1f} rating) and Julian Sayin ({sayin['Rating']:.1f}) have been more efficient in 2026 than Mestemaker ({L['Rating']:.1f}); the case for him is volume, big plays, the tools scouts grade, and age.
+- **Grade: first-round candidate. The numbers alone do not make him QB1.** Through {L['G']} games he has {L['Yards']:,} yards ({rk('Yards')} FBS passers), {L['TD']} touchdown passes ({rk('TD')}) and a {L['Rating']:.1f} rating, close to what the {N} first-round quarterbacks since 2021 had through the same {sg['games']} games (median {sg['rating']['median']:.1f}; he is ahead of {sg['rating']['beats']} of {N} on rating and {sg['ypg']['beats']} of {N} on yards per game).
+- **Against schedule he is #{o['class_rank']} of {o['class_n']} in this class.** His rating against FBS opponents is {me_o['over']:+.1f} above what those defenses allowed in their other games. Darian Mensah is {opp['Darian Mensah']['over']:+.1f} and Julian Sayin {opp['Julian Sayin']['over']:+.1f}; the first-round median is {o['fr_median']:+.1f}, and he is ahead of {o['fr_beats']} of {N}. His opponents have been the easiest pass defenses any of the seven has faced.
+- **Similar college lines have gone anywhere from pick 1 to undrafted.** Of the {his_band['n']} quarterbacks since 2020 whose last college season had a rating of {his_band['band']}, {his_band['round1']} went in round 1. The case for QB1 is outside the box score: 17 of 25 NFL scouts and executives named him the first quarterback off the board (ESPN, Oct. 31), he leads the country in touchdown passes, and he will be 21 on draft day.
 
-{img('explosive_vs_first_round.png', 'Completions of 25+ yards per 100 attempts: Mestemaker in 2026 against the final college season of every FBS quarterback drafted in round 1 since 2021.')}
+{img('opponent_adjusted.png', 'Passer rating against FBS opponents minus the rating those opponents allowed in their other games: first-round quarterbacks in their final college season, the 2027 class, and Mestemaker.')}
 
 ## Key numbers
 
 | Measure | Value |
 |---|---|
-| 2026 passing line ({L['G']} games) | **{L['Comp']}-of-{L['Att']}, {L['Yards']:,} yards, {L['TD']} TD, {L['Int']} INT** |
-| Yards per attempt / passer rating | **{L['YPA']:.1f} ({rk('YPA')}) / {L['Rating']:.1f} ({rk('Rating')})** |
-| 25+ yard completions per 100 attempts | **{L['x25']:.1f} ({rk('x25')}); first-round median {v['x25']['median']:.1f}** |
-| Measures (of 14) where he beats the first-round median | **{n_above}** |
-| Rating change, Group of Five to Power Four (other movers' average) | **{mv['me_d_rating']:+.1f} ({mv['mean_d_rating']:+.1f})** |
-| Last {f['last7']['games']} games | **{f['last7']['yards']:,} yards, {f['last7']['td']} TD, {f['last7']['int']} INT, {f['last7']['rating']:.1f} rating** |
-| Interception % / third-down rating | **{L['INTp']:.1f} ({rk('INTp')}) / {L['r3']:.0f} ({rk('r3')})** |
-| Year-to-year r: interception % / third-down rating / yards per game | **{s['INTp']['r']:.2f} / {s['r3']['r']:.2f} / {s['YPG']['r']:.2f}** |
-| Age at the April 2027 draft (born {f['age']['born']}) | **{f['age']['at_draft']}**; nflverse lists a median age of {f['age']['first_round_median_nflverse']:.0f} for the {f['age']['first_round_total']} first-round QBs, 2021-2026 |
-| NFL scouts and executives who named him the first QB off the board (ESPN, Oct. 31) | **17 of 25** |
+| 2026 passing line ({L['G']} games, before Texas Tech) | **{L['Comp']}-of-{L['Att']}, {L['Yards']:,} yards, {L['TD']} TD, {L['Int']} INT** |
+| Passer rating: all games / FBS opponents only | **{L['Rating']:.1f} ({rk('Rating')}) / {me_o['fbs_rating']:.1f}** |
+| Rating over what his FBS opponents allowed | **{me_o['over']:+.1f}** (#{o['class_rank']} of {o['class_n']} in the class; first-round median {o['fr_median']:+.1f}) |
+| Rating through {sg['games']} games vs first-round QBs through {sg['games']} games | **{sg['rating']['me']:.1f} vs median {sg['rating']['median']:.1f}** (ahead of {sg['rating']['beats']} of {N}) |
+| Round 1 rate, last-season rating {his_band['band']} | **{his_band['round1']} of {his_band['n']}** |
+| Nearest {pc['n']} prior seasons in the full pool: round 1 / drafted later / not drafted / still in college | **{pc['round1']} / {pc['drafted'] - pc['round1']} / {pc['not_drafted']} / {pc['n'] - pc['decided']}** |
+| 25+ yard completions per 100 attempts (95% interval) | **{L['x25']:.1f} ({iv['x25_lo']:.1f} to {iv['x25_hi']:.1f})**; first-round median {v['x25']['median']:.1f} |
+| Interception % (95% interval) | **{L['INTp']:.1f} ({iv['int_lo']:.1f} to {iv['int_hi']:.1f})**, {rk('INTp')} |
+| Rating change vs FBS opponents, North Texas to Oklahoma State | **{mf['me_d']:+.1f}** (other {mf['others']} movers: mean {mf['mean']:+.1f}, SD {mf['sd']:.1f}) |
+| NFL scouts and executives naming him the first QB taken (ESPN, Oct. 31) | **17 of 25** |
+| Age at the April 2027 draft (born {f['age']['born']}) | **{f['age']['at_draft']}** |
 
 ## Why it matters for a club
 
-- **College scouting:** the public numbers agree with the tape consensus on the strengths (arm, big plays, production) and put a size on the two concerns (interceptions, third down), so the area scout's report can be checked against a baseline.
-- **General manager:** a quarterback who is 21 on draft day plays his rookie contract and fifth-year option at ages 21 through 25, a year younger than the typical first-round quarterback (nflverse lists a median age of {f['age']['first_round_median_nflverse']:.0f} for the last {f['age']['first_round_total']}).
-- **Offensive staff:** he is at his best on early downs (passer rating {f['downs']['1st Down']['rating']:.0f} on first down, {f['downs']['2nd Down']['rating']:.0f} on second, {f['downs']['3rd Down']['rating']:.0f} on third). What he needs is a third-and-long plan and a staff that lives with some interceptions in exchange for the big plays.
+- **College scouting:** the tape consensus has him first. This page gives the area scout the base rates and the schedule context to test that against, and names the two quarterbacks whose production is better.
+- **General manager:** production like his has been a first-round profile about a third of the time. Taking him first is a bet on traits and age, so the tape and the interviews have to carry it.
+- **Offensive staff:** he is at his best on early downs (passer rating {f['downs']['1st Down']['rating']:.0f} on first down, {f['downs']['2nd Down']['rating']:.0f} on second, {f['downs']['3rd Down']['rating']:.0f} on third) and has needed a third-and-long answer.
 
 ## The question
 
 **Is Drew Mestemaker the best quarterback in the 2027 draft?**
 
-The league is leaning that way. ESPN's midseason poll of 25 scouts and executives gave him 17 votes as the first quarterback taken, the most in the poll's three years; he had none in August. Dane Brugler's November board has him as the top quarterback and No. 2 overall. This report asks whether the public production data backs that up, where it disagrees, and how much weight the disagreements deserve.
+The league is leaning that way. ESPN's midseason poll of 25 scouts and executives gave him 17 votes as the first quarterback taken, the most in the poll's three years; he had none in August. Dane Brugler's November board has him as the top quarterback and No. 2 overall. I started this page expecting the production data to agree. It agrees that he belongs in the first-round conversation. It does not show that he is better than Mensah or Sayin, and this page says so.
 
 The background is part of the evaluation. He did not start a varsity game at quarterback at Vandegrift High in Austin, walked on at North Texas in 2024, led FBS in passing yards as a redshirt freshman in 2025, and followed Eric Morris to Oklahoma State, which went 1-11 last year and is {f['team']['wins']}-{f['team']['losses']} with him, scoring {f['team']['ppg']:.1f} points a game.
 
 ## Data
 
-- **Season tables:** the top 100 FBS passers by yards per game in each season, 2020-2026 ({f['n_seasons']} quarterback seasons), from [cfbstats.com](https://cfbstats.com). The 2026 season runs through {THROUGH} (nine games for Oklahoma State, before Texas Tech).
-- **Situational tables** (down, quarter, field zone, score, completions of 15+ and 25+ yards) for every quarterback in the 2024, 2025 and 2026 lists and for each first-round quarterback's final season.
-- **Game logs and splits** for Mestemaker (2024-2026) and the 2027 class.
-- **Draft results:** [nflverse](https://github.com/nflverse/nflverse-data) draft picks, 2021-2026: 19 first-round quarterbacks, 18 of them from FBS (Trey Lance played in FCS).
+- **Season tables:** the top 100 FBS passers by yards per game in each season, 2020-2026 ({f['n_seasons']} quarterback seasons), from [cfbstats.com](https://cfbstats.com). The 2026 season runs through {THROUGH}: nine games for Oklahoma State. The Texas Tech game on Nov. 14 is not in these numbers.
+- **Situational tables** for every quarterback in the 2024, 2025 and 2026 lists and for each first-round quarterback's final season.
+- **Game logs and splits** for Mestemaker (2024-2026), the 2027 class, every first-round quarterback's final season, and the 20 transfers in result 5.
+- **Team pass defense,** every FBS team, 2020-2026 (cfbstats national tables), for the opponent adjustment.
+- **Draft results:** [nflverse](https://github.com/nflverse/nflverse-data) draft picks, 2021-2026: 68 drafted quarterbacks, 19 in round 1, 18 of those from FBS (Trey Lance played in FCS).
 - **Scouting consensus,** cited where used: ESPN (Pete Thamel, Oct. 31, 2026), The Athletic's Dane Brugler via Bleacher Report (Nov. 12, 2026), PFF (Oct. 6, 2026).
 
 ## Results
 
-### 1. His production is at the first-round standard, and his big-play rate is above it.
+### 1. Through nine games his raw line is near the first-round median: ahead on volume, behind on interceptions.
 
-Against the final college season of the {f['first_round_n']} FBS quarterbacks drafted in round 1 since 2021, Mestemaker's 2026 beats the median in yards per game, yards per attempt, passer rating, touchdown rate, first downs per attempt and both explosive measures. He trails it in completion percentage, interception rate, third down and the fourth quarter.
+First-round quarterbacks are compared here through their first {sg['games']} games of their final college season, so the comparison is nine games against nine.
 
-| Measure | Mestemaker 2026 | First-round median | First-rounders he beats |
+| Measure, first {sg['games']} games | Mestemaker 2026 | First-round median | First-rounders he is ahead of |
 |---|---|---|---|
-{fr_rows}
+{sg_rows}
 
-His closest statistical matches in that group (distance on yards per attempt, completion %, touchdown %, interception %, 25+ rate and yards per game) are {comps}. At his nine-game pace a 12-game regular season ends near {f['pace_12']['yards']:,} yards and {f['pace_12']['td']} touchdowns.
+Situational measures are only available for full seasons, so these compare his nine games with their whole season, bowl and playoff games included:
 
-{img('national_ranks.png', 'National rank in each measure among the top 100 FBS passers by yards per game, 2026.')}
+| Measure | Mestemaker, 9 games | First-round median, full season | First-rounders he is ahead of |
+|---|---|---|---|
+{full_rows}
 
-### 2. In this class, Mensah and Sayin are the more efficient passers; Mestemaker has the most volume and big plays.
+These measures overlap heavily (rating is built from yards, touchdowns and interceptions per attempt), so they are one or two independent looks, not eleven. At his nine-game pace a 12-game regular season ends near {f['pace_12']['yards']:,} yards and {f['pace_12']['td']} touchdowns.
 
-| Quarterback | Team | G | Yards | TD | INT | Cmp % | Y/A | Rating | 25+ per 100 | INT % | 3rd-down rating |
-|---|---|---|---|---|---|---|---|---|---|---|---|
+{img('national_ranks.png', 'National rank in each measure among the top 100 FBS passers by yards per game, 2026, all games.')}
+
+### 2. Against the defenses he has faced, he is fourth of seven in the class and below most first-rounders.
+
+For each FBS game I take what that opponent allowed to every other passing offense this season, weight it by his attempts, and compare. The FCS game (Murray State: {f['fcs_game']['att']} attempts, {f['fcs_game']['rating']:.1f} rating) is out.
+
+| Quarterback | Team | G | Yards | TD | INT | Cmp % | Y/A | Rating, all games | Rating vs FBS | What those defenses allow | Over expected | 25+ per 100 | INT % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 {cls_rows}
 
-Mensah leads this group in rating and completion percentage, Sayin in yards per attempt, and Carr in interception rate; that has to be said plainly. Mestemaker leads it in yards, touchdowns, yards per game, 25+ yard completions and rating when trailing. These seven are the quarterbacks named in ESPN's poll plus Sayin, not every eligible passer; nationally {f['x25_leader']['name']} ({f['x25_leader']['team']}) has the top 25+ rate ({f['x25_leader']['x25']:.1f} on {f['x25_leader']['att']} attempts). Dante Moore, the August favorite, played {f['moore']['games']} games ({f['moore']['yards']} yards, {f['moore']['td']} TD) before a concussion that is expected to end his season; Oklahoma State beat his Oregon team {f['oregon']['result'].split()[1]} with Mestemaker throwing for {f['oregon']['yards']} and running for {f['oregon']['rush']}.
+- His opponents allow a {me_o['opp_allowed']:.1f} rating to everyone else, the most generous schedule of the seven (#{o['sched_rank_easiest']} easiest).
+- He is {me_o['over']:+.1f} over expected. Mensah ({opp['Darian Mensah']['over']:+.1f}) and Sayin ({opp['Julian Sayin']['over']:+.1f}) are about twice that. He is level with Carr ({opp['CJ Carr']['over']:+.1f}).
+- The same measure for the {N} first-round quarterbacks' final seasons has a median of {o['fr_median']:+.1f}. He is ahead of {o['fr_beats']} of them. His own 2025 at North Texas was {o['me_2025']['over']:+.1f}.
+- On unadjusted rating he is #{raw_rank} of the seven. He leads the group in yards, touchdowns, yards per game and 25+ yard completions.
 
-Over the last two seasons Mestemaker has the most yards ({two_me['Yards']:,}) and touchdowns ({two_me['TD']}) of the group on {two_me['Att']:,} attempts, with a {two_me['Rating']:.1f} rating. {two_best_rate['name']} has the best two-year rating ({two_best_rate['Rating']:.1f}) and yards per attempt.
+These seven are the quarterbacks named in ESPN's poll plus Sayin, not every eligible passer; nationally {f['x25_leader']['name']} ({f['x25_leader']['team']}) has the top 25+ rate ({f['x25_leader']['x25']:.1f} on {f['x25_leader']['att']} attempts). Dante Moore, the August favorite, played {f['moore']['games']} games ({f['moore']['yards']} yards, {f['moore']['td']} TD) before a concussion that is expected to end his season; Oklahoma State beat his Oregon team {f['oregon']['result'].split()[1]} with Mestemaker throwing for {f['oregon']['yards']} and running for {f['oregon']['rush']}.
+
+Over the last two seasons Mestemaker has the most yards ({two_me['Yards']:,}) and touchdowns ({two_me['TD']}) of the group on {two_me['Att']:,} attempts, with a {two_me['Rating']:.1f} rating. {two_best['name']} has the best two-year rating ({two_best['Rating']:.1f}).
 
 | Quarterback | Seasons in data | Att | Yards | TD | INT | Y/A | Rating | Yards per game |
 |---|---|---|---|---|---|---|---|---|
@@ -392,80 +601,146 @@ Over the last two seasons Mestemaker has the most yards ({two_me['Yards']:,}) an
 
 {img('class_map.png', 'Yards per attempt against 25+ yard completion rate for the top FBS passers; the draft-eligible class is labeled.')}
 
-### 3. More often than not, quarterbacks lose production moving up a level. He gained.
+### 3. College seasons like his have produced first-round picks, day-three picks and undrafted players.
 
-{mv['n']} quarterbacks since 2021 transferred from a Group of Five school to a Power Four school and made the top-100 list in both seasons. The other {mv['others']} changed by {mv['mean_d_rating']:+.1f} rating points on average (median {mv['median_d_rating']:+.1f}) and {mv['mean_d_ypa']:+.2f} yards per attempt; {mv['declined']} of {mv['others']} declined. Leaving out John Mateer, whose Washington State was a two-team Pac-12 in 2024, the average is {mv['mean_d_rating_ex_mateer']:+.1f}. Mestemaker went {mv['me_before']:.1f} to {mv['me_after']:.1f} and {mv['me_d_ypa']:+.1f} yards per attempt, and his first Power Four season ranks #{mv['me_rank_after']} of the {mv['n']}. Of the {mv['started_165']} who left with a rating of 165 or better, he is the only one who kept it.
+The nearest {pc['n']} seasons to his 2026 among all {pc['prior_seasons']} qualifying seasons from 2020 to 2025 (distance on yards per attempt, completion %, touchdown %, interception % and yards per game):
+
+| Quarterback | Team | Season | Rating | Y/A | TD % | INT % | What happened |
+|---|---|---|---|---|---|---|---|
+{comp_rows}
+
+Of the {pc['decided']} whose draft outcome is known, {pc['round1']} went in round 1, {pc['drafted'] - pc['round1']} were drafted later and {pc['not_drafted']} were not drafted. Several of these are not a quarterback's final season, so the outcome is what eventually happened to the player.
+
+Every prior season at or above both his rating ({L['Rating']:.1f}) and his yards per attempt ({L['YPA']:.1f}): {ao['seasons']} seasons by {ao['qbs']} quarterbacks. Of those quarterbacks, {ao['round1']} went in round 1, {ao['drafted_later']} were drafted later and {ao['not_drafted']} were not drafted.
+
+| Quarterback | Team | Season | Rating | Y/A | What happened |
+|---|---|---|---|---|---|
+{ao_rows}
+
+The base rate by rating, for the {f['base_rate_n']} quarterbacks whose last top-100 season came in 2020-2025:
+
+| Rating in last qualifying season | Quarterbacks | Drafted | Round 1 | Round 1 rate |
+|---|---|---|---|---|
+{br_rows}
+
+Production gets a quarterback into the conversation. It has not been enough to make one a first-round pick, and the players who were not drafted from the top of this list were mostly from Group of Five schools, which is the question he had to answer by moving up.
+
+{img('base_rate.png', 'Share of quarterbacks drafted, and drafted in round 1, by passer rating in their last qualifying college season, 2020-2025.')}
+
+### 4. He held his level moving from the American to the Big 12, which is better than the typical mover and inside the normal spread.
+
+{mf['n']} quarterbacks since 2021 transferred from a Group of Five school to a Power Four school and made the top-100 list in both seasons. Against FBS opponents only:
+
+- His rating went from {mf['me_before']:.1f} to {mf['me_after']:.1f} ({mf['me_d']:+.1f}).
+- The other {mf['others']} changed by {mf['mean']:+.1f} on average (median {mf['median']:+.1f}); {mf['declined']} of {mf['others']} declined. The standard deviation is {mf['sd']:.1f} points, so his change is {mf['z']:+.1f} SD from the average: not distinguishable from a typical move.
+- His change ranks #{mf['me_rank']} of {mf['n']}. His level after the move ranks #{mf['me_rank_after']} of {mf['n']}; {mf['top_after']} is first.
+- Counting all games, his rating rose {mv['me_d_rating']:+.1f} ({mv['me_before']:.1f} to {mv['me_after']:.1f}). That gain comes from the Murray State game.
+- He moved with his head coach and offense. This is a test of better opponents, not of a new system.
 
 Against Power conference opponents this year: {sp['vs. FBS Power 5']['att']} attempts, {sp['vs. FBS Power 5']['ypa']:.1f} yards per attempt, {sp['vs. FBS Power 5']['td']} touchdowns, {sp['vs. FBS Power 5']['int']} interceptions, {sp['vs. FBS Power 5']['rating']:.1f} rating.
 
-{img('g5_to_p4.png', 'Passer rating in the last Group of Five season and the first Power Four season for every quarterback who qualified in both.')}
+{img('g5_to_p4.png', 'Passer rating against FBS opponents in the last Group of Five season and the first Power Four season, for every transfer who qualified in both.')}
 
-### 4. His biggest knock, interception rate, is one of the least repeatable numbers a quarterback has.
+### 5. The setting he came from is friendly to quarterbacks, and the coach is only part of it.
 
-He ranks {rk('INTp')} in interception rate and {rk('r3')} in third-down rating ({L['att3']:.0f} attempts), and his fourth-quarter rating ({L['q4']:.0f}) is {rk('q4')}. Before pricing those, check how much of each is the quarterback. For the same quarterback in back-to-back seasons:
+North Texas starters in this data:
+
+| Season | Quarterback | Head coach | Att | Y/A | Rating |
+|---|---|---|---|---|---|
+{unt_rows}
+
+- Under Morris, the two North Texas starters before him averaged a {sy['morris_other_mean']:.1f} rating. He was {f['line_2025']['Rating'] - sy['morris_other_mean']:.0f} points better in the same offense ({f['line_2025']['Rating']:.1f}), which is evidence for the player.
+- After he and Morris left, {unt26['name']} has a {unt26['rating']:.1f} rating there under a new staff{succ_txt}. That is evidence that the schedule and setting at North Texas lift a passer's numbers, whoever coaches.
+- Both readings are true at once, and this data cannot split them. No adjustment for receivers or line is made here.
+
+### 6. His weakest numbers are noisy ones, and so is his best one.
+
+He ranks {rk('INTp')} in interception rate and {rk('r3')} in third-down rating ({L['att3']:.0f} attempts), and his fourth-quarter rating ({L['q4']:.0f}) is {rk('q4')}. For the same quarterback in back-to-back seasons:
 
 | Measure | Year-to-year r | 95% interval | Pairs |
 |---|---|---|---|
 {st_rows}
 
-Interception rate barely carries over (r = {s['INTp']['r']:.2f}), and third-down rating is weak (r = {s['r3']['r']:.2f}, on a small sample: {L['att3']:.0f} third-down attempts for him this year). His own history says the same: in 2025 he threw interceptions on {f['line_2025']['INTp']:.1f}% of attempts with a {f['line_2025']['r3']:.0f} third-down rating. Fourth-quarter rating is different: on a smaller sample it repeats about as well as overall rating (r = {s['q4']['r']:.2f}), so his drop from {f['line_2025']['q4']:.0f} in 2025 to {L['q4']:.0f} this year is the split I would watch. Volume and accuracy repeat best (yards per game r = {s['YPG']['r']:.2f}, completion % r = {s['Pct']['r']:.2f}), and he has been top two in yards per game in both seasons.
-
-The same test cuts against his headline strength. The 25+ yard completion rate repeats at only r = {s['x25']['r']:.2f} across quarterbacks, so one season of it is weak evidence. He was #{f['ranks_2025']['x25'][0]} of {f['ranks_2025']['x25'][1]} in 2025 and is {rk('x25')} now, so there are two seasons behind it, but yards per attempt (r = {s['YPA']['r']:.2f}) is the safer number to project, and he led FBS in it in 2025 (#{f['ranks_2025']['YPA'][0]} of {f['ranks_2025']['YPA'][1]}).
+- **Interceptions.** {L['Int']} in {L['Att']} attempts is {L['INTp']:.1f}%, with a 95% interval of {iv['int_lo']:.1f} to {iv['int_hi']:.1f} that {int_contains} the first-round median ({v['INTp']['median']:.1f}). Interception rate barely carries over year to year (r = {s['INTp']['r']:.2f}); in 2025 he was at {f['line_2025']['INTp']:.1f}%.
+- **Third down.** r = {s['r3']['r']:.2f}, on a small sample ({L['att3']:.0f} attempts for him this year). In 2025 his third-down rating was {f['line_2025']['r3']:.0f}.
+- **Fourth quarter.** On a smaller sample it repeats about as well as overall rating (r = {s['q4']['r']:.2f}), so his drop from {f['line_2025']['q4']:.0f} in 2025 to {L['q4']:.0f} is the split I would watch.
+- **Big plays.** {iv['x25_n']} completions of 25+ yards in {iv['x25_att']} attempts is {L['x25']:.1f}%, {rk('x25')} nationally and above {v['x25']['beats']} of {N} first-rounders' full seasons. The 95% interval is {iv['x25_lo']:.1f} to {iv['x25_hi']:.1f}, which {contains} the first-round median ({v['x25']['median']:.1f}), and the rate repeats at only r = {s['x25']['r']:.2f} across quarterbacks. He was #{f['ranks_2025']['x25'][0]} of {f['ranks_2025']['x25'][1]} in 2025. Yards per attempt (r = {s['YPA']['r']:.2f}) is the safer number, and he led FBS in it in 2025.
 
 {img('stability.png', 'Year-to-year correlation of each passing measure, with 95% bootstrap intervals.')}
 
-### 5. After two rough games to open 2026, he has been the best version of himself.
+{img('explosive_vs_first_round.png', 'Completions of 25+ yards per 100 attempts, with the 95% interval on his nine-game rate.')}
 
-Weeks 1 and 2 (Tulsa, Oregon): a {f['first2']['rating']:.1f} rating with {f['first2']['int']} interceptions on {f['first2']['att']} attempts. The {f['last7']['games']} games since: {f['last7']['comp']}-of-{f['last7']['att']}, {f['last7']['yards']:,} yards, {f['last7']['ypa']:.1f} per attempt, {f['last7']['td']} touchdowns, {f['last7']['int']} interceptions, a {f['last7']['rating']:.1f} rating, and no game below {f['last7']['min_rating']:.0f}. He has thrown for 300 yards in {f['games_300']} of {L['G']} games. On the ground: {f['rush']['att']} carries, {f['rush']['yards']} yards, {f['rush']['td']} touchdowns.
+### 7. Recent form is strong, and the hardest games have been his worst.
+
+- Weeks 1 and 2 (Tulsa, Oregon): a {f['first2']['rating']:.1f} rating with {f['first2']['int']} interceptions on {f['first2']['att']} attempts. The {f['last7']['games']} games since: {f['last7']['comp']}-of-{f['last7']['att']}, {f['last7']['yards']:,} yards, {f['last7']['td']} touchdowns, {f['last7']['int']} interceptions, a {f['last7']['rating']:.1f} rating (one of the seven is the FCS game).
+- 300 yards in {f['games_300']} of {L['G']} games. On the ground: {f['rush']['att']} carries, {f['rush']['yards']} yards, {f['rush']['td']} touchdowns.
+- Against AP-ranked teams: {sp['vs. Ranked (AP)']['att']} attempts, {sp['vs. Ranked (AP)']['rating']:.1f} rating, {sp['vs. Ranked (AP)']['td']} touchdowns, {sp['vs. Ranked (AP)']['int']} interceptions. Against FBS teams with winning records: {sp['vs. FBS Winning']['rating']:.1f}. In losses: {sp['in Losses']['rating']:.1f}.
+- On third and 10 or more he is {f['downs']['3rd Down, 10+ To Go']['comp']}-of-{f['downs']['3rd Down, 10+ To Go']['att']} for {f['downs']['3rd Down, 10+ To Go']['yards']} yards.
 
 {img('game_log.png', 'Game-by-game passer rating, North Texas 2025 and Oklahoma State 2026.')}
 
-### 6. Where the numbers say to be careful.
+### 8. What the scouts add, which this data cannot measure.
 
-- **Better opponents have slowed him.** Against AP-ranked teams: {sp['vs. Ranked (AP)']['att']} attempts, {sp['vs. Ranked (AP)']['rating']:.1f} rating, {sp['vs. Ranked (AP)']['td']} touchdowns, {sp['vs. Ranked (AP)']['int']} interceptions. Against FBS teams with winning records: {sp['vs. FBS Winning']['rating']:.1f}. In losses: {sp['in Losses']['rating']:.1f}.
-- **Third and long.** On third and 10 or more he is {f['downs']['3rd Down, 10+ To Go']['comp']}-of-{f['downs']['3rd Down, 10+ To Go']['att']} for {f['downs']['3rd Down, 10+ To Go']['yards']} yards ({f['downs']['3rd Down, 10+ To Go']['rating']:.0f} rating). His third-down rating is the lowest of the seven quarterbacks in the class table and would rank ahead of only {v['r3']['beats']} of the {f['first_round_n']} first-rounders.
-- **Pressure.** PFF had him at a 48.8 passing grade under pressure against 90.3 from a clean pocket through Week 5 (PFF, Oct. 6, 2026), when its board had him behind Manning, Moore and Carr among quarterbacks. That is PFF's charting, not mine, and it covers his first four games.
-- **Experience.** ESPN projects 27 career starts by the end of 2026. Scouts told ESPN and Brugler the same thing: the tools are there and the sample is short.
-- **He may not come out.** He is a redshirt sophomore; Brugler reports scouts believe there is a good chance he declares, which is not the same as declaring.
+- **Consensus.** 17 of 25 in ESPN's poll; top quarterback and No. 2 overall on Brugler's board.
+- **Tools, as cited.** ESPN's scouts point to size and arm ("arm talent, power and accuracy," one said). Brugler cites tools, passing instincts and toughness.
+- **Pressure.** PFF had him at a 48.8 passing grade under pressure against 90.3 from a clean pocket through Week 5 (Oct. 6, 2026), when its board had him behind Manning, Moore and Carr among quarterbacks. That is PFF's charting over his first four games.
+- **Experience.** ESPN projects 27 career starts by the end of 2026.
+- **He may not come out.** He is a redshirt sophomore; Brugler reports scouts believe there is a good chance he declares.
+- **Age.** Born {f['age']['born']}, he will be {f['age']['at_draft']} at the draft.
 
 ## Verdict
 
-**QB1, with a first-round grade.** The production is at or above the first-round median on {n_above} of 14 measures, he leads the quarterbacks compared here in yards, touchdowns and big plays, his overall efficiency held up after the step to the Big 12, he will be 21 on draft day, and ESPN's scout poll and Brugler's board both have him first. The interception and third-down numbers are worth a hard look on tape, and the data says not to overweight one season of either.
+**What the evidence on this page supports**
 
-**What would change my mind:** an interception rate that stays above 2.5% over the last three regular-season games and the postseason, or Mensah holding a rating near 190 through the postseason. Mensah and Sayin are the alternatives, and on 2026 efficiency alone both are ahead of him.
+| For QB1 | Against QB1 |
+|---|---|
+| 17 of 25 scouts and executives, and Brugler's board | Mensah ({opp['Darian Mensah']['over']:+.1f}) and Sayin ({opp['Julian Sayin']['over']:+.1f}) are far ahead of his {me_o['over']:+.1f} against schedule |
+| #1 in touchdown passes and #2 in yards in FBS | The easiest set of pass defenses of the seven quarterbacks compared |
+| Raw line near the first-round median through nine games, ahead of {sg['ypg']['beats']} of {N} in yards per game | Ahead of only {o['fr_beats']} of {N} first-rounders once opponents are counted |
+| Held his level moving up a conference | {his_band['round1']} of {his_band['n']} quarterbacks with a last-season rating like his went in round 1 |
+| 21 on draft day; two seasons as a starter | {rk('INTp')} in interception rate; {sp['vs. Ranked (AP)']['rating']:.1f} rating against ranked teams |
+
+**Grade:** first-round candidate. On production he is in the top four of this class, behind Mensah and Sayin and level with Carr.
+
+**My call, and it is an opinion:** I would still have him first, because the people who grade arms for a living do, because of his age, and because he was {f['line_2025']['Rating'] - sy['morris_other_mean']:.0f} points better than the two quarterbacks who ran the same offense before him. The numbers on this page do not prove that. If the draft were decided on college production against schedule, Mensah would be first.
+
+**What would move it:** up, if he plays to his season line against Texas Tech and the better defenses left; down, if the interception rate stays above 2.5% or Mensah and Sayin hold their margins through the postseason.
 
 ## Method
 
-- **Rates.** Touchdown % and interception % are per attempt. Adjusted yards per attempt is (yards + 20 x TD - 45 x INT) / attempts. Passer rating is the NCAA formula: (8.4 x yards + 330 x TD + 100 x completions - 200 x INT) / attempts.
-- **Explosive rates** are completions of 15+ and 25+ yards per 100 attempts, from the cfbstats situational tables. Rating when trailing pools the three "losing by" score states.
-- **National ranks** are among the top {f['pool']} FBS passers by yards per game, so a rank of #8 means eighth among high-volume starters, not among every quarterback who threw a pass.
-- **First-round comparison.** Each first-round quarterback's final college season against Mestemaker's season in progress. Similarity is Euclidean distance on six z-scored measures.
-- **Stability.** Pearson r between season t and t+1 for the same quarterback when he made the top-100 list in both, 2020-2026 for the season-table measures and 2024-2026 for the situational ones; intervals from 2,000 bootstrap samples that resample quarterbacks.
-- **Moving up.** Transfers only (a quarterback whose school changed conferences is not counted). Power conferences are the ACC, Big Ten, Big 12, SEC, Notre Dame and the Pac-12 through 2023. The list of moves is in `data/g5_to_p4_moves.csv`.
+- **Rates.** Touchdown % and interception % are per attempt. Passer rating is the NCAA formula: (8.4 x yards + 330 x TD + 100 x completions - 200 x INT) / attempts.
+- **Opponent adjustment.** FBS games only. For each game, the opponent's season passing line allowed, minus this quarterback's own game, gives what that defense allows per attempt to everyone else. Those rates times his attempts, summed over games, give an expected line and an expected rating. "Over expected" is his FBS rating minus that. It adjusts for pass defense only, and an opponent's other games are against different offenses.
+- **Same-games comparison.** Each first-round quarterback's first {sg['games']} games of his final college season from the game logs (Justin Fields played eight in 2020).
+- **Full-pool comps.** Euclidean distance on five z-scored measures across all prior qualifying seasons. Draft outcomes are matched by name to nflverse picks, 2021-2026; "not drafted" means not drafted through 2026 and not in the 2026 college data.
+- **Base rate.** One row per quarterback: his last top-100 season, 2020-2025, excluding anyone still playing college football in 2026.
+- **Intervals.** Wilson 95% intervals on the per-attempt rates. Year-to-year r from quarterbacks on the top-100 list in back-to-back seasons, with 2,000 bootstrap samples that resample quarterbacks.
+- **Moving up.** Transfers only. Power conferences are the ACC, Big Ten, Big 12, SEC, Notre Dame and the Pac-12 through 2023. Ratings are from the "vs. FBS" split. The list is in `data/g5_to_p4_moves.csv`.
+- **National ranks** are among the top {f['pool']} FBS passers by yards per game, all games.
 
 ## Validation
 
-- Season totals reproduce from the game logs (the sum of nine games equals the season line), and my computed passer rating matches the cfbstats rating for the season.
+- Season totals reproduce from the game logs, and my computed passer rating matches the cfbstats rating.
 - The cfbstats line ({L['Comp']}-of-{L['Att']}, {L['Yards']:,} yards, {L['TD']} TD, {L['Int']} INT) matches the line reported by USA Today on Nov. 14, 2026 and by Bleacher Report on Nov. 12.
-- The cfbstats situational table counts {f['sit_att_all_plays']} attempts against {L['Att']} in the season table; the per-attempt situational rates use the situational count, and the difference does not move any figure at one decimal.
-- First-round names, picks and ages come from nflverse and were checked against the 2025 and 2026 first rounds reported by ESPN.
-- Stability is reported for every measure, including the one that hurts the argument (25+ rate, r = {s['x25']['r']:.2f}).
+- All 18 FBS first-round quarterbacks, all 20 movers and all seven class quarterbacks have complete game logs or splits; tests fail if one is missing.
+- The cfbstats situational table counts {f['sit_att_all_plays']} attempts against {L['Att']} in the season table; the per-attempt situational rates use the situational count.
+- Results that cut against the scouting consensus are reported at the same weight as the ones that support it.
 
 ## Limitations
 
-- **Nine games.** Every 2026 number is a partial season, and several 2026 quarterbacks in the stability and transfer samples are also mid-season.
-- **Box-score data.** No air yards, pressure, drops or time to throw. The explosive measures count completions by total gain, so they include yards after the catch and credit the receivers and scheme as well as the passer.
-- **System and supporting cast.** He has played both seasons in Eric Morris's offense. North Texas's 2026 quarterback, Tayven Jackson, has a {f['context']['unt_2026_rating']:.1f} rating in the offense Mestemaker left, which says the environment is quarterback-friendly. No adjustment for receivers, line or schedule strength is made here.
-- **Survivor samples.** The stability and transfer samples only include quarterbacks who kept a starting job and stayed in the top 100; players who lost their jobs after moving up are missing, which makes the average mover look better than the true average.
-- **Small comparison group.** Eighteen first-round quarterbacks is enough for a ranking, not for a model of NFL success.
+- **Nine games.** Every 2026 number is a partial season, and the opponent ratings behind the adjustment are nine-game samples too.
+- **Box-score data.** No air yards, pressure, drops or time to throw. The explosive measures count completions by total gain, so they credit receivers and scheme as well as the passer.
+- **The opponent adjustment is simple.** One number per defense, no adjustment for the offenses that defense faced, none for receivers or line.
+- **Survivor samples.** The stability, transfer and base-rate samples only include quarterbacks who made a top-100 list. "Not drafted" includes players who lost jobs or were hurt.
+- **Name matching** to draft picks can miss a player whose name is listed differently; the 68 drafted quarterbacks were checked by hand, and the five from FCS schools are not in the college data.
+- **Small groups.** Eighteen first-round quarterbacks and {his_band['n']} quarterbacks in his rating band are enough for a base rate, not for a model.
 - **No tape grades of my own** are in this report. Tools and traits are cited from published evaluations.
 
 ## Next steps
 
-- Refresh after Texas Tech (Nov. 14) and the rest of the Big 12 schedule; the verdict section says what would move it.
-- Add play-by-play: expected points per dropback, air yards, and performance under pressure and against the blitz.
-- Opponent adjustment by defensive pass efficiency allowed.
-- The same page for Mensah and Carr, so the class is ranked on one method.
+- Refresh after Texas Tech (Nov. 14) and each game left.
+- Play-by-play: expected points per dropback, air yards, pressure and blitz splits.
+- A fuller opponent model (offense and defense together) and the same page for Mensah, Sayin and Carr.
+- NFL outcomes for the comparison seasons, once the 2024-2026 classes have played enough.
 
 ## Reproduce
 
@@ -481,14 +756,15 @@ Code: [`projects/draft_mestemaker.py`](../../projects/draft_mestemaker.py). Numb
 | File | What it holds |
 |---|---|
 | `findings.json` | Every number on this page |
-| `explosive_vs_first_round.png`, `national_ranks.png`, `class_map.png`, `g5_to_p4.png`, `stability.png`, `game_log.png` | The six figures |
-| `class_table.csv`, `first_round_final_seasons.csv`, `g5_to_p4_table.csv`, `stability_table.csv` | The tables behind the figures |
+| `opponent_adjusted.png`, `national_ranks.png`, `class_map.png`, `base_rate.png`, `g5_to_p4.png`, `stability.png`, `explosive_vs_first_round.png`, `game_log.png` | The eight figures |
+| `class_table.csv`, `first_round_final_seasons.csv`, `g5_to_p4_table.csv`, `stability_table.csv`, `opponent_adjusted.csv`, `pool_comps.csv` | The tables behind the figures |
 | `data/qb_seasons_2020_2026.csv` | Top-100 passer tables, 2020-2026 |
 | `data/situational_2024_2026_and_first_rounders.csv` | Situational passing tables |
-| `data/gamelogs.csv`, `data/splits.csv` | Game logs and splits for Mestemaker and the class |
-| `data/first_round_qbs_2021_2026.csv`, `data/g5_to_p4_moves.csv` | Draft picks and the list of moves |
+| `data/gamelogs.csv`, `data/splits.csv` | Game logs and splits |
+| `data/team_pass_defense_2020_2026.csv` | Passing allowed by every FBS defense |
+| `data/first_round_qbs_2021_2026.csv`, `data/qb_draft_picks_2021_2026.csv`, `data/g5_to_p4_moves.csv` | Draft picks and the list of moves |
 
-**Sources:** [cfbstats.com](https://cfbstats.com/2026/player/521/50259623/index.html); [nflverse draft picks](https://github.com/nflverse/nflverse-data); [ESPN, "NFL scouts favor Drew Mestemaker as first QB taken in draft"](https://www.espn.com/college-football/story/_/id/50335830/nfl-scouts-favor-drew-mestemaker-first-qb-taken-draft); [Bleacher Report on Brugler's board](https://bleacherreport.com/articles/25532576-drew-mestemakers-nfl-draft-2027-status-addressed-nfl-scouts-brugler-ranks-qb-new-big-board); [PFF, top 10 quarterback prospects after Week 5](https://www.pff.com/news/draft-top-10-quarterback-prospects-after-week-5); [Oklahoma State roster bio](https://okstate.com/sports/football/roster/drew-mestemaker/14374); [USA Today via Yahoo Sports, Nov. 14, 2026](https://sports.yahoo.com/articles/drew-mestemaker-one-win-away-100703900.html); birth month from [Wikipedia](https://en.wikipedia.org/wiki/Drew_Mestemaker).
+**Sources:** [cfbstats.com](https://cfbstats.com/2026/player/521/50259623/index.html); [nflverse draft picks](https://github.com/nflverse/nflverse-data); [ESPN, "NFL scouts favor Drew Mestemaker as first QB taken in draft"](https://www.espn.com/college-football/story/_/id/50335830/nfl-scouts-favor-drew-mestemaker-first-qb-taken-draft); [Bleacher Report on Brugler's board](https://bleacherreport.com/articles/25532576-drew-mestemakers-nfl-draft-2027-status-addressed-nfl-scouts-brugler-ranks-qb-new-big-board); [PFF, top 10 quarterback prospects after Week 5](https://www.pff.com/news/draft-top-10-quarterback-prospects-after-week-5); [Oklahoma State roster bio](https://okstate.com/sports/football/roster/drew-mestemaker/14374) and [Eric Morris staff bio](https://www.okstate.com/staff-directory/eric-morris/3991); [Fox Sports on Neal Brown replacing Morris at North Texas](https://www.foxsports.com/articles/cfb/no-20-north-texas-names-neal-brown-to-replace-oklahoma-stbound-eric-morris-after-season); [USA Today via Yahoo Sports, Nov. 14, 2026](https://sports.yahoo.com/articles/drew-mestemaker-one-win-away-100703900.html); birth month from [Wikipedia](https://en.wikipedia.org/wiki/Drew_Mestemaker).
 
 <sub>[← Portfolio](../../README.md)</sub>
 """
@@ -543,6 +819,13 @@ def pull(seasons=(SEASON,)):
             spl.append(sp)
         logs = pd.concat([logs[logs.season != y]] + gl)
         splits = pd.concat([splits[splits.season != y]] + spl)
+    td = pd.read_csv(DATA / "team_pass_defense_2020_2026.csv")
+    for y in seasons:
+        t = pd.read_html(io.StringIO(get(f"https://cfbstats.com/{y}/leader/national/team/defense/split01/category02/sort01.html")))[0]
+        t = t.drop(columns=["Unnamed: 0", "Att/G", "Yards/G"]).rename(columns={"Pct.": "Pct", "Yards/Att": "YPA"})
+        t["season"] = y
+        td = pd.concat([td[td.season != y], t])
+    td.to_csv(DATA / "team_pass_defense_2020_2026.csv", index=False)
     seas.to_csv(DATA / "qb_seasons_2020_2026.csv", index=False)
     sit.to_csv(DATA / "situational_2024_2026_and_first_rounders.csv", index=False)
     logs.to_csv(DATA / "gamelogs.csv", index=False)
@@ -553,6 +836,7 @@ def main():
     if "--refresh" in sys.argv:
         pull()
     f, D, G, fr, mv, cls = analyze()
+    _, _, SP, FR, MV = load()
     unt = D[(D.season == SEASON) & (D.Team == "N Texas")]
     f["context"] = dict(unt_2026_qb=unt.Name.iloc[0], unt_2026_rating=float(unt.Rating.iloc[0]))
     OUT.mkdir(parents=True, exist_ok=True)
@@ -562,7 +846,12 @@ def main():
     fr[["Name", "season", "pick", "team", "age"] + cols[2:]].round(2).to_csv(OUT / "first_round_final_seasons.csv", index=False)
     mv[["name", "from_team", "to_team", "season_before", "season_after", "Rating_b", "Rating_a", "d_rating", "YPA_b", "YPA_a", "d_ypa"]].round(2).to_csv(OUT / "g5_to_p4_table.csv", index=False)
     pd.DataFrame(f["stability"]).T.round(3).to_csv(OUT / "stability_table.csv")
-    figures(f, D, G, fr, mv, cls)
+    mvf = evaluate(f, D, G, SP, FR, MV)
+    (OUT / "findings.json").write_text(json.dumps(f, indent=1))
+    o = f["opp"]
+    pd.DataFrame([dict(group="2027 class", **x) for x in o["cls"]] + [dict(group="first round, final season", **x) for x in o["first_round"]]).round(2).to_csv(OUT / "opponent_adjusted.csv", index=False)
+    pd.DataFrame(f["pool_comps"]).round(2).to_csv(OUT / "pool_comps.csv", index=False)
+    figures(f, D, G, fr, mv, cls, mvf)
     (OUT / "README.md").write_text(readme(f))
     print(json.dumps({k: f[k] for k in ["line", "ranks", "move", "last7", "first2", "team", "age", "comps", "class_leads"]}, indent=1)[:3000])
 

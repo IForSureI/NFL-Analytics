@@ -327,6 +327,15 @@ def main():
     find["musd_per_ypc_part"] = {c: usd(pc_.params[c], 1) for c in ["xypc", "ryoe_pc"]}
     find["musd_per_ypc_part_ci"] = {c: [usd(v, 1) for v in pc_.conf_int().loc[c]] for c in ["xypc", "ryoe_pc"]}
     find["price_per_carry_diff_p"] = round(float(pc_.t_test("ryoe_pc - xypc = 0").pvalue), 3)
+    # how big would a gap have to be for this sample to find it? (80% power, two-sided 5% test: 2.8 standard errors)
+    tt = pc_.t_test("ryoe_pc - xypc = 0")
+    find["price_per_carry_diff_musd"] = usd(float(np.ravel(tt.effect)[0]), 1)
+    find["price_per_carry_diff_ci"] = [usd(float(v), 1) for v in np.ravel(tt.conf_int())]
+    find["price_per_carry_min_detectable_musd"] = usd(2.8 * float(np.ravel(tt.sd)[0]), 1)
+    tv = pyv.t_test("ryoe_pc - xypc = 0")
+    find["predict_next_ypc_diff"] = round(float(np.ravel(tv.effect)[0]), 3)
+    find["predict_next_ypc_diff_ci"] = [round(float(v), 3) for v in np.ravel(tv.conf_int())]
+    find["predict_next_ypc_min_detectable"] = round(2.8 * float(np.ravel(tv.sd)[0]), 3)
     find["predict_ratio_ryoe_to_expected_yard"] = round(float(py.params["ryoe_yds"] / py.params["x_yds"]), 2)
     fut = {cc: round(find["musd_per_100_yards"][cc] / max(find["predict_next_yards_per"][cc], 1e-6), 2) for cc in ["x_yds", "ryoe_yds"]}
     find["musd_per_100_future_yards"] = fut

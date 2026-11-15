@@ -24,6 +24,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from nflan import data, plot
+from projects.box_score_tax import _beta, boot_players, one_deal_per_player_year
 from projects.box_score_tax import ols, CAP_2026
 
 OUT = Path("reports/08-yac-tax")
@@ -83,7 +84,9 @@ def main():
     c = data.load_contracts()
     c = c[c.position.isin(["WR", "TE"]) & c.gsis_id.notna() & c.apy_cap_pct.notna()]
     rookie = c.draft_year.notna() & (c.year_signed == c.draft_year)
-    c = c[~rookie & c.year_signed.between(2019, 2026) & (c.apy_cap_pct >= 0.004)].drop_duplicates(["gsis_id", "year_signed", "apy"])
+    c = c[~rookie & c.year_signed.between(2019, 2026) & (c.apy_cap_pct >= 0.004)]
+    find["contracts_before_dedupe"] = int(len(c.drop_duplicates(["gsis_id", "year_signed", "apy"])))
+    c = one_deal_per_player_year(c)  # a tag or tender and a long-term deal in the same year are one decision
     plat = n[comp + ["gsis_id", "season", "targets", "yards", "pos"]].rename(columns={"season": "platform"})
     mk = c.merge(plat, on="gsis_id")
     mk = mk[mk.platform == mk.year_signed - 1].copy()
@@ -95,6 +98,22 @@ def main():
     # price per FUTURE yard bought through each component
     find["musd_per_100_future_yards"] = {cc: round(find["musd_per_100_yards"][cc] / max(find["predict_next_yards_per_yard"][cc], 1e-6), 2)
                                           for cc in comp}
+    # THE TEST: relative price of a YAC-over-expected yard vs an air yard, over its relative predictive value. 1 = fairly priced.
+    usd = lambda b: float(b) * CAP_2026
+    X = comp + ["targets"]
+    def tax(sm_):
+        bm = _beta(sm_["m"].apy_pct, sm_["m"][X]); bp = _beta(sm_["p"].yards_next, sm_["p"][X])
+        return (bm[2] / bm[0], bp[2] / bp[0], usd(bm[2]) / bp[2] if bp[2] > 0 else np.inf, usd(bm[0]) / bp[0])
+    bs = np.array(boot_players({"m": (mk.dropna(subset=X), "gsis_id"), "p": (p2.dropna(subset=X + ["yards_next"]), "gsis_id")}, tax, n=2000))
+    T = np.where(bs[:, 1] > 0, bs[:, 0] / np.where(bs[:, 1] > 0, bs[:, 1], 1), np.inf)
+    find["tax_ratio"] = round(float((mm.params["yacoe_yds"] / mm.params["air_yds"]) / (pm.params["yacoe_yds"] / pm.params["air_yds"])), 2)
+    find["tax_ratio_ci90"] = [round(float(x), 2) for x in np.percentile(T, [5, 95])]
+    find["tax_ratio_ci95"] = [round(float(x), 2) for x in np.percentile(T, [2.5, 97.5])]
+    find["tax_ratio_share_above_1"] = round(float(np.mean(T > 1)), 3)
+    find["tax_ratio_boot_n"] = int(len(T))
+    find["musd_per_100_future_yards_ci90"] = {"yacoe_yds": [round(float(x), 2) for x in np.percentile(bs[:, 2], [5, 95])],
+                                               "air_yds": [round(float(x), 2) for x in np.percentile(bs[:, 3], [5, 95])]}
+    find["qualified_seasons"] = int(len(full)); find["pairs_share_of_seasons"] = round(len(p2) / len(full), 2)
     rob = []
     for name, d_ in {"all": mk, "WR only": mk[mk.position == "WR"], "TE only": mk[mk.position == "TE"],
                      "deals >= 1% of cap": mk[mk.apy_cap_pct >= 0.01], "multi-year deals": mk[mk.years >= 2],
@@ -122,7 +141,7 @@ def main():
     h1, l1 = ax.get_legend_handles_labels(); h2, l2 = ax2.get_legend_handles_labels()
     ax.legend(h1 + h2, l1 + l2, loc="upper center", fontsize=8.5)
     ax.set_ylim(0, max(paid) * 1.45); ax2.set_ylim(min(0, min(fut)) * 1.2, max(fut) * 1.45)
-    plot.finish(fig, ax, "No YAC tax: what a yard is paid tracks what it predicts",
+    plot.finish(fig, ax, "No YAC tax detected: pay tracks prediction, within wide error",
                 f"Veteran WR/TE contracts 2019-2026 ({len(mk)}, {mk.gsis_id.nunique()} players); prediction from 2016-{last - 1}", OUT / "yac_tax.png", source=SRC)
 
     # 4. boards: last full season, and 2027 free agents

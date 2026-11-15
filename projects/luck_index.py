@@ -40,6 +40,48 @@ def team_games(g: pd.DataFrame) -> pd.DataFrame:
     return t.reset_index(drop=True)
 
 
+LUCKY = 2.0          # wins above or below Pythagorean that count as a lucky or unlucky season
+MATCH_WINDOW = 1.0   # controls must be within this many wins (per 17 games) of the lucky team
+N_BOOT = 1000
+
+
+def matched_gap(d: pd.DataFrame, side: int) -> float:
+    """Next-year change for lucky (side=1) or unlucky (side=-1) teams minus the change for
+    same-record teams whose record matched their points (within 1 win of Pythagorean)."""
+    hit = d[side * d.luck17 >= LUCKY]
+    ctrl = d[d.luck17.abs() < 1.0]
+    if hit.empty or ctrl.empty:
+        return np.nan
+    cw = ctrl.w17.to_numpy(); cc = (ctrl.w17_next - ctrl.w17).to_numpy()
+    gaps = []
+    for w, ch in zip(hit.w17.to_numpy(), (hit.w17_next - hit.w17).to_numpy()):
+        m = np.abs(cw - w) <= MATCH_WINDOW
+        if m.any():
+            gaps.append(ch - cc[m].mean())
+    return float(np.mean(gaps)) if gaps else np.nan
+
+
+def _ols(y, X):
+    A = np.column_stack([np.ones(len(X)), X])
+    return np.linalg.lstsq(A, y, rcond=None)[0][1:]
+
+
+def _luck_stats(d: pd.DataFrame) -> dict:
+    y = d.w17_next.to_numpy()
+    b = _ols(y, d[["p17", "luck17"]].to_numpy())
+    c = _ols(y, d[["p17", "fumble_luck", "fg_luck", "one_score_luck"]].to_numpy())
+    return {
+        "lucky_minus_matched_wins": matched_gap(d, 1),
+        "unlucky_minus_matched_wins": matched_gap(d, -1),
+        "next_wins_per_pythag_win": b[0],
+        "next_wins_per_luck_win": b[1],
+        "next_wins_per_fumble_recovery_over_exp": c[1],
+        "next_wins_per_fg_point_of_luck": c[2],
+        "next_wins_per_one_score_win_over_half": c[3],
+        "r_pythag_minus_r_wins": d.pyth_pct.corr(d.winpct_next) - d.winpct.corr(d.winpct_next),
+    }
+
+
 def main():
     plot.style(); OUT.mkdir(parents=True, exist_ok=True)
     pbp = data.load_pbp(range(2006, LAST + 1), columns=COLS)
@@ -90,9 +132,31 @@ def main():
         find[f"yoy_r_{c}"] = round(float(nxt[c].corr(nxt[c + "_next"])), 3)
     find["r_next_winpct_from_winpct"] = round(float(nxt.winpct.corr(nxt.winpct_next)), 3)
     find["r_next_winpct_from_pythag"] = round(float(nxt.pyth_pct.corr(nxt.winpct_next)), 3)
-    lucky = nxt[nxt.wins_over_pythag >= 2]; unlucky = nxt[nxt.wins_over_pythag <= -2]
+    lucky = nxt[nxt.wins_over_pythag >= LUCKY]; unlucky = nxt[nxt.wins_over_pythag <= -LUCKY]
     find["lucky_teams_n"] = len(lucky); find["lucky_change_wins_per17"] = round(float(17 * (lucky.winpct_next - lucky.winpct).mean()), 2)
     find["unlucky_teams_n"] = len(unlucky); find["unlucky_change_wins_per17"] = round(float(17 * (unlucky.winpct_next - unlucky.winpct).mean()), 2)
+    find["team_season_pairs"] = len(nxt)
+
+    # Any team with a lot of wins falls back next year. The fair test compares lucky teams with teams
+    # that had the same record without the luck, and asks whether luck adds to the fall.
+    nxt["w17"] = 17 * nxt.winpct; nxt["w17_next"] = 17 * nxt.winpct_next; nxt["p17"] = 17 * nxt.pyth_pct
+    nxt["luck17"] = nxt.w17 - nxt.p17
+    stats = lambda d: _luck_stats(d)
+    point = stats(nxt)
+    rng = np.random.default_rng(7)
+    by_team = {t: d for t, d in nxt.groupby("team")}
+    teams = list(by_team)
+    boots = []
+    for _ in range(N_BOOT):
+        d = pd.concat([by_team[t] for t in rng.choice(teams, len(teams))], ignore_index=True)
+        boots.append(stats(d))
+    boots = pd.DataFrame(boots)
+    for k_, v in point.items():
+        lo, hi = np.nanpercentile(boots[k_], [2.5, 97.5])
+        find[k_] = [round(float(v), 3), round(float(lo), 3), round(float(hi), 3)]
+    find["boot_n"] = N_BOOT
+    find["lucky_cutoff_wins"] = LUCKY
+    find["match_window_wins"] = MATCH_WINDOW
 
     # chart: this year's luck vs next year's change
     fig, ax = plt.subplots(figsize=(8, 6))
@@ -101,8 +165,8 @@ def main():
     xs = np.linspace(-5, 5, 20); ax.plot(xs, np.polyval(b, xs), color=plot.ACCENT2, lw=2.4)
     ax.axhline(0, color=plot.MUTED, lw=.8); ax.axvline(0, color=plot.MUTED, lw=.8)
     ax.set_xlabel("Wins above Pythagorean expectation, season N"); ax.set_ylabel("Change in wins next season (per 17 games)")
-    plot.finish(fig, ax, "Luck runs out: teams that beat their point differential fall back",
-                f"Each dot is a team-season, 2006-{LAST - 1}. Slope {b[0]:.2f} wins next year per lucky win this year", OUT / "luck_regression.png")
+    plot.finish(fig, ax, "Teams that beat their point differential win fewer games next year",
+                f"Each dot is a team-season, 2006-{LAST - 1}. Slope {b[0]:.2f}. Part of this is plain regression to the mean", OUT / "luck_regression.png")
     find["slope_change_per_lucky_win"] = round(float(b[0]), 2)
 
     # season in progress
@@ -116,7 +180,7 @@ def main():
     ax.axvline(0, color=plot.MUTED); ax.grid(axis="y", visible=False)
     ax.set_xlabel("Actual wins minus Pythagorean wins")
     plot.finish(fig, ax, f"{LAST} so far: who is winning more than their scoring says?",
-                "Orange = record better than points (expect a fall). Green = due for better luck.", OUT / f"luck_{LAST}.png")
+                "Orange = record better than points. Green = record worse than points.", OUT / f"luck_{LAST}.png")
 
     pd.Series(find, dtype=object).to_json(OUT / "findings.json", indent=2, default_handler=str)
     for k_, v in find.items():

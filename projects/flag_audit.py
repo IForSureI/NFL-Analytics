@@ -16,16 +16,18 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from scipy.stats import norm
 
 from nflan import data, plot
 from nflan.penalties import accepted_flags
-from nflan.stats import wilson, split_half_r, shrink_rate
+from nflan.stats import wilson, split_half_r, shrink_rate, boot_r, boot_ratio
 
 OUT = Path("reports/01-flag-audit")
+CLOSE = 8  # score within this many points counts as a close game state
 SEASONS = range(2016, data.latest_season_available() + 1)
 COLS = ["game_id", "old_game_id", "season", "season_type", "week", "posteam", "defteam", "home_team",
         "away_team", "posteam_type", "play_type", "penalty", "penalty_type", "penalty_team", "desc",
-        "epa", "wpa", "qb_dropback", "passer_player_id", "passer_player_name", "down", "result", "qtr"]
+        "epa", "wpa", "qb_dropback", "passer_player_id", "passer_player_name", "down", "result", "qtr", "score_differential"]
 
 
 def main():
@@ -58,6 +60,42 @@ def main():
     ot.to_csv(OUT / "objective_road_skew_by_type.csv")
     findings["objective_road_skew_top"] = ot.head(4)["mean"].round(3).to_dict()
     findings["false_start_road_share"] = float(ot.loc["False Start", "mean"])
+    # 1b. The same gap per play, in close games only, with game-bootstrap intervals.
+    # Trailing teams pass more and get held more, so the score can fake a home edge.
+    era_of = lambda d: np.where(d.season <= 2022, "2016-22", f"2023-{max(SEASONS) % 100:02d}")
+    sf = flags[(flags.flag_kind == "subjective") & flags.play_type.isin(["run", "pass", "no_play"]) & flags.down.notna()].copy()
+    sf["road"] = np.where(sf.against_home, -1, 1)
+    sf["close"] = sf.score_differential.abs() <= CLOSE
+    gs = snaps.assign(close=snaps.score_differential.abs() <= CLOSE).groupby("game_id").agg(season=("season", "first"), snaps=("close", "size"), close_snaps=("close", "sum"))
+    gs["net"] = sf.groupby("game_id").road.sum().reindex(gs.index).fillna(0)
+    gs["net_close"] = sf[sf.close].groupby("game_id").road.sum().reindex(gs.index).fillna(0)
+    gs["one"] = 1.0; gs["era"] = era_of(gs)
+    eras_ = sorted(gs.era.unique())
+    findings["close_score_points"] = CLOSE
+    for label, d in [(e, gs[gs.era == e]) for e in eras_] + [("2016-22 without 2020", gs[(gs.season <= 2022) & (gs.season != 2020)])]:
+        findings[f"road_subj_per_game_ci|{label}"] = [round(v, 3) for v in boot_ratio(d.net, d.one)]
+        findings[f"road_subj_per_100_snaps_ci|{label}"] = [round(v, 3) for v in boot_ratio(d.net, d.snaps, scale=100)]
+        findings[f"road_subj_per_100_close_snaps_ci|{label}"] = [round(v, 3) for v in boot_ratio(d.net_close, d.close_snaps, scale=100)]
+    rng = np.random.default_rng(7)
+    a, b_ = gs[gs.era == eras_[0]], gs[gs.era == eras_[-1]]
+    def _diff(col, den):
+        out = []
+        for _ in range(2000):
+            x = a.iloc[rng.integers(0, len(a), len(a))]; y = b_.iloc[rng.integers(0, len(b_), len(b_))]
+            out.append(100 * (x[col].sum() / x[den].sum() - y[col].sum() / y[den].sum()))
+        p = 100 * (a[col].sum() / a[den].sum() - b_[col].sum() / b_[den].sum())
+        return [round(float(p), 3)] + [round(float(v), 3) for v in np.percentile(out, [2.5, 97.5])]
+    findings["road_subj_drop_per_100_snaps_ci"] = _diff("net", "snaps")
+    findings["road_subj_drop_per_100_close_snaps_ci"] = _diff("net_close", "close_snaps")
+    # the break year was picked from the chart, so also report every possible break year
+    by_season = gs.groupby("season").apply(lambda d: 100 * d.net.sum() / d.snaps.sum())
+    findings["road_subj_per_100_snaps_by_season"] = by_season.round(3).to_dict()
+    brk = {}
+    for y in sorted(gs.season.unique())[2:-1]:
+        e, l = gs[gs.season < y], gs[gs.season >= y]
+        brk[int(y)] = round(float(100 * (e.net.sum() / e.snaps.sum() - l.net.sum() / l.snaps.sum())), 3)
+    findings["drop_by_break_year"] = brk
+
     fig, ax = plt.subplots()
     for k, c in [("subjective", plot.ACCENT2), ("objective", plot.ACCENT)]:
         s = g[g.flag_kind == k]
@@ -65,7 +103,7 @@ def main():
     ax.axhline(0, color=plot.MUTED, lw=1)
     ax.set_ylabel("Extra flags on the road team, per game"); ax.legend(loc="upper right")
     ax.set_xticks(list(SEASONS))
-    plot.finish(fig, ax, "The road team's extra judgment-call flags have disappeared",
+    plot.finish(fig, ax, "The road team's extra judgment-call flags have shrunk since 2023",
                 "Accepted flags on the away team minus the home team, per game. 2020 had few or no fans; 2026 is partial.", OUT / "home_edge.png")
 
     # 2. Referee crews (referee name = crew), flags per game, year-to-year stability
@@ -84,6 +122,7 @@ def main():
     pairs = crew.merge(crew.assign(season=crew.season - 1), on=["referee", "season"], suffixes=("", "_next"))
     r_crew = pairs[["vs_league", "vs_league_next"]].corr().iloc[0, 1]
     findings["crew_yoy_r"] = r_crew; findings["crew_pairs"] = len(pairs)
+    findings["crew_yoy_r_ci"] = [round(v, 3) for v in boot_r(pairs.vs_league, pairs.vs_league_next, groups=pairs.referee)[1:]]
     crew.sort_values(["season", "vs_league"]).to_csv(OUT / "crew_flags_per_game.csv", index=False)
     fig, ax = plt.subplots(figsize=(7, 6))
     ax.scatter(pairs.vs_league, pairs.vs_league_next, s=28, color=plot.ACCENT, alpha=0.75)
@@ -127,6 +166,12 @@ def main():
     findings["rtp_league_per100"] = 100 * lg_rate
     findings["rtp_top"] = qb.head(5)[["name", "rtp", "dropbacks", "per100", "lo", "hi"]].round(2).values.tolist()
     findings["rtp_above_league"] = qb[qb.lo > 100 * lg_rate].name.tolist()
+    # with this many quarterbacks, some 95% intervals miss the league rate by chance alone
+    findings["rtp_qbs"] = len(qb)
+    findings["rtp_expected_above_by_chance"] = round(0.025 * len(qb), 1)
+    z_b = float(norm.ppf(1 - 0.025 / len(qb)))  # Bonferroni: the 95% test split across every quarterback
+    lo_b = np.array([wilson(k_, n_, z=z_b)[0] for k_, n_ in zip(qb.rtp, qb.dropbacks)])
+    findings["rtp_above_league_after_correction"] = qb[lo_b > lg_rate].name.tolist()
     qb["rank"] = range(1, len(qb) + 1)
     mah = qb[qb.name == "P.Mahomes"]
     if len(mah):
