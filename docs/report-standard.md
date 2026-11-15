@@ -33,6 +33,7 @@ Every study in this portfolio is written to the same standard. It borrows its st
 6. **Names are checked.** Any player or team list is checked against current news (extensions, tags, retirements, injuries) before it is published.
 7. **No coach names from play-by-play coach fields;** they lag.
 8. **Every number on a page comes from `findings.json`,** so a refresh can never leave a stale number in the text.
+9. **First person.** I am the author, so every page says I, my and me. No page refers to me in the third person, and none shows scratch paths or tool names. A byline with my full name is fine. `tests/test_voice.py` checks it.
 
 ## How a new study plugs in
 
