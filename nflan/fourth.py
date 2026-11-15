@@ -55,6 +55,59 @@ def _tick(s: pd.DataFrame, seconds) -> pd.DataFrame:
     return s
 
 
+def convert_frame(plays: pd.DataFrame):
+    """3rd- and 4th-down runs and passes: the model inputs X, y = 1 when the play gained the distance or scored, and the rows.
+
+    One definition for fitting and for scoring on held-out seasons, so the two cannot drift apart."""
+    d = plays[plays["down"].isin([3, 4]) & plays["play_type"].isin(["run", "pass"])].copy()
+    d = d.dropna(subset=["ydstogo", "yardline_100", "yards_gained", "posteam_spread"])
+    d["is4"] = (d["down"] == 4).astype(int)
+    y = ((d["yards_gained"] >= d["ydstogo"]) | (d["touchdown"] == 1) & (d["td_team"] == d["posteam"])).astype(int)
+    return d[CONVERT_FEATURES], y, d
+
+
+def fg_frame(plays: pd.DataFrame):
+    """Field-goal attempts with a distance: the model inputs (distance, distance squared, indoor, season trend), made, the rows."""
+    k = plays[(plays["field_goal_attempt"] == 1) & plays["kick_distance"].notna()].copy()
+    k["made"] = (k["field_goal_result"] == "made").astype(int)
+    k["indoor"] = k["roof"].isin(["dome", "closed"]).astype(int)
+    X = np.column_stack([k["kick_distance"], k["kick_distance"] ** 2, k["indoor"], k["season"] - 2015])
+    return X, k["made"], k
+
+
+def punt_frame(plays: pd.DataFrame, pbp: pd.DataFrame) -> pd.DataFrame:
+    """One row per punt: where it was kicked from (yardline_100) and where the other team's next snap was (next_yl,
+    from their side). Punts with no next snap by the other team (a muff recovered by the punting team, the end of
+    a half) are dropped."""
+    cols = ["game_id", "play_id", "yardline_100", "posteam"] + [c for c in ("season",) if c in plays.columns]
+    p = plays[(plays["punt_attempt"] == 1) & (plays["play_type"] == "punt")][cols]
+    nxt = pbp[["game_id", "play_id", "posteam", "yardline_100", "play_type"]].copy()
+    nxt = nxt[nxt["play_type"].isin(["run", "pass", "field_goal", "punt", "no_play"])]
+    m = pd.merge_asof(p.sort_values("play_id"), nxt.sort_values("play_id").rename(
+        columns={"posteam": "next_team", "yardline_100": "next_yl", "play_type": "next_type"}),
+        on="play_id", by="game_id", direction="forward", allow_exact_matches=False)
+    return m[(m["next_team"] != m["posteam"]) & m["next_yl"].notna()]
+
+
+def grade_calls(point: pd.DataFrame, refits: list, chosen_col) -> tuple:
+    """The grading rule, in one place. `point` and each frame in `refits` hold wp_go, wp_fg, wp_punt and go_boost for the
+    same fourth downs; `chosen_col` is 0, 1 or 2 for the option the coach took (go, field goal, punt).
+
+    Returns (wp_lost, clear_go). A call is charged its gap to the best option only when the gap is 1+ win-probability
+    point and the 5th percentile of the gap across the refits is above zero. A go spot is clear when going adds 2+
+    points and the 5th percentile of that margin across the refits is above zero."""
+    col = np.asarray(chosen_col)
+
+    def gap(o):
+        v = o[["wp_go", "wp_fg", "wp_punt"]].values
+        return 100 * (np.nanmax(v, axis=1) - v[np.arange(len(v)), col])
+    g = gap(point)
+    gaps = np.column_stack([gap(o) for o in refits]); boosts = np.column_stack([o["go_boost"].values for o in refits])
+    miss = (g >= 1.0) & (np.nanpercentile(gaps, 5, axis=1) > 0)
+    clear_go = (point["go_boost"].values >= 2) & (np.nanpercentile(boosts, 5, axis=1) > 0)
+    return np.where(miss, g, 0.0), clear_go
+
+
 @dataclass
 class FourthDownBot:
     wp: WPModel
@@ -72,15 +125,11 @@ class FourthDownBot:
 
         The pregame spread for the offense is an input, so a strong offense converts more often than a weak one.
         """
-        d = plays[plays["down"].isin([3, 4]) & plays["play_type"].isin(["run", "pass"])].copy()
-        d = d.dropna(subset=["ydstogo", "yardline_100", "yards_gained", "posteam_spread"])
-        d["is4"] = (d["down"] == 4).astype(int)
-        y = (d["yards_gained"] >= d["ydstogo"]) | (d["touchdown"] == 1) & (d["td_team"] == d["posteam"])
-        X = d[CONVERT_FEATURES]
+        X, y, d = convert_frame(plays)
         clf = HistGradientBoostingClassifier(max_iter=200, monotonic_cst=[-1, 0, 0, 1], min_samples_leaf=300, random_state=7)
-        clf.fit(X, y.astype(int))
+        clf.fit(X, y)
         # extra yards beyond the sticks on successful plays (median, by distance bucket)
-        succ = d[y & (d["yards_gained"] >= d["ydstogo"])]
+        succ = d[(y == 1) & (d["yards_gained"] >= d["ydstogo"])]
         succ = succ.assign(extra=(succ["yards_gained"] - succ["ydstogo"]).clip(0, 40),
                            bucket=pd.cut(succ["ydstogo"], [0, 1, 2, 4, 7, 10, 99]))
         gain = succ.groupby("bucket", observed=True)["extra"].median().rename("extra").reset_index()
@@ -88,23 +137,18 @@ class FourthDownBot:
 
     @staticmethod
     def fit_fg(plays: pd.DataFrame) -> LogisticRegression:
-        k = plays[(plays["field_goal_attempt"] == 1) & plays["kick_distance"].notna()].copy()
-        k["made"] = (k["field_goal_result"] == "made").astype(int)
-        k["indoor"] = k["roof"].isin(["dome", "closed"]).astype(int)
-        X = np.column_stack([k["kick_distance"], k["kick_distance"] ** 2, k["indoor"], k["season"] - 2015])
-        return LogisticRegression(max_iter=2000).fit(X, k["made"])
+        X, made, _ = fg_frame(plays)
+        return LogisticRegression(max_iter=2000).fit(X, made)
 
     @staticmethod
     def fit_punt(plays: pd.DataFrame, pbp: pd.DataFrame) -> HistGradientBoostingRegressor:
-        """Opponent's next-drive starting yardline_100 (from their perspective) after a punt."""
-        p = plays[(plays["punt_attempt"] == 1) & (plays["play_type"] == "punt")][["game_id", "play_id", "yardline_100", "posteam"]]
-        nxt = pbp[["game_id", "play_id", "posteam", "yardline_100", "play_type"]].copy()
-        nxt = nxt[nxt["play_type"].isin(["run", "pass", "field_goal", "punt", "no_play"])]
-        m = pd.merge_asof(p.sort_values("play_id"), nxt.sort_values("play_id").rename(
-            columns={"posteam": "next_team", "yardline_100": "next_yl", "play_type": "next_type"}),
-            on="play_id", by="game_id", direction="forward", allow_exact_matches=False)
-        m = m[(m["next_team"] != m["posteam"]) & m["next_yl"].notna()]
-        reg = HistGradientBoostingRegressor(max_iter=150, monotonic_cst=[1], random_state=7)
+        """Opponent's next-drive starting yardline_100 (from their perspective) after a punt.
+
+        Monotone decreasing: the farther the punter is from the end zone he is kicking toward, the closer the
+        other team starts to its own goal to score. (Until Nov. 15, 2026 the sign was +1, which the data cannot
+        satisfy, so the trees returned one number for every spot. The held-out test caught it.)"""
+        m = punt_frame(plays, pbp)
+        reg = HistGradientBoostingRegressor(max_iter=150, monotonic_cst=[-1], random_state=7)
         reg.fit(m[["yardline_100"]], m["next_yl"])
         return reg
 
