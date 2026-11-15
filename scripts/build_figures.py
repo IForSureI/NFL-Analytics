@@ -130,7 +130,7 @@ def at_a_glance():
     ax = axs[3]
     ax.bar([0, 1], [f4["lucky_change_wins_per17"], f4["unlucky_change_wins_per17"]], color=[ORANGE, FIELD], width=0.55)
     ax.axhline(0, color=MUTED, lw=0.8)
-    _card(ax, "04", "Luck Index", f"{f4['lucky_change_wins_per17']:+.1f} wins", "Next-year change for teams 2+ wins over their points (orange) vs 2+ under (green)")
+    _card(ax, "04", "Luck Index", f"{f4['next_wins_per_luck_win'][0]:+.2f} wins", f"Next-year wins per win above what points predict (a Pythagorean win is worth {f4['next_wins_per_pythag_win'][0]:.2f}). Bars: raw next-year change, teams 2+ wins over (orange) and under (green)")
 
     # 05 kickoffs
     k = pd.read_csv(R / "05-kickoff-value/kickoffs_by_season.csv").sort_values("season")
@@ -151,9 +151,12 @@ def at_a_glance():
     # 07 box-score tax
     f7 = F("07-box-score-tax")
     ax = axs[6]
-    ax.bar([0, 1], [f7["market_ratio_sack_to_pressure"], f7["predict_count_ratio"]], color=[ORANGE, FIELD], width=0.55)
-    ax.set_ylim(0, f7["market_ratio_sack_to_pressure"] * 1.2)
-    _card(ax, "07", "Box-Score Tax", f"{f7['market_ratio_sack_to_pressure']:.2f}x vs {f7['predict_count_ratio']:.2f}x", f"A sack is priced like {f7['market_ratio_sack_to_pressure']:.2f} non-sack pressures (orange) but predicts like {f7['predict_count_ratio']:.2f} (green)")
+    lo7, hi7 = f7["tax_ratio_ci90"]
+    ax.bar([0], [f7["tax_ratio"]], color=[ORANGE], width=0.45)
+    ax.plot([0, 0], [lo7, min(hi7, 6)], color=INK, lw=1.6)
+    ax.axhline(1, color=MUTED, lw=0.9, ls="--")
+    ax.set_xlim(-1, 1); ax.set_ylim(0, 6.3)
+    _card(ax, "07", "Box-Score Tax", f"{f7['tax_ratio']:.1f}x", f"Price of a sack beyond what pressures predict, against what it predicts. Fair is 1.0 (dashed). 90% interval {lo7:.1f} to {hi7:.1f}; the line is cut at 6")
 
     # 08 YAC tax
     f8 = F("08-yac-tax")
@@ -161,10 +164,10 @@ def at_a_glance():
     ax = axs[7]
     ax.bar([0, 1, 2], [fut["air_yds"], fut["xyac_yds"], fut["yacoe_yds"]], color=[FIELD, FIELD, ORANGE], width=0.6)
     ax.set_ylim(0, max(fut.values()) * 1.25)
-    _card(ax, "08", "YAC Tax", "No tax", "Price per 100 future yards: air yards, expected YAC, YAC over expected (orange) all close")
+    _card(ax, "08", "YAC Tax", "None detected", f"Price per 100 future yards: air yards, expected YAC, YAC over expected (orange). Ratio {f8['tax_ratio']:.2f}, 90% interval {f8['tax_ratio_ci90'][0]:.1f} to {f8['tax_ratio_ci90'][1]:.1f}")
 
     fig.text(0.03, 0.955, "Selected studies at a glance", fontsize=20, fontweight="bold", color=INK, fontfamily=DISPLAY)
-    fig.text(0.03, 0.915, "Headline number and the evidence behind it. Every figure is rebuilt from the data on each refresh.", fontsize=11, color=MUTED, fontfamily=TEXT, style="italic")
+    fig.text(0.03, 0.915, "Headline number and the evidence behind it. Drawn by code from each study's saved results.", fontsize=11, color=MUTED, fontfamily=TEXT, style="italic")
     fig.text(0.03, 0.02, "Data: nflverse (play-by-play, NGS, PFR, Over The Cap). Chart: Dylan Fanelli", fontsize=8.5, color=MUTED)
     A.mkdir(exist_ok=True)
     fig.savefig(A / "at-a-glance.png", facecolor=PAPER)

@@ -1,4 +1,5 @@
-"""Refresh the season in progress and rebuild every study, test and README.
+"""Refresh the season in progress and its side tables (contracts, charting, players, snaps, Next Gen Stats),
+then rebuild every study, test and README.
 
     python scripts/update.py            # refresh the current season, run everything
     python scripts/update.py --no-download
@@ -39,6 +40,15 @@ def main():
         for s in range(data.FIRST_SEASON, season + 1):
             data.pbp_path(s, refresh=(s == season))
         data.load_officials(refresh=True)
+        # the side tables the contract and kickoff studies read; without this they would stay at their first download
+        data.load_contracts(refresh=True)
+        data.load_pfr_def(refresh=True)
+        data.load_players(refresh=True)
+        data.load_ngs_receiving(refresh=True)
+        data.load_draft_picks(refresh=True)
+        data.load_snap_counts(range(2018, season + 1), refresh_current=season)
+        from projects.run_game_value import load_ngs_rushing
+        load_ngs_rushing(refresh=True)
     for name in STUDIES:
         print(f"== {name}")
         importlib.import_module(f"projects.{name}").main()
