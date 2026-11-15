@@ -22,6 +22,36 @@ def _eras(f):
     return sorted({k.split(",")[0] for k in _era(f)})
 
 
+def _kg(r, d=1):
+    """Games to half signal, as text."""
+    k = r["k_games"]
+    if k is None:
+        return "no measurable signal"
+    return f"{k:.0f}" if k >= 100 else f"{k:.{d}f}"
+
+
+def _kgci(r):
+    lo, hi = r["k_games_ci"]
+    lo_t = "0" if lo is None else (f"{lo:.0f}" if lo >= 100 else f"{lo:.1f}")
+    hi_t = "no upper bound" if hi is None else (f"{hi:.0f}" if hi >= 100 else f"{hi:.1f}")
+    return f"{lo_t} to {hi_t}"
+
+
+def atlas_table(f, team=True):
+    """The ranked atlas: most to least reliable over a full season, with the regression guide."""
+    tg = {"Offense", "Defense", "Special teams", "Team"}
+    rows = sorted([r for r in f["atlas"].values() if (r["group"] in tg) == team], key=lambda r: -r["rel_full_season"])
+    head = ("| # | Metric | Trial | Split-half r (95%) | Half signal after k trials (games) | Signal in a full season | "
+            "Regress after 4 / 8 / 17 games | Year-to-year r (95%) |\n|---|---|---|---|---|---|---|---|")
+    out = [head]
+    for i, r in enumerate(rows, 1):
+        k = "no measurable signal" if r["k"] is None else f"{r['k']:,.0f} ({_kg(r)})"
+        out.append(f"| {i} | {r['label']} | {r['unit']} | {r['split_half_r']:.2f} ({r['split_half_ci'][0]:.2f} to {r['split_half_ci'][1]:.2f}) | {k} | "
+                   f"{100 * r['rel_full_season']:.0f}% | {100 * r['regress_4']:.0f}% / {100 * r['regress_8']:.0f}% / {100 * r['regress_17']:.0f}% | "
+                   f"{r['yoy_r']:.2f} ({r['yoy_ci'][0]:.2f} to {r['yoy_ci'][1]:.2f}) |")
+    return "\n".join(out)
+
+
 META = {
     "01-flag-audit": dict(
         short="Flag Audit",
@@ -421,5 +451,61 @@ META = {
                "free_agents_2027_rbs.csv": "2027 free-agent backs: RYOE, shrunk RYOE, expected YPC, value flag, news note",
                "free_agents_2027_rbs_no_ngs.csv": "2027 free-agent backs with 100+ carries but under 100 in NGS season rows, with news notes",
                "models.txt": "Full regression output"},
+    ),
+    "13-metric-stability-atlas": dict(
+        short="Metric Stability Atlas",
+        tldr=lambda f: [
+            f"Offense numbers settle faster than defense numbers: offense EPA per play is half signal after {f['atlas']['off_epa']['k_games']:.1f} games (95% interval {f['atlas']['off_epa']['k_games_ci'][0]:.1f} to {f['atlas']['off_epa']['k_games_ci'][1]:.1f}), defense EPA per play after {f['atlas']['def_epa']['k_games']:.1f} ({f['atlas']['def_epa']['k_games_ci'][0]:.1f} to {f['atlas']['def_epa']['k_games_ci'][1]:.1f}), and {len(f['team_no_majority_by_17'])} of {sum(r['group'] in ('Offense', 'Defense', 'Special teams', 'Team') for r in f['atlas'].values())} team numbers are still less than half signal after a full season.",
+            (f"After 8 games, no metric beats point differential at predicting the rest of the season; net EPA per play ties it (r = {f['predict_rest']['res_point_diff']['r_rest_pd']:.2f} vs {f['predict_rest']['net_epa']['r_rest_pd']:.2f}, {f['predict_rest']['_n']} team-seasons), and out of sample it lifts R² only from {f['predict_rest']['_oos_r2_pd_alone']:.3f} to {f['predict_rest']['_oos_r2_pd_epa']:.3f}."
+             if not f["predict_beats_pd"] else
+             f"After 8 games, {len(f['predict_beats_pd'])} metric(s) beat point differential at predicting the rest of the season ({f['predict_rest']['_n']} team-seasons)."),
+            f"A defense's pressure rate is half signal after {f['atlas']['def_pressure_rate']['k_games']:.1f} games, its sack rate after {f['atlas']['def_sack_rate']['k_games']:.1f}; target share settles in {f['atlas']['wr_tgt_share']['k_games']:.1f} games, receiver and rusher efficiency in more than a season. Regressing by these rules beat the raw number out of sample for {f['oos_shrunk_beats_raw']} of {f['oos_metrics']} metrics.",
+        ],
+        question="Which team and player numbers can a club trust, and after how many games?",
+        seasons=lambda f: f"{f['seasons'].split('-')[0]}-{f['current_season']}",
+        tags=["split-half reliability", "regression to the mean", "year-to-year stability", "out-of-sample test", "team bootstrap"],
+        hero=("team_atlas.png", "Games until each team number is half signal, with 95% intervals (resampling teams)."),
+        figs={3: [("player_atlas.png", "Games of a typical qualified player's volume until each player number is half signal, with 95% intervals.")],
+              4: [("within_vs_across.png", "Within-season reliability of a full season against year-to-year r, one dot per metric.")],
+              5: [("predict_rest.png", "First 8 games of each team number against point differential per game over the rest of the season."),
+                  ("week_curve.png", "How well each number through game N predicts point differential over the rest of the season.")],
+              7: [("oos_check.png", "Out of sample: the reliability each metric's k predicts against the slope seen in later seasons.")]},
+        tables=lambda f: {2: ["**The team atlas, most to least reliable over a full season.** Regress = how far to pull the number toward the league mean after 4, 8 and 17 games of typical volume.", atlas_table(f, team=True)],
+                          3: ["**The player atlas.** Games are a typical qualified player's volume per game.", atlas_table(f, team=False)]},
+        key=lambda f: [
+            ("Offense EPA/play: games to half signal (95% interval)", f"{f['atlas']['off_epa']['k_games']:.1f} ({f['atlas']['off_epa']['k_games_ci'][0]:.1f} to {f['atlas']['off_epa']['k_games_ci'][1]:.1f})"),
+            ("Defense EPA/play allowed: games to half signal", f"{f['atlas']['def_epa']['k_games']:.1f} ({f['atlas']['def_epa']['k_games_ci'][0]:.1f} to {f['atlas']['def_epa']['k_games_ci'][1]:.1f})"),
+            ("Offense more reliable than defense, matched pairs", f"{f['off_more_reliable_pairs']} of {len(f['off_vs_def_pairs'])}"),
+            ("Defense pressure rate / sack rate: games to half signal", f"{f['atlas']['def_pressure_rate']['k_games']:.1f} / {f['atlas']['def_sack_rate']['k_games']:.1f}"),
+            ("Team numbers under half signal after 17 games", f"{len(f['team_no_majority_by_17'])} of {sum(r['group'] in ('Offense', 'Defense', 'Special teams', 'Team') for r in f['atlas'].values())}"),
+            ("After 8 games, r with rest-of-season point differential: point differential / net EPA", f"{f['predict_rest']['res_point_diff']['r_rest_pd']:.2f} / {f['predict_rest']['net_epa']['r_rest_pd']:.2f}"),
+            ("QB Weeks 1-9 to Weeks 10+ EPA/dropback: r from EPA / from CPOE", f"{f['qb_predict']['qb_epa']['r']:.2f} / {f['qb_predict']['qb_cpoe']['r']:.2f}"),
+            ("Regressed beats raw out of sample", f"{f['oos_shrunk_beats_raw']} of {f['oos_metrics']} metrics"),
+        ],
+        why=[
+            "**Self-scouting and game planning:** by Week 5 or 6 an offense's EPA, success rate and pass rate over expected are mostly signal; a defense's are not until late in the season, so a staff should not rebuild a defensive plan on four games.",
+            "**Pro personnel, the trade deadline and free agency:** a receiver's target share and a pass rusher's pressure rate are trustworthy after a few games; a receiver's or back's per-touch efficiency is not, even after a full season, so regress it hard (the atlas says how far) before paying for it.",
+            "**Front office and ownership:** at midseason, point differential and net EPA per play are the honest read of a team; turnovers forced, fumble recoveries, red-zone and field-goal rates are mostly noise and should not drive personnel moves.",
+            "**Analytics staff:** every weekly board can carry the regression constant from this atlas, so a hot month is shown next to what it is likely to be worth. The rule was tested out of sample before it is offered.",
+        ],
+        method_eq=[
+            r"Reliability of $n$ trials: $\rho(n) = \dfrac{n}{n + k}$; from a split-half $r$ on halves of $n_h$ trials, $k = n_h \dfrac{1 - r}{r}$.",
+            r"Regressed estimate: $\hat\theta = \mu + \dfrac{n}{n + k}\,(x - \mu)$, so after $n$ trials regress $\dfrac{k}{n + k}$ of the way to the league mean $\mu$.",
+            r"Spearman-Brown: doubling a half gives $\rho_{\text{full}} = \dfrac{2r}{1 + r}$, the same as $\rho(2n_h)$ above.",
+        ],
+        validation=lambda f: [
+            f"Random game splits ({f['n_splits']} per metric) and the odd vs even week split agree: the mean gap in r is {f['odd_even_vs_random_mean_abs_gap']:.3f} across the {len(f['atlas'])} metrics.",
+            f"Out of sample: k fit on the earlier seasons, tested by forecasting even weeks from odd weeks in the later ones. Regressed beat raw for {f['oos_shrunk_beats_raw']} of {f['oos_metrics']} metrics and the league mean for {f['oos_shrunk_beats_mean']}; predicted reliability vs observed slope r = {f['oos_calibration_r']:.2f}.",
+            f"Team prediction is fit on {f['predict_rest']['_train']} and scored on {f['predict_rest']['_test']}; quarterback prediction the same. Out-of-sample R² is reported next to every in-sample r.",
+            f"Every r carries a 95% interval that resamples whole teams or players ({f['boot_split']} draws for split-half r, {f['boot_r']:,} for the rest). Seasons are centred before any correlation, so league trends are not counted as signal.",
+            "Logic tests on made-up data (`tests/test_stability_atlas.py`) check that the split-half engine recovers a known reliability, that k turns into the right regression share, that splits keep each unit's games whole, that season centring removes a pure trend, and that the out-of-sample test prefers the regressed forecast when the truth is noisy.",
+        ],
+        next=["Per-pass-rush-snap pressure and yards per route run, if public route and rush counts appear.",
+              "Opponent-adjusted versions of the team numbers, to see how much of the defense noise is schedule.",
+              "A weekly in-season projection that blends last season (weighted by year-to-year r) with this season (weighted by k)."],
+        files={"atlas.csv": "Every metric: split-half r with interval, odd/even r, k in trials and games, regression shares, year-to-year r, out-of-sample check",
+               "regression_guide.csv": "k and how far to regress after 4, 8 and 17 games, per metric",
+               "predict_rest_of_season.csv": "First-8-game team numbers vs rest-of-season point differential and win %, with out-of-sample R² and next-season r",
+               "teams_<season>_regressed.csv": "The season in progress: raw and regressed offense, defense and net EPA per play and point differential, by team"},
     ),
 }

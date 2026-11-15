@@ -463,9 +463,90 @@ def run_game_value():
 """
 
 
+
+def stability_atlas():
+    from report_meta import _kg, _kgci
+    f = F("13-metric-stability-atlas")
+    a = f["atlas"]; pr = f["predict_rest"]; q = f["qb_predict"]; ns = f["next_season"]; cx = f["repo_context"]
+    tm = [r for r in a.values() if r["group"] in ("Offense", "Defense", "Special teams", "Team")]
+    no_maj = f["team_no_majority_by_17"]
+    lab = lambda m: a[m]["label"]
+    def sh(m):
+        r = a[m]
+        return f"split-half r = {r['split_half_r']:.2f} ({r['split_half_ci'][0]:.2f} to {r['split_half_ci'][1]:.2f})"
+    def shr(m):
+        r = a[m]
+        return f"{r['split_half_r']:.2f} ({r['split_half_ci'][0]:.2f} to {r['split_half_ci'][1]:.2f})"
+    def kg(m):
+        return f"{_kg(a[m])} games ({_kgci(a[m])})"
+    def yy(m):
+        r = a[m]
+        return f"{r['yoy_r']:.2f} ({r['yoy_ci'][0]:.2f} to {r['yoy_ci'][1]:.2f})"
+    beats = f["predict_beats_pd"]
+    d_net = pr["net_epa"]["minus_point_diff"]
+    lead5 = ("After 8 games, no metric beats point differential at predicting the rest of the season; net EPA per play ties it." if not beats else
+             f"After 8 games, {', '.join(lab(b) for b in beats)} beat{'s' if len(beats) == 1 else ''} point differential at predicting the rest of the season.")
+    cm = q["cpoe_minus_epa"]
+    lead6 = ("For quarterbacks, early EPA per dropback predicts the rest of the season better than early CPOE." if cm[2] < 0 else
+             "For quarterbacks, early CPOE predicts the rest of the season better than early EPA per dropback." if cm[1] > 0 else
+             "For quarterbacks, early EPA per dropback and early CPOE predict the rest of the season about equally.")
+    yb, ya = f["share_yoy_below_within"]
+    pairs = len(f["off_vs_def_pairs"])
+    cr = f["current_regress_share"]
+    nearest = f["repo_context_nearest"].get("02_scorecard_split_half_r")
+    fast = min((r for r in tm if r['k_games'] is not None), key=lambda r: r['k_games'])['metric']
+    return f"""# 13 The Metric Stability Atlas: which numbers a club can trust, and after how many games
+
+**The question:** A club reads dozens of team and player numbers every week. Some are mostly signal after a month; some are still mostly noise after a full season, and a staff that reacts to those is chasing luck. For {len(tm)} team numbers and {len(a) - len(tm)} player numbers, I measured how fast each one becomes signal within a season, how well it carries into the next season, and which early-season team numbers predict the rest of the season. Two earlier studies here found boards that do not repeat (the fourth-down team card, the pass-rusher sack board); this study asks the same question of everything else. It is the football twin of the [Reliability Atlas](https://github.com/IForSureI/Dylan-Fanelli-Baseball-Analytics-Portfolio/blob/main/reports/2026-reliability-atlas.md) in my baseball portfolio.
+**Inspired by:** Michael MacKelvie, [Does Defense Win Championships...?]({YT}exOWLuFCkwg) (offense is more stable week to week than defense). The regression constant is the idea behind Russell Carleton's stabilization work in baseball.
+**Data:** nflverse play-by-play {f['seasons']} regular seasons ({f['team_plays']:,} offensive plays, {f['team_seasons']} team-seasons; nflfastR EPA, success, CPOE, xpass and xYAC), FTN pressure charting via nflverse participation ({f['pressure_seasons'][0]}-{f['pressure_seasons'][-1]}), NFL Next Gen Stats weekly rushing (RYOE, 2018-{int(f['seasons'][-4:])}), Pro Football Reference weekly defense (pressures and sacks, 2018-{int(f['seasons'][-4:])}), snap counts and players, all via [nflverse](https://github.com/nflverse/nflverse-data), pulled {f['pulled'].get(f"pbp_{f['current_season']}.parquet", '')}. The {f['current_season']} season (through Week {f['through_week']}) is left out of every estimate and used only for the current-season table. Not measured: {' '.join(f'{k}, because {v}.' for k, v in f['dropped'].items())}
+**Code:** [`projects/metric_stability_atlas.py`](../../projects/metric_stability_atlas.py)
+
+## What I found
+1. **Offense numbers settle faster than defense numbers.** Across the {pairs} offense and defense pairs, the offensive version is more reliable over a full season in {f['off_more_reliable_pairs']}. The median team number is half signal after {f['median_k_games']['Offense']:.1f} games on offense and {f['median_k_games']['Defense']:.1f} on defense. Offense EPA per play is half signal after {kg('off_epa')} and {100 * a['off_epa']['rel_full_season']:.0f}% signal over 17 games; defense EPA per play allowed takes {kg('def_epa')} and reaches {100 * a['def_epa']['rel_full_season']:.0f}%. The fastest team number to settle is {lab(fast).lower()}, half signal after {kg(fast)}{'; it is a choice, not a result' if fast == 'off_proe' else ''}. Point differential is half signal after {kg('res_point_diff')}, win % after {kg('res_win_pct')}.
+2. **Pressure settles; sacks, takeaways, fumbles, red-zone and field-goal rates mostly do not.** A defense's pressure rate (FTN charting, {f['pressure_seasons'][0]}-{f['pressure_seasons'][-1]} only, so a wide interval) is half signal after {kg('def_pressure_rate')}; its sack rate after {kg('def_sack_rate')}. Interceptions per dropback take {kg('def_int_rate')}. Fumbles recovered per play, red-zone TD rate allowed and field-goal rate are close to pure noise within a season: {sh('def_fumble_lost_rate')}, {shr('def_rz_td')} and {shr('st_fg_pct')}. {len(no_maj)} of {len(tm)} team numbers are still less than half signal after a full 17-game season.
+3. **For players, usage settles within a few games; receiver and running back efficiency takes more than a season.** Target share is half signal after {kg('wr_tgt_share')}, receiver aDOT after {kg('wr_adot')} and a pass rusher's pressures per snap after {kg('pr_pressure_rate')}. Quarterbacks sit in between: EPA per dropback {kg('qb_epa')}, CPOE {kg('qb_cpoe')}, interception rate {kg('qb_int_rate')}. Per touch, receiver EPA per target takes {kg('wr_epa_tgt')}, YAC over expected per catch {kg('wr_yacoe')}, rusher EPA per carry {kg('rb_epa')} and RYOE per carry {kg('rb_ryoe')}, all past one season of a starter's volume.
+4. **{yb} of {ya} numbers repeat less from one season to the next than within a season.** Offense EPA per play is {100 * a['off_epa']['rel_full_season']:.0f}% signal within a season but repeats at year-to-year r = {yy('off_epa')}; defense EPA per play {100 * a['def_epa']['rel_full_season']:.0f}% against {yy('def_epa')}. Rosters, schemes and health change, so a full season is an upper bound on what carries over. The numbers that carry best are usage: target share {yy('wr_tgt_share')}, receiver aDOT {yy('wr_adot')} and pass-rusher pressures per snap {yy('pr_pressure_rate')}.
+5. **{lead5}** Over {pr['_n']} team-seasons, the first 8 games' point differential correlates with the rest of the season's at r = {pr['res_point_diff']['r_rest_pd']:.2f} ({pr['res_point_diff']['r_rest_pd_ci'][0]:.2f} to {pr['res_point_diff']['r_rest_pd_ci'][1]:.2f}); net EPA per play at {pr['net_epa']['r_rest_pd']:.2f} ({pr['net_epa']['r_rest_pd_ci'][0]:.2f} to {pr['net_epa']['r_rest_pd_ci'][1]:.2f}), a difference of {d_net[0]:+.3f} ({d_net[1]:+.3f} to {d_net[2]:+.3f}). Offense EPA per play gives {pr['off_epa']['r_rest_pd']:.2f} and defense EPA per play {pr['def_epa']['r_rest_pd']:.2f}; special teams numbers give about zero. Out of sample (fit {pr['_train']}, tested {pr['_test']}), point differential alone explains {100 * pr['_oos_r2_pd_alone']:.1f}% of rest-of-season point differential, adding net EPA per play {100 * pr['_oos_r2_pd_epa']:.1f}%, and adding net success rate too {100 * pr['_oos_r2_pd_epa_sr']:.1f}%. Game by game from week 1 to 12, the two never differ by more than {f['week_curve_max_abs_gap']:.2f} in r. Into next season, point differential carries at r = {ns['res_point_diff'][0]:.2f} ({ns['res_point_diff'][1]:.2f} to {ns['res_point_diff'][2]:.2f}) and net EPA per play at {ns['net_epa'][0]:.2f} ({ns['net_epa'][1]:.2f} to {ns['net_epa'][2]:.2f}).
+6. **{lead6}** In {q['n']} quarterback-seasons ({q['qbs']} quarterbacks, 150+ dropbacks before and after), Weeks 1-9 EPA per dropback correlates with Weeks 10+ EPA per dropback at r = {q['qb_epa']['r']:.2f} ({q['qb_epa']['ci'][0]:.2f} to {q['qb_epa']['ci'][1]:.2f}), success rate at {q['qb_sr']['r']:.2f}, CPOE at {q['qb_cpoe']['r']:.2f} ({q['qb_cpoe']['ci'][0]:.2f} to {q['qb_cpoe']['ci'][1]:.2f}); the CPOE-minus-EPA gap is {cm[0]:+.2f} ({cm[1]:+.2f} to {cm[2]:+.2f}). Out of sample, EPA per dropback alone explains {100 * q['qb_epa']['oos_r2']:.1f}% of the rest, CPOE alone {100 * q['qb_cpoe']['oos_r2']:.1f}%, and the two together {100 * q['oos_r2_epa_cpoe']:.1f}%. Season to season, CPOE repeats at {yy('qb_cpoe')} and EPA per dropback at {yy('qb_epa')}.
+7. **The regression rules hold out of sample.** Each metric's k was fit on the earlier seasons ({f['train']} for play-by-play numbers; the first half of the seasons for FTN, NGS and PFR numbers) and used to forecast each team's or player's even-week value from its odd-week value in the later seasons. The regressed forecast beat the raw odd-week number for {f['oos_shrunk_beats_raw']} of {f['oos_metrics']} metrics and the league mean for {f['oos_shrunk_beats_mean']}; its median squared error was {100 * f['oos_median_mse_ratio_vs_raw']:.0f}% of the raw number's and {100 * f['oos_median_mse_ratio_vs_mean']:.0f}% of the league mean's. The reliability k predicts and the slope actually seen line up at r = {f['oos_calibration_r']:.2f} across metrics (mean gap {f['oos_mean_abs_slope_gap']:.3f}).
+8. **Earlier boards in this portfolio sit at the noisy end of the atlas.** The fourth-down team card in study 02 repeats at odd vs even weeks r = {cx['02_scorecard_split_half_r']:.2f}, about where {nearest[1].lower()} sits here (split-half r = {nearest[2]:.2f}). Study 03 found a rusher's EPA per sack does not repeat (year-to-year r = {cx['03_epa_per_sack_yoy_r']:.2f}); here a rusher's sacks per snap repeat at {yy('pr_sack_rate')} and pressures per snap at {yy('pr_pressure_rate')}, so the count is a skill and the timing of the sacks is not. Study 05's returner rating repeats at r = {cx['05_returner_split_half_r']:.2f}, like the noisiest numbers in this table.
+9. **{f['current_season']} through Week {f['through_week']}: regress offense EPA about {100 * cr['off_epa']:.0f}%, defense EPA about {100 * cr['def_epa']:.0f}%.** With {f['current_games_range'][0]} to {f['current_games_range'][1]} games played, the median team's net EPA per play should be pulled {100 * cr['net_epa']:.0f}% of the way to the league mean and its point differential {100 * cr['res_point_diff']:.0f}%. Regressing does not reorder teams on one number (every team has about the same sample), but it does change how far apart they are. Point differential and regressed net EPA put {f['current_point_diff_vs_net_epa_rank_moves_3plus']} of {f['current_table_teams']} teams three or more places apart, and finding 5 says the two forecast the rest of the season about equally, so for those teams the honest answer is in between. `teams_{f['current_season']}_regressed.csv` has every team.
+
+![Team atlas](team_atlas.png)
+![Player atlas](player_atlas.png)
+![Within vs across](within_vs_across.png)
+![Prediction](predict_rest.png)
+![Week curve](week_curve.png)
+![Out of sample](oos_check.png)
+
+## Method
+- **Units and trials.** Every number is a ratio of sums over games: EPA per play is total EPA over plays, sack rate is sacks over dropbacks, target share is a receiver's targets over his team's targets in the games he was targeted, pressures per 100 snaps are PFR pressures over defensive snaps. A trial is the denominator (plays, dropbacks, targets, carries, snaps, games). Scrimmage plays exclude two-point tries; dropbacks are nflfastR's `pass` flag (passes, sacks, scrambles); designed runs are `rush`. Explosive means a 10+ yard run or a 20+ yard dropback. Red-zone trips are drives with a snap at the opponent's 20 or closer. Pass rate over expected uses neutral plays (first and second down, win probability 20-80%, outside the last two minutes of a half). Special teams EPA is the team's side of every kickoff, punt, field goal and extra point. Players qualify by season volume: quarterbacks 200+ dropbacks (150+ attempts for CPOE, aDOT and interception rate), WR and TE 50+ targets (35+ catches for YAC over expected), RBs 100+ designed runs (100+ NGS carries for RYOE), edge and interior defenders 300+ defensive snaps; each half of a split needs a minimum too (both are in `atlas.csv`).
+- **Split-half reliability.** Each unit-season's games are shuffled and split into two halves, {f['n_splits']} times. The two halves are correlated across units after subtracting each season's league mean, so a league-wide trend (passing EPA rising since 2006) is not counted as signal. Each half must reach a minimum sample. The odd vs even week split is reported as a check.
+- **Regression constant.** Under the classical model, a sample of n trials has reliability n / (n + k). A split-half r measured on halves of n trials gives k; "half signal" is n = k. Converting k to games uses the median per-game volume of a qualified team or player.
+- **Year to year.** The full season against the next, same team or player, both seasons qualified, seasons centred.
+- **Prediction.** Teams: each number over the first 8 games against point differential per game and win % over games 9 on, every team-season {f['seasons']}; fit {pr['_train']}, tested {pr['_test']}. Quarterbacks: Weeks 1-9 against Weeks 10+, 150+ dropbacks in each.
+- **Intervals.** Split-half intervals resample whole teams or players ({f['boot_split']} draws over 20 of the splits); year-to-year and prediction intervals resample teams or players ({f['boot_r']:,} draws), so a club's repeat seasons are not treated as independent.
+
+## Limits
+- The k model assumes a fixed true level within a season. Injuries, trades, quarterback changes and scheme changes break that, so k is an average across teams, not a rule for a team that just lost its quarterback.
+- Opponents differ between halves, so schedule strength counts as noise here. That is right for forecasting, but it means a team's reliable number still includes who it played.
+- Player samples are regulars only (playing-time minimums). A narrower spread of talent lowers reliability, and players who lost the job are missing from the year-to-year pairs.
+- Pressure rates use FTN charting for {f['pressure_seasons'][0]}-{f['pressure_seasons'][-1]} only ({a['def_pressure_rate']['unit_seasons']} team-seasons, {a['def_pressure_rate']['yoy_pairs']} year-to-year pairs), so their intervals are wide. The earlier participation pressure field comes from a different source and leaves sacks out, so it was not mixed in.
+- Pass-rusher rates are per defensive snap, not per pass-rush snap (not public), so a rusher used mostly on passing downs looks better and part of the stability is his role. Target share counts games in which the receiver was targeted, not every game he played.
+- RYOE comes from NGS weekly rows, which list a back only in games where NGS reports him, so it covers fewer games than play-by-play.
+- Yards per route run and pass-rush win rate are not measured: no public per-player routes or pass-rush snaps.
+- EPA, CPOE, xpass and xYAC are nflfastR model outputs; nflverse revises past seasons now and then, which moves these numbers slightly.
+- r = {pr['res_point_diff']['r_rest_pd']:.2f} after 8 games still leaves most of the rest of the season unexplained.
+
+## Files
+`atlas.csv`, `regression_guide.csv`, `predict_rest_of_season.csv`, `teams_<season>_regressed.csv`, `findings.json`
+"""
+
+
 REPORTS = [("01-flag-audit", flag_audit), ("02-fourth-down-bot", fourth), ("03-sack-leverage", sacks),
            ("04-luck-index", luck), ("05-kickoff-value", kickoff), ("06-pass-run", passrun), ("07-box-score-tax", box_score_tax), ("08-yac-tax", yac_tax),
-           ("09-run-game-value", run_game_value)]
+           ("09-run-game-value", run_game_value), ("13-metric-stability-atlas", stability_atlas)]
 
 
 UPCOMING = [("09", "Run Game Value", "How much of a running back's production is his, and do contracts pay for that part?"),
@@ -666,6 +747,7 @@ I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward 
 | Special teams | What is a kickoff worth under the new rule, and can returners or kickers be told apart yet? | [05 Kickoff Value](reports/05-kickoff-value/) |
 | Front office and ownership | How much of our record will carry over, and how much was the bounces? | [04 Luck Index](reports/04-luck-index/) |
 | Game prep | What does this crew call, and where does the road flag gap sit? | [01 Flag Audit](reports/01-flag-audit/) |
+| Every department | Which of this week's numbers can we trust, and how far should we regress the rest? | [13 Metric Stability Atlas](reports/13-metric-stability-atlas/) |
 
 <a id="how-i-work"></a>
 ## How I work
@@ -679,7 +761,7 @@ Every study follows the same [report standard](docs/report-standard.md), modeled
 5. **What a club does with it,** limitations and next steps on every page.
 6. **Reproducible:** one command re-downloads the data and rebuilds the studies, charts and pages; `pytest` (run by GitHub Actions on every change, Python 3.10 and 3.12) tests the model and study logic on small made-up tables, checks that saved results are internally consistent, and checks that every page meets the standard. The tests do not prove a finding is right.
 
-**Techniques used here:** gradient-boosted win probability with monotone constraints; decision analysis; expected points (EPA); empirical-Bayes shrinkage and Wilson intervals; split-half and year-to-year reliability; OLS with player-clustered standard errors; bootstrap resampling; Pythagorean expectation; contract valuation in cap-share terms; DuckDB SQL.
+**Techniques used here:** gradient-boosted win probability with monotone constraints; decision analysis; expected points (EPA); empirical-Bayes shrinkage and Wilson intervals; split-half and year-to-year reliability with regression constants (Spearman-Brown); OLS with player-clustered standard errors; bootstrap resampling; Pythagorean expectation; contract valuation in cap-share terms; DuckDB SQL.
 
 <a id="under-the-hood"></a>
 ## Under the hood
@@ -836,6 +918,8 @@ def wrap(slug, body, idx):
     placed = {m["hero"][0]}
     for n, lead, text in items:
         out += [f"### {n}. {lead}", "", text.strip(), ""]
+        for tbl in (m["tables"](f).get(int(n), []) if "tables" in m else []):
+            out += [tbl, ""]
         for file, cap in m["figs"].get(int(n), []):
             out += [_fig(slug, file, cap), ""]; placed.add(file)
     rest = [x for x in figs if x not in placed and all(x != q for v in m["figs"].values() for q, _ in v)]
