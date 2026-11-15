@@ -1,3 +1,6 @@
+Win-probability test (2024-2025): Brier 0.1495 vs nflfastR 0.1488
+Longest field goal the bot considers: 56 yards
+
 Conversion extra-yards table:
      bucket  extra
 0    (0, 1]    2.0
