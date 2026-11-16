@@ -1,0 +1,13 @@
+version,picks,QB,QB_clear,RB,RB_clear,WR,WR_clear,TE,TE_clear,OT,OT_clear,IOL,IOL_clear,EDGE,EDGE_clear,IDL,IDL_clear,LB,LB_clear,CB,CB_clear,S,S_clear
+"Career AV, all classes (main)",2860,-0.417,True,-0.113,False,-0.171,True,-0.367,True,0.292,True,0.265,True,-0.032,False,0.209,True,0.162,True,-0.184,True,0.136,False
+"Career AV, classes 2006-2017 (8+ seasons seen)",2114,-0.343,False,-0.124,False,-0.173,True,-0.348,True,0.315,True,0.249,True,-0.017,False,0.235,True,0.112,False,-0.173,True,0.11,False
+"Career AV, classes 2011-2021 (current rookie wage scale)",2056,-0.262,False,-0.027,False,-0.177,True,-0.36,True,0.24,True,0.307,True,-0.061,False,0.218,True,0.181,True,-0.264,True,0.076,False
+"Career AV, not class-scaled",2860,-0.391,True,-0.128,True,-0.165,True,-0.36,True,0.314,True,0.244,True,-0.033,False,0.228,True,0.153,True,-0.204,True,0.134,True
+AV for the drafting team,2860,-0.429,True,-0.005,False,-0.066,False,-0.266,True,0.249,True,0.133,False,-0.06,False,0.124,False,0.16,True,-0.228,True,0.129,False
+"Second-contract APY, % of cap (classes 2011-2021)",2056,0.367,False,-0.278,True,-0.028,False,0.066,False,0.125,False,0.118,False,0.102,False,0.143,False,-0.122,False,-0.119,False,-0.033,False
+Earned a second contract (1%+ of cap),2056,-0.056,False,-0.13,False,-0.228,True,0.191,False,0.178,False,0.134,False,-0.06,False,0.182,True,0.066,False,-0.155,True,0.068,False
+"Half-snap games, seasons 1-4 (classes 2013-2021)",1684,-0.602,True,-0.405,True,-0.015,False,0.097,False,0.214,True,0.422,True,-0.233,True,-0.137,False,-0.058,False,0.06,False,0.416,True
+Became a starter,2860,-0.483,True,-0.175,True,-0.229,True,0.302,True,0.105,False,0.215,True,-0.189,True,0.151,True,0.13,True,-0.121,False,0.232,True
+"Career AV, classes 2006-2018 (2019-2021 left out)",2299,-0.378,True,-0.135,False,-0.18,True,-0.313,True,0.303,True,0.255,True,-0.002,False,0.235,True,0.116,False,-0.184,True,0.125,False
+"Career AV, positions from the draft label only",2600,-0.426,True,-0.108,False,-0.155,True,-0.351,True,0.358,True,0.247,True,0.008,False,0.204,True,0.026,False,-0.212,True,0.275,True
+"Second-contract APY, window 3-6 years (classes 2011-2020)",1865,0.465,False,-0.307,True,-0.036,False,0.08,False,0.09,False,0.084,False,0.177,False,0.125,False,-0.092,False,-0.146,False,-0.012,False
