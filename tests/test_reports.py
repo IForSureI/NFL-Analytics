@@ -202,3 +202,53 @@ def test_snippets_kicker_model_sane():
     assert k["model_kicks"] > 2000
     assert all(abs(r["fgoe_pts"]) <= 3 * r["att"] for r in k["top3"] + k["bottom3"])   # cannot gain or lose more than 3 points a kick
     assert 0 <= k["outside_chance_band"] <= k["n"]
+
+
+def test_draft_value_findings_are_consistent():
+    f = load("10-draft-value")
+    assert f["picks"] + f["specialists_dropped"] + f["unresolved_dropped"] == f["picks_all"]
+    assert sum(f["picks_by_pos"].values()) == f["picks"]
+    for k in ("curve_av_at", "curve_apy_at", "curve_start_at", "curve_second_at"):   # the curve never rises with the pick
+        v = [f[k][p] for p in sorted(f[k], key=int)]
+        assert all(a >= b for a, b in zip(v, v[1:])), k
+    for p, r in f["r37"].items():
+        for val, ci in (("av_surplus", "av_ci"), ("apy_surplus", "apy_ci"), ("start_over", "start_over_ci"), ("second_over", "second_over_ci")):
+            assert r[ci][0] <= r[ci][1], (p, val)
+        assert r["av_p"] <= r["av_p_holm"] <= 1                                 # a correction never lowers a p-value
+        assert r["picks"] == sum(f["grid_n"][p][x] for x in ("R3", "R4", "R5", "R6", "R7"))
+    assert set(f["r37_av_holm_clear"]) <= set(f["r37_av_clear"]) and set(f["r37_apy_holm_clear"]) <= set(f["r37_apy_clear"])
+    for x in f["inefficiencies"]:                                               # the rule stated before the results
+        r = f["r37"][x["pos"]]
+        assert r["av_ci"][0] > 0 or r["av_ci"][1] < 0
+        assert (r["av_surplus"] > 0) == (r["apy_surplus"] > 0) == (x["direction"] == "drafted too late")
+    assert len(f["inefficiencies"]) <= 3 and all(c["bandwidth"] > 0 for c in f["curve_cv"].values())
+
+
+def test_draft_value_logic_on_made_up_picks():
+    import numpy as np
+    import pandas as pd
+    from projects.draft_value import fit_curve, surplus_table, equivalent_shift, position_group, second_contract, POS_ORDER
+    rng = np.random.default_rng(3)
+    n = 6000
+    pick = rng.integers(1, 257, n)
+    pos = rng.choice(POS_ORDER, n)
+    base = 60 * np.exp(-pick / 60) + 5                                          # a known falling curve
+    y = base + np.where((pos == "IDL") & (pick > 64), 4.0, 0.0) + rng.normal(0, 3, n)   # late IDL planted at +4
+    df = pd.DataFrame({"pick": pick, "pos": pos, "y": y, "round": np.minimum((pick - 1) // 32 + 1, 7)})
+    cv = fit_curve(df.pick, df.y, 0.18)
+    assert np.all(np.diff(cv) <= 1e-9)                                          # never rises
+    assert abs(cv[99] - (60 * np.exp(-100 / 60) + 5)) < 1.5                     # and finds the curve that made the data
+    t, ex, _ = surplus_table(df, "y", 0.18, n_boot=60)
+    r = t[t["round"] == "R3-7"].set_index("pos")
+    assert r.loc["IDL", "lo"] > 2.5 and r.loc["IDL", "hi"] < 5.5                # the planted effect, less the curve's share of it
+    others = r.drop("IDL")
+    assert (others.surplus.abs() < 1.0).all()
+    assert equivalent_shift(cv, np.array([100, 150]), float(cv[[99, 149]].mean())) == 0   # no surplus, no shift
+    assert equivalent_shift(cv, np.array([150]), float(cv[129])) == 20.0
+    assert position_group("DB", "S", None) == "S" and position_group("CB", "S", None) == "CB"   # specific labels win
+    assert position_group("OLB", "ED", None) == "EDGE" and position_group("P") == "ST"
+    c = pd.DataFrame({"draft_year": [2015, 2015, 2015, 2016], "draft_overall": [100, 100, 100, 5], "year_signed": [2015, 2019, 2022, 2017],
+                      "apy_cap_pct": [0.005, 0.02, 0.05, 0.01]})
+    sc = second_contract(c)
+    assert sc.loc[sc.draft_overall == 100, "apy_cap"].item() == 0.02            # rookie deal and the year-7 deal fall outside 2-5
+    assert 5 not in set(sc.draft_overall)                                       # signed one year after the draft: not a second contract
