@@ -1,4 +1,4 @@
-<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 09 Run Game Value](../09-run-game-value/)</sub>
+<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 10 Draft Value](../10-draft-value/)</sub>
 
 # 13 The Metric Stability Atlas
 ### Which numbers a club can trust, and after how many games
@@ -224,6 +224,6 @@ Code: [`projects/metric_stability_atlas.py`](../../projects/metric_stability_atl
 | [`findings.json`](findings.json) | Every number quoted on this page, machine-readable |
 
 ---
-<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 09 Run Game Value](../09-run-game-value/)</sub>
+<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 10 Draft Value](../10-draft-value/)</sub>
 
 <sub>© 2026 Dylan Fanelli. All rights reserved. To cite: Fanelli, D. (2026). *The Metric Stability Atlas*. NFL Analytics. https://github.com/IForSureI/NFL-Analytics/tree/main/reports/13-metric-stability-atlas</sub>
