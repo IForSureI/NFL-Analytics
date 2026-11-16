@@ -81,6 +81,25 @@ def _holdout_table(f):
             + "\n".join(rows))
 
 
+def _jn(xs):
+    xs = list(xs)
+    return " and ".join(xs) if len(xs) <= 2 else ", ".join(xs[:-1]) + " and " + xs[-1]
+
+
+def draft_table(f):
+    """The positions-by-round table: career AV over the curve per pick (rounds 1-7) and second-contract money (rounds 3-7 pooled)."""
+    rs = ["R1", "R2", "R3", "R4", "R5", "R6", "R7"]
+    head = "| Position | " + " | ".join(f"Rd {r[1]}" for r in rs) + " | Rds 3-7 AV vs slot | Rds 3-7 money vs slot (pts of cap) | Rds 3-7 picks |"
+    out = [head, "|---" * (len(rs) + 4) + "|"]
+    for p in f["grid_av"]:
+        cells = [f"{f['grid_av'][p][r]:+.1f}" + ("*" if f["grid_av_clear"][p][r] else "") for r in rs]
+        x = f["r37"][p]
+        av = f"{100 * x['av_rel']:+.0f}%" + ("*" if x["av_ci"][0] > 0 or x["av_ci"][1] < 0 else "")
+        mo = f"{x['apy_surplus']:+.2f}" + ("*" if x["apy_ci"][0] > 0 or x["apy_ci"][1] < 0 else "")
+        out.append(f"| {p} | " + " | ".join(cells) + f" | {av} | {mo} | {x['picks']} |")
+    return "\n".join(out)
+
+
 META = {
     "01-flag-audit": dict(
         short="Flag Audit",
@@ -492,6 +511,62 @@ META = {
                "free_agents_2027_rbs.csv": "2027 free-agent backs: RYOE, shrunk RYOE, expected YPC, value flag, news note",
                "free_agents_2027_rbs_no_ngs.csv": "2027 free-agent backs with 100+ carries but under 100 in NGS season rows, with news notes",
                "models.txt": "Full regression output"},
+    ),
+    "10-draft-value": dict(
+        headline=1,
+        short="Draft Value",
+        tldr=lambda f: [
+            f"The value of a pick falls steeply through round 1 and flattens after: on the smoothed curve pick 32 keeps {100 * f['av_share_of_top5']['32']:.0f}% of a top-five pick's career AV and pick 100 {100 * f['av_share_of_top5']['100']:.0f}% ({f['picks']:,} picks, drafts {f['draft_classes']}).",
+            f"In rounds 3-7, linemen beat their slot in career AV (OT {100 * f['r37']['OT']['av_rel']:+.0f}%, IOL {100 * f['r37']['IOL']['av_rel']:+.0f}%, IDL {100 * f['r37']['IDL']['av_rel']:+.0f}%, intervals clear of zero) but second-contract money does not clearly confirm it; the only clear money gap is running backs ({f['r37']['RB']['apy_surplus']:+.2f} points of cap a year, {100 * f['r37']['RB']['apy_rel']:+.0f}% vs slot), and the two measures disagree most on quarterbacks and tight ends (rank r across 11 positions {f['r37_rank_corr_av_apy']:.2f}, {f['r37_rank_corr_av_apy_no_qb']:.2f} without quarterbacks).",
+            f"By a rule set before the results, the three clearest inefficiencies are {', '.join(x['pos'] + ' (' + x['direction'] + ')' for x in f['inefficiencies'])}: clear in AV, same direction but not clear in contract APY, and {' and '.join(sorted(set.intersection(*[set(p for p, _ in v) for v in f['rule_versions'].values()]))) or 'no position'} stays in the top three under every alternative I tried. Only {100 * f['share_beat_slot_all']:.0f}% of late-round picks beat their slot, so no position is a safe bet (best Sharpe ratio {f['r37'][f['r37_by_sharpe'][0]]['sharpe']:+.2f}).",
+        ],
+        question="In rounds 3-7, which positions return the most value per pick, and are some positions drafted too late?",
+        seasons=lambda f: f"drafts {f['draft_classes']}",
+        tags=["pick-value curve", "kernel smoothing", "bootstrap", "cross-validation", "contract valuation"],
+        hero=("gm_one_page.png", "Rounds 3-7 by position: career AV, second-contract money and second-contract rate, each against the average pick at the same slots."),
+        figs={1: [("pick_value_curve.png", "The pick-value curve in career AV and second-contract money.")],
+              2: [("surplus_heatmap.png", "Career AV over the curve by position and round.")],
+              4: [("hit_rates.png", "Starter and second-contract rates against the rate expected at the same picks.")],
+              5: [("risk_return.png", "Mean surplus against its spread, rounds 3-7 (MacKelvie's Sharpe ratio).")]},
+        tables=lambda f: {2: ["**Positions by round.** Career AV over the pick-value curve per pick (rounds 1-2 for reference), and rounds 3-7 pooled in AV (% vs slot) and second-contract money (APY points of cap a year). * = 95% bootstrap interval clear of zero.", draft_table(f)]},
+        key=lambda f: [
+            ("Picks (drafts) / rounds 3-7", f"{f['picks']:,} ({f['draft_classes']}) / {f['picks_r37']:,}"),
+            ("Pick 32 / pick 100 as a share of a top-five pick (career AV)", f"{100 * f['av_share_of_top5']['32']:.0f}% / {100 * f['av_share_of_top5']['100']:.0f}%"),
+            ("Rounds 3-7 positions clear of the slot in AV (after Holm)", f"{len(f['r37_av_clear'])} of 11 ({len(f['r37_av_holm_clear'])})"),
+            ("Rounds 3-7 positions clear of the slot in second-contract money", f"{len(f['r37_apy_clear'])} of 11 ({', '.join(f['r37_apy_clear']) or 'none'})"),
+            ("Rank correlation, AV vs money, 11 positions (without QB)", f"{f['r37_rank_corr_av_apy']:.2f} ({f['r37_rank_corr_av_apy_no_qb']:.2f})"),
+            ("OT / IOL / IDL career AV vs slot", f"{100 * f['r37']['OT']['av_rel']:+.0f}% / {100 * f['r37']['IOL']['av_rel']:+.0f}% / {100 * f['r37']['IDL']['av_rel']:+.0f}%"),
+            ("RB second-contract APY vs slot (95% interval)", f"{f['r37']['RB']['apy_surplus']:+.2f} pts of cap ({f['r37']['RB']['apy_ci'][0]:+.2f} to {f['r37']['RB']['apy_ci'][1]:+.2f})"),
+            ("Late-round picks that beat their slot", f"{100 * f['share_beat_slot_all']:.0f}%"),
+        ],
+        why=[
+            "**Draft room:** on a tie in rounds 3-7, the evidence leans to the interior lineman over the corner or the running back; it is a tiebreaker, not a reason to reach.",
+            "**Trade value:** the curve says what a pick is expected to return, so a pick-for-pick trade can be checked against it in AV or in second-contract money.",
+            "**Roster planning:** late-round running backs return less second-contract money than their slot and late-round quarterbacks rarely become starters, so a depth chart that counts on either is a depth chart with a hole.",
+        ],
+        method_eq=[
+            r"Curve: $\hat{y}(p) = \text{isotonic}\!\left(\dfrac{\sum_i K_h(\log p - \log p_i)\, y_i}{\sum_i K_h(\log p - \log p_i)}\right)$, Gaussian $K_h$, bandwidth $h$ chosen by leaving out one draft class at a time.",
+            r"Surplus of pick $i$: $s_i = y_i - \hat{y}(p_i)$; a position's value over the curve is $\bar{s}$ over its picks, and AV vs slot is $\bar{y}/\bar{\hat{y}} - 1$.",
+            r"Sharpe ratio for position $g$: $\bar{s}_g / \text{sd}(s_g)$, rounds 3-7.",
+        ],
+        validation=lambda f: [
+            f"Out of sample: fit on all classes but one, scored on the class left out, the smoothed curve beats plain round averages for every outcome (career AV {f['curve_cv']['w_av_adj']['improvement_pct']:.1f}%, money {f['curve_cv']['apy_pct']['improvement_pct']:.1f}%, starter {f['curve_cv']['started']['improvement_pct']:.1f}%, second contract {f['curve_cv']['second']['improvement_pct']:.1f}%, snaps {f['curve_cv']['snap_games']['improvement_pct']:.1f}% lower squared error).",
+            f"{f['robust_n']} versions of the rounds 3-7 position test (classes {f['draft_classes'].split('-')[0]}-2017 only, 2011-2021 only, 2019-2021 left out, AV not class-scaled, AV for the drafting team, positions from the draft label only, second-contract money in a 2-5 and a 3-6 year window, second-contract rate, rookie-deal snaps, starter rate) are in `robustness_rounds_3_7.csv`. OT and IOL keep their sign in {f['robust_sign_agree']['OT']} and {f['robust_sign_agree']['IOL']} of {f['robust_n']}; RB stays below its slot in {f['robust_sign_agree']['RB']} of {f['robust_n']}; TE flips in {f['robust_n'] - f['robust_sign_agree']['TE']} (below in AV, above in starts).",
+            f"A bootstrap that resamples whole draft classes instead of picks keeps the same AV result ({_jn(f['class_boot_av_clear'])} clear) and widens the money result to {_jn(f['class_boot_apy_clear'])}; the pick bootstrap is the more conservative for money, so the page reports it.",
+            f"Intervals come from 1,000 bootstrap samples that refit the curve each time. A regression check with errors clustered by drafting team gives the same rounds 3-7 position means (`models.txt`), and with draft-class fixed effects and log pick, {', '.join(p for p, v in f['ols_vs_wr_fe'].items() if v[1] > 0)} stay clearly above WR.",
+            f"Multiple tests: {len(f['r37_av_holm_clear'])} of 11 AV results and {len(f['r37_apy_holm_clear'])} of 11 money results survive a Holm correction; in the full table {f['grid_cells_clear']} of {f['grid_cells']} cells clear zero against about {0.05 * f['grid_cells']:.0f} expected by chance.",
+            "An independent review re-ran the study, checked every number on this page against findings.json, tested robustness, checked the definition of each nflverse column used and web-checked the named players; its corrections are in this version.",
+        ],
+        next=["Replace AV with a position-neutral value measure (wins above replacement by position) when a public one covers 2006 onward.",
+              "Price the surplus in cap dollars: what a late-round starter at each position saves against the veteran market for the same snaps.",
+              "Add pre-draft consensus boards, so the test is against where a player was expected to go, not only where he went."],
+        files={"surplus_by_position_round.csv": "Every position-round cell for all six outcomes: mean, expected, surplus, 95% interval, n",
+               "rounds_3_7_summary.csv": "Rounds 3-7 by position: AV, money, hit rates, snaps, Sharpe ratio, Holm-adjusted p",
+               "rounds_3_7_by_position.csv": "Rounds 3-7 by position for each outcome: picks earlier and Sharpe ratio with intervals",
+               "robustness_rounds_3_7.csv": "The rounds 3-7 position test (% vs slot) under nine outcomes and samples",
+               "pick_value_curve.csv": "The smoothed curve at every pick for each outcome",
+               "late_round_picks.csv": "Every round 3-7 pick with its outcomes and AV surplus",
+               "models.txt": "Regression output: position means with team-clustered errors, and the fixed-effects check"},
     ),
     "13-metric-stability-atlas": dict(
         short="Metric Stability Atlas",

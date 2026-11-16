@@ -531,6 +531,104 @@ def run_game_value():
 
 
 
+def _j(xs):
+    xs = list(xs)
+    return " and ".join(xs) if len(xs) <= 2 else ", ".join(xs[:-1]) + " and " + xs[-1]
+
+
+def _sgn(x, d=1, pct_=False):
+    return f"{100 * x:+.{d}f}%" if pct_ else f"{x:+.{d}f}"
+
+
+def _ci_pct(c, d=0):
+    return f"{100 * c[0]:+.{d}f}% to {100 * c[1]:+.{d}f}%"
+
+
+def _always(f):
+    sets = [set(p for p, _ in v) for v in f['rule_versions'].values()]
+    return sorted(set.intersection(*sets))
+
+
+def draft_verdict(f):
+    """Title wording follows the results: AV signal, money confirmation."""
+    r = f["r37"]
+    beat = [p for p in r if r[p]["av_ci"][0] > 0]
+    money = [p for p in f["r37_apy_clear"]]
+    both = [x["pos"] for x in f["inefficiencies"] if x["apy_clear"]]
+    if both:
+        return f"{_j(both)} beat or miss their slot in both career value and second-contract money"
+    if beat and not both:
+        return (f"late-round linemen beat their slot in career AV, but second-contract money does not clearly confirm it"
+                if set(beat) & {"OT", "IOL", "IDL"} else f"{_j(beat)} beat their slot in career AV, but second-contract money does not clearly confirm it")
+    return "no position clearly beats its slot"
+
+
+def draft_value():
+    f = F("10-draft-value")
+    r = f["r37"]; cv = f["curve_cv"]; av = f["curve_av_at"]; st = f["curve_start_at"]; sc = f["curve_second_at"]; ap = f["curve_apy_at"]
+    ine = f["inefficiencies"]; nx = f["next_signals"]
+    pos_by_av = f["r37_by_av"]
+    beat = [p for p in pos_by_av if r[p]["av_ci"][0] > 0]; short = [p for p in reversed(pos_by_av) if r[p]["av_ci"][1] < 0]
+    def avs(p):
+        x = r[p]; return f"{p} {_sgn(x['av_rel'], 0, True)} ({_ci_pct(x['av_rel_ci'])}, {x['picks']} picks)"
+    def money(p):
+        x = r[p]; return f"{p} {x['apy_surplus']:+.2f} points of cap a year ({x['apy_ci'][0]:+.2f} to {x['apy_ci'][1]:+.2f}, {_sgn(x['apy_rel'], 0, True)} vs slot)"
+    def pp(x, k):
+        return f"{100 * x[k]:+.1f} points ({100 * x[k + '_ci'][0]:+.1f} to {100 * x[k + '_ci'][1]:+.1f})"
+    def ineff(x):
+        p = x["pos"]; q = r[p]
+        return (f"**{p}, {x['direction']}.** Career AV {_sgn(q['av_rel'], 0, True)} against the slot ({_ci_pct(q['av_rel_ci'])}); "
+                f"became a starter {pp(q, 'start_over')}; earned a second contract {pp(q, 'second_over')}; "
+                f"second-contract APY {q['apy_surplus']:+.2f} points of cap a year ({q['apy_ci'][0]:+.2f} to {q['apy_ci'][1]:+.2f}); "
+                f"half-snap games in seasons 1-4 {q['snap_surplus']:+.1f} ({q['snap_ci'][0]:+.1f} to {q['snap_ci'][1]:+.1f}). "
+                f"Same sign as the main result in {f['robust_sign_agree'][p]} of {f['robust_n']} versions of the test.")
+    ex = f["examples"]
+    exs = "; ".join(f"{e[1]} ({e[0]}, {e[2]} round {e[3]}, pick {e[4]}: {e[6]} Pro Bowl{'' if e[6] == 1 else 's'}, {e[7]} first-team All-Pro)" for e in ex)
+    rb = r["RB"]; r1 = f["r1"]
+    r1_money_short = [p for p in r1 if r1[p]["apy_ci"][1] < 0]
+    r1_av_short = [p for p in r1 if r1[p]["av_ci"][1] < 0]; r1_av_beat = [p for p in r1 if r1[p]["av_ci"][0] > 0]
+    sh = f["r37_by_sharpe"]
+    return f"""# 10 Draft Value: {draft_verdict(f)}
+
+**The question:** if the draft prices positions correctly, a pick at any position should return about what the average pick at the same slot returns. A position whose late-round picks beat their slot on more than one measure is being taken too late; one that falls short is being taken too early. My hypothesis going in was that the AV results would hold up in the money test. They did not: career AV and second-contract money rank the positions very differently, and only one money gap is clear.
+**Inspired by:** Michael MacKelvie, [The Safest Pick is the Most Dangerous in the NFL]({YT}H8rolEibsPg) and [NFL Teams Know How To Draft - Why Don't They?]({YT}2Kdb2b0em-I).
+**Data:** nflverse `draft_picks` (Pro Football Reference draft tables) for the {f['draft_classes']} drafts: {f['picks_all']:,} picks, {f['picks']:,} after dropping {f['specialists_dropped']} kickers, punters and long snappers and {f['unresolved_dropped']} picks whose generic position (DB, LB) could not be split; {f['picks_r37']:,} of them in rounds 3-7. Over The Cap contracts via nflverse for second contracts ({f['contract_classes']} classes, {f['picks_contract']:,} picks: Over The Cap lists every drafted player from 2011 on). nflverse snap counts for rookie-deal playing time ({f['snap_classes']} classes, {f['picks_snaps']:,} picks). The 2021 class is the cutoff: it has played five seasons, so careers are mostly observed; career AV is scaled to the class average so short careers are not punished for being short.
+**Code:** [`projects/draft_value.py`](../../projects/draft_value.py)
+
+## What I found
+1. **The value of a pick falls steeply through round 1, then flattens.** On the smoothed curve, the top five picks expect {f['av_top5']:.0f} career AV on average, pick 32 {av['32']:.0f}, pick 100 {av['100']:.0f} and pick 200 {av['200']:.0f}: pick 32 keeps {100 * f['av_share_of_top5']['32']:.0f}% of a top-five pick's value, pick 100 {100 * f['av_share_of_top5']['100']:.0f}%. (Pick 1 alone, {av['1']:.0f}, rests on 16 players, so I anchor on the top five.) Round 1 alone loses {f['av_drop_r1']:.0f} AV; picks 64 to 250 together lose {f['av_drop_r3_7']:.0f}. In second-contract money the curve runs from {ap['10']:.1f}% of the cap a year at pick 10 to {ap['100']:.1f}% at pick 100 and {ap['250']:.2f}% at pick 250. The chance of becoming a starter falls from {100 * st['100']:.0f}% at pick 100 to {100 * st['250']:.0f}% at pick 250, and of earning a second contract worth 1%+ of the cap from {100 * sc['100']:.0f}% to {100 * sc['250']:.0f}%. Fit on all classes but one and scored on the class left out, the curve beats plain round averages for every outcome (career AV {cv['w_av_adj']['improvement_pct']:.1f}% lower squared error, money {cv['apy_pct']['improvement_pct']:.1f}%); most of the spread between players is not explained by the slot at all.
+2. **In career AV, late-round linemen beat their slot; quarterbacks, tight ends, corners and receivers fall short.** Rounds 3-7, career AV against the curve at the same picks: {'; '.join(avs(p) for p in beat)}. Below: {'; '.join(avs(p) for p in short)}. {len(f['r37_av_clear'])} of 11 intervals clear zero, {len(f['r37_av_holm_clear'])} after correcting for testing 11 positions (Holm){'; ' + _j([p for p in f['r37_av_clear'] if p not in f['r37_av_holm_clear']]) + ' does not survive the correction' if set(f['r37_av_clear']) - set(f['r37_av_holm_clear']) else ''}. In picks, OT output sits about {r['OT']['picks_earlier']:.0f} picks earlier than where they were taken (95% interval {r['OT']['picks_earlier_ci'][0]:.0f} to {r['OT']['picks_earlier_ci'][1]:.0f}), IOL {r['IOL']['picks_earlier']:.0f} and IDL {r['IDL']['picks_earlier']:.0f}. In the round-by-round table, {f['grid_cells_r37_clear']} of {f['grid_cells_r37']} position-round cells in rounds 3-7 clear zero, where about {0.05 * f['grid_cells_r37']:.0f} would by chance.
+3. **Second-contract money does not confirm the AV ranking, mostly because of quarterbacks and tight ends.** The money a player earned on his second deal, as a share of the cap, is the market's own price for him, so it measures position value the way teams pay for it. On it, only {_j(f['r37_apy_clear'])} clear{'s' if len(f['r37_apy_clear']) == 1 else ''} zero in rounds 3-7: {'; '.join(money(p) for p in f['r37_apy_clear'])}. Across the 11 positions the AV rank and the money rank correlate at {f['r37_rank_corr_av_apy']:.2f}, {f['r37_rank_corr_av_apy_no_qb']:.2f} without quarterbacks and {f['r37_rank_corr_av_apy_no_qb_te']:.2f} without quarterbacks and tight ends (11 points, so these are rough). Late-round quarterbacks are {_sgn(r['QB']['av_rel'], 0, True)} in AV but {_sgn(r['QB']['apy_rel'], 0, True)} in money (backups get paid; interval {r['QB']['apy_ci'][0]:+.2f} to {r['QB']['apy_ci'][1]:+.2f}), and tight ends are {_sgn(r['TE']['av_rel'], 0, True)} in AV while becoming starters {100 * r['TE']['start_over']:+.0f} points more often than their slot. Among the other positions the two measures mostly agree in direction, but only running backs are clear in money. AV gives linemen credit through games started and team offense, so part of the linemen's AV edge may be how AV is built.
+4. **The three clearest inefficiencies, by a rule set before the results, hold in AV and only point the same way in contract money.** The rule: rounds 3-7 pooled, the AV interval clear of zero, second-contract APY with the same sign, ranked by the weaker of the two z-scores. {f['inefficiency_rule_n']} positions pass ({_j(x['pos'] for x in f['rule_passers'])}); the three strongest are below, and none of them clears zero in APY on its own. (1) {ineff(ine[0]) if len(ine) > 0 else ''} (2) {ineff(ine[1]) if len(ine) > 1 else ''} (3) {ineff(ine[2]) if len(ine) > 2 else ''} IDL's second-contract rate does clear zero, but its rookie-deal snap measure is below the slot: interior linemen rotate, so fewer of their games reach half the snaps, and on that measure the case for IDL is weaker. The list is fragile: {'; '.join(f"{k}: {_j(p for p, _ in v)}" for k, v in f['rule_versions'].items() if k != 'main')}. {_j(_always(f)) or 'No position'} {'is' if len(_always(f)) == 1 else 'are'} in the top three in all {len(f['rule_versions'])} versions. The late-round hits behind the "too late" groups include {exs}. Running backs miss the rule only because their AV interval reaches {rb['av_ci'][1]:+.2f} AV ({_ci_pct(rb['av_rel_ci'])} against the slot), a borderline miss; they are one of {sum(v == f['robust_n'] for v in f['robust_sign_agree'].values())} positions ({_j([p for p, v in f['robust_sign_agree'].items() if v == f['robust_n']])}) on the same side of the slot in all {f['robust_n']} versions of the test, and the only position clear in money under both the pick and the class bootstrap: {money('RB')}, and {pp(rb, 'start_over')} on becoming a starter.
+5. **Risk and return: no late-round position is a safe bet.** MacKelvie's Sharpe ratio (mean surplus over its spread, rounds 3-7) is highest for {_j(sh[:3])} ({', '.join(f"{r[p]['sharpe']:+.2f}" for p in sh[:3])}) and lowest for {_j(sh[-2:])} ({', '.join(f"{r[p]['sharpe']:+.2f}" for p in sh[-2:])}). Even the best is small: a late-round pick's career AV spreads {f['r37_av_sd_all']:.1f} around the curve, and only {100 * f['share_beat_slot_all']:.0f}% of all late-round picks beat their slot (the average is pulled up by a few stars). The best positions raise that to {100 * min(v for v in f['share_beat_slot'].values() if v >= max(f['share_beat_slot'].values()) - 0.01):.0f}-{100 * max(f['share_beat_slot'].values()):.0f}% ({_j([p for p, v in f['share_beat_slot'].items() if v >= max(f['share_beat_slot'].values()) - 0.01])}); late-round quarterbacks beat it {100 * f['share_beat_slot']['QB']:.0f}% of the time.
+6. **MacKelvie's "safe pick" claim partly holds in round 1.** He argues that "safe" first-round picks at non-premium positions (TE, S, LB, IOL, RB) are the riskiest for what they return. First-round picks at {_j(r1_money_short)} returned less second-contract money than their slot (RB {r1['RB']['apy_surplus']:+.2f}, LB {r1['LB']['apy_surplus']:+.2f}, S {r1['S']['apy_surplus']:+.2f} points of cap a year; each interval below zero), and first-round {_j(r1_av_short)} fell short in AV. First-round {_j(r1_av_beat)} beat their slot in AV ({r1['IOL']['av_surplus']:+.1f} AV, interval {r1['IOL']['av_ci'][0]:+.2f} to {r1['IOL']['av_ci'][1]:+.1f}), so not every non-premium position is a bad first-round bet. Round-1 cells hold {min(x['n'] for x in r1.values())} to {max(x['n'] for x in r1.values())} picks each, so these intervals are wide.
+
+![Curve](pick_value_curve.png)
+![Heatmap](surplus_heatmap.png)
+![GM chart](gm_one_page.png)
+![Hit rates](hit_rates.png)
+![Risk and return](risk_return.png)
+
+## Method
+- **Outcomes.** Career AV is PFR's weighted career Approximate Value (`w_av`: 100% of a player's best season, 95% of the next, and so on), set to 0 for a pick who never played and scaled so each class has the pooled class mean (the 2021 class is scaled up {f['class_av_scale']['2021']:.2f}x, 2006 down to {f['class_av_scale']['2006']:.2f}x). "Became a starter": `seasons_started` (PFR's seasons as primary starter) of 1 or more. Second contract: the largest veteran deal (signed {f['second_window'][0]} to {f['second_window'][1]} years after the draft; rookie deals excluded) as APY share of the cap, 0 if none; "earned a second contract" means that deal is worth {100 * f['real_deal_cap_share']:.0f}%+ of the cap a year, about twice a veteran minimum. Rookie-deal snaps: games with half or more of the offense's or defense's snaps in seasons 1-4.
+- **Positions.** The PFR draft label when it is specific (T, G, C, DT, CB, S...). Generic labels (DB, LB, OLB, DE, DL, OL) are split with the player's Over The Cap position, then his nflverse players position: DB becomes CB or S, a 3-4 outside linebacker who rushes becomes EDGE. Groups: QB, RB (with FB), WR, TE, OT, IOL, EDGE, IDL, LB, CB, S.
+- **The curve.** A Gaussian kernel smoother in log pick (narrow at the top of the draft, wide late), then isotonic regression so the expected outcome never rises with the pick. The bandwidth for each outcome is the one with the lowest squared error when each class is left out in turn.
+- **Value over the curve.** Each pick's outcome minus the curve at his pick; means by position and round. Intervals: 1,000 bootstrap samples that resample picks and refit the curve each time, so the curve's own uncertainty is in the interval. "Picks earlier" solves for the shift k that makes the curve, averaged over the position's actual picks moved k spots up, equal the position's mean outcome; it is capped at 200 picks either way, which the QB and TE intervals reach.
+- **Sharpe ratio:** mean surplus divided by the standard deviation of surplus, per position, rounds 3-7, with bootstrap intervals.
+
+## Limits
+- AV is a crude value measure. It credits linemen through games started and team scoring, defenders partly through tackles and turnovers, and it values a starting guard and a starting edge rusher on scales that do not match what teams pay. That is why the money test exists, and where the two disagree I don't call it an inefficiency.
+- Second-contract money is the market's price, which is not value either: it rewards positions teams pay (quarterbacks, edge rushers) and penalizes ones they don't (running backs), and it misses players who were cut but useful. It is only observable for the {f['contract_classes']} classes.
+- Positions for generic labels use a player's later Over The Cap position, which can reflect a move after the draft. With the draft label alone ({f['label_only_picks']:,} picks; generic DBs dropped, outside linebackers counted as LB) the top three change (see finding 4).
+- Surplus is measured against the average pick at the same slot, not against the player a team would have taken instead, and position mix by slot reflects how teams already draft.
+- {f['grid_cells']} position-round cells are tested; with 95% intervals about 1 in 20 clears zero by chance, so single cells in the table should not be read alone.
+- The rookie wage scale changed in 2011 and the 17-game season began in 2021; class scaling and the 2011-2021 version in the robustness table cover the first only partly.
+
+## Files
+`surplus_by_position_round.csv`, `rounds_3_7_summary.csv`, `rounds_3_7_by_position.csv`, `robustness_rounds_3_7.csv`, `pick_value_curve.csv`, `late_round_picks.csv`, `models.txt`, `findings.json`
+"""
+
+
 def stability_atlas():
     from report_meta import _kg, _kgci
     f = F("13-metric-stability-atlas")
@@ -613,7 +711,7 @@ def stability_atlas():
 
 REPORTS = [("01-flag-audit", flag_audit), ("02-fourth-down-bot", fourth), ("03-sack-leverage", sacks),
            ("04-luck-index", luck), ("05-kickoff-value", kickoff), ("06-pass-run", passrun), ("07-box-score-tax", box_score_tax), ("08-yac-tax", yac_tax),
-           ("09-run-game-value", run_game_value), ("13-metric-stability-atlas", stability_atlas)]
+           ("09-run-game-value", run_game_value), ("10-draft-value", draft_value), ("13-metric-stability-atlas", stability_atlas)]
 
 
 UPCOMING = [("09", "Run Game Value", "How much of a running back's production is his, and do contracts pay for that part?"),
@@ -814,6 +912,7 @@ I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward 
 | Special teams | What is a kickoff worth under the new rule, and can returners or kickers be told apart yet? | [05 Kickoff Value](reports/05-kickoff-value/) |
 | Front office and ownership | How much of our record will carry over, and how much was the bounces? | [04 Luck Index](reports/04-luck-index/) |
 | Game prep | What does this crew call, and where does the road flag gap sit? | [01 Flag Audit](reports/01-flag-audit/) |
+| College scouting and the draft room | In rounds 3-7, which positions return more than their slot, and on which measure? | [10 Draft Value](reports/10-draft-value/) |
 | Every department | Which of this week's numbers can we trust, and how far should we regress the rest? | [13 Metric Stability Atlas](reports/13-metric-stability-atlas/) |
 
 <a id="how-i-work"></a>
