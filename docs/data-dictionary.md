@@ -11,9 +11,10 @@ All data is public and loaded by `nflan/data.py` from the [nflverse data release
 | Pro Football Reference advanced defense | `pfr_advstats` (def) | 2018-present | 07 |
 | NFL Next Gen Stats receiving | `nextgen_stats` (receiving) | 2016-2025 | 08 |
 | NFL Next Gen Stats rushing | `nextgen_stats` (rushing; RYOE from 2018) | 2018-present | 09 |
-| Snap counts | `snap_counts` | 2018-present | 07, 08, 09 |
-| Over The Cap contracts | `contracts` | deals signed 2019-2026 | 07, 08, 09 |
-| Players (ID crosswalk) | `players` | | 07, 08, 09 |
+| Snap counts | `snap_counts` | 2018-present (2013-2024 in 10) | 07, 08, 09, 10 |
+| Over The Cap contracts | `contracts` | deals signed 2019-2026 (2013-2026 in 10) | 07, 08, 09, 10 |
+| Draft picks (Pro Football Reference draft tables) | `draft_picks` | drafts 2006-2021 | 10 |
+| Players (ID crosswalk) | `players` | | 07, 08, 09, 10 |
 
 ## Key play-by-play columns
 
@@ -34,3 +35,14 @@ All data is public and loaded by `nflan/data.py` from the [nflverse data release
 - CSVs use one row per player-season, team-season or season, with the season as an integer column.
 - Dollars are millions in 2026 cap terms (cap $301.2M) unless the column says otherwise.
 - Player names follow the source (nflverse abbreviations in play-by-play, full names from PFR and Over The Cap).
+
+## Draft-pick columns used in study 10
+
+| Column | Meaning |
+|---|---|
+| `season`, `round`, `pick`, `team` | Draft year, round, overall pick, drafting team |
+| `position` | Position listed at the draft (PFR); generic labels (DB, LB, OLB, DE, DL, OL) are split with Over The Cap |
+| `w_av` | Weighted career Approximate Value: 100% of the best season, 95% of the second best, and so on; empty for a pick who never played |
+| `dr_av` | Approximate Value earned for the drafting team |
+| `seasons_started` | Seasons as his team's primary starter at his position |
+| `games`, `probowls`, `allpro` | Games played, Pro Bowls, first-team All-Pro selections |

@@ -28,11 +28,11 @@ This portfolio started from two YouTube creators who make football analysis that
 | 05 Kickoff Value | Kollmann: Kick Returners are in Absolute Hell.; Kickers are taking over the NFL. |
 | 06 Pass vs Run | MacKelvie: Passing is better...so, why run?; Kollmann: Does "establishing the run" even work? |
 | 09 Run Game Value | Kollmann: The Running Back Problem.; Should Running Backs go in the Top 10? |
+| 10 Draft Value | MacKelvie: The Safest Pick is the Most Dangerous in the NFL; NFL Teams Know How To Draft - Why Don't They? |
 | 13 Metric Stability Atlas | MacKelvie: Does Defense Win Championships...? |
 
 ## Next studies on the list
 
-- **Draft surplus value by position and round** (MacKelvie: The Safest Pick is the Most Dangerous; NFL Teams Know How To Draft).
 - **Second-down run tendency and play action** with 2022+ FTN charting (Kollmann: Does "establishing the run" even work?).
 - **Cover 0 answer matrix** from 2023+ participation data (Kollmann: The Dolphins ran the same blitz 35 times).
 - **True cap burden vs headline AAV** (Kollmann: How Accountants Broke the NFL).

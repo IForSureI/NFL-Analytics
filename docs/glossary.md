@@ -20,6 +20,10 @@ Terms used across the studies, in plain language first and the formal version se
 | **Clustered standard errors** | Honest uncertainty when the same player or team appears many times | Cluster-robust covariance by player or team |
 | **Bootstrap** | Re-run the analysis on resampled data many times to see how much the answer moves | 1,000 resamples by player |
 | **APY % of cap** | A contract's average annual value as a share of that year's salary cap, so 2019 and 2026 deals compare | APY divided by the league cap in the signing year |
+| **AV** (Approximate Value) | Pro Football Reference's single-number estimate of a player's season value, comparable across positions only roughly | Team points split by position group, then among players by games started and stats |
+| **Pick-value curve** | What a pick at each draft slot returns on average | Kernel-smoothed mean outcome by overall pick, forced to fall with the pick (study 10) |
+| **Surplus (value over the curve)** | What a pick returned beyond the average pick at his slot | Outcome minus the curve at his pick |
+| **Sharpe ratio** (draft) | Return for the risk taken: average surplus per unit of its spread | Mean surplus / SD of surplus |
 | **Platform season** | The season right before a contract is signed | |
 | **Pressure** (PFR) | Sacks plus hurries plus QB knockdowns | Pro Football Reference charting |
 | **Sack luck** | Sacks beyond what a player's pressures predict | Sacks minus 0.264 times pressures |
