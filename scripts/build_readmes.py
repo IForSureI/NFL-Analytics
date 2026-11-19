@@ -826,6 +826,7 @@ def snippets_section():
 
 
 DRAFT = "draft-2027-drew-mestemaker"
+WORDS = "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen".split()
 
 
 def draft_section():
@@ -840,7 +841,7 @@ def draft_section():
     return (f"\n## Draft board: 2027 quarterbacks\n\n[**Drew Mestemaker, QB, Oklahoma State: is he QB1?**](reports/{DRAFT}/) "
             f"NFL scouts have him first. Through {L['G']} games he has {L['Yards']:,} yards and {L['TD']} touchdowns, but against what his opponents allow he is "
             f"{me['over']:+.1f} rating points over expected, #{o['class_rank']} of {o['class_n']} in the class and below the first-round median ({o['fr_median']:+.1f}). "
-            f"The evaluation uses nine-game comparisons with every first-round quarterback since 2021, an opponent adjustment, base rates "
+            f"The evaluation uses {WORDS[L['G']]}-game comparisons with every first-round quarterback since 2021, an opponent adjustment, base rates "
             f"({band['round1']} of {band['n']} quarterbacks with a rating like his went in round 1) and a test of which numbers repeat.\n\n"
             f'<p align="center"><a href="reports/{DRAFT}/"><img src="reports/{DRAFT}/opponent_adjusted.png" width="720"></a></p>\n')
 
