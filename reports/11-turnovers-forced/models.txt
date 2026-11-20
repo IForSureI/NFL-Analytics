@@ -1,0 +1,56 @@
+=== Same-year points allowed per game ~ EPA no-takeaway (SD) + takeaway rate (SD), clustered by franchise
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  pa_pg   R-squared:                       0.679
+Model:                            OLS   Adj. R-squared:                  0.678
+Method:                 Least Squares   F-statistic:                     631.0
+Date:                Fri, 20 Nov 2026   Prob (F-statistic):           7.70e-26
+Time:                        20:36:12   Log-Likelihood:                -1259.3
+No. Observations:                 608   AIC:                             2525.
+Df Residuals:                     605   BIC:                             2538.
+Df Model:                           2                                         
+Covariance Type:              cluster                                         
+===============================================================================
+                  coef    std err          z      P>|z|      [0.025      0.975]
+-------------------------------------------------------------------------------
+const       -1.388e-17      0.142  -9.77e-17      1.000      -0.278       0.278
+epa_noto_sd     2.4373      0.097     25.218      0.000       2.248       2.627
+to_rate_sd     -0.8723      0.084    -10.440      0.000      -1.036      -0.709
+==============================================================================
+Omnibus:                        5.572   Durbin-Watson:                   2.250
+Prob(Omnibus):                  0.062   Jarque-Bera (JB):                5.473
+Skew:                           0.196   Prob(JB):                       0.0648
+Kurtosis:                       3.250   Cond. No.                         1.31
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (CRV1)
+
+=== Next-year points allowed per game ~ this year's EPA no-takeaway (SD) + takeaway rate (SD), clustered by franchise
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:             pa_pg_next   R-squared:                       0.074
+Model:                            OLS   Adj. R-squared:                  0.071
+Method:                 Least Squares   F-statistic:                     16.85
+Date:                Fri, 20 Nov 2026   Prob (F-statistic):           1.12e-05
+Time:                        20:36:12   Log-Likelihood:                -1586.8
+No. Observations:                 608   AIC:                             3180.
+Df Residuals:                     605   BIC:                             3193.
+Df Model:                           2                                         
+Covariance Type:              cluster                                         
+===============================================================================
+                  coef    std err          z      P>|z|      [0.025      0.975]
+-------------------------------------------------------------------------------
+const       -1.388e-17      0.206  -6.74e-17      1.000      -0.404       0.404
+epa_noto_sd     0.8526      0.161      5.303      0.000       0.537       1.168
+to_rate_sd     -0.2132      0.142     -1.500      0.134      -0.492       0.065
+==============================================================================
+Omnibus:                        7.900   Durbin-Watson:                   2.122
+Prob(Omnibus):                  0.019   Jarque-Bera (JB):                5.785
+Skew:                           0.117   Prob(JB):                       0.0554
+Kurtosis:                       2.583   Cond. No.                         1.31
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (CRV1)
+

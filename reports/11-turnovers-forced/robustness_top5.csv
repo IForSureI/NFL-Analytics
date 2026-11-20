@@ -1,0 +1,9 @@
+version,n,excess_retained,pa_change,vs_matched,ci_low,ci_high
+"Main: top 5, same season, within 1 pt",82,0.096,1.28,-0.05,-1.27,1.11
+Top 3,49,-0.018,2.14,0.3,-0.88,1.72
+Top 8,125,0.112,1.34,-0.11,-1.18,1.03
+Within 2 pts,87,0.096,1.28,0.02,-0.94,0.96
+Within 3 pts,93,0.096,1.28,0.08,-0.77,0.97
+Top 5 per 100 plays,81,0.085,1.68,-0.16,-1.43,1.08
+Top 5 by interception rate,81,0.074,1.34,-0.01,-1.38,1.38
+Controls from any season,94,0.096,1.28,-0.43,-1.24,0.42
