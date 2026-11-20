@@ -475,6 +475,100 @@ def yac_tax():
 """
 
 
+def _tf_verdict(f):
+    """The title follows the tests, so a refresh cannot leave a stale verdict."""
+    stick = "takeaways don't repeat like the rest of a defense" if f["yoy_r_diff"]["epa_noto_minus_to_rate"][1] > 0 else "takeaways repeat about like the rest of a defense"
+    fool = {"held": "and a takeaway year does fool people about the defense",
+            "failed": "but a takeaway year does not fool people about the defense (that half of the hypothesis failed)",
+            "inconclusive": "but whether a takeaway year fools people, the data cannot tell"}[f["fooled_verdict"]]
+    return f"{stick}, {fool}"
+
+
+def _ci(v, d=2, pre=""):
+    """'x (95% interval lo to hi)', with an extra decimal when a bound rounds to zero."""
+    dd = d + 1 if (round(v[1], d) == 0 and v[1] != 0) or (round(v[2], d) == 0 and v[2] != 0) else d
+    return f"{pre}{v[0]:.{dd}f} (95% interval {v[1]:.{dd}f} to {v[2]:.{dd}f})"
+
+
+def _bt_text(bt):
+    """The back-test sentence follows the result: a working sell flag gives up more points than its controls, a buy flag fewer."""
+    wrong = [k for k, sign in (("sell", 1), ("buy", -1)) if sign * bt[k]["vs_matched"][0] < 0]
+    clear = [k for k in bt if not bt[k]["vs_matched"][1] < 0 < bt[k]["vs_matched"][2]]
+    w = (" and ".join(wrong) + (" estimate points" if len(wrong) == 1 else " estimates point") + " the wrong way") if wrong else "both estimates point the expected way"
+    if not clear:
+        return f"Neither interval excludes zero and the {w}, so the flags show where points lean on takeaways and carry no tested forecast edge."
+    return f"The {' and '.join(clear)} interval{'s exclude' if len(clear) > 1 else ' excludes'} zero, and the {w}."
+
+
+def turnovers_forced():
+    f = F("11-turnovers-forced")
+    y = f["yoy_r"]; yr = f["yoy_r_raw"]; d = f["yoy_r_diff"]; rn = f["r_next_pa"]; o = f["oos"]; sp = f["oos_splits"]; c = f["components_pa_per_sd"]
+    pr = f["player_yoy"]; py = f["pfr_yoy"]; bt = f["backtest"]; rob = f["top5_robustness"]; g = f["top5_pa_change_vs_matched"]
+    T, E = "takeaways per 100 plays", "EPA allowed, no-takeaway plays"
+    def team(x):
+        rec = f"{x['def_rec']} of {x['opp_fum_known']} loose balls recovered"
+        return (f"**{x['team']}** ({x['games']} games: {x['takeaways']} defensive takeaways, {x['ints']} interceptions, {rec}; takeaway rate #{x['to_rank']}; "
+                f"{x['pa_pg']:.1f} points allowed per game, #{x['pa_rank']}; EPA allowed without takeaways #{x['epa_noto_rank']}). "
+                f"Takeaways {'took' if x['to_pts'] < 0 else 'cost'} about {abs(x['to_pts']):.1f} points a game {'off' if x['to_pts'] < 0 else 'onto'} the board against a league-average rate; "
+                f"history says about {abs(x['to_pts_carry']):.1f} of that carries into weeks {f['through_week'] + 1}+")
+    sell = "; ".join(team(x) for x in f["sell"]) or "none this week"
+    buy = "; ".join(team(x) for x in f["buy"]) or "none this week"
+    leaders = ", ".join(f"{n} ({t}, {k})" for n, t, k in f["current_int_leaders"])
+    split_txt = "; ".join(f"{k} {v[T]:.2f} vs {v[E]:.2f}" for k, v in sp.items())
+    n_split = len(sp)
+    fool_txt = {"held": "The hypothesis held here: takeaway defenses gave back more points than same-points defenses.",
+                "failed": "The interval rules out the gap my hypothesis predicts, so that half of the hypothesis failed.",
+                "inconclusive": (f"My hypothesis predicts a gap of about {f['top5_gap_predicted_if_fooled']:+.2f} points per game (if takeaway points carried nothing next year and the rest carried like EPA, "
+                                 f"the {f['top5_takeaway_points_saved']:.2f} points a game these defenses' takeaways saved would cost them about that much more than their controls). "
+                                 f"The main interval holds both that value and zero ({sum(r['pa_change_vs_matched'][1] <= f['top5_gap_predicted_if_fooled'] <= r['pa_change_vs_matched'][2] for r in rob)} of the {len(rob)} versions hold the predicted value): the test cannot tell a takeaway year from any other good year, so I call it inconclusive, not failed.")}[f["fooled_verdict"]]
+    return f"""# 11 Turnovers Forced: {_tf_verdict(f)}
+
+**The question:** do defenses that force a lot of turnovers keep doing it, and does a takeaway-heavy year fool people about a defense? This is the defensive version of [study 04](../04-luck-index/) (luck in the win column) and [study 07](../07-box-score-tax/) (headline stats that do not repeat). My bet going in: takeaways are rare, noisy events, so a defense's takeaway rate would repeat less than the rest of its work, and next year's points allowed would follow the defense underneath the takeaways.
+**Data:** nflverse play-by-play, regular seasons {f['seasons']} ({f['team_seasons']} team-seasons, {f['pairs']} back-to-back pairs) plus {f['current_season']} through Week {f['through_week']} (pulled {f['pbp_pulled']}, last game {f['current_last_game_date']}); nflverse snap counts {f['player_seasons_range']} for {f['player_seasons']:,} defensive back and linebacker seasons with {f['min_snaps']}+ snaps; Pro Football Reference advanced defense via [nflverse](https://github.com/nflverse/nflverse-data) ({f['pfr_seasons']}) for the comparison with study 07.
+**Code:** [`projects/turnovers_forced.py`](../../projects/turnovers_forced.py)
+
+## What I found
+1. **Takeaways repeat less than the rest of a defense, and who falls on the ball does not repeat at all.** With each season's league average taken out (league interceptions fell from {f['league_int_rate_first_last'][0]:.2f} to {f['league_int_rate_first_last'][1]:.2f} per 100 dropbacks over these years, a shared trend that would otherwise look like a team trait), takeaways per play repeat year to year at r = {_ci(y['to_rate'])} and interceptions per dropback at r = {y['int_rate'][0]:.2f}. EPA per play allowed on plays without a takeaway repeats at r = {y['epa_noto'][0]:.2f}; the gap is {_ci(d['epa_noto_minus_to_rate'])} against takeaways and {_ci(d['epa_noto_minus_int_rate'])} against interceptions. The share of the offense's loose balls a defense recovers repeats at r = {_ci(y['fum_rec_share'])}, forced fumbles at {y['ff_rate'][0]:.2f}. The pass-rush proxy, a sack or QB hit per dropback, repeats at {y['press_rate'][0]:.2f}, success rate allowed at {y['succ_noto'][0]:.2f} and points allowed at {y['pa_pg'][0]:.2f}. Without taking the league trend out, interceptions look stickier ({yr['int_rate']:.2f}) than they are.
+2. **For next year's points, EPA without turnovers beats takeaways, modestly.** This year's EPA allowed without takeaways correlates r = {rn['epa_noto'][0]:.2f} with next year's points allowed per game (both against the league average); takeaways per play, r = {rn['to_rate'][0]:.2f} (negative: more takeaways, fewer points). The gap is {_ci(f['r_next_pa_diff_epa_noto_minus_to_rate'])}. Out of sample, EPA has the lower error in {f['oos_epa_beats_to_in']} of {n_split} splits (points per game, takeaways vs EPA: {split_txt}); in the base split (fit on seasons {f['oos_train']}, scored on {f['oos_test']}, each predicting the next, {f['oos_n'][1]} pairs) the difference is {_ci(f['oos_rmse_to_minus_epa'])}. Adding takeaways to EPA lowers the error in {f['oos_adding_to_helps_in']} of {n_split} splits, so I find no signal in takeaways that EPA misses. The best single predictor is this year's points allowed, and none of them explains more than {100 * max(v['r2'] for v in o.values()):.0f}% of next year's points.
+3. **How much of the points takeaways save carries into next year is too imprecise to pin down.** In the same season, a one-standard-deviation higher takeaway rate goes with {abs(f['pa_per_sd_same_year']['to_rate_sd'][0]):.2f} fewer points allowed per game, holding EPA without takeaways fixed; next season, {abs(f['pa_per_sd_next_year']['to_rate_sd'][0]):.2f} fewer, a carry share of {100 * f['carry_share_to_rate'][0]:.0f}% (95% interval {100 * f['carry_share_to_rate'][1]:.0f}% to {100 * f['carry_share_to_rate'][2]:.0f}%). For EPA without takeaways the share is {100 * f['carry_share_epa_noto'][0]:.0f}% ({100 * f['carry_share_epa_noto'][1]:.0f}% to {100 * f['carry_share_epa_noto'][2]:.0f}%). Split into parts, interceptions keep {abs(c['int_rate']['next_year']):.2f} of {abs(c['int_rate']['same_year']):.2f} points per SD (next-year interval {c['int_rate']['next_year_ci'][0]:+.2f} to {c['int_rate']['next_year_ci'][1]:+.2f}); forced fumbles ({c['ff_rate']['next_year']:+.2f}, {c['ff_rate']['next_year_ci'][0]:+.2f} to {c['ff_rate']['next_year_ci'][1]:+.2f}) and recovery share ({c['fum_rec_share']['next_year']:+.2f}, {c['fum_rec_share']['next_year_ci'][0]:+.2f} to {c['fum_rec_share']['next_year_ci'][1]:+.2f}) keep nothing I can detect, and were worth little to begin with ({abs(c['ff_rate']['same_year']):.2f} and {abs(c['fum_rec_share']['same_year']):.2f} points per SD).
+4. **Top-5 takeaway defenses lose most of the takeaways; whether their points allowed fall back further than other good defenses', the test cannot tell.** The {f['top5_n']} top-5 takeaway seasons ({f['seasons'].split('-')[0]}-{int(f['seasons'].split('-')[1]) - 1}) averaged {f['top5_takeaways_pg'][0]:.2f} defensive takeaways per game against a league {f['league_takeaways_pg']:.2f}; the next year, {f['top5_takeaways_pg'][1]:.2f}. They kept {100 * f['top5_excess_retained'][0]:.0f}% of their edge (95% interval {100 * f['top5_excess_retained'][1]:.0f}% to {100 * f['top5_excess_retained'][2]:.0f}%); {100 * f['top5_still_top5_next']:.0f}% were top-5 again. Their points allowed rose {f['top5_pa_change'][0]:.2f} per game. Against defenses from the same season that allowed the same points (within {f['match_window_ppg']:g}) without the takeaways ({f['top5_matched_n_used']} of the {f['top5_n']} found such controls), the difference is {g[0]:+.2f} points per game ({g[1]:+.2f} to {g[2]:+.2f}). {fool_txt} Across all {len(rob)} versions in `robustness_top5.csv` the gap runs {min(r['pa_change_vs_matched'][0] for r in rob):+.2f} to {max(r['pa_change_vs_matched'][0] for r in rob):+.2f}, and {sum(r['pa_change_vs_matched'][1] < 0 < r['pa_change_vs_matched'][2] for r in rob)} of the {len(rob)} intervals cross zero.
+5. **Players: a defensive back's interceptions per snap barely repeat; his pass breakups do.** For defensive backs with {f['min_snaps']}+ snaps in back-to-back seasons ({pr['DB']['pairs']:,} pairs, {f['player_seasons_range']}, each season's average taken out), interceptions per snap repeat at r = {_ci(pr['DB']['ints100'])}, pass breakups at r = {pr['DB']['pbu100'][0]:.2f}, and this year's breakups say nothing about next year's interceptions (r = {pr['DB']['pbu_predicts_next_int'][0]:.2f}). The {f['db_5plus_int_n']} defensive back seasons with 5+ interceptions averaged {f['db_5plus_int_mean'][0]:.2f}, then {f['db_5plus_int_mean'][1]:.2f} the next year, keeping {100 * f['db_5plus_int_retained'][0]:.0f}% of their per-snap edge over the average ({100 * f['db_5plus_int_retained'][1]:.0f}% to {100 * f['db_5plus_int_retained'][2]:.0f}%).
+6. **How that fits study 07.** Study 07 found interception rate repeats best of the public coverage stats in PFR's charting, and it still does here: per target (40+ targets, {f['pfr_pairs']} pairs, {f['pfr_seasons']}) r = {py['int_rate'][0]:.2f}, above completion % allowed ({py['cmp_pct'][0]:.2f}) and yards per target ({py['ypt'][0]:.2f}). Both findings hold. Per target is the friendlier denominator: the same players' interceptions per snap repeat at r = {py['int_per_snap'][0]:.2f}, and all defensive backs with {f['min_snaps']}+ snaps at {pr['DB']['ints100'][0]:.2f}. Being the stickiest of a noisy set is not the same as being sticky: even at r = {py['int_rate'][0]:.2f}, about {100 * (1 - py['int_rate'][0]):.0f}% of a big interception year should be expected to go away.
+7. **The {f['current_season']} list, through Week {f['through_week']}: a description, not a forecast.** The rule, set before I ran it: flag a defense when its takeaway rate is worth {f['flag_rule']['to_pts_ppg']:g}+ points per game against a league-average rate (points per takeaway from a weeks 1-{f['split_week']} model on {f['inseason_n']} team-seasons). Sell, points allowed lean on takeaways ({f['flag_rule']['sell_n']}): {sell}. Buy, takeaways have cost points ({f['flag_rule']['buy_n']}): {buy}. The same rule run at Week {f['split_week']} in {f['seasons']} flagged {bt['sell']['n']} sells and {bt['buy']['n']} buys; against same-season defenses that had allowed about the same points, the sells' points allowed moved by {bt['sell']['vs_matched'][0]:+.2f} per game over the rest of the season ({bt['sell']['vs_matched'][1]:+.2f} to {bt['sell']['vs_matched'][2]:+.2f}) and the buys' by {bt['buy']['vs_matched'][0]:+.2f} ({bt['buy']['vs_matched'][1]:+.2f} to {bt['buy']['vs_matched'][2]:+.2f}). {_bt_text(bt)} Individual interception leaders so far (team where the interceptions came): {leaders}. Over full seasons, a defensive back keeps about {100 * f['db_5plus_int_retained'][0]:.0f}% of a big interception year's edge into the next.
+
+![Stability](stability.png)
+![Prediction](predict_points.png)
+![Top 5](top5_regression.png)
+![Fooled test](fooled_test.png)
+![Players](player_interceptions.png)
+![{f['current_season']}](buy_sell_{f['current_season']}.png)
+
+## Method
+- **Plays:** regular-season runs and dropbacks with an EPA value and a down (penalty no-plays, special teams and two-point tries are left out). Teams are tracked as franchises (STL to LA, SD to LAC, OAK to LV), so relocations keep their year-to-year pairs.
+- **Takeaways:** defensive takeaways only: an interception (`interception`) or a fumble lost by the offense (`fumble_lost`) on those plays. Muffed punts and kickoff fumbles a team recovers are not counted, so official takeaway totals can run a few higher. A fumble after an interception return belongs to the defense, so it is not counted twice.
+- **Forced fumbles and recovery share:** offense fumbles (`fumbled_1_team` = the offense) with `fumble_forced`; recovery share = fumbles the defense recovered (`fumble_recovery_1_team`) over offense fumbles with a recovery team (out-of-bounds fumbles have none and are left out). League share over {f['seasons']}: {f['league_fum_rec_share_pooled']:.3f}.
+- **Pass-rush proxy:** dropbacks (`qb_dropback`) with a sack or a QB hit, each dropback counted once (most sacks are also marked as hits). Play-by-play has no full pressure charting before 2023.
+- **EPA and success without takeaways:** nflfastR EPA per play and success rate allowed, on plays with no takeaway. Points allowed are final scores, so they include return touchdowns given up by the offense and special teams.
+- **League trend out:** for stability, prediction and carry, every team measure is taken relative to that season's league average (player rates relative to their position group's season average). The raw year-to-year values are kept in findings.json (`yoy_r_raw`).
+- **Intervals:** 95%, from {1000:,} resamples of franchises (team questions) or players (player questions) with all their seasons. Regressions in `models.txt` cluster errors by franchise.
+- **Carry share:** the coefficient on a measure in next year's points-allowed regression divided by its coefficient in this year's, both with EPA without takeaways and takeaway rate together.
+- **Top-5 test:** top 5 by takeaways per game each season ({f['seasons'].split('-')[0]}-{int(f['seasons'].split('-')[1]) - 1}, so a next season exists); ties at the cut ({f['top5_seasons_with_tie_at_cut']} seasons) are broken by takeaways per play. Controls are teams from the same season outside the top 10 that allowed within {f['match_window_ppg']:g} point per game of the top-5 team; the gap is the top-5 team's change minus the controls' mean change. The predicted gap is the EPA carry share times the points per game the top-5 teams' takeaways saved against the league (same-year regression).
+- **{f['current_season']} list:** takeaway points = (team takeaways per 100 plays minus the league's) times {abs(f['inseason_pa_per_takeaway_per_100']):.2f} points per game, the weeks 1-{f['split_week']} coefficient with EPA without takeaways held fixed. The carry share for the rest of a season is {100 * f['inseason_carry_share_to'][0]:.0f}% ({100 * f['inseason_carry_share_to'][1]:.0f}% to {100 * f['inseason_carry_share_to'][2]:.0f}%). The back-test matches each flagged team with same-season teams within {2 * f['match_window_ppg']:g} points per game.
+- **Players:** from `interception_player_id`, `forced_fumble_player_1/2_player_id` and `pass_defense_1/2_player_id` (the interceptor, also credited with the pass defensed, is taken out of breakups), joined to snap counts through the nflverse player table. A leader's current team comes from his latest snap-count row.
+
+## Limits
+- No opponent adjustment: a defense that faced interception-prone quarterbacks gets credit for them.
+- Points allowed include points the defense did not give up (pick-sixes and return touchdowns), which adds noise to every prediction here.
+- The top-5 test has low power: its intervals are about {g[2] - g[1]:.1f} points per game wide, against a predicted effect of {f['top5_gap_predicted_if_fooled']:+.2f}.
+- The in-season test splits at Week {f['split_week']}; with a {f['current_games_range'][0]}-{f['current_games_range'][1]} game sample, a team's takeaway rate is about {100 * f['current_reliability_to_rate']:.0f}% signal by the split-half test ({f['split_half']['to_rate']['split_half_r']:.2f} between odd and even weeks over a season).
+- Player rates are per snap, not per target or per coverage snap: public data has no coverage assignments. The per-target check covers only {f['pfr_seasons']}.
+- Interceptions include tipped balls and quarterback errors the defender did little to cause, and play-by-play cannot tell them apart.
+
+## Files
+`team_season_defense.csv`, `top5_takeaway_seasons.csv`, `robustness_top5.csv`, `backtest_week10_flags.csv`, `buy_sell_{f['current_season']}.csv`, `models.txt`, `findings.json`
+"""
+
+
 def run_game_value():
     f = F("09-run-game-value")
     y = f["yoy_r"]; ci = f["yoy_r_ci"]; po = f["portability"]; pay = f["musd_per_100_yards"]; pci = f["musd_per_100_yards_ci"]
@@ -711,7 +805,8 @@ def stability_atlas():
 
 REPORTS = [("01-flag-audit", flag_audit), ("02-fourth-down-bot", fourth), ("03-sack-leverage", sacks),
            ("04-luck-index", luck), ("05-kickoff-value", kickoff), ("06-pass-run", passrun), ("07-box-score-tax", box_score_tax), ("08-yac-tax", yac_tax),
-           ("09-run-game-value", run_game_value), ("10-draft-value", draft_value), ("13-metric-stability-atlas", stability_atlas)]
+           ("09-run-game-value", run_game_value), ("10-draft-value", draft_value), ("11-turnovers-forced", turnovers_forced),
+           ("13-metric-stability-atlas", stability_atlas)]
 
 
 UPCOMING = [("09", "Run Game Value", "How much of a running back's production is his, and do contracts pay for that part?"),
@@ -908,7 +1003,7 @@ I'm Dylan Fanelli, and this is the NFL analytics portfolio I am building toward 
 |---|---|---|
 | Head coach and game management | Go, kick or punt on this fourth down? | [02 Fourth-Down Bot](reports/02-fourth-down-bot/) |
 | Pro personnel and free agency | Are pass rushers, receivers and running backs priced for what repeats? Who to target in free agency? | [07 Box-Score Tax](reports/07-box-score-tax/), [08 YAC Tax](reports/08-yac-tax/), [09 Run Game Value](reports/09-run-game-value/) |
-| Defensive staff | When is a sack worth the most? | [03 Sack Leverage](reports/03-sack-leverage/) |
+| Defensive staff | When is a sack worth the most? Are our takeaways a skill or a hot streak? | [03 Sack Leverage](reports/03-sack-leverage/), [11 Turnovers Forced](reports/11-turnovers-forced/) |
 | Offensive staff | Should we pass more on early downs? | [06 Pass vs Run](reports/06-pass-run/) |
 | Special teams | What is a kickoff worth under the new rule, and can returners or kickers be told apart yet? | [05 Kickoff Value](reports/05-kickoff-value/) |
 | Front office and ownership | How much of our record will carry over, and how much was the bounces? | [04 Luck Index](reports/04-luck-index/) |
