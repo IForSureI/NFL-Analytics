@@ -252,3 +252,46 @@ def test_draft_value_logic_on_made_up_picks():
     sc = second_contract(c)
     assert sc.loc[sc.draft_overall == 100, "apy_cap"].item() == 0.02            # rookie deal and the year-7 deal fall outside 2-5
     assert 5 not in set(sc.draft_overall)                                       # signed one year after the draft: not a second contract
+
+
+def test_turnovers_forced_findings_are_consistent():
+    f = load("11-turnovers-forced")
+    for k, v in f["yoy_r"].items():
+        assert -1 <= v[1] <= v[0] <= v[2] <= 1, k
+    for k, v in f["r_next_pa"].items():
+        assert _interval_ok(v), k
+    assert f["pairs"] < f["team_seasons"] and f["top5_n"] == 5 * len(range(int(f["seasons"][:4]), int(f["seasons"][-4:])))
+    assert _interval_ok(f["top5_excess_retained"]) and _interval_ok(f["top5_pa_change_vs_matched"])
+    assert f["top5_takeaways_pg"][0] > f["league_takeaways_pg"] > f["bottom5_takeaways_pg"][0]   # the top five sit above the league by construction
+    assert 0.4 < f["league_fum_rec_share_pooled"] < 0.6                                             # a loose ball is close to a coin flip
+    assert all(_interval_ok(r["pa_change_vs_matched"]) for r in f["top5_robustness"])
+    assert f["oos_n"][0] + f["oos_n"][1] == f["pairs"]
+    assert f["flag_rule"]["sell_n"] == len(f["sell"]) and f["flag_rule"]["buy_n"] == len(f["buy"])
+    assert all(x["to_pts"] <= -f["flag_rule"]["to_pts_ppg"] for x in f["sell"]) and all(x["to_pts"] >= f["flag_rule"]["to_pts_ppg"] for x in f["buy"])
+    assert 1 <= f["through_week"] <= 18 and f["current_games_range"][1] <= f["through_week"]
+
+
+def test_turnovers_forced_logic_on_made_up_plays():
+    import pandas as pd
+    from projects.turnovers_forced import aggregate, latest_complete_week, tag_plays, team_points
+    base = dict(season=2030, season_type="REG", game_date="2030-09-10", home_team="AAA", away_team="BBB", home_score=20, away_score=10,
+                posteam="BBB", defteam="AAA", play_type="pass", epa=0.5, down=1, qb_dropback=1, interception=0, fumble=0, fumble_forced=0,
+                fumble_lost=0, fumbled_1_team=None, fumble_recovery_1_team=None, sack=0, qb_hit=0, success=1)
+    rows = [dict(base, game_id="g1", week=1),
+            dict(base, game_id="g1", week=1, interception=1, epa=-4.0, success=0),                                      # takeaway
+            dict(base, game_id="g1", week=1, play_type="run", qb_dropback=0, fumble=1, fumble_forced=1, fumble_lost=1,   # forced, recovered by D
+                 fumbled_1_team="BBB", fumble_recovery_1_team="AAA", epa=-3.0, success=0),
+            dict(base, game_id="g1", week=1, fumble=1, fumbled_1_team="BBB", fumble_recovery_1_team="BBB", sack=1, qb_hit=1, epa=-1.0, success=0),
+            dict(base, game_id="g1", week=1, interception=1, fumble=1, fumble_lost=1, fumbled_1_team="AAA", fumble_recovery_1_team="BBB", epa=-2.0, success=0),  # INT then fumbled back
+            dict(base, game_id="g0", week=1, home_team="III", away_team="JJJ", posteam="JJJ", defteam="III"),
+            dict(base, game_id="g2", week=2, home_team="CCC", away_team="DDD", posteam="DDD", defteam="CCC"),
+            dict(base, game_id="g3", week=2, home_team="EEE", away_team="FFF", posteam="FFF", defteam="EEE"),
+            dict(base, game_id="g4", week=3, home_team="GGG", away_team="HHH", posteam="HHH", defteam="GGG")]
+    pbp = pd.DataFrame(rows)
+    assert latest_complete_week(pbp, 2030) == 2          # week 3 has fewer games than any earlier week: still being played
+    s = tag_plays(pbp)
+    t = aggregate(s, team_points(pbp)).set_index("team").loc["AAA"]
+    assert t.plays == 5 and t.takeaways == 3 and t.ints == 2 and t.fum_lost == 1   # the fumble after an interception is not a second takeaway
+    assert t.opp_fum_known == 2 and t.def_rec == 1 and t.ff == 1 and t.fum_rec_share == 0.5
+    assert t.press == 1 and t.dropbacks == 4
+    assert t.epa_noto == (0.5 - 1.0) / 2 and t.pa_pg == 10
