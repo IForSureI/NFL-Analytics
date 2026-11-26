@@ -1,4 +1,4 @@
-<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 09 Run Game Value](../09-run-game-value/) &nbsp;|&nbsp; [13 Metric Stability Atlas →](../13-metric-stability-atlas/)</sub>
+<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 09 Run Game Value](../09-run-game-value/) &nbsp;|&nbsp; [11 Turnovers Forced →](../11-turnovers-forced/)</sub>
 
 # 10 Draft Value
 ### Late-round linemen beat their slot in career AV, but second-contract money does not clearly confirm it
@@ -159,6 +159,6 @@ Code: [`projects/draft_value.py`](../../projects/draft_value.py)
 | [`findings.json`](findings.json) | Every number quoted on this page, machine-readable |
 
 ---
-<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 09 Run Game Value](../09-run-game-value/) &nbsp;|&nbsp; [13 Metric Stability Atlas →](../13-metric-stability-atlas/)</sub>
+<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 09 Run Game Value](../09-run-game-value/) &nbsp;|&nbsp; [11 Turnovers Forced →](../11-turnovers-forced/)</sub>
 
 <sub>© 2026 Dylan Fanelli. All rights reserved. To cite: Fanelli, D. (2026). *Draft Value*. NFL Analytics. https://github.com/IForSureI/NFL-Analytics/tree/main/reports/10-draft-value</sub>
