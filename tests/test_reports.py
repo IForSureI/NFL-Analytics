@@ -295,3 +295,57 @@ def test_turnovers_forced_logic_on_made_up_plays():
     assert t.opp_fum_known == 2 and t.def_rec == 1 and t.ff == 1 and t.fum_rec_share == 0.5
     assert t.press == 1 and t.dropbacks == 4
     assert t.epa_noto == (0.5 - 1.0) / 2 and t.pa_pg == 10
+
+
+def test_backup_qb_findings_are_consistent():
+    f = load("12-backup-qb-value")
+    for k in ("epa_db", "pf", "margin", "win"):
+        assert _interval_ok(f["effect"][k]), k
+    s = f["backup_starts_per_17"]
+    assert s[1] <= s[0] <= s[2] and 0 < s[0] < 17
+    assert 0 <= f["share_seasons_4plus"] <= f["share_seasons_with_backup_start"] <= 1
+    assert sum(f["dist_backup_starts"].values()) == f["team_seasons"]
+    assert f["fe_backup_games"] == f["backup_games"] and f["fe_games"] <= f["team_games"]
+    assert 0 < f["wins_per_point_margin"][0] < 0.1                                     # a point of margin per game is worth a few hundredths of a win
+    lo, hi = f["wins_per_start_via_margin_ci"]
+    assert lo <= f["wins_per_start_via_margin"] <= hi
+    assert f["wins_per_start_via_margin"] == pytest.approx(f["effect"]["margin"][0] * f["wins_per_point_margin"][0], abs=1e-3)
+    u = f["upgrade"]
+    assert _interval_ok(u["wins_per_season"]) and _interval_ok(u["value_musd"]) and u["cost_gap_musd"] == f["pricey_musd"] - f["cheap_musd"]
+    assert u["value_musd"][0] == pytest.approx(u["wins_per_season"][0] * f["usd_per_win_qb_market"][0], abs=0.02)
+    assert _interval_ok(f["usd_per_win_qb_market"])
+    for r in f["robustness"]:
+        assert r["margin_lo"] <= r["margin"] <= r["margin_hi"]
+    for g in ("history", "no_history"):
+        assert _interval_ok(f["rest_of_season"][g]["rate"]) and 0 <= f["rest_of_season"][g]["rate"][0] <= 1
+    rows = f["exposure_rows"]
+    assert len({r["team"] for r in rows}) == len(rows) == 32
+    for r in rows:
+        assert r["starter_id"] != r["backup_id"]
+        assert r["exp_wins_lost_rest_lo"] <= r["exp_wins_lost_rest"] <= r["exp_wins_lost_rest_hi"] or abs(r["exp_wins_lost_rest"]) < 1e-9
+    assert all(x["team"] in {r["team"] for r in rows if not r["already_on_backup"]} for x in f["spotlight"])
+
+
+def test_backup_qb_logic_on_made_up_games():
+    import pandas as pd
+    from projects.backup_qb_value import contract_in_force, game_qbs, season_starters, shrink, value_of_upgrade
+    drop = pd.DataFrame({"game_id": ["g1"] * 5 + ["g2"] * 4 + ["g3"] * 3, "team": ["A"] * 12,
+                         "passer_id": ["s", "s", "s", "b", "b", "b", "b", "b", "s", "s", "s", "s"],
+                         "passer": ["S"] * 12, "epa": [0.1] * 12})
+    tg = game_qbs(drop)
+    assert dict(zip(tg.game_id, tg.qb)) == {"g1": "s", "g2": "b", "g3": "s"}          # most dropbacks in the game
+    tg["season"] = 2020
+    st = season_starters(tg)
+    assert st.starter.iloc[0] == "s" and st.starter_starts.iloc[0] == 2                  # most games as the game's QB
+    assert shrink([0.0], [0], -0.1, 200)[0] == pytest.approx(-0.1)                      # no record: the prior
+    assert shrink([30.0], [200], 0.0, 200)[0] == pytest.approx(0.075)                   # half signal at k dropbacks
+    hist = [{"contract_type": "Drafted", "year_signed": 2018.0, "yrs": 4.0, "apy": 1.0},
+            {"contract_type": "Extension", "year_signed": 2021.0, "yrs": 2.0, "apy": 10.0},
+            {"contract_type": "UFA", "year_signed": 2025.0, "yrs": 1.0, "apy": 3.0}]
+    assert contract_in_force(hist, 2019)[0] == 1.0
+    assert contract_in_force(hist, 2021)[0] == 1.0                                       # the extension signed in 2021 starts in 2022
+    assert contract_in_force(hist, 2023)[0] == 10.0                                      # the extension covers 2022-2023
+    assert contract_in_force(hist, 2024)[0] != contract_in_force(hist, 2024)[0]          # no deal covers 2024: nan
+    assert contract_in_force(hist, 2025)[0] == 3.0
+    w, usd = value_of_upgrade(3.0, 0.12, 0.10, 10.0)                                     # wins lost per start: $2M backup 0.12, $10M backup 0.10
+    assert w == pytest.approx(0.06) and usd == pytest.approx(0.6)                        # 3 starts x 0.02 wins x $10M a win
