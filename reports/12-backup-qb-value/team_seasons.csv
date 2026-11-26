@@ -1,0 +1,609 @@
+season,team,starter_name,games,bstarts,prev_missed,history
+2007,ARI,K.Warner,16,4,,not a season starter the year before
+2007,ATL,J.Harrington,16,6,1.0,missed 1-3
+2007,BAL,K.Boller,16,8,,not a season starter the year before
+2007,BUF,T.Edwards,16,6,,not a season starter the year before
+2007,CAR,V.Testaverde,16,11,,not a season starter the year before
+2007,CHI,R.Grossman,16,9,0.0,missed 0 the year before
+2007,CIN,C.Palmer,16,0,0.0,missed 0 the year before
+2007,CLE,D.Anderson,16,0,,not a season starter the year before
+2007,DAL,T.Romo,16,0,0.0,missed 0 the year before
+2007,DEN,J.Cutler,16,1,,not a season starter the year before
+2007,DET,J.Kitna,16,0,0.0,missed 0 the year before
+2007,GB,B.Favre,16,2,0.0,missed 0 the year before
+2007,HOU,M.Schaub,16,8,,not a season starter the year before
+2007,IND,P.Manning,16,1,0.0,missed 0 the year before
+2007,JAX,D.Garrard,16,5,0.0,missed 0 the year before
+2007,KC,D.Huard,16,6,6.0,missed 4+
+2007,LA,M.Bulger,16,5,0.0,missed 0 the year before
+2007,LAC,P.Rivers,16,0,0.0,missed 0 the year before
+2007,LV,J.McCown,16,8,,not a season starter the year before
+2007,MIA,C.Lemon,16,7,,not a season starter the year before
+2007,MIN,T.Jackson,16,4,,not a season starter the year before
+2007,NE,T.Brady,16,0,0.0,missed 0 the year before
+2007,NO,D.Brees,16,0,0.0,missed 0 the year before
+2007,NYG,E.Manning,16,0,0.0,missed 0 the year before
+2007,NYJ,C.Pennington,16,7,0.0,missed 0 the year before
+2007,PHI,D.McNabb,16,3,6.0,missed 4+
+2007,PIT,B.Roethlisberger,16,1,0.0,missed 0 the year before
+2007,SEA,M.Hasselbeck,16,0,4.0,missed 4+
+2007,SF,T.Dilfer,16,10,,not a season starter the year before
+2007,TB,J.Garcia,16,5,,not a season starter the year before
+2007,TEN,V.Young,16,2,0.0,missed 0 the year before
+2007,WAS,J.Campbell,16,4,,not a season starter the year before
+2008,ARI,K.Warner,16,0,0.0,missed 0 the year before
+2008,ATL,M.Ryan,16,0,,not a season starter the year before
+2008,BAL,J.Flacco,16,0,,not a season starter the year before
+2008,BUF,T.Edwards,16,3,4.0,missed 4+
+2008,CAR,J.Delhomme,16,0,,not a season starter the year before
+2008,CHI,K.Orton,16,2,,not a season starter the year before
+2008,CIN,R.Fitzpatrick,16,4,,not a season starter the year before
+2008,CLE,D.Anderson,16,7,0.0,missed 0 the year before
+2008,DAL,T.Romo,16,3,0.0,missed 0 the year before
+2008,DEN,J.Cutler,16,0,0.0,missed 0 the year before
+2008,DET,D.Orlovsky,16,8,,not a season starter the year before
+2008,GB,A.Rodgers,16,0,,not a season starter the year before
+2008,HOU,M.Schaub,16,6,5.0,missed 4+
+2008,IND,P.Manning,16,1,0.0,missed 0 the year before
+2008,JAX,D.Garrard,16,0,4.0,missed 4+
+2008,KC,T.Thigpen,16,4,,not a season starter the year before
+2008,LA,M.Bulger,16,2,4.0,missed 4+
+2008,LAC,P.Rivers,16,0,0.0,missed 0 the year before
+2008,LV,J.Russell,16,2,,not a season starter the year before
+2008,MIA,C.Pennington,16,0,7.0,missed 4+
+2008,MIN,G.Frerotte,16,5,,not a season starter the year before
+2008,NE,M.Cassel,16,0,,not a season starter the year before
+2008,NO,D.Brees,16,0,0.0,missed 0 the year before
+2008,NYG,E.Manning,16,0,0.0,missed 0 the year before
+2008,NYJ,B.Favre,16,0,0.0,missed 0 the year before
+2008,PHI,D.McNabb,16,1,2.0,missed 1-3
+2008,PIT,B.Roethlisberger,16,0,1.0,missed 1-3
+2008,SEA,S.Wallace,16,8,,not a season starter the year before
+2008,SF,S.Hill,16,7,,not a season starter the year before
+2008,TB,J.Garcia,16,5,3.0,missed 1-3
+2008,TEN,K.Collins,16,2,,not a season starter the year before
+2008,WAS,J.Campbell,16,0,3.0,missed 1-3
+2009,ARI,K.Warner,16,2,0.0,missed 0 the year before
+2009,ATL,M.Ryan,16,3,0.0,missed 0 the year before
+2009,BAL,J.Flacco,16,0,0.0,missed 0 the year before
+2009,BUF,R.Fitzpatrick,16,7,1.0,missed 1-3
+2009,CAR,J.Delhomme,16,5,0.0,missed 0 the year before
+2009,CHI,J.Cutler,16,0,0.0,missed 0 the year before
+2009,CIN,C.Palmer,16,1,,not a season starter the year before
+2009,CLE,B.Quinn,16,8,,not a season starter the year before
+2009,DAL,T.Romo,16,0,3.0,missed 1-3
+2009,DEN,K.Orton,16,0,1.0,missed 1-3
+2009,DET,M.Stafford,16,6,,not a season starter the year before
+2009,GB,A.Rodgers,16,0,0.0,missed 0 the year before
+2009,HOU,M.Schaub,16,0,5.0,missed 4+
+2009,IND,P.Manning,16,1,0.0,missed 0 the year before
+2009,JAX,D.Garrard,16,0,0.0,missed 0 the year before
+2009,KC,M.Cassel,16,1,0.0,missed 0 the year before
+2009,LA,M.Bulger,16,9,1.0,missed 1-3
+2009,LAC,P.Rivers,16,1,0.0,missed 0 the year before
+2009,LV,J.Russell,16,8,1.0,missed 1-3
+2009,MIA,C.Henne,16,2,,not a season starter the year before
+2009,MIN,B.Favre,16,0,0.0,missed 0 the year before
+2009,NE,T.Brady,16,0,,not a season starter the year before
+2009,NO,D.Brees,16,1,0.0,missed 0 the year before
+2009,NYG,E.Manning,16,1,0.0,missed 0 the year before
+2009,NYJ,M.Sanchez,16,1,,not a season starter the year before
+2009,PHI,D.McNabb,16,2,0.0,missed 0 the year before
+2009,PIT,B.Roethlisberger,16,1,0.0,missed 0 the year before
+2009,SEA,M.Hasselbeck,16,3,,not a season starter the year before
+2009,SF,A.Smith,16,5,,not a season starter the year before
+2009,TB,J.Freeman,16,7,,not a season starter the year before
+2009,TEN,V.Young,16,7,,not a season starter the year before
+2009,WAS,J.Campbell,16,0,0.0,missed 0 the year before
+2010,ARI,D.Anderson,16,7,,not a season starter the year before
+2010,ATL,M.Ryan,16,0,2.0,missed 1-3
+2010,BAL,J.Flacco,16,0,0.0,missed 0 the year before
+2010,BUF,R.Fitzpatrick,16,3,1.0,missed 1-3
+2010,CAR,J.Clausen,16,5,,not a season starter the year before
+2010,CHI,J.Cutler,16,1,0.0,missed 0 the year before
+2010,CIN,C.Palmer,16,0,0.0,missed 0 the year before
+2010,CLE,C.McCoy,16,8,,not a season starter the year before
+2010,DAL,J.Kitna,16,6,,not a season starter the year before
+2010,DEN,K.Orton,16,3,0.0,missed 0 the year before
+2010,DET,S.Hill,16,6,,not a season starter the year before
+2010,GB,A.Rodgers,16,2,0.0,missed 0 the year before
+2010,HOU,M.Schaub,16,0,0.0,missed 0 the year before
+2010,IND,P.Manning,16,0,0.0,missed 0 the year before
+2010,JAX,D.Garrard,16,3,0.0,missed 0 the year before
+2010,KC,M.Cassel,16,1,0.0,missed 0 the year before
+2010,LA,S.Bradford,16,0,,not a season starter the year before
+2010,LAC,P.Rivers,16,0,0.0,missed 0 the year before
+2010,LV,J.Campbell,16,5,0.0,missed 0 the year before
+2010,MIA,C.Henne,16,2,0.0,missed 0 the year before
+2010,MIN,B.Favre,16,5,0.0,missed 0 the year before
+2010,NE,T.Brady,16,0,0.0,missed 0 the year before
+2010,NO,D.Brees,16,0,1.0,missed 1-3
+2010,NYG,E.Manning,16,0,0.0,missed 0 the year before
+2010,NYJ,M.Sanchez,16,1,1.0,missed 1-3
+2010,PHI,M.Vick,16,5,,not a season starter the year before
+2010,PIT,B.Roethlisberger,16,4,1.0,missed 1-3
+2010,SEA,M.Hasselbeck,16,4,2.0,missed 1-3
+2010,SF,A.Smith,16,6,0.0,missed 0 the year before
+2010,TB,J.Freeman,16,0,0.0,missed 0 the year before
+2010,TEN,K.Collins,16,8,,not a season starter the year before
+2010,WAS,D.McNabb,16,3,2.0,missed 1-3
+2011,ARI,J.Skelton,16,8,,not a season starter the year before
+2011,ATL,M.Ryan,16,1,0.0,missed 0 the year before
+2011,BAL,J.Flacco,16,0,0.0,missed 0 the year before
+2011,BUF,R.Fitzpatrick,16,0,1.0,missed 1-3
+2011,CAR,C.Newton,16,0,,not a season starter the year before
+2011,CHI,J.Cutler,16,6,1.0,missed 1-3
+2011,CIN,A.Dalton,16,0,,not a season starter the year before
+2011,CLE,C.McCoy,16,3,3.0,missed 1-3
+2011,DAL,T.Romo,16,1,,not a season starter the year before
+2011,DEN,T.Tebow,16,5,,not a season starter the year before
+2011,DET,M.Stafford,16,0,,not a season starter the year before
+2011,GB,A.Rodgers,16,1,1.0,missed 1-3
+2011,HOU,M.Schaub,16,6,0.0,missed 0 the year before
+2011,IND,C.Painter,16,8,,not a season starter the year before
+2011,JAX,B.Gabbert,16,2,,not a season starter the year before
+2011,KC,M.Cassel,16,7,1.0,missed 1-3
+2011,LA,S.Bradford,16,6,0.0,missed 0 the year before
+2011,LAC,P.Rivers,16,0,0.0,missed 0 the year before
+2011,LV,C.Palmer,16,6,0.0,missed 0 the year before
+2011,MIA,M.Moore,16,3,,not a season starter the year before
+2011,MIN,C.Ponder,16,8,,not a season starter the year before
+2011,NE,T.Brady,16,0,0.0,missed 0 the year before
+2011,NO,D.Brees,16,0,0.0,missed 0 the year before
+2011,NYG,E.Manning,16,0,0.0,missed 0 the year before
+2011,NYJ,M.Sanchez,16,0,1.0,missed 1-3
+2011,PHI,M.Vick,16,3,4.0,missed 4+
+2011,PIT,B.Roethlisberger,16,1,0.0,missed 0 the year before
+2011,SEA,T.Jackson,16,1,,not a season starter the year before
+2011,SF,A.Smith,16,0,5.0,missed 4+
+2011,TB,J.Freeman,16,1,0.0,missed 0 the year before
+2011,TEN,M.Hasselbeck,16,1,2.0,missed 1-3
+2011,WAS,R.Grossman,16,3,,not a season starter the year before
+2012,ARI,K.Kolb,16,11,,not a season starter the year before
+2012,ATL,M.Ryan,16,0,0.0,missed 0 the year before
+2012,BAL,J.Flacco,16,1,0.0,missed 0 the year before
+2012,BUF,R.Fitzpatrick,16,0,0.0,missed 0 the year before
+2012,CAR,C.Newton,16,0,0.0,missed 0 the year before
+2012,CHI,J.Cutler,16,2,6.0,missed 4+
+2012,CIN,A.Dalton,16,0,0.0,missed 0 the year before
+2012,CLE,B.Weeden,16,1,,not a season starter the year before
+2012,DAL,T.Romo,16,0,0.0,missed 0 the year before
+2012,DEN,P.Manning,16,0,,not a season starter the year before
+2012,DET,M.Stafford,16,0,0.0,missed 0 the year before
+2012,GB,A.Rodgers,16,0,1.0,missed 1-3
+2012,HOU,M.Schaub,16,0,6.0,missed 4+
+2012,IND,A.Luck,16,0,,not a season starter the year before
+2012,JAX,C.Henne,16,8,,not a season starter the year before
+2012,KC,M.Cassel,16,8,7.0,missed 4+
+2012,LA,S.Bradford,16,0,6.0,missed 4+
+2012,LAC,P.Rivers,16,0,0.0,missed 0 the year before
+2012,LV,C.Palmer,16,2,0.0,missed 0 the year before
+2012,MIA,R.Tannehill,16,1,,not a season starter the year before
+2012,MIN,C.Ponder,16,0,0.0,missed 0 the year before
+2012,NE,T.Brady,16,0,0.0,missed 0 the year before
+2012,NO,D.Brees,16,0,0.0,missed 0 the year before
+2012,NYG,E.Manning,16,0,0.0,missed 0 the year before
+2012,NYJ,M.Sanchez,16,1,0.0,missed 0 the year before
+2012,PHI,M.Vick,16,7,3.0,missed 1-3
+2012,PIT,B.Roethlisberger,16,3,1.0,missed 1-3
+2012,SEA,R.Wilson,16,0,,not a season starter the year before
+2012,SF,C.Kaepernick,16,8,,not a season starter the year before
+2012,TB,J.Freeman,16,0,1.0,missed 1-3
+2012,TEN,J.Locker,16,6,,not a season starter the year before
+2012,WAS,R.Griffin III,16,1,,not a season starter the year before
+2013,ARI,C.Palmer,16,0,1.0,missed 1-3
+2013,ATL,M.Ryan,16,0,0.0,missed 0 the year before
+2013,BAL,J.Flacco,16,0,0.0,missed 0 the year before
+2013,BUF,E.Manuel,16,6,,not a season starter the year before
+2013,CAR,C.Newton,16,0,0.0,missed 0 the year before
+2013,CHI,J.Cutler,16,6,1.0,missed 1-3
+2013,CIN,A.Dalton,16,0,0.0,missed 0 the year before
+2013,CLE,J.Campbell,16,9,,not a season starter the year before
+2013,DAL,T.Romo,16,1,0.0,missed 0 the year before
+2013,DEN,P.Manning,16,0,0.0,missed 0 the year before
+2013,DET,M.Stafford,16,0,0.0,missed 0 the year before
+2013,GB,A.Rodgers,16,8,0.0,missed 0 the year before
+2013,HOU,M.Schaub,16,6,0.0,missed 0 the year before
+2013,IND,A.Luck,16,0,0.0,missed 0 the year before
+2013,JAX,C.Henne,16,3,2.0,missed 1-3
+2013,KC,A.Smith,16,1,,not a season starter the year before
+2013,LA,K.Clemens,16,7,,not a season starter the year before
+2013,LAC,P.Rivers,16,0,0.0,missed 0 the year before
+2013,LV,T.Pryor,16,7,,not a season starter the year before
+2013,MIA,R.Tannehill,16,0,0.0,missed 0 the year before
+2013,MIN,C.Ponder,16,8,0.0,missed 0 the year before
+2013,NE,T.Brady,16,0,0.0,missed 0 the year before
+2013,NO,D.Brees,16,0,0.0,missed 0 the year before
+2013,NYG,E.Manning,16,0,0.0,missed 0 the year before
+2013,NYJ,G.Smith,16,1,,not a season starter the year before
+2013,PHI,N.Foles,16,5,,not a season starter the year before
+2013,PIT,B.Roethlisberger,16,0,3.0,missed 1-3
+2013,SEA,R.Wilson,16,0,0.0,missed 0 the year before
+2013,SF,C.Kaepernick,16,0,0.0,missed 0 the year before
+2013,TB,M.Glennon,16,3,,not a season starter the year before
+2013,TEN,R.Fitzpatrick,16,6,0.0,missed 0 the year before
+2013,WAS,R.Griffin III,16,3,1.0,missed 1-3
+2014,ARI,D.Stanton,16,8,,not a season starter the year before
+2014,ATL,M.Ryan,16,0,0.0,missed 0 the year before
+2014,BAL,J.Flacco,16,0,0.0,missed 0 the year before
+2014,BUF,K.Orton,16,4,,not a season starter the year before
+2014,CAR,C.Newton,16,2,0.0,missed 0 the year before
+2014,CHI,J.Cutler,16,1,5.0,missed 4+
+2014,CIN,A.Dalton,16,0,0.0,missed 0 the year before
+2014,CLE,B.Hoyer,16,2,,not a season starter the year before
+2014,DAL,T.Romo,16,1,1.0,missed 1-3
+2014,DEN,P.Manning,16,0,0.0,missed 0 the year before
+2014,DET,M.Stafford,16,0,0.0,missed 0 the year before
+2014,GB,A.Rodgers,16,0,7.0,missed 4+
+2014,HOU,R.Fitzpatrick,16,5,2.0,missed 1-3
+2014,IND,A.Luck,16,2,0.0,missed 0 the year before
+2014,JAX,B.Bortles,16,2,,not a season starter the year before
+2014,KC,A.Smith,16,1,1.0,missed 1-3
+2014,LA,A.Davis,16,7,,not a season starter the year before
+2014,LAC,P.Rivers,16,0,0.0,missed 0 the year before
+2014,LV,D.Carr,16,0,,not a season starter the year before
+2014,MIA,R.Tannehill,16,0,0.0,missed 0 the year before
+2014,MIN,T.Bridgewater,16,3,,not a season starter the year before
+2014,NE,T.Brady,16,1,0.0,missed 0 the year before
+2014,NO,D.Brees,16,0,0.0,missed 0 the year before
+2014,NYG,E.Manning,16,0,0.0,missed 0 the year before
+2014,NYJ,G.Smith,16,5,0.0,missed 0 the year before
+2014,PHI,M.Sanchez,16,7,,not a season starter the year before
+2014,PIT,B.Roethlisberger,16,0,0.0,missed 0 the year before
+2014,SEA,R.Wilson,16,0,0.0,missed 0 the year before
+2014,SF,C.Kaepernick,16,0,0.0,missed 0 the year before
+2014,TB,J.McCown,16,6,,not a season starter the year before
+2014,TEN,C.Whitehurst,16,9,,not a season starter the year before
+2014,WAS,R.Griffin III,16,9,3.0,missed 1-3
+2015,ARI,C.Palmer,16,0,,not a season starter the year before
+2015,ATL,M.Ryan,16,0,0.0,missed 0 the year before
+2015,BAL,J.Flacco,16,6,0.0,missed 0 the year before
+2015,BUF,T.Taylor,16,2,,not a season starter the year before
+2015,CAR,C.Newton,16,0,1.0,missed 1-3
+2015,CHI,J.Cutler,16,2,1.0,missed 1-3
+2015,CIN,A.Dalton,16,4,0.0,missed 0 the year before
+2015,CLE,J.McCown,16,9,5.0,missed 4+
+2015,DAL,M.Cassel,16,10,,not a season starter the year before
+2015,DEN,P.Manning,16,8,0.0,missed 0 the year before
+2015,DET,M.Stafford,16,1,0.0,missed 0 the year before
+2015,GB,A.Rodgers,16,0,0.0,missed 0 the year before
+2015,HOU,B.Hoyer,16,5,2.0,missed 1-3
+2015,IND,M.Hasselbeck,16,8,,not a season starter the year before
+2015,JAX,B.Bortles,16,0,0.0,missed 0 the year before
+2015,KC,A.Smith,16,0,1.0,missed 1-3
+2015,LA,N.Foles,16,5,,not a season starter the year before
+2015,LAC,P.Rivers,16,0,0.0,missed 0 the year before
+2015,LV,D.Carr,16,1,0.0,missed 0 the year before
+2015,MIA,R.Tannehill,16,0,0.0,missed 0 the year before
+2015,MIN,T.Bridgewater,16,0,1.0,missed 1-3
+2015,NE,T.Brady,16,0,0.0,missed 0 the year before
+2015,NO,D.Brees,16,1,0.0,missed 0 the year before
+2015,NYG,E.Manning,16,0,0.0,missed 0 the year before
+2015,NYJ,R.Fitzpatrick,16,1,4.0,missed 4+
+2015,PHI,S.Bradford,16,2,,not a season starter the year before
+2015,PIT,B.Roethlisberger,16,4,0.0,missed 0 the year before
+2015,SEA,R.Wilson,16,0,0.0,missed 0 the year before
+2015,SF,B.Gabbert,16,8,,not a season starter the year before
+2015,TB,J.Winston,16,0,,not a season starter the year before
+2015,TEN,M.Mariota,16,5,,not a season starter the year before
+2015,WAS,K.Cousins,16,0,,not a season starter the year before
+2016,ARI,C.Palmer,16,1,0.0,missed 0 the year before
+2016,ATL,M.Ryan,16,0,0.0,missed 0 the year before
+2016,BAL,J.Flacco,16,0,6.0,missed 4+
+2016,BUF,T.Taylor,16,1,2.0,missed 1-3
+2016,CAR,C.Newton,16,1,0.0,missed 0 the year before
+2016,CHI,M.Barkley,16,9,,not a season starter the year before
+2016,CIN,A.Dalton,16,0,3.0,missed 1-3
+2016,CLE,R.Griffin III,16,11,,not a season starter the year before
+2016,DAL,D.Prescott,16,1,,not a season starter the year before
+2016,DEN,T.Siemian,16,3,,not a season starter the year before
+2016,DET,M.Stafford,16,0,0.0,missed 0 the year before
+2016,GB,A.Rodgers,16,0,0.0,missed 0 the year before
+2016,HOU,B.Osweiler,16,2,,not a season starter the year before
+2016,IND,A.Luck,16,1,,not a season starter the year before
+2016,JAX,B.Bortles,16,0,0.0,missed 0 the year before
+2016,KC,A.Smith,16,2,0.0,missed 0 the year before
+2016,LA,C.Keenum,16,7,,not a season starter the year before
+2016,LAC,P.Rivers,16,0,0.0,missed 0 the year before
+2016,LV,D.Carr,16,1,0.0,missed 0 the year before
+2016,MIA,R.Tannehill,16,3,0.0,missed 0 the year before
+2016,MIN,S.Bradford,16,1,2.0,missed 1-3
+2016,NE,T.Brady,16,4,0.0,missed 0 the year before
+2016,NO,D.Brees,16,0,1.0,missed 1-3
+2016,NYG,E.Manning,16,0,0.0,missed 0 the year before
+2016,NYJ,R.Fitzpatrick,16,4,0.0,missed 0 the year before
+2016,PHI,C.Wentz,16,0,,not a season starter the year before
+2016,PIT,B.Roethlisberger,16,2,4.0,missed 4+
+2016,SEA,R.Wilson,16,0,0.0,missed 0 the year before
+2016,SF,C.Kaepernick,16,6,,not a season starter the year before
+2016,TB,J.Winston,16,0,0.0,missed 0 the year before
+2016,TEN,M.Mariota,16,2,4.0,missed 4+
+2016,WAS,K.Cousins,16,0,0.0,missed 0 the year before
+2017,ARI,C.Palmer,16,9,1.0,missed 1-3
+2017,ATL,M.Ryan,16,0,0.0,missed 0 the year before
+2017,BAL,J.Flacco,16,0,0.0,missed 0 the year before
+2017,BUF,T.Taylor,16,1,1.0,missed 1-3
+2017,CAR,C.Newton,16,0,1.0,missed 1-3
+2017,CHI,M.Trubisky,16,4,,not a season starter the year before
+2017,CIN,A.Dalton,16,0,0.0,missed 0 the year before
+2017,CLE,D.Kizer,16,2,,not a season starter the year before
+2017,DAL,D.Prescott,16,0,0.0,missed 0 the year before
+2017,DEN,T.Siemian,16,6,2.0,missed 1-3
+2017,DET,M.Stafford,16,0,0.0,missed 0 the year before
+2017,GB,B.Hundley,16,6,,not a season starter the year before
+2017,HOU,D.Watson,16,9,,not a season starter the year before
+2017,IND,J.Brissett,16,1,,not a season starter the year before
+2017,JAX,B.Bortles,16,0,0.0,missed 0 the year before
+2017,KC,A.Smith,16,1,1.0,missed 1-3
+2017,LA,J.Goff,16,1,,not a season starter the year before
+2017,LAC,P.Rivers,16,0,0.0,missed 0 the year before
+2017,LV,D.Carr,16,1,1.0,missed 1-3
+2017,MIA,J.Cutler,16,5,,not a season starter the year before
+2017,MIN,C.Keenum,16,1,6.0,missed 4+
+2017,NE,T.Brady,16,0,0.0,missed 0 the year before
+2017,NO,D.Brees,16,0,0.0,missed 0 the year before
+2017,NYG,E.Manning,16,1,0.0,missed 0 the year before
+2017,NYJ,J.McCown,16,3,,not a season starter the year before
+2017,PHI,C.Wentz,16,3,0.0,missed 0 the year before
+2017,PIT,B.Roethlisberger,16,1,2.0,missed 1-3
+2017,SEA,R.Wilson,16,0,0.0,missed 0 the year before
+2017,SF,C.Beathard,16,10,,not a season starter the year before
+2017,TB,J.Winston,16,5,0.0,missed 0 the year before
+2017,TEN,M.Mariota,16,2,1.0,missed 1-3
+2017,WAS,K.Cousins,16,0,0.0,missed 0 the year before
+2018,ARI,J.Rosen,16,3,,not a season starter the year before
+2018,ATL,M.Ryan,16,0,0.0,missed 0 the year before
+2018,BAL,J.Flacco,16,7,0.0,missed 0 the year before
+2018,BUF,J.Allen,16,5,,not a season starter the year before
+2018,CAR,C.Newton,16,2,0.0,missed 0 the year before
+2018,CHI,M.Trubisky,16,2,0.0,missed 0 the year before
+2018,CIN,A.Dalton,16,6,0.0,missed 0 the year before
+2018,CLE,B.Mayfield,16,2,,not a season starter the year before
+2018,DAL,D.Prescott,16,0,0.0,missed 0 the year before
+2018,DEN,C.Keenum,16,0,0.0,missed 0 the year before
+2018,DET,M.Stafford,16,0,0.0,missed 0 the year before
+2018,GB,A.Rodgers,16,1,,not a season starter the year before
+2018,HOU,D.Watson,16,0,9.0,missed 4+
+2018,IND,A.Luck,16,0,,not a season starter the year before
+2018,JAX,B.Bortles,16,5,0.0,missed 0 the year before
+2018,KC,P.Mahomes,16,0,,not a season starter the year before
+2018,LA,J.Goff,16,0,1.0,missed 1-3
+2018,LAC,P.Rivers,16,0,0.0,missed 0 the year before
+2018,LV,D.Carr,16,0,1.0,missed 1-3
+2018,MIA,R.Tannehill,16,5,,not a season starter the year before
+2018,MIN,K.Cousins,16,0,0.0,missed 0 the year before
+2018,NE,T.Brady,16,0,0.0,missed 0 the year before
+2018,NO,D.Brees,16,1,0.0,missed 0 the year before
+2018,NYG,E.Manning,16,0,1.0,missed 1-3
+2018,NYJ,S.Darnold,16,3,,not a season starter the year before
+2018,PHI,C.Wentz,16,5,3.0,missed 1-3
+2018,PIT,B.Roethlisberger,16,0,1.0,missed 1-3
+2018,SEA,R.Wilson,16,0,0.0,missed 0 the year before
+2018,SF,N.Mullens,16,8,,not a season starter the year before
+2018,TB,J.Winston,16,6,3.0,missed 1-3
+2018,TEN,M.Mariota,16,3,1.0,missed 1-3
+2018,WAS,A.Smith,16,6,1.0,missed 1-3
+2019,ARI,K.Murray,16,0,,not a season starter the year before
+2019,ATL,M.Ryan,16,1,0.0,missed 0 the year before
+2019,BAL,L.Jackson,16,1,,not a season starter the year before
+2019,BUF,J.Allen,16,1,4.0,missed 4+
+2019,CAR,K.Allen,16,3,,not a season starter the year before
+2019,CHI,M.Trubisky,16,2,2.0,missed 1-3
+2019,CIN,A.Dalton,16,3,5.0,missed 4+
+2019,CLE,B.Mayfield,16,0,0.0,missed 0 the year before
+2019,DAL,D.Prescott,16,0,0.0,missed 0 the year before
+2019,DEN,J.Flacco,16,8,7.0,missed 4+
+2019,DET,M.Stafford,16,8,0.0,missed 0 the year before
+2019,GB,A.Rodgers,16,0,0.0,missed 0 the year before
+2019,HOU,D.Watson,16,1,0.0,missed 0 the year before
+2019,IND,J.Brissett,16,2,,not a season starter the year before
+2019,JAX,G.Minshew II,16,2,,not a season starter the year before
+2019,KC,P.Mahomes,16,3,0.0,missed 0 the year before
+2019,LA,J.Goff,16,0,0.0,missed 0 the year before
+2019,LAC,P.Rivers,16,0,0.0,missed 0 the year before
+2019,LV,D.Carr,16,0,0.0,missed 0 the year before
+2019,MIA,R.Fitzpatrick,16,3,,not a season starter the year before
+2019,MIN,K.Cousins,16,1,0.0,missed 0 the year before
+2019,NE,T.Brady,16,0,0.0,missed 0 the year before
+2019,NO,D.Brees,16,6,1.0,missed 1-3
+2019,NYG,D.Jones,16,4,,not a season starter the year before
+2019,NYJ,S.Darnold,16,3,3.0,missed 1-3
+2019,PHI,C.Wentz,16,0,3.0,missed 1-3
+2019,PIT,M.Rudolph,16,6,,not a season starter the year before
+2019,SEA,R.Wilson,16,0,0.0,missed 0 the year before
+2019,SF,J.Garoppolo,16,0,,not a season starter the year before
+2019,TB,J.Winston,16,0,2.0,missed 1-3
+2019,TEN,R.Tannehill,16,6,5.0,missed 4+
+2019,WAS,C.Keenum,16,8,0.0,missed 0 the year before
+2020,ARI,K.Murray,16,1,0.0,missed 0 the year before
+2020,ATL,M.Ryan,16,0,1.0,missed 1-3
+2020,BAL,L.Jackson,16,1,1.0,missed 1-3
+2020,BUF,J.Allen,16,0,0.0,missed 0 the year before
+2020,CAR,T.Bridgewater,16,1,,not a season starter the year before
+2020,CHI,N.Foles,16,8,,not a season starter the year before
+2020,CIN,J.Burrow,16,6,,not a season starter the year before
+2020,CLE,B.Mayfield,16,0,0.0,missed 0 the year before
+2020,DAL,A.Dalton,16,7,3.0,missed 1-3
+2020,DEN,D.Lock,16,4,,not a season starter the year before
+2020,DET,M.Stafford,16,1,8.0,missed 4+
+2020,GB,A.Rodgers,16,0,0.0,missed 0 the year before
+2020,HOU,D.Watson,16,0,1.0,missed 1-3
+2020,IND,P.Rivers,16,0,0.0,missed 0 the year before
+2020,JAX,G.Minshew II,16,7,2.0,missed 1-3
+2020,KC,P.Mahomes,16,1,2.0,missed 1-3
+2020,LA,J.Goff,16,1,0.0,missed 0 the year before
+2020,LAC,J.Herbert,16,1,,not a season starter the year before
+2020,LV,D.Carr,16,1,0.0,missed 0 the year before
+2020,MIA,T.Tagovailoa,16,7,,not a season starter the year before
+2020,MIN,K.Cousins,16,0,1.0,missed 1-3
+2020,NE,C.Newton,16,1,,not a season starter the year before
+2020,NO,D.Brees,16,4,5.0,missed 4+
+2020,NYG,D.Jones,16,2,2.0,missed 1-3
+2020,NYJ,S.Darnold,16,4,3.0,missed 1-3
+2020,PHI,C.Wentz,16,4,0.0,missed 0 the year before
+2020,PIT,B.Roethlisberger,16,1,,not a season starter the year before
+2020,SEA,R.Wilson,16,0,0.0,missed 0 the year before
+2020,SF,N.Mullens,16,7,,not a season starter the year before
+2020,TB,T.Brady,16,0,0.0,missed 0 the year before
+2020,TEN,R.Tannehill,16,0,0.0,missed 0 the year before
+2020,WAS,A.Smith,16,8,,not a season starter the year before
+2021,ARI,K.Murray,17,3,0.0,missed 0 the year before
+2021,ATL,M.Ryan,17,0,0.0,missed 0 the year before
+2021,BAL,L.Jackson,17,6,1.0,missed 1-3
+2021,BUF,J.Allen,17,0,0.0,missed 0 the year before
+2021,CAR,S.Darnold,17,5,4.0,missed 4+
+2021,CHI,J.Fields,17,7,,not a season starter the year before
+2021,CIN,J.Burrow,17,1,6.0,missed 4+
+2021,CLE,B.Mayfield,17,3,0.0,missed 0 the year before
+2021,DAL,D.Prescott,17,1,,not a season starter the year before
+2021,DEN,T.Bridgewater,17,4,1.0,missed 1-3
+2021,DET,J.Goff,17,3,1.0,missed 1-3
+2021,GB,A.Rodgers,17,1,0.0,missed 0 the year before
+2021,HOU,D.Mills,17,4,,not a season starter the year before
+2021,IND,C.Wentz,17,0,4.0,missed 4+
+2021,JAX,T.Lawrence,17,0,,not a season starter the year before
+2021,KC,P.Mahomes,17,0,1.0,missed 1-3
+2021,LA,M.Stafford,17,0,0.0,missed 0 the year before
+2021,LAC,J.Herbert,17,0,0.0,missed 0 the year before
+2021,LV,D.Carr,17,0,0.0,missed 0 the year before
+2021,MIA,T.Tagovailoa,17,6,1.0,missed 1-3
+2021,MIN,K.Cousins,17,1,0.0,missed 0 the year before
+2021,NE,M.Jones,17,0,,not a season starter the year before
+2021,NO,T.Siemian,17,11,,not a season starter the year before
+2021,NYG,D.Jones,17,7,2.0,missed 1-3
+2021,NYJ,Z.Wilson,17,5,,not a season starter the year before
+2021,PHI,J.Hurts,17,2,,not a season starter the year before
+2021,PIT,B.Roethlisberger,17,1,1.0,missed 1-3
+2021,SEA,R.Wilson,17,3,0.0,missed 0 the year before
+2021,SF,J.Garoppolo,17,2,,not a season starter the year before
+2021,TB,T.Brady,17,0,0.0,missed 0 the year before
+2021,TEN,R.Tannehill,17,0,0.0,missed 0 the year before
+2021,WAS,T.Heinicke,17,1,,not a season starter the year before
+2022,ARI,K.Murray,17,7,3.0,missed 1-3
+2022,ATL,M.Mariota,17,4,,not a season starter the year before
+2022,BAL,L.Jackson,17,6,5.0,missed 4+
+2022,BUF,J.Allen,16,0,0.0,missed 0 the year before
+2022,CAR,B.Mayfield,17,10,3.0,missed 1-3
+2022,CHI,J.Fields,17,2,5.0,missed 4+
+2022,CIN,J.Burrow,16,0,1.0,missed 1-3
+2022,CLE,J.Brissett,17,6,,not a season starter the year before
+2022,DAL,D.Prescott,17,5,1.0,missed 1-3
+2022,DEN,R.Wilson,17,2,3.0,missed 1-3
+2022,DET,J.Goff,17,0,3.0,missed 1-3
+2022,GB,A.Rodgers,17,0,1.0,missed 1-3
+2022,HOU,D.Mills,17,2,3.0,missed 1-3
+2022,IND,M.Ryan,17,5,0.0,missed 0 the year before
+2022,JAX,T.Lawrence,17,0,0.0,missed 0 the year before
+2022,KC,P.Mahomes,17,0,0.0,missed 0 the year before
+2022,LA,M.Stafford,17,8,0.0,missed 0 the year before
+2022,LAC,J.Herbert,17,0,0.0,missed 0 the year before
+2022,LV,D.Carr,17,2,0.0,missed 0 the year before
+2022,MIA,T.Tagovailoa,17,5,4.0,missed 4+
+2022,MIN,K.Cousins,17,0,1.0,missed 1-3
+2022,NE,M.Jones,17,4,0.0,missed 0 the year before
+2022,NO,A.Dalton,17,3,,not a season starter the year before
+2022,NYG,D.Jones,17,1,6.0,missed 4+
+2022,NYJ,Z.Wilson,17,8,4.0,missed 4+
+2022,PHI,J.Hurts,17,2,2.0,missed 1-3
+2022,PIT,K.Pickett,17,6,,not a season starter the year before
+2022,SEA,G.Smith,17,0,,not a season starter the year before
+2022,SF,J.Garoppolo,17,7,2.0,missed 1-3
+2022,TB,T.Brady,17,0,0.0,missed 0 the year before
+2022,TEN,R.Tannehill,17,5,0.0,missed 0 the year before
+2022,WAS,T.Heinicke,17,8,1.0,missed 1-3
+2023,ARI,K.Murray,17,9,6.0,missed 4+
+2023,ATL,D.Ridder,17,5,,not a season starter the year before
+2023,BAL,L.Jackson,17,1,5.0,missed 4+
+2023,BUF,J.Allen,17,0,0.0,missed 0 the year before
+2023,CAR,B.Young,17,1,,not a season starter the year before
+2023,CHI,J.Fields,17,4,2.0,missed 1-3
+2023,CIN,J.Burrow,17,8,0.0,missed 0 the year before
+2023,CLE,J.Flacco,17,12,,not a season starter the year before
+2023,DAL,D.Prescott,17,0,5.0,missed 4+
+2023,DEN,R.Wilson,17,2,2.0,missed 1-3
+2023,DET,J.Goff,17,0,0.0,missed 0 the year before
+2023,GB,J.Love,17,0,,not a season starter the year before
+2023,HOU,C.Stroud,17,2,,not a season starter the year before
+2023,IND,G.Minshew II,17,2,,not a season starter the year before
+2023,JAX,T.Lawrence,17,1,0.0,missed 0 the year before
+2023,KC,P.Mahomes,17,1,0.0,missed 0 the year before
+2023,LA,M.Stafford,17,2,8.0,missed 4+
+2023,LAC,J.Herbert,17,5,0.0,missed 0 the year before
+2023,LV,A.O'Connell,17,7,,not a season starter the year before
+2023,MIA,T.Tagovailoa,17,0,4.0,missed 4+
+2023,MIN,K.Cousins,17,9,0.0,missed 0 the year before
+2023,NE,M.Jones,17,6,3.0,missed 1-3
+2023,NO,D.Carr,17,1,2.0,missed 1-3
+2023,NYG,T.DeVito,17,10,,not a season starter the year before
+2023,NYJ,Z.Wilson,17,6,5.0,missed 4+
+2023,PHI,J.Hurts,17,1,2.0,missed 1-3
+2023,PIT,K.Pickett,17,7,1.0,missed 1-3
+2023,SEA,G.Smith,17,2,0.0,missed 0 the year before
+2023,SF,B.Purdy,17,1,,not a season starter the year before
+2023,TB,B.Mayfield,17,0,10.0,missed 4+
+2023,TEN,R.Tannehill,17,8,5.0,missed 4+
+2023,WAS,S.Howell,17,0,,not a season starter the year before
+2024,ARI,K.Murray,17,0,0.0,missed 0 the year before
+2024,ATL,K.Cousins,17,3,9.0,missed 4+
+2024,BAL,L.Jackson,17,0,1.0,missed 1-3
+2024,BUF,J.Allen,17,1,0.0,missed 0 the year before
+2024,CAR,B.Young,17,5,1.0,missed 1-3
+2024,CHI,C.Williams,17,0,,not a season starter the year before
+2024,CIN,J.Burrow,17,0,7.0,missed 4+
+2024,CLE,J.Winston,17,10,,not a season starter the year before
+2024,DAL,D.Prescott,17,9,0.0,missed 0 the year before
+2024,DEN,B.Nix,17,0,,not a season starter the year before
+2024,DET,J.Goff,17,0,0.0,missed 0 the year before
+2024,GB,J.Love,17,3,0.0,missed 0 the year before
+2024,HOU,C.Stroud,17,1,2.0,missed 1-3
+2024,IND,A.Richardson,17,7,,not a season starter the year before
+2024,JAX,T.Lawrence,17,8,1.0,missed 1-3
+2024,KC,P.Mahomes,17,1,1.0,missed 1-3
+2024,LA,M.Stafford,17,1,2.0,missed 1-3
+2024,LAC,J.Herbert,17,0,4.0,missed 4+
+2024,LV,G.Minshew II,17,8,1.0,missed 1-3
+2024,MIA,T.Tagovailoa,17,6,0.0,missed 0 the year before
+2024,MIN,S.Darnold,17,0,,not a season starter the year before
+2024,NE,D.Maye,17,7,,not a season starter the year before
+2024,NO,D.Carr,17,7,0.0,missed 0 the year before
+2024,NYG,D.Jones,17,7,,not a season starter the year before
+2024,NYJ,A.Rodgers,17,0,,not a season starter the year before
+2024,PHI,J.Hurts,17,3,0.0,missed 0 the year before
+2024,PIT,R.Wilson,17,6,2.0,missed 1-3
+2024,SEA,G.Smith,17,0,2.0,missed 1-3
+2024,SF,B.Purdy,17,2,1.0,missed 1-3
+2024,TB,B.Mayfield,17,0,0.0,missed 0 the year before
+2024,TEN,W.Levis,17,7,,not a season starter the year before
+2024,WAS,J.Daniels,17,2,,not a season starter the year before
+2025,ARI,J.Brissett,17,5,,not a season starter the year before
+2025,ATL,M.Penix,17,8,,not a season starter the year before
+2025,BAL,L.Jackson,17,5,0.0,missed 0 the year before
+2025,BUF,J.Allen,17,1,1.0,missed 1-3
+2025,CAR,B.Young,17,1,3.0,missed 1-3
+2025,CHI,C.Williams,17,0,0.0,missed 0 the year before
+2025,CIN,J.Burrow,17,10,0.0,missed 0 the year before
+2025,CLE,S.Sanders,17,9,,not a season starter the year before
+2025,DAL,D.Prescott,17,1,9.0,missed 4+
+2025,DEN,B.Nix,17,0,0.0,missed 0 the year before
+2025,DET,J.Goff,17,0,0.0,missed 0 the year before
+2025,GB,J.Love,17,3,2.0,missed 1-3
+2025,HOU,C.Stroud,17,4,0.0,missed 0 the year before
+2025,IND,D.Jones,17,5,7.0,missed 4+
+2025,JAX,T.Lawrence,17,0,7.0,missed 4+
+2025,KC,P.Mahomes,17,3,1.0,missed 1-3
+2025,LA,M.Stafford,17,0,1.0,missed 1-3
+2025,LAC,J.Herbert,17,1,0.0,missed 0 the year before
+2025,LV,G.Smith,17,2,0.0,missed 0 the year before
+2025,MIA,T.Tagovailoa,17,3,6.0,missed 4+
+2025,MIN,J.McCarthy,17,7,,not a season starter the year before
+2025,NE,D.Maye,17,0,0.0,missed 0 the year before
+2025,NO,T.Shough,17,7,,not a season starter the year before
+2025,NYG,J.Dart,17,5,,not a season starter the year before
+2025,NYJ,J.Fields,17,10,,not a season starter the year before
+2025,PHI,J.Hurts,17,1,2.0,missed 1-3
+2025,PIT,A.Rodgers,17,1,0.0,missed 0 the year before
+2025,SEA,S.Darnold,17,0,0.0,missed 0 the year before
+2025,SF,B.Purdy,17,8,2.0,missed 1-3
+2025,TB,B.Mayfield,17,0,0.0,missed 0 the year before
+2025,TEN,C.Ward,17,1,,not a season starter the year before
+2025,WAS,M.Mariota,17,9,,not a season starter the year before

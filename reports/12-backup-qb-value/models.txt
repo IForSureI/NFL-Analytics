@@ -1,0 +1,86 @@
+Data pulled 2026-11-26. Team-season fixed effects are in each model but not printed.
+
+=== epa_db (n = 6545, clustered by franchise)
+               coef      se       p
+const        0.0751  0.0037  0.0000
+backup      -0.0918  0.0090  0.0000
+home         0.0052  0.0047  0.2669
+opp_def_epa  0.4759  0.0332  0.0000
+
+=== pf (n = 6545, clustered by franchise)
+                  coef      se    p
+const          19.4942  0.1711  0.0
+backup         -2.8759  0.3418  0.0
+home            1.9056  0.2398  0.0
+opp_margin_pg  -0.2199  0.0187  0.0
+
+=== margin (n = 6545, clustered by franchise)
+                 coef      se    p
+const         -5.9536  0.2250  0.0
+backup        -3.9658  0.5062  0.0
+home           3.9682  0.2806  0.0
+opp_margin_pg -0.6593  0.0282  0.0
+
+=== win (n = 6545, clustered by franchise)
+                 coef      se    p
+const          0.2832  0.0079  0.0
+backup        -0.1207  0.0151  0.0
+home           0.1062  0.0116  0.0
+opp_margin_pg -0.0184  0.0009  0.0
+
+=== epa_db_quality (n = 6545, clustered by franchise)
+               coef      se       p
+const        0.0796  0.0040  0.0000
+backup      -0.1044  0.0102  0.0000
+bp_c         0.4202  0.1019  0.0000
+sp_c        -0.2729  0.1665  0.1013
+home         0.0055  0.0046  0.2310
+opp_def_epa  0.4717  0.0329  0.0000
+
+=== margin_quality (n = 6545, clustered by franchise)
+                  coef      se       p
+const          -5.6825  0.2231  0.0000
+backup         -4.6999  0.5482  0.0000
+bp_c           23.3304  5.6897  0.0000
+sp_c           -6.5426  9.3851  0.4857
+home            3.9840  0.2795  0.0000
+opp_margin_pg  -0.6561  0.0282  0.0000
+
+=== margin_contract (n = 5011, clustered by franchise)
+                  coef      se       p
+const          -4.4349  0.1769  0.0000
+backup         -3.4230  0.5664  0.0000
+apy_c           0.2463  0.1158  0.0334
+sp_c          -10.6297  9.0611  0.2407
+home            3.8037  0.3503  0.0000
+opp_margin_pg  -0.6679  0.0311  0.0000
+
+=== margin_contract_and_record (n = 5011, clustered by franchise)
+                  coef      se       p
+const          -4.4197  0.1742  0.0000
+backup         -4.0247  0.7053  0.0000
+apy_c           0.1225  0.1432  0.3921
+bp_c           14.0169  8.6216  0.1040
+sp_c           -9.1350  9.1940  0.3204
+home            3.8101  0.3482  0.0000
+opp_margin_pg  -0.6666  0.0309  0.0000
+
+=== epa_contract (n = 5011, clustered by franchise)
+               coef      se       p
+const       -0.0665  0.0033  0.0000
+backup      -0.0802  0.0094  0.0000
+apy_c        0.0045  0.0019  0.0183
+sp_c        -0.2400  0.1598  0.1331
+home         0.0036  0.0062  0.5569
+opp_def_epa  0.4818  0.0300  0.0000
+
+=== qb_market (n = 149, clustered by franchise)
+          coef      se      p
+const   1.0377  1.6685  0.534
+epa_s  42.1388  7.3909  0.000
+n       0.0158  0.0034  0.000
+
+=== win% ~ point margin per game (n = 640 team-seasons, clustered by franchise)
+             coef      se    p
+const      0.5000  0.0034  0.0
+margin_pg  0.0279  0.0005  0.0

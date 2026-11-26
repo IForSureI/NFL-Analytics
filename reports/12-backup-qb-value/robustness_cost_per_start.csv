@@ -1,0 +1,9 @@
+version,team_seasons,backup_games,epa_db,margin,margin_lo,margin_hi,wins_per_start
+all backup starts (base),402,1695,-0.092,-3.97,-4.96,-2.97,-0.111
+final week dropped,352,1500,-0.08,-3.53,-4.52,-2.55,-0.099
+starter returned later,298,1367,-0.084,-3.64,-4.73,-2.55,-0.102
+starter started half or more,375,1433,-0.098,-4.28,-5.25,-3.31,-0.119
+starter listed Out or Doubtful (2009+),151,332,-0.103,-4.34,-6.02,-2.65,-0.121
+2016-2025,211,866,-0.096,-4.03,-5.26,-2.79,-0.112
+no opponent control,402,1695,-0.092,-4.02,-5.07,-2.97,-0.112
+pregame spread as the opponent control,402,1695,-0.084,-2.79,-3.73,-1.86,-0.078
