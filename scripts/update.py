@@ -21,7 +21,7 @@ sys.path.insert(0, str(ROOT))
 
 from nflan import data  # noqa: E402
 
-STUDIES = ["flag_audit", "fourth_down_bot", "sack_leverage", "luck_index", "kickoff_value", "pass_run", "box_score_tax", "yac_tax", "run_game_value", "draft_value", "turnovers_forced", "metric_stability_atlas", "in_season_snippets"]
+STUDIES = ["flag_audit", "fourth_down_bot", "sack_leverage", "luck_index", "kickoff_value", "pass_run", "box_score_tax", "yac_tax", "run_game_value", "draft_value", "turnovers_forced", "backup_qb_value", "metric_stability_atlas", "in_season_snippets"]
 
 
 def current_season(today: dt.date | None = None) -> int:
