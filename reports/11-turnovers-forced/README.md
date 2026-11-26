@@ -1,4 +1,4 @@
-<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 10 Draft Value](../10-draft-value/) &nbsp;|&nbsp; [13 Metric Stability Atlas →](../13-metric-stability-atlas/)</sub>
+<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 10 Draft Value](../10-draft-value/) &nbsp;|&nbsp; [12 Backup QB Value →](../12-backup-qb-value/)</sub>
 
 # 11 Turnovers Forced
 ### Takeaways don't repeat like the rest of a defense, but whether a takeaway year fools people, the data cannot tell
@@ -154,6 +154,6 @@ Code: [`projects/turnovers_forced.py`](../../projects/turnovers_forced.py)
 | [`findings.json`](findings.json) | Every number quoted on this page, machine-readable |
 
 ---
-<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 10 Draft Value](../10-draft-value/) &nbsp;|&nbsp; [13 Metric Stability Atlas →](../13-metric-stability-atlas/)</sub>
+<sub>[← Portfolio](../../README.md) &nbsp;|&nbsp; [← 10 Draft Value](../10-draft-value/) &nbsp;|&nbsp; [12 Backup QB Value →](../12-backup-qb-value/)</sub>
 
 <sub>© 2026 Dylan Fanelli. All rights reserved. To cite: Fanelli, D. (2026). *Turnovers Forced*. NFL Analytics. https://github.com/IForSureI/NFL-Analytics/tree/main/reports/11-turnovers-forced</sub>
